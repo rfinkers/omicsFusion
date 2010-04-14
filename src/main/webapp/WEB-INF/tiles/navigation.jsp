@@ -4,9 +4,8 @@
     Author     : Richard Finkers
 --%>
 
-<%@taglib uri="http://struts.apache.org/tags-html" prefix="html" %>
-<%@taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
-<%@taglib uri="http://struts.apache.org/tags-bean" prefix="bean" %>
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%@ taglib prefix="s" uri="/struts-tags"%>
 
 <!-- start vertical menu -->
 <div class="vertMenu">

@@ -1,9 +1,6 @@
-<%-- 
-    Document   : footer / basis layout
-    Created on : Apr 10, 2009, 6:07:02 PM
-    Author     : finke002
---%>
-<%@taglib prefix="html" uri="http://struts.apache.org/tags-html" %>
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%@ taglib prefix="s" uri="/struts-tags"%>
+
 <hr>
 <html:img bundle="images" pageKey="footer.potato.hand" altKey="footer.potato.hand.alt" />
 <html:img bundle="images" pageKey="footer.tomato.eating" altKey="footer.tomato.eating.alt" />

@@ -1,16 +1,16 @@
 <%-- 
-    Document   : EU-SOL header.jsp
+    Document   : PBR header.jsp
     Created on : Apr 10, 2009, 6:58:31 PM
     Author     : finke002
 --%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@taglib uri="http://struts.apache.org/tags-html" prefix="html" %>
-<%@taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%@ taglib prefix="s" uri="/struts-tags"%>
+
 
 <div id="logobar">
     <div id="logo">
-        <html:link bundle="images" href="http://www.eu-sol.net" target="_bank"><html:img bundle="images" pageKey="eusol.logo" altKey="eusol.alt" height="35"/></html:link>
-        <html:link bundle="images" href="http://cordis.europa.eu/fp6" target="_blank"><html:img bundle="images" pageKey="euFw6.logo" altKey="euFw6.alt" /></html:link>
+        <html:link bundle="images" href="http://www.plantbreeding.wur.nl" target="_bank"><html:img bundle="images" pageKey="plantbreeding.logo" altKey="plantbreeding.alt" height="35"/></html:link>
+        <%--<html:link bundle="images" href="http://cordis.europa.eu/fp6" target="_blank"><html:img bundle="images" pageKey="euFw6.logo" altKey="euFw6.alt" /></html:link>--%>
     </div>
     <!-- @todo: url from properties file.. height control of the logo?end logobar -->
     <logic:notPresent name="user" scope="session">

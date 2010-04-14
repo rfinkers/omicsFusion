@@ -6,7 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
-<%@taglib prefix="tiles" uri="http://struts.apache.org/tags-tiles" %>
+<%@taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
 
 <tiles:insert page="/WEB-INF/tiles/layoutPage.jsp">
     <tiles:put name="title" value="omicsFusion" />
