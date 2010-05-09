@@ -9,5 +9,13 @@
     </head>
     <body>
         <h1>omicsFusion</h1>
+        <ul>
+            <li>Upload excel</li>
+            <li>check excel</li>
+            <li>Select methods</li>
+            <li>run analysis</li>
+            <li>email results</li>
+            <li>show results using link in email</li>
+        </ul>
     </body>
 </html>
