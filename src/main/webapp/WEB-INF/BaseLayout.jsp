@@ -4,28 +4,23 @@
     "http://www.w3.org/TR/html4/loose.dtd">
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <!-- page title -->
+        <title><tiles:insertAttribute name="title" /></title>
 
-        <link rel="stylesheet" type="text/css" media="all" href="style.css" />
-    </head>
-    <html>
-        <head>
-            <!-- favicon -->
-            <link rel="icon" type="image/x-icon" href="<s:url value="/favicon.ico"/>" />
-                  <link rel="shortcut icon" type="image/x-icon" href="<s:url value="/favicon.ico"/>" />
-                  <!-- current page -->
-        <html:base/>
+        <!-- favicon -->
+        <link rel="icon" type="image/x-icon" href="<s:url value="/favicon.ico"/>" />
+        <link rel="shortcut icon" type="image/x-icon" href="<s:url value="/favicon.ico"/>" />
+
         <!-- meta information -->
         <meta name="keywords" content="EU-SOL, CBSG, Wageningen UR Plantbreeding, tomato, potato" />
         <meta name="description" content="Research &amp; education for the EU-SOL project of the expertise group Wageningen UR Plant Breeding." />
         <meta name="reply-to" content="webmaster.plantbreeding@wur.nl" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
         <!-- stylesheets -->
         <link href="<s:url value="/css/themeEU-SOL.css"/>" rel="stylesheet" media="screen" type="text/css" title="Standaard" />
-        <!-- page title -->
-        <title><tiles:insertAttribute name="title" ignore="true" /></title>
-        <!-- javascript-->
 
+        <!-- javascript-->
         <script type="text/javascript" src="<s:url value="/js/jquery-1.4.min.js"/>"></script>
         <script type="text/javascript" src="<s:url value="/js/mbMenu.js"/>"></script>
         <script type="text/javascript" src="<s:url value="/js/jquery.metadata.js"/>"></script>

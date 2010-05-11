@@ -44,7 +44,7 @@
         </listener-class>
     </listener>
     <context-param>
-        <param-name>tilesDefinitions</param-name>
+        <param-name>org.apache.tiles.impl.BasicTilesContainer.DEFINITIONS_CONFIG</param-name>
         <param-value>/WEB-INF/tiles.xml</param-value>
     </context-param>
     <session-config>
