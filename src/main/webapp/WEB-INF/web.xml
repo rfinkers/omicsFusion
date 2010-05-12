@@ -4,12 +4,12 @@
     <context-param>
         <description>Where to submit the jobs</description>
         <param-name>SGESubmit</param-name>
-        <param-value>submitHost</param-value>
+        <param-value>d0100531.wurnet.nl</param-value>
     </context-param>
     <context-param>
         <description>SGE queue to use</description>
         <param-name>SGEQueue</param-name>
-        <param-value>default</param-value>
+        <param-value>batch</param-value>
     </context-param>
     <context-param>
         <description>Server used to send emails</description>
@@ -21,32 +21,21 @@
         <param-name>fromEmail</param-name>
         <param-value>webmaster.plantbreeding@wur.nl</param-value>
     </context-param>
+    <context-param>
+        <param-name>tilesDefinitions</param-name>
+        <param-value>/WEB-INF/tiles.xml</param-value>
+    </context-param>
+    <listener>
+        <listener-class>org.apache.struts2.tiles.StrutsTilesListener</listener-class>
+    </listener>
     <filter>
         <filter-name>struts2</filter-name>
-        <!--<filter-class>org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter</filter-class>-->
         <filter-class>org.apache.struts2.dispatcher.FilterDispatcher</filter-class>
     </filter>
-    <!-- extensions are included in the struts.properties -->
-    <!-- struts.action.extension=action -->
     <filter-mapping>
         <filter-name>struts2</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
-    <!--Class not found -->
-    <!--    <listener>
-        <listener-class>
-            org.springframework.web.context.ContextLoaderListener
-        </listener-class>
-    </listener>-->
-    <listener>
-        <listener-class>
-            org.apache.struts2.tiles.StrutsTilesListener
-        </listener-class>
-    </listener>
-    <context-param>
-        <param-name>org.apache.tiles.impl.BasicTilesContainer.DEFINITIONS_CONFIG</param-name>
-        <param-value>/WEB-INF/tiles.xml</param-value>
-    </context-param>
     <session-config>
         <session-timeout>
             30

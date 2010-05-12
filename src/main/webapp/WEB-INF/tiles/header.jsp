@@ -18,7 +18,7 @@
     </logic:notPresent>
     <logic:present name="user" scope="session">
         <%--TODO: Implement usage of jsp:getProperty in e.g. the Trait graph / accession report pages?--%>
-        <div id="login">Welcome, <jsp:getProperty name="user" property="firstName"/> <jsp:getProperty name="user" property="lastName"/></div><br >
+        <div id="login">Welcome, <%--<jsp:getProperty name="user" property="firstName"/> <jsp:getProperty name="user" property="lastName"/>--%></div><br >
     </logic:present>
     <hr>
 </div>

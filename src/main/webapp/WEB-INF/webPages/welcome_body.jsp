@@ -1,14 +1,10 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
-<html>
 
-<head>
-<title>Welcome Page - Struts 2 - Login Application</title>
-</head>
-<body>
-	<h2>Congratulations, <s:property value="username" />!</h2>
+
+<h2>Congratulations, <s:property value="username" />!</h2>
 	Welcome to Struts 2 world.
-	<h3>What is Apache Tiles</h3>
+<h3>What is Apache Tiles</h3>
 	Apache Tiles is a templating framework built to simplify the
 	development of web application user interfaces. Tiles allows
 	authors to define page fragments which can be assembled into
@@ -21,5 +17,3 @@
 	   popular Struts framework. It has since been extracted from
 	   Struts and is now integrated with various frameworks, such
 	   as Struts 2 and Shale.
-</body>
-</html>

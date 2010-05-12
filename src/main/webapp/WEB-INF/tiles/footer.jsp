@@ -8,3 +8,5 @@
 <html:img bundle="images" pageKey="footer.tomato" altKey="footer.tomato.alt" />
 <html:img bundle="images" pageKey="footer.potato.flower" altKey="footer.potato.flower.alt" />
 <html:link bundle="images" href="http://www.plantbreeding.wur.nl" target="_bank"><html:img bundle="images" pageKey="plantbreeding.logo" altKey="plantbreeding.alt" /></html:link>
+
+test: footer
