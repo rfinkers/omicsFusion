@@ -30,37 +30,37 @@
         <script type="text/javascript" src="<s:url value="/js/jquery.breeDB.0.1.js"/>"></script>
     </head>
     <body>
-        <div id="canvas">
+        <s:div id="canvas">
             <!-- start of the header-->
-            <div id="header">
+            <s:div id="header">
                 <tiles:insertAttribute name="header" />
-            </div>
+            </s:div>
             <!-- end of the header-->
-            <div id="contentcontainer" class="homepage">
-                <div id="maincontent">
-                    <div id="pagecontainer">
+            <s:div id="contentcontainer" class="homepage">
+                <s:div id="maincontent">
+                    <s:div id="pagecontainer">
                         <!-- start of the navigation menu -->
-                        <div id="context">
+                        <s:div id="context">
                             <tiles:insertAttribute name="menu" />
-                        </div>
+                        </s:div>
                         <!-- end of the navigation menu -->
                         <!-- start of the page bdy -->
-                        <div id="content">
+                        <s:div id="content">
                             <tiles:insertAttribute name="body" />
-                        </div>
+                        </s:div>
                         <!-- end of the body -->
-                    </div>
+                    </s:div>
                     <!--  end pagecontainer -->
-                </div>
+                </s:div>
                 <!--  end maincontent -->
-            </div>
+            </s:div>
             <!--  end contentcontainer -->
             <!-- start of the footer -->
-            <div id ="footer">
+            <s:div id ="footer">
                 <tiles:insertAttribute name="footer" />
-            </div>
+            </s:div>
             <!-- end of the footer -->
-        </div>
+        </s:div>
         <!-- End canvas -->
     </body>
 </html>
