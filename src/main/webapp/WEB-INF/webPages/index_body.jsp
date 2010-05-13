@@ -4,6 +4,10 @@
     Author     : finke002
 --%>
 
+<%@ taglib prefix="s" uri="/struts-tags"%>
+
+<s:text name="welcome.heading" />
+
 <h1>omicsFusion</h1>
 <ul>
     <li>Upload excel</li>

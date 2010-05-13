@@ -8,7 +8,7 @@
               value="false" />
     <constant name="struts.devMode" value="false" />
     <constant name="struts.custom.i18n.resources"
-              value="ApplicationResources" />
+              value="nl.wur.plantbreeding.omicsfusion.resources.OmicsFusion" />
 
     <package name="default" extends="struts-default" namespace="/">
         <result-types>

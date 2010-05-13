@@ -3,6 +3,7 @@
 "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
 "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
 <tiles-definitions>
+    <!-- Basis layout -->
     <definition name="baseLayout" template="/WEB-INF/tiles/BaseLayout.jsp">
         <put-attribute name="title" value="" />
         <put-attribute name="header" value="/WEB-INF/tiles/header.jsp" />
@@ -10,7 +11,8 @@
         <put-attribute name="body" value="" />
         <put-attribute name="footer" value="/WEB-INF/tiles/footer.jsp" />
     </definition>
-        <definition name="index" extends="baseLayout">
+    <!--Webpage Root-->
+    <definition name="index" extends="baseLayout">
         <put-attribute name="title" value="omicsFusion" />
         <put-attribute name="body" value="/WEB-INF/webPages/index_body.jsp" />
     </definition>
@@ -18,16 +20,39 @@
         <put-attribute name="title" value="Welcome page" />
         <put-attribute name="body" value="/WEB-INF/webPages/welcome_body.jsp" />
     </definition>
-        <definition name="403" extends="baseLayout">
+    <!--Error Pages-->
+    <definition name="403" extends="baseLayout">
         <put-attribute name="title" value="403 - Not authorized" />
         <put-attribute name="body" value="/WEB-INF/webPages/errorPages/403_body.jsp" />
     </definition>
-        <definition name="404" extends="baseLayout">
+    <definition name="404" extends="baseLayout">
         <put-attribute name="title" value="404 - Not found" />
         <put-attribute name="body" value="/WEB-INF/webPages/errorPages/404_body.jsp" />
     </definition>
-        <definition name="500" extends="baseLayout">
+    <definition name="500" extends="baseLayout">
         <put-attribute name="title" value="500 - Internal server error" />
         <put-attribute name="body" value="/WEB-INF/webPages/errorPages/500_body.jsp" />
     </definition>
+    <!--Submit wizard-->
+    <definition name="submitIndex" extends="baseLayout">
+        <put-attribute name="title" value="omicsFusion" />
+        <put-attribute name="body" value="/WEB-INF/webPages/submit/index_body.jsp" />
+    </definition>
+    <definition name="methodSelection" extends="baseLayout">
+        <put-attribute name="title" value="omicsFusion" />
+        <put-attribute name="body" value="/WEB-INF/webPages/submit/methodSelection_body.jsp" />
+    </definition>
+    <definition name="submit" extends="baseLayout">
+        <put-attribute name="title" value="omicsFusion" />
+        <put-attribute name="body" value="/WEB-INF/webPages/submit/submit_body.jsp" />
+    </definition>
+    <definition name="uploadExcel" extends="baseLayout">
+        <put-attribute name="title" value="omicsFusion" />
+        <put-attribute name="body" value="/WEB-INF/webPages/submit/uploadExcel_body.jsp" />
+    </definition>
+    <definition name="userDetails" extends="baseLayout">
+        <put-attribute name="title" value="omicsFusion" />
+        <put-attribute name="body" value="/WEB-INF/webPages/submit/userDetails_body.jsp" />
+    </definition>
+    <!-- View results -->
 </tiles-definitions>

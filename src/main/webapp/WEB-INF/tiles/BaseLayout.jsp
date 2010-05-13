@@ -21,8 +21,8 @@
         <link href="<s:url value="/css/themeEU-SOL.css"/>" rel="stylesheet" media="screen" type="text/css" title="Standaard" />
 
         <!-- javascript-->
-        <script type="text/javascript" src="<s:url value="/js/jquery-1.4.min.js"/>"></script>
-        <script type="text/javascript" src="<s:url value="/js/mbMenu.js"/>"></script>
+        <script type="text/javascript" src="<s:url value="/js/jquery-1.4.2.min.js"/>"></script>
+        <script type="text/javascript" src="<s:url value="/js/mbMenu.min.js"/>"></script>
         <script type="text/javascript" src="<s:url value="/js/jquery.metadata.js"/>"></script>
         <script type="text/javascript" src="<s:url value="/js/jquery.hoverIntent.js"/>"></script>
         <script type="text/javascript" src="<s:url value="/js/menu.js"/>"></script>
