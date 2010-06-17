@@ -22,3 +22,5 @@ Flow of the website
     <li>5 - email results</li>
     <li>show results using link in email</li>
 </ul>
+
+<s:a value="/submit/userDetails.jsp">Start</s:a>
