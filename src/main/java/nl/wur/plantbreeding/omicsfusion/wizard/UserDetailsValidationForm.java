@@ -18,6 +18,10 @@ public class UserDetailsValidationForm extends ActionSupport {
     private String name;
     /** email of the user */
     private String email;
+    /** country */
+    private String county;
+    /** affiliation */
+    private String affiliation;
 
     public String getEmail() {
         return email;
@@ -33,6 +37,22 @@ public class UserDetailsValidationForm extends ActionSupport {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getAffiliation() {
+        return affiliation;
+    }
+
+    public void setAffiliation(String affiliation) {
+        this.affiliation = affiliation;
+    }
+
+    public String getCounty() {
+        return county;
+    }
+
+    public void setCounty(String county) {
+        this.county = county;
     }
 
     public static Logger getLOG() {

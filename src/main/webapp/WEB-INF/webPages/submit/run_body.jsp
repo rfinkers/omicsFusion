@@ -4,4 +4,6 @@
     Author     : finke002
 --%>
 
-Results index
+<%@ taglib prefix="s" uri="/struts-tags"%>
+
+running/ refresh?

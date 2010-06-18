@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <package name="userDetails" namespace="/userRegistration" extends="struts-default">
+        <action name="userDetails" class="nl.wur.plantbreeding.omicsfusion.wizard.UserDetailsAction">
+            <result name="input">/submit/userDetails.jsp</result>
+            <result name="success">/submit/uploadExcel.jsp</result>
+            <result name="error">/submit/userDetails.jsp</result>
+        </action>
+    </package>
+    <package name="dataUpload" namespace="/userRegistration" extends="struts-default">
+        <action name="dataUpload" class="nl.wur.plantbreeding.omicsfusion.wizard.DataUploadAction">
+            	<interceptor-ref name="fileUpload">
+		<param name="maximumSize">2097152</param>
+
+		<param name="allowedTypes">
+			image/png,image/gif,image/jpeg,image/pjpeg
+		</param>
+	</interceptor-ref>
+	<interceptor-ref name="defaultStack"></interceptor-ref>
+
+            <result name="input">/submit/uploadExcel.jsp</result>
+            <result name="success">/submit/methodSelection.jsp</result>
+            <result name="error">/submit/uploadExcel.jsp</result>
+        </action>
+    </package>
+    <package name="methodSelection" namespace="/userRegistration" extends="struts-default">
+        <action name="methodSelection" class="nl.wur.plantbreeding.omicsfusion.wizard.MethodSelectionAction">
+            <result name="input">/submit/methodSelection.jsp</result>
+            <result name="success">/submit/wizardComplete.jsp</result>
+            <result name="error">/submit/methodSelection.jsp</result>
+        </action>
+    </package>
+</struts>

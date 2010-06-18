@@ -6,6 +6,7 @@ package nl.wur.plantbreeding.omicsfusion.wizard;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.util.logging.Logger;
+import java.io.File;
 
 /**
  *
@@ -15,23 +16,23 @@ public class DataUploadValidationForm extends ActionSupport {
 
     private static final long serialVersionUID = 170610L;
     /** File containing the xxxx trait */
-    private String file1;
+    private File file1;
     /** File containing the xxxx matrix */
-    private String file2;
+    private File file2;
 
-    public String getFile1() {
+    public File getFile1() {
         return file1;
     }
 
-    public void setFile1(String file1) {
+    public void setFile1(File file1) {
         this.file1 = file1;
     }
 
-    public String getFile2() {
+    public File getFile2() {
         return file2;
     }
 
-    public void setFile2(String file2) {
+    public void setFile2(File file2) {
         this.file2 = file2;
     }
 
@@ -41,5 +42,17 @@ public class DataUploadValidationForm extends ActionSupport {
 
     public static void setLOG(Logger LOG) {
         ActionSupport.LOG = LOG;
+    }
+
+    @Override
+    public void validate() {
+
+//        if (file1==null){
+//            addActionError("please select a file");//TODO: via validation.xml?
+//        }
+//        if (file1.canRead() == false) {
+//            addActionError("cannot read file");
+//
+//        }
     }
 }

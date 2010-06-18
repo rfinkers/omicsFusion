@@ -15,6 +15,8 @@ public class DataUploadAction extends DataUploadValidationForm {
 
     @Override
     public String execute() throws Exception {
-        return super.execute();
+        System.out.println("Action: upload data completed");
+    
+        return SUCCESS;
     }
 }

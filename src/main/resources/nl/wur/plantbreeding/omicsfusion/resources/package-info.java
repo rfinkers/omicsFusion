@@ -1,4 +1,4 @@
 /**
  * Resource bundles.
  */
-package nl.wur.solgenomics.omicsfusion2.resource;
+package nl.wur.plantbreeding.omicsfusion.resources;

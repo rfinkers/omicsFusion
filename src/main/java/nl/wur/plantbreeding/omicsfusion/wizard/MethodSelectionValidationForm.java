@@ -2,25 +2,18 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package nl.wur.plantbreeding.omicsfusion.methods;
+package nl.wur.plantbreeding.omicsfusion.wizard;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.util.logging.Logger;
 
 /**
- * Contains the selections for the wizzard.
+ * Overview of selected methods.
  * @author Richard Finkers
  */
-public class UserMethodSelectionForm extends ActionSupport {
+public class MethodSelectionValidationForm extends ActionSupport {
 
-    /** firstName */
-    private String firstName;
-    /** lastName */
-    private String lastName;
-    /** email */
-    private String email;
-    /** session token */
-    private String token;
+    private static final long serialVersionUID = 180610L;
     /** lasso regression */
     private boolean lasso;
     /** Elastic net 1 */
@@ -31,16 +24,24 @@ public class UserMethodSelectionForm extends ActionSupport {
     private boolean pcr;
     /** pls */
     private boolean pls;
-    /** spls */
-    private boolean spls;
-    /** random forrest */
+    /** random forest */
     private boolean rf;
-    /** ridge */
+    /** ridge regression */
     private boolean ridge;
     /** svm */
     private boolean svm;
+    /** spls */
+    private boolean spls;
     /** univariate */
     private boolean univariate;
+
+    public boolean isLasso() {
+        return lasso;
+    }
+
+    public void setLasso(boolean lasso) {
+        this.lasso = lasso;
+    }
 
     public boolean isElasticNet1() {
         return elasticNet1;
@@ -56,30 +57,6 @@ public class UserMethodSelectionForm extends ActionSupport {
 
     public void setElasticNet2(boolean elasticNet2) {
         this.elasticNet2 = elasticNet2;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
     }
 
     public boolean isPcr() {
@@ -130,28 +107,12 @@ public class UserMethodSelectionForm extends ActionSupport {
         this.svm = svm;
     }
 
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
     public boolean isUnivariate() {
         return univariate;
     }
 
     public void setUnivariate(boolean univariate) {
         this.univariate = univariate;
-    }
-    
-    public boolean isLasso() {
-        return lasso;
-    }
-
-    public void setLasso(boolean lasso) {
-        this.lasso = lasso;
     }
 
     public static Logger getLOG() {
@@ -160,5 +121,15 @@ public class UserMethodSelectionForm extends ActionSupport {
 
     public static void setLOG(Logger LOG) {
         ActionSupport.LOG = LOG;
+    }
+
+    @Override
+    public void validate() {
+        /* atleast one method should be selected */
+        if (isLasso() == false && isElasticNet1() == false && isElasticNet2() == false
+                && isPcr() == false && isPls() == false && isRf() == false && isSpls() == false
+                && isRidge() == false && isSvm() == false && isUnivariate() == false) {
+            addActionError("The current selection is invalid. Select at least one method!");
+        }
     }
 }

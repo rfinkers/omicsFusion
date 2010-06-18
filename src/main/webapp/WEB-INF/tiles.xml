@@ -16,10 +16,6 @@
         <put-attribute name="title" value="omicsFusion" />
         <put-attribute name="body" value="/WEB-INF/webPages/index_body.jsp" />
     </definition>
-    <definition name="welcome" extends="baseLayout">
-        <put-attribute name="title" value="Welcome page" />
-        <put-attribute name="body" value="/WEB-INF/webPages/welcome_body.jsp" />
-    </definition>
     <!--Error Pages-->
     <definition name="403" extends="baseLayout">
         <put-attribute name="title" value="403 - Not authorized" />
@@ -42,10 +38,6 @@
         <put-attribute name="title" value="omicsFusion" />
         <put-attribute name="body" value="/WEB-INF/webPages/submit/methodSelection_body.jsp" />
     </definition>
-    <definition name="submit" extends="baseLayout">
-        <put-attribute name="title" value="omicsFusion" />
-        <put-attribute name="body" value="/WEB-INF/webPages/submit/submit_body.jsp" />
-    </definition>
     <definition name="uploadExcel" extends="baseLayout">
         <put-attribute name="title" value="omicsFusion" />
         <put-attribute name="body" value="/WEB-INF/webPages/submit/uploadExcel_body.jsp" />
@@ -54,5 +46,17 @@
         <put-attribute name="title" value="omicsFusion" />
         <put-attribute name="body" value="/WEB-INF/webPages/submit/userDetails_body.jsp" />
     </definition>
+    <definition name="wizardComplete" extends="baseLayout">
+        <put-attribute name="title" value="omicsFusion" />
+        <put-attribute name="body" value="/WEB-INF/webPages/submit/wizardComplete_body.jsp" />
+    </definition>
+    <definition name="run" extends="baseLayout">
+        <put-attribute name="title" value="omicsFusion" />
+        <put-attribute name="body" value="/WEB-INF/webPages/submit/run_body.jsp" />
+    </definition>
     <!-- View results -->
+    <definition name="resultsIndex" extends="baseLayout">
+        <put-attribute name="title" value="omicsFusion" />
+        <put-attribute name="body" value="/WEB-INF/webPages/results/index_body.jsp" />
+    </definition>
 </tiles-definitions>

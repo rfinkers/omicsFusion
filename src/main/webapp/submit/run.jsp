@@ -9,4 +9,4 @@
     "http://www.w3.org/TR/html4/loose.dtd">
 
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles" %>
-<tiles:insertDefinition name="submitIndex" />
+<tiles:insertDefinition name="run" />

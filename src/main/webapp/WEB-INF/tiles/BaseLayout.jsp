@@ -18,7 +18,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
         <!-- stylesheets -->
-        <link href="<s:url value="/css/themeEU-SOL.css"/>" rel="stylesheet" media="screen" type="text/css" title="Standaard" />
+        <link href="<s:url value="/css/themePBR.css"/>" rel="stylesheet" media="screen" type="text/css" title="Standaard" />
 
         <!-- javascript-->
         <script type="text/javascript" src="<s:url value="/js/jquery-1.4.2.min.js"/>"></script>

@@ -11,7 +11,7 @@
               value="nl.wur.plantbreeding.omicsfusion.resources.OmicsFusion" />
 
 <!--              Actions for the framework-->
-    <include file="userDetails.xml"/>
+    <include file="submitWizard.xml"/>
 
     <package name="default" extends="struts-default" namespace="/">
         <result-types>

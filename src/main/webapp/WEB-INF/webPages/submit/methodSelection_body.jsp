@@ -2,8 +2,10 @@
 
 
 <h1><s:text name="omicsFusion.heading" /></h1>
-
-<s:form action="selectMethods">
+<s:actionerror/>
+<%--<s:fielderror />--%>
+<s:actionmessage/>
+<s:form action="/userRegistration/methodSelection">
     <s:text name="analysis.methods"/>
 
     <s:checkbox key="analysis.method.lasso" name="lasso"/>
@@ -19,5 +21,5 @@
 
     <s:text name="analysis.variableSelection"/>
 
-    <s:submit key="button.submit"/> <s:reset key="button.reset"/>
+    <s:submit key="method.submit"/> <s:reset key="button.reset"/>
 </s:form>
