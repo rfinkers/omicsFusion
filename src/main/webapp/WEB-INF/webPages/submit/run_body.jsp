@@ -7,3 +7,4 @@
 <%@ taglib prefix="s" uri="/struts-tags"%>
 
 running/ refresh?
+TODO: resource bundle

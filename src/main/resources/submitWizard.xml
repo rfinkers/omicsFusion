@@ -13,15 +13,14 @@
     </package>
     <package name="dataUpload" namespace="/userRegistration" extends="struts-default">
         <action name="dataUpload" class="nl.wur.plantbreeding.omicsfusion.wizard.DataUploadAction">
-            	<interceptor-ref name="fileUpload">
-		<param name="maximumSize">2097152</param>
-
-		<param name="allowedTypes">
-			image/png,image/gif,image/jpeg,image/pjpeg
-		</param>
-	</interceptor-ref>
-	<interceptor-ref name="defaultStack"></interceptor-ref>
-
+            <interceptor-ref name="fileUpload">
+                <param name="maximumSize">2097152</param>
+                <param name="allowedTypes">
+                    application/vnd.ms-excel
+<!--			application/vnd.ms-excel,image/png example for multiple types-->
+                </param>
+            </interceptor-ref>
+            <interceptor-ref name="defaultStack"></interceptor-ref>
             <result name="input">/submit/uploadExcel.jsp</result>
             <result name="success">/submit/methodSelection.jsp</result>
             <result name="error">/submit/uploadExcel.jsp</result>
@@ -32,6 +31,13 @@
             <result name="input">/submit/methodSelection.jsp</result>
             <result name="success">/submit/wizardComplete.jsp</result>
             <result name="error">/submit/methodSelection.jsp</result>
+        </action>
+    </package>
+        <package name="pipeline" namespace="/analysis" extends="struts-default">
+        <action name="pipeline" class="nl.wur.plantbreeding.omicsfusion.methods.RunAnalysisAction">
+            <result name="input">/submit/wizardComplete.jsp</result>
+            <result name="success">/submit/run.jsp</result>
+<!--            <result name="error">/submit/methodSelection.jsp</result>-->
         </action>
     </package>
 </struts>

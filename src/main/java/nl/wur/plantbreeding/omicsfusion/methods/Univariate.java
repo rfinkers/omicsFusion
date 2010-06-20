@@ -6,10 +6,11 @@
 package nl.wur.plantbreeding.omicsfusion.methods;
 
 /**
- * Univariate Analyses
+ * Univariate analysis
  * @author Richard Finkers
  */
-public class Univariate {
+public class Univariate extends Analysis {
+
 //r2<-NULL
 //r2adj<-NULL
 //beta0<-NULL

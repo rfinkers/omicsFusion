@@ -12,11 +12,11 @@ Form
 <h2><s:text name="uploadExcel.heading" /></h2>
 <s:actionerror/>
 <s:actionmessage/>
+<s:fielderror/>
 <s:text name="uploadExcel.explanation"/>
 
 
 <s:form action="/userRegistration/dataUpload" enctype="multipart/form-data" >
-    <s:file name="file1" key="file1" />
-    <s:file name="file2" key="file2" />
+    <s:file name="dataSheetFile" key="dataSheet" />
     <s:reset/><s:submit/>
 </s:form>

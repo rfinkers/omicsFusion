@@ -5,14 +5,14 @@
 --%>
 
 <%@ taglib prefix="s" uri="/struts-tags"%>
-
+<s:text name="submit.complete.progress"/>
 <h2><s:text name="submit.complete.heading" /></h2>
 <s:actionerror/>
 <s:actionmessage/>
 <s:text name="submit.complete.explanation"/>
 
 <h4><s:text name="submit.complete.user"/></h4>
-<s:property value="#session.omicsFusionUser.email"/>
+<s:property value="email"/><s:property value="#session.omicsFusionUser.email"/>
 
 <h4><s:text name="submit.complete.upload"/></h4>
 
@@ -21,4 +21,5 @@
 
 <s:form action="/analysis/pipeline" >
     <s:hidden value="go" name="ready"/>
+    <s:submit/>
 </s:form>

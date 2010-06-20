@@ -1,13 +1,13 @@
 <%@ taglib prefix="s" uri="/struts-tags"%>
 
-
-<h1><s:text name="omicsFusion.heading" /></h1>
+<s:text name="analysis.methods.progress"/>
+<h2><s:text name="analysis.methods.heading" /></h2>
 <s:actionerror/>
 <%--<s:fielderror />--%>
 <s:actionmessage/>
-<s:form action="/userRegistration/methodSelection">
-    <s:text name="analysis.methods"/>
+<s:text name="analisis.methods.explanation"/>
 
+<s:form action="/userRegistration/methodSelection">
     <s:checkbox key="analysis.method.lasso" name="lasso"/>
     <s:checkbox key="analysis.method.elasticNet1" name="elasticNet1"/>
     <s:checkbox key="analysis.method.elasticNet2" name="elasticNet2"/>
@@ -19,7 +19,7 @@
     <s:checkbox key="analysis.method.spls" name="spls"/>
     <s:checkbox key="analysis.method.univariate" name="univariate"/>
 
-    <s:text name="analysis.variableSelection"/>
+    <s:text name="analysis.methods.variable.selection"/>
 
     <s:submit key="method.submit"/> <s:reset key="button.reset"/>
 </s:form>

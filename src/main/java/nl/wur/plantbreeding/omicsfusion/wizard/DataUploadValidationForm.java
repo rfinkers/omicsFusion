@@ -10,30 +10,40 @@ import java.io.File;
 
 /**
  *
- * @author finke002
+ * @author Richard Finkers
  */
 public class DataUploadValidationForm extends ActionSupport {
 
     private static final long serialVersionUID = 170610L;
-    /** File containing the xxxx trait */
-    private File file1;
-    /** File containing the xxxx matrix */
-    private File file2;
+    /** File containing the trait data */
+    private File dataSheetFile;
+    /** content type of the data sheet */
+    private String dataSheetFileContentType;
+    /** name of the dataSheet */
+    private String dataSheetFileFileName;
 
-    public File getFile1() {
-        return file1;
+    public File getDataSheetFile() {
+        return dataSheetFile;
     }
 
-    public void setFile1(File file1) {
-        this.file1 = file1;
+    public void setDataSheetFile(File dataSheetFile) {
+        this.dataSheetFile = dataSheetFile;
     }
 
-    public File getFile2() {
-        return file2;
+    public String getDataSheetFileContentType() {
+        return dataSheetFileContentType;
     }
 
-    public void setFile2(File file2) {
-        this.file2 = file2;
+    public void setDataSheetFileContentType(String dataSheetFileContentType) {
+        this.dataSheetFileContentType = dataSheetFileContentType;
+    }
+
+    public String getDataSheetFileFileName() {
+        return dataSheetFileFileName;
+    }
+
+    public void setDataSheetFileFileName(String dataSheetFileFileName) {
+        this.dataSheetFileFileName = dataSheetFileFileName;
     }
 
     public static Logger getLOG() {
@@ -46,6 +56,10 @@ public class DataUploadValidationForm extends ActionSupport {
 
     @Override
     public void validate() {
+
+        if(dataSheetFileFileName.equals("")){
+              addActionError("please select a file");//TODO: via validation.xml?
+        }
 
 //        if (file1==null){
 //            addActionError("please select a file");//TODO: via validation.xml?
