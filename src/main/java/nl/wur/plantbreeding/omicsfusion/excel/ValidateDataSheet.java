@@ -6,7 +6,6 @@ package nl.wur.plantbreeding.omicsfusion.excel;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.Level;
@@ -26,8 +25,6 @@ public class ValidateDataSheet {
     /** The import stream to load the data sheet */
     private static InputStream dataSheet;
 
-    private ValidateDataSheet() {
-    }
 
     /**
      * Checks if a file is a valid excel (2003/2007?) workbook.
@@ -57,4 +54,5 @@ public class ValidateDataSheet {
 
         return sheetValidated;
     }
+
 }

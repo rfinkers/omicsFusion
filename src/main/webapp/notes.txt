@@ -17,3 +17,7 @@ For the future I think we will need a version of the program that can:
 In addition we will need a clear description of all the methods with all their pros and cons (advantages, disadvantages, peculiarities, behaviour), not just from a theoretical perspective but also for guidance in the application by non-statistical users. It will have to include sort of a recommendation: if this and this is your situation and you are interested in this and this type of biological question then you should use this and this method and certainly not that and that method. The paper should actually already contain most of this information, so that a reference will be also good.
 
 I will send a cc to Richard Finkers as this also concerns the web application of this methodology that is being built.
+
+Animesh komt met nieuwe scripts:
+input in apparte files? voorschrijven van formaten!
+omgaan met missing data

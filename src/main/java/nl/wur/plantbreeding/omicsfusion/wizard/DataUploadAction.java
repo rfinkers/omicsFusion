@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import nl.wur.plantbreeding.omicsfusion.excel.ValidateDataSheet;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import org.apache.commons.io.FileUtils;
 import org.apache.struts2.interceptor.ServletRequestAware;
 
@@ -27,19 +26,24 @@ public class DataUploadAction extends DataUploadValidationForm implements Servle
     public String execute() throws Exception {
         try {
 
-            File theFile = getDataSheetFile();
+            File theFile = getDataSheetPredictorFile();
 
-            File destFile = new File("/tmp/" + request.getSession().getId() + "/" + getDataSheetFileFileName());//TODO: get tmp directory from environment
+            File destFile = new File("/tmp/" + request.getSession().getId() + "/" + getDataSheetPredictorFileFileName());//TODO: get tmp directory from environment
             FileUtils.copyFile(theFile, destFile);
 
-            //validate excelsheet
+            System.out.println("Predictor: " + getDataSheetPredictorFileFileName());
+            System.out.println("Type: " + getPredictorType());
+            System.out.println("Response: " + getDataSheetResponseFileFileName());
+            System.out.println("Type: "+ getResponseType());
+            
+            //validate excelsheet. validation depends on the type of the sheet
 
-            boolean validation = ValidateDataSheet.validate(destFile);
-            if (validation == false) {
+            boolean validationPredictorSheet = ValidateDataSheet.validate(destFile);
+            if (validationPredictorSheet == false) {
                 addActionError("Excel sheet validation failed");//TODO: more detailed errors should be given.
                 return INPUT;
             }
-            System.out.println("validation: " + validation);
+            System.out.println("validation: " + validationPredictorSheet);
             //TODO: catch the different exceptions and handle them in a correct manner
         } catch (FileNotFoundException e) {
 

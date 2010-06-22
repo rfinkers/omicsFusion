@@ -17,6 +17,7 @@ Form
 
 
 <s:form action="/userRegistration/dataUpload" enctype="multipart/form-data" >
-    <s:file name="dataSheetFile" key="dataSheet" />
+    <s:file name="dataSheetResponseFile" key="dataSheetResponseFile" /><s:select key="dataset.type" name="responseType" headerValue="-- Please select --" headerKey="select" list="#{'ph':'Phenomics','me':'Metabolomics','tr':'Trascriptomics','ma':'Markers (Binary)'}"/>
+    <s:file name="dataSheetPredictorFile" key="dataSheetPredictorFile"/><s:select key="dataset.type" name="predictorType" headerValue="-- Please select --" headerKey="select" list="#{'ph':'Phenomics','me':'Metabolomics','tr':'Trascriptomics','ma':'Markers (Binary)'}"/>
     <s:reset/><s:submit/>
 </s:form>

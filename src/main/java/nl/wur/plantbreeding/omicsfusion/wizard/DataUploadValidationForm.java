@@ -15,35 +15,85 @@ import java.io.File;
 public class DataUploadValidationForm extends ActionSupport {
 
     private static final long serialVersionUID = 170610L;
-    /** File containing the trait data */
-    private File dataSheetFile;
+    /** File containing the response variables */
+    private File dataSheetResponseFile;
     /** content type of the data sheet */
-    private String dataSheetFileContentType;
+    private String dataSheetResponseFileContentType;
     /** name of the dataSheet */
-    private String dataSheetFileFileName;
+    private String dataSheetResponseFileFileName;
+    /** Type of the response variables */
+    private String responseType;
+    /** File containing the predictor variables */
+    private File dataSheetPredictorFile;
+    /** content type of the data sheet */
+    private String dataSheetPredictorFileContentType;
+    /** name of the dataSheet */
+    private String dataSheetPredictorFileFileName;
+    /** Type of the predictor variables */
+    private String predictorType;
 
-    public File getDataSheetFile() {
-        return dataSheetFile;
+    public File getDataSheetPredictorFile() {
+        return dataSheetPredictorFile;
     }
 
-    public void setDataSheetFile(File dataSheetFile) {
-        this.dataSheetFile = dataSheetFile;
+    public void setDataSheetPredictorFile(File dataSheetPredictorFile) {
+        this.dataSheetPredictorFile = dataSheetPredictorFile;
     }
 
-    public String getDataSheetFileContentType() {
-        return dataSheetFileContentType;
+    public String getDataSheetPredictorFileContentType() {
+        return dataSheetPredictorFileContentType;
     }
 
-    public void setDataSheetFileContentType(String dataSheetFileContentType) {
-        this.dataSheetFileContentType = dataSheetFileContentType;
+    public void setDataSheetPredictorFileContentType(String dataSheetPredictorFileContentType) {
+        this.dataSheetPredictorFileContentType = dataSheetPredictorFileContentType;
     }
 
-    public String getDataSheetFileFileName() {
-        return dataSheetFileFileName;
+    public String getDataSheetPredictorFileFileName() {
+        return dataSheetPredictorFileFileName;
     }
 
-    public void setDataSheetFileFileName(String dataSheetFileFileName) {
-        this.dataSheetFileFileName = dataSheetFileFileName;
+    public void setDataSheetPredictorFileFileName(String dataSheetPredictorFileFileName) {
+        this.dataSheetPredictorFileFileName = dataSheetPredictorFileFileName;
+    }
+
+    public File getDataSheetResponseFile() {
+        return dataSheetResponseFile;
+    }
+
+    public void setDataSheetResponseFile(File dataSheetResponseFile) {
+        this.dataSheetResponseFile = dataSheetResponseFile;
+    }
+
+    public String getDataSheetResponseFileContentType() {
+        return dataSheetResponseFileContentType;
+    }
+
+    public void setDataSheetResponseFileContentType(String dataSheetResponseFileContentType) {
+        this.dataSheetResponseFileContentType = dataSheetResponseFileContentType;
+    }
+
+    public String getDataSheetResponseFileFileName() {
+        return dataSheetResponseFileFileName;
+    }
+
+    public void setDataSheetResponseFileFileName(String dataSheetResponseFileFileName) {
+        this.dataSheetResponseFileFileName = dataSheetResponseFileFileName;
+    }
+
+    public String getPredictorType() {
+        return predictorType;
+    }
+
+    public void setPredictorType(String predictorType) {
+        this.predictorType = predictorType;
+    }
+
+    public String getResponseType() {
+        return responseType;
+    }
+
+    public void setResponseType(String responseType) {
+        this.responseType = responseType;
     }
 
     public static Logger getLOG() {
@@ -57,9 +107,13 @@ public class DataUploadValidationForm extends ActionSupport {
     @Override
     public void validate() {
 
-        if(dataSheetFileFileName.equals("")){
-              addActionError("please select a file");//TODO: via validation.xml?
+        if(predictorType.equals("select")|| responseType.equals("select")){
+            addActionError("Please select the type of data");//TODO: resource bundle
         }
+
+//        if(dataSheetFileFileName.equals("")){
+//              addActionError("please select a file");//TODO: via validation.xml?
+//        }
 
 //        if (file1==null){
 //            addActionError("please select a file");//TODO: via validation.xml?
