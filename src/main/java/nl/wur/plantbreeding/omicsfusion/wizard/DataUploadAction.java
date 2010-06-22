@@ -1,4 +1,4 @@
-/*
+avas/*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
@@ -45,6 +45,8 @@ public class DataUploadAction extends DataUploadValidationForm implements Servle
             }
             System.out.println("validation: " + validationPredictorSheet);
             //TODO: catch the different exceptions and handle them in a correct manner
+
+            //TODO: should we prepare the list with selectionboxes here?
         } catch (FileNotFoundException e) {
 
             addActionError(e.getMessage());
