@@ -8,9 +8,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import nl.wur.plantbreeding.omicsfusion.utils.Constants;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
@@ -21,14 +21,8 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
  */
 public class ValidateDataSheets {
 
-    /** Validation results */
-    private static boolean sheetValidated;
     /** The logger */
     private static final Logger LOG = Logger.getLogger(ValidateDataSheets.class.getName());
-    /** Minimun nr of columns for predictor sheet */
-    private final static int PREDICTOR_COLUMNS = 5;
-    /** Minimun nr of columns for response sheet */
-    private final static int RESPONSE_COLUMNS = 1;
 
     private ValidateDataSheets() {
     }
@@ -37,15 +31,13 @@ public class ValidateDataSheets {
      * Checks if a file is a valid excel (2003/2007?) workbook.
      * @param responseSheet
      * @param predictorSheet
-     * @return valid or not valid
      * @throws DataSheetValidationException
      * @throws InvalidFormatException
      * @throws FileNotFoundException
      * @throws IOException
      */
-    public static boolean validateExcelSheets(File responseSheet, File predictorSheet) throws DataSheetValidationException, InvalidFormatException, FileNotFoundException, IOException {
-        /** Validation parameter */
-        sheetValidated = false;
+    public static void validateExcelSheets(File responseSheet, File predictorSheet) throws DataSheetValidationException, InvalidFormatException, FileNotFoundException, IOException {
+
         /** nr of rows in response sheet */
         int responseRows;
         /** nr of rows in predictor sheet */
@@ -57,19 +49,15 @@ public class ValidateDataSheets {
         Workbook predictorWorkbook;
 
         responseWorkbook = loadExcelSheet(responseSheet);
-        responseRows = checkWorkbookDimensions(responseWorkbook, responseSheet.getName(), RESPONSE_COLUMNS + 1);// +1 because of column containing the labels.
+        responseRows = checkWorkbookDimensions(responseWorkbook, responseSheet.getName(), Constants.RESPONSE_COLUMNS + 1);// +1 because of column containing the labels.
         predictorWorkbook = loadExcelSheet(predictorSheet);
-        predictorRows = checkWorkbookDimensions(predictorWorkbook, predictorSheet.getName(), PREDICTOR_COLUMNS + 1);// +1 because of columns containing the labels.
+        predictorRows = checkWorkbookDimensions(predictorWorkbook, predictorSheet.getName(), Constants.PREDICTOR_COLUMNS + 1);// +1 because of columns containing the labels.
 
         if (predictorRows == responseRows) {
             compareIndividualNames(responseWorkbook, predictorWorkbook);
         } else {
             throw new DataSheetValidationException("Number of individuals on the predictor and response variable sheets differ");
         }
-        System.out.println("Predictor rows: " + predictorRows);
-        System.out.println("Response rows : " + responseRows);
-
-        return true;//TODO: deal with this
     }
 
     /**

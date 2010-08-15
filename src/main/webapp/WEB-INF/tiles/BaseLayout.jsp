@@ -17,6 +17,8 @@
         <meta name="reply-to" content="webmaster.plantbreeding@wur.nl" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
+<!--        <meta http-equiv="refresh" content="2;url<s:url/>"/> Only for wait.jsp / If thest?-->
+
         <!-- stylesheets -->
         <link href="<s:url value="/css/themePBR.css"/>" rel="stylesheet" media="screen" type="text/css" title="Standaard" />
 

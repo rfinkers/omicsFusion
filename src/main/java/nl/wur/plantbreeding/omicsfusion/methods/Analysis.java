@@ -2,8 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package nl.wur.plantbreeding.omicsfusion.methods;
+
+import java.io.FileOutputStream;
+import java.util.logging.Logger;
 
 /**
  *
@@ -11,8 +13,27 @@ package nl.wur.plantbreeding.omicsfusion.methods;
  */
 public class Analysis {
 
-    public void readExcelSheet(String sessionID){
-        
+    /** A logger */
+    private static final Logger LOG = Logger.getLogger(Analysis.class.getName());
+    /** Write R files to the required directory */
+    private FileOutputStream fos;
+
+    /**
+     * @return the fos
+     */
+    public FileOutputStream getFos() {
+        return fos;
     }
+
+    /**
+     * @param fos the fos to set
+     */
+    public void setFos(FileOutputStream fos) {
+        this.fos = fos;
+    }
+
+    public void readExcelSheet(String sessionID) {
+    }
+
 
 }

@@ -5,11 +5,26 @@
 
 package nl.wur.plantbreeding.omicsfusion.methods;
 
+import java.io.File;
+import java.io.FileOutputStream;
+
 /**
  * Univariate analysis
  * @author Richard Finkers
  */
 public class Univariate extends Analysis {
+
+    //Write the script
+    //Export to tmp directory
+    //Submit to SGE
+
+    FileOutputStream fos = getFos();// FIXME: add tmp directory whith the excel files!
+
+
+
+
+
+
 
 //r2<-NULL
 //r2adj<-NULL

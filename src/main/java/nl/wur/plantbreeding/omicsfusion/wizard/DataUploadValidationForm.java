@@ -107,6 +107,7 @@ public class DataUploadValidationForm extends ActionSupport {
     @Override
     public void validate() {
 
+        //Order of importance for the order that the messages are shown.
         if (dataSheetResponseFile == null || dataSheetPredictorFile == null) {//TODO: via validation.xml?
             addActionError("Please select a response file");//TODO: resource bundle
         }

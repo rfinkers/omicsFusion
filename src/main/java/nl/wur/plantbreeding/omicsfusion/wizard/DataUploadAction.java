@@ -40,16 +40,10 @@ public class DataUploadAction extends DataUploadValidationForm implements Servle
             System.out.println("Response: " + getDataSheetResponseFileFileName());
             System.out.println("Type: " + getResponseType());
 
-            //validate excelsheet. validation depends on the type of the sheet
-            boolean validationPredictorSheet = ValidateDataSheets.validateExcelSheets(responseSheet, predictorSheet);
-            if (validationPredictorSheet == false) {
-                addActionError("Excel sheet validation failed");//TODO: more detailed errors should be given.
-                return INPUT;
-            }
-            System.out.println("validation: " + validationPredictorSheet);
-            //TODO: catch the different exceptions and handle them in a correct manner
+            //validate the correctness of the format of the excelsheet.
+            ValidateDataSheets.validateExcelSheets(responseSheet, predictorSheet);
 
-            //TODO: should we prepare the list with selectionboxes here?
+            //TODO: should we prepare the list with selectionboxes here depending of the type of sheets?
         } catch (InvalidFormatException e) {
             addActionError(e.getMessage());
             return INPUT;
