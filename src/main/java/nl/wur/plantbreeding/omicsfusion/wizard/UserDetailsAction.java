@@ -21,7 +21,7 @@ public class UserDetailsAction extends UserDetailsValidationForm implements Sess
 
     @Override
     public String execute() throws Exception {
-        System.out.println("Action: user details completed: " + getEmail());//TODO: remove debug code
+        getLOG().info("Action: user details completed: " + getEmail());//TODO: remove debug code
         try {
             //TODO: get the user ID? or just before persisting the object?
             //TODO: finish UserDetailsAction-validation.xml add validation to all.

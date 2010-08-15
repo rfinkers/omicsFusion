@@ -107,9 +107,23 @@ public class DataUploadValidationForm extends ActionSupport {
     @Override
     public void validate() {
 
-        if(predictorType.equals("select")|| responseType.equals("select")){
-            addActionError("Please select the type of data");//TODO: resource bundle
+        if (dataSheetResponseFile == null || dataSheetPredictorFile == null) {//TODO: via validation.xml?
+            addActionError("Please select a response file");//TODO: resource bundle
         }
+        if (responseType.equals("select")) {//TODO: via validation.xml?
+            addActionError("Please select the type of data for the response file");//TODO: resource bundle
+        }
+        if (dataSheetPredictorFile == null) {
+            addActionError("Please select a predictor file");//TODO: resource bundle
+        }
+        if (predictorType.equals("select")) {
+            addActionError("Please select the type of data for the predictor file");//TODO: resource bundle
+        }
+
+        //TODO: filenames are not kept after validation error. Type, however, is kept.
+
+
+
 
 //        if(dataSheetFileFileName.equals("")){
 //              addActionError("please select a file");//TODO: via validation.xml?
