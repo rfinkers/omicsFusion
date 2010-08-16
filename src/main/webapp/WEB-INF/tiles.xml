@@ -58,8 +58,8 @@
         <put-attribute name="title" value="omicsFusion" />
         <put-attribute name="body" value="/WEB-INF/webPages/submit/run_body.jsp" />
     </definition>
-        <definition name="wait" extends="Please wait">
-        <put-attribute name="title" value="omicsFusion" />
+    <definition name="wait" extends="baseLayout">
+        <put-attribute name="title" value="Please wait" />
         <put-attribute name="body" value="/WEB-INF/webPages/submit/wait_body.jsp" />
     </definition>
     <!-- View results -->

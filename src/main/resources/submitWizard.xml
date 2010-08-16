@@ -33,10 +33,11 @@
             <result name="error">/submit/methodSelection.jsp</result>
         </action>
     </package>
-        <package name="pipeline" namespace="/analysis" extends="struts-default">
+    <package name="pipeline" namespace="/analysis" extends="struts-default">
         <action name="pipeline" class="nl.wur.plantbreeding.omicsfusion.methods.RunAnalysisAction">
             <result name="input">/submit/wizardComplete.jsp</result>
             <result name="success">/submit/run.jsp</result>
+<!--            <result name="success">/submit/run.jsp</result>-->
 <!--            <result name="error">/submit/methodSelection.jsp</result>-->
         </action>
     </package>

@@ -26,18 +26,17 @@ public class WriteFile {
      */
     public void WriteFile(String fileName, String content) throws IOException {
 
-        File f = new File("textfile1.txt");//FIXME: be sure to write to the current /tmp directory for this session
+        File f = new File(fileName);//FIXME: be sure to write to the current /tmp directory for this session
         FileOutputStream fop = new FileOutputStream(f);
 
         if (f.exists()) {
             String str = "This data is written through the program";
-            fop.write(str.getBytes());
-
+            fop.write(content.getBytes());
             fop.flush();
             fop.close();
             System.out.println("The data has been written");
         } else {
-            System.out.println("This file is not exist");
+            System.out.println("This file does not exist");
         }
     }
 }
