@@ -29,10 +29,10 @@ public class Univariate extends Analysis {
         //required libraries
         rScript += "library(gdata)\n";
         //load the input data
-        rScript += "Y<-read.xls(\"brix.xls\")\n";
-        rScript += "rowNames(Y)<-Y[1]\n";
+        rScript += "Y<-read.xls(\"brix.xls\")\n";//FIXME: hardcode sheet names
+        rScript += "rownames(Y)<-Y[1]\n";
         rScript += "Y<-Y[2]\n";
-        rScript += "X<-read.xls(\"traits.xls\")\n";
+        rScript += "X<-read.xls(\"traits.xls\")\n";//FIXME: hardcode sheet names
         //run the analysis
         rScript += "for(i in 2:dim(X)[2])\n";
         rScript += "{\n";

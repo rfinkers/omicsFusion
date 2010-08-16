@@ -30,13 +30,12 @@ public class WriteFile {
         FileOutputStream fop = new FileOutputStream(f);
 
         if (f.exists()) {
-            String str = "This data is written through the program";
             fop.write(content.getBytes());
             fop.flush();
             fop.close();
             System.out.println("The data has been written");
         } else {
-            System.out.println("This file does not exist");
+            System.out.println("This file does not exist");//TODO throw exception
         }
     }
 }
