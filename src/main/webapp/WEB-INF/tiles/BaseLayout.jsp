@@ -1,8 +1,10 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-    "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<%@ taglib prefix="sj" uri="/struts-jquery-tags"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <!-- page title -->
         <title><tiles:insertAttribute name="title" /></title>
@@ -19,11 +21,14 @@
 
 <!--        <meta http-equiv="refresh" content="2;url<s:url/>"/> Only for wait.jsp / If thest?-->
 
-        <!-- stylesheets -->
+        <!-- style sheets -->
         <link href="<s:url value="/css/themePBR.css"/>" rel="stylesheet" media="screen" type="text/css" title="Standaard" />
 
+        <!-- taglib auto generated -->
+        <s:head/>
+        <sj:head/>
+
         <!-- javascript-->
-        <script type="text/javascript" src="<s:url value="/js/jquery-1.4.2.min.js"/>"></script>
         <script type="text/javascript" src="<s:url value="/js/mbMenu.min.js"/>"></script>
         <script type="text/javascript" src="<s:url value="/js/jquery.metadata.js"/>"></script>
         <script type="text/javascript" src="<s:url value="/js/jquery.hoverIntent.js"/>"></script>

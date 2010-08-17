@@ -5,8 +5,6 @@
 package nl.wur.plantbreeding.omicsfusion.methods;
 
 import java.util.logging.Logger;
-import nl.wur.plantbreeding.omicsfusion.wizard.DataUploadAction;
-import nl.wur.plantbreeding.omicsfusion.wizard.DataUploadValidationForm;
 
 /**
  * Contains the script required to perform Univariate analysis.
@@ -16,27 +14,38 @@ public class Univariate extends Analysis {
 
     /** The logger */
     private static final Logger LOG = Logger.getLogger(Univariate.class.getName());
+
     /** The script file */
     //private String rScript = "";
-
     /**
      * Basic analysis script for R
+     * @param output Output directory
      * @return The script
      */
-    public String analysisisRScript() {
+    public String analysisisRScript(String output) {
         //Write the script
         rScript = "#Univariate Analysis\n";
+        //Set the working directory
+        rScript += "setwd(\"" + output + "\")\n";
         //required libraries
         rScript += "library(gdata)\n";
+        rScript += "library(multtest)\n";
+        //initialize the variables
+        rScript += "r2<-NULL\n";
+        rScript += "r2adj<-NULL\n";
+        rScript += "beta0<-NULL\n";
+        rScript += "beta1<-NULL\n";
+        rScript += "pval<-NULL\n";
         //load the input data
         rScript += "Y<-read.xls(\"brix.xls\")\n";//FIXME: hardcode sheet names
-        rScript += "rownames(Y)<-Y[1]\n";
-        rScript += "Y<-Y[2]\n";
+        //rScript += "rownames(Y)<-Y[1]\n";
+        //rScript += "Y<-Y[2]\n";
         rScript += "X<-read.xls(\"traits.xls\")\n";//FIXME: hardcode sheet names
+        rScript += "trtname<-colnames(X)\n";
         //run the analysis
         rScript += "for(i in 2:dim(X)[2])\n";
         rScript += "{\n";
-        rScript += "    lmres<-lm(Y~X[,i])\n";
+        rScript += "    lmres<-lm(Y[,2]~X[,i])\n";
         rScript += "    anovares<-anova(lmres)\n";
         rScript += "    sumres<-summary(lmres)\n";
         rScript += "    r2[i]<-sumres$r.squared\n";
@@ -49,22 +58,21 @@ public class Univariate extends Analysis {
         //Write results to XLS files
         rScript += "index<-1:dim(X)[2]\n";
         rScript += "adjp1<-mt.rawp2adjp(rawp=pval[order(index)])\n";
-        rScript += "outp<-cbind(beta1,r2,pval,adjp)\n";
-        rScript += "filename5<-paste(trtname,\"Univ_coef.xls\",sep=\"_\")\n";
-        rScript += "write.xls(outp,filename5)\n";
+        rScript += "adjp<-adjp1$adjp[order(adjp1$index),]\n";
+        rScript += "outp<-cbind(trtname,beta1,r2,pval,adjp)\n";
+        rScript += "filename5<-paste(trtname,\"Univ_coef.csv\")\n";
+        rScript += "write.csv(outp,filename5)\n";
 
         return rScript;
     }
     //Export to tmp directory
     //Submit to SGE
-
 //r2<-NULL
 //r2adj<-NULL
 //beta0<-NULL
 //beta1<-NULL
 //pval<-NULL
 //
-
 //for(i in 1:dim(X)[2])
 //{
 //lmres<-lm(y ~ X[,i])
