@@ -1,6 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * omicsFusion submission pipeline.
  */
-
 package nl.wur.plantbreeding.omicsfusion.wizard;
