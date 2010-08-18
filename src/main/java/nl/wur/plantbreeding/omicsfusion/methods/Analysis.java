@@ -20,4 +20,11 @@ public class Analysis {
     Analysis() {
     }
     /** Write R files to the required directory */
+
+    public String preProcessMatrix(){
+        String rCode="";
+        
+        return rCode;
+    }
+    
 }

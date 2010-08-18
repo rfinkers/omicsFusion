@@ -11,7 +11,7 @@ import java.util.StringTokenizer;
 import java.util.logging.Logger;
 
 /**
- * Executes
+ * Executes a SGE batch script and returns the nr of the submission
  * @author finke002
  */
 public class CmdExec {
@@ -19,33 +19,22 @@ public class CmdExec {
     /** The logger */
     private static final Logger LOG = Logger.getLogger(CmdExec.class.getName());
 
-    public static void CmdExec(String executionDir) throws IOException {
+    private CmdExec() {
+    }
 
-        String line;
-        Process p = Runtime.getRuntime().exec("qsub -S /qsub -S /bin/bash " + executionDir + "batch.sh");
-        BufferedReader input =
-                new BufferedReader(new InputStreamReader(p.getInputStream()));
-        while (( line = input.readLine() ) != null) {//We actually only need the first line.
-            System.out.println(line);
-        }
-//        try {
-//
-//            Pattern intsOnly = Pattern.compile("\\d+");
-//            Matcher makeMatch = intsOnly.matcher(line);
-//            makeMatch.find();
-//            String inputInt = makeMatch.group();
-//            System.out.println(inputInt);
-//        }
-//        catch (Exception e) {
-//            e.printStackTrace();
-//        }
+    public static int CmdExec(String executionDir) throws IOException {
 
-        int jobId=0;
+        Process p = Runtime.getRuntime().exec("qsub -S /bin/bash " + executionDir + "batch.sh");
+        BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
+        String line = input.readLine();
+        input.close();
+
+        int jobId = 0;
         StringTokenizer st = new StringTokenizer(line);
         while (st.hasMoreTokens()) {
             try {
                 jobId = Integer.parseInt(st.nextToken());
-                if(jobId!=0){
+                if (jobId != 0) {
                     break;
                 }
             }
@@ -53,11 +42,6 @@ public class CmdExec {
                 //do nothing
             }
         }
-
-        System.out.println("JobID: " + jobId);
-
-
-        input.close();
-
+        return jobId;
     }
 }

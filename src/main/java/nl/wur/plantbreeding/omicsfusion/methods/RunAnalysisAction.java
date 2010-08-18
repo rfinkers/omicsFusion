@@ -38,12 +38,13 @@ public class RunAnalysisAction extends ActionSupport implements ServletRequestAw
         System.out.println("use writefile");
         wf.WriteFile("/tmp/" + request.getSession().getId() + "/univariate.R", script);
         LOG.info("Univariate script written to disk");
-        wf.WriteFile("/tmp/" + request.getSession().getId() + "/batch.sh", 
+        wf.WriteFile("/tmp/" + request.getSession().getId() + "/batch.sh",
                 "#!/bin/sh\ncd /tmp/" + request.getSession().getId() + "\nR --no-save < univariate.R");
+        LOG.info("Writing invocation script");
 
         //Submit jobs to the SGE QUEUE
-        CmdExec.CmdExec("/tmp/" + request.getSession().getId()+ "/");
-
+        CmdExec.CmdExec("/tmp/" + request.getSession().getId() + "/");
+        LOG.info("Subitted to que");
         //Submit successfull Message?
 
         //Info on identifyer for job status
