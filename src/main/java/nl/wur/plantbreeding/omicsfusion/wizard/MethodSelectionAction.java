@@ -14,6 +14,7 @@ public class MethodSelectionAction extends MethodSelectionValidationForm {
 
     @Override
     public String execute() throws Exception {
+        //TODO: store the selections on the session scope?
         System.out.println("Action: method selection completed. Lasso: " + isLasso());
         return SUCCESS;
     }

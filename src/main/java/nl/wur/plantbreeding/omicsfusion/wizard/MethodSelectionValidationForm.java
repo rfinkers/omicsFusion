@@ -17,9 +17,7 @@ public class MethodSelectionValidationForm extends ActionSupport {
     /** lasso regression */
     private boolean lasso;
     /** Elastic net 1 */
-    private boolean elasticNet1;
-    /** Elastic net 2 */
-    private boolean elasticNet2;
+    private boolean elasticNet;
     /** pcr */
     private boolean pcr;
     /** pls */
@@ -43,20 +41,12 @@ public class MethodSelectionValidationForm extends ActionSupport {
         this.lasso = lasso;
     }
 
-    public boolean isElasticNet1() {
-        return elasticNet1;
+    public boolean isElasticNet() {
+        return elasticNet;
     }
 
-    public void setElasticNet1(boolean elasticNet1) {
-        this.elasticNet1 = elasticNet1;
-    }
-
-    public boolean isElasticNet2() {
-        return elasticNet2;
-    }
-
-    public void setElasticNet2(boolean elasticNet2) {
-        this.elasticNet2 = elasticNet2;
+    public void setElasticNet(boolean elasticNet1) {
+        this.elasticNet = elasticNet1;
     }
 
     public boolean isPcr() {
@@ -126,8 +116,8 @@ public class MethodSelectionValidationForm extends ActionSupport {
     @Override
     public void validate() {
         /* atleast one method should be selected */
-        if (isLasso() == false && isElasticNet1() == false && isElasticNet2() == false
-                && isPcr() == false && isPls() == false && isRf() == false && isSpls() == false
+        if (isLasso() == false && isElasticNet() == false && isPcr() == false
+                && isPls() == false && isRf() == false && isSpls() == false
                 && isRidge() == false && isSvm() == false && isUnivariate() == false) {
             addActionError("The current selection is invalid. Select at least one method!");
         }

@@ -29,19 +29,21 @@ public class CmdExec {
         String line = input.readLine();
         input.close();
 
+
         int jobId = 0;
-        StringTokenizer st = new StringTokenizer(line);
-        while (st.hasMoreTokens()) {
-            try {
-                jobId = Integer.parseInt(st.nextToken());
-                if (jobId != 0) {
-                    break;
+        if (line != null) {
+            StringTokenizer st = new StringTokenizer(line);
+            while (st.hasMoreTokens()) {
+                try {
+                    jobId = Integer.parseInt(st.nextToken());
+                    if (jobId != 0) {
+                        break;
+                    }
+                } catch (NumberFormatException numberFormatException) {
+                    //do nothing
                 }
             }
-            catch (NumberFormatException numberFormatException) {
-                //do nothing
-            }
-        }
+        }//FIXME: else throw exception?? or handle jobId=0 at a different level?
         return jobId;
     }
 }

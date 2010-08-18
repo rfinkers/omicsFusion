@@ -9,6 +9,7 @@ import nl.wur.plantbreeding.omicsfusion.excel.ValidateDataSheets;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.HashMap;
 import nl.wur.plantbreeding.omicsfusion.excel.DataSheetValidationException;
 import org.apache.commons.io.FileUtils;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -58,6 +59,12 @@ public class DataUploadAction extends DataUploadValidationForm implements Servle
             return INPUT;
         }
         System.out.println("Action: upload data completed");//TODO; remove debug code
+
+        HashMap<String, String> sheets = new HashMap<String, String>(2);
+        sheets.put("predictor", getDataSheetPredictorFileFileName());
+        sheets.put("response", getDataSheetResponseFileFileName());
+
+        request.getSession().setAttribute("sheets", sheets);
 
         return SUCCESS;
     }
