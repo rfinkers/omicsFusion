@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import nl.wur.plantbreeding.omicsfusion.methods.ElasticNet;
+import nl.wur.plantbreeding.omicsfusion.methods.Lasso;
 import nl.wur.plantbreeding.omicsfusion.methods.Univariate;
 import nl.wur.plantbreeding.omicsfusion.utils.CmdExec;
 import nl.wur.plantbreeding.omicsfusion.utils.WriteFile;
@@ -45,7 +46,7 @@ public class RunAnalysisAction extends ActionSupport implements ServletRequestAw
             //do something
         }
 
-        ElasticNet en = new ElasticNet();
+        Lasso en = new Lasso();
         String elasticNet = en.getAnalysisScript(sheets);
 
         Univariate uv = new Univariate();//FIXME: only Univariate during initial testing phase.
