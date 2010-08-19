@@ -38,18 +38,6 @@
             <version>1.2.16</version>
         </dependency>
         <dependency>
-            <groupId>rosuda</groupId>
-            <artifactId>Rengine</artifactId>
-            <version>0.6.2</version>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>org.nuiton.thirdparty</groupId>
-            <artifactId>Rserve</artifactId>
-            <version>0.6-1</version>
-            <type>jar</type>
-        </dependency>
-        <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
             <version>6.0</version>
