@@ -2,12 +2,14 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package nl.wur.plantbreeding.omicsfusion.methods;
+package nl.wur.plantbreeding.omicsfusion.wizard;
 
 import com.opensymphony.xwork2.ActionSupport;
 import java.util.HashMap;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
+import nl.wur.plantbreeding.omicsfusion.methods.ElasticNet;
+import nl.wur.plantbreeding.omicsfusion.methods.Univariate;
 import nl.wur.plantbreeding.omicsfusion.utils.CmdExec;
 import nl.wur.plantbreeding.omicsfusion.utils.WriteFile;
 import org.apache.struts2.interceptor.ServletRequestAware;
@@ -43,7 +45,8 @@ public class RunAnalysisAction extends ActionSupport implements ServletRequestAw
             //do something
         }
 
-
+        ElasticNet en = new ElasticNet();
+        String elasticNet = en.getAnalysisScript(sheets);
 
         Univariate uv = new Univariate();//FIXME: only Univariate during initial testing phase.
         String script = uv.analysisisRScript("/tmp/" + getRequest().getSession().getId());
@@ -51,6 +54,7 @@ public class RunAnalysisAction extends ActionSupport implements ServletRequestAw
         System.out.println("call writefile");
         WriteFile wf = new WriteFile();
         System.out.println("use writefile");
+        wf.WriteFile("/tmp/" + getRequest().getSession().getId() + "/elasticNet.R", elasticNet);
         wf.WriteFile("/tmp/" + getRequest().getSession().getId() + "/univariate.R", script);
         LOG.info("Univariate script written to disk");
         wf.WriteFile("/tmp/" + getRequest().getSession().getId() + "/batch.sh",
@@ -63,7 +67,7 @@ public class RunAnalysisAction extends ActionSupport implements ServletRequestAw
         if (jobId == 0) {
             LOG.severe("error during submission");
         } else {
-            LOG.info("Subitted to que");
+            LOG.info("Subitted to que with jobId: " + jobId);
         }
         //Submit successfull Message?
 

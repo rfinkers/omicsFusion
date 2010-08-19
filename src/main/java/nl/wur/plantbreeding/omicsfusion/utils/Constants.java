@@ -8,14 +8,18 @@ package nl.wur.plantbreeding.omicsfusion.utils;
  * Constants used within the omicsFusion project
  * @author finke002
  */
-public final class Constants {
+public class Constants {
 
-    /** user details */
+    /** user details object name. */
     public static final String USER = "omicsFusionUser";
-    /** Minimun nr of columns for predictor sheet */
+    /** Minimum number of columns for predictor sheet. */
     public final static int PREDICTOR_COLUMNS = 5;
-    /** Minimun nr of columns for response sheet */
+    /** Minimum number of columns for response sheet. */
     public final static int RESPONSE_COLUMNS = 1;
+    /** The total number of iterations on the dataset. */
+    public static final int ITERATIONS = 100;
+    /** outer cross validation (to optimize parameters. */
+    public static final int NUMBERFOLDS = 10;
 
     private Constants() {
     }

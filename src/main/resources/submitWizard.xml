@@ -34,7 +34,7 @@
         </action>
     </package>
     <package name="pipeline" namespace="/analysis" extends="struts-default">
-        <action name="pipeline" class="nl.wur.plantbreeding.omicsfusion.methods.RunAnalysisAction">
+        <action name="pipeline" class="nl.wur.plantbreeding.omicsfusion.wizard.RunAnalysisAction">
             <result name="input">/submit/wizardComplete.jsp</result>
             <result name="success">/submit/run.jsp</result>
 <!--            <result name="success">/submit/run.jsp</result>-->

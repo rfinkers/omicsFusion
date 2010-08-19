@@ -24,7 +24,7 @@ public class Univariate extends Analysis {
      */
     public String analysisisRScript(String output) {
         //Write the script
-        rScript = "#Univariate Analysis\n";
+        String rScript = "#Univariate Analysis\n";
         //Set the working directory
         rScript += "setwd(\"" + output + "\")\n";
         //required libraries

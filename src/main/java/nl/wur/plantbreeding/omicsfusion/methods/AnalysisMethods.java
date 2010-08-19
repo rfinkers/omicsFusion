@@ -13,14 +13,22 @@ public interface AnalysisMethods {
     String rScript = "";
 
     /**
+     * Which R libraries are used for this Method.
+     * @return A string containing the required libraries.
+     */
+    String getRequiredLibraries();
+
+    /**
      * Initialization of empty variables to store the results.
-     * @param loop Outer cross validation loop (To estimate MSER).
-     * @param itterations Inner cross validation (to optimize parameters).
      * @return
      */
-    String getParamterInitialization(int loop, int itterations);
+    String initializeResultObjects();
 
     String getAnalysis();
 
-    String getPostProcessing();
+    String combineResults();
+
+    String writeResults();
+
+    String getAnalysisScript();
 }

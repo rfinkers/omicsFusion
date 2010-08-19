@@ -5,96 +5,99 @@
 package nl.wur.plantbreeding.omicsfusion.methods;
 
 import java.util.logging.Logger;
+import nl.wur.plantbreeding.omicsfusion.utils.Constants;
 
 /**
  * Elastic net application using GLMNET and caret
  * @author Richard Finkers
  */
-public class ElasticNet extends Analysis implements AnalysisMethods {
+public class ElasticNet extends Analysis {
 
     /**The Logger */
     private static final Logger LOG = Logger.getLogger(ElasticNet.class.getName());
 
     @Override
-    public String getParamterInitialization(int loop, int itterations) {
-        String rCode = "";
-        rCode += "coefsEN" + loop + "<-matrix(data=NA,nrow=dim(DesignMatrix)[2]+1,ncol=" + itterations + ")";
-        rCode += "R2_en" + loop + "<-matrix(data=NA,nrow=1,ncol=" + itterations + ")";
-        rCode += "en_frac_" + loop + "<-matrix(data=NA,nrow=1,ncol=" + itterations + ")";
-        rCode += "en_lambda_" + loop + "<-matrix(data=NA,nrow=1,ncol=" + itterations + ")";
-        rCode += "test" + loop + "test1_en<-matrix(data=NA,nrow=" + itterations + ",ncol=2)";
+    public String getRequiredLibraries() {
+        String rCode = "# Load requried libraries\n";
+        rCode += "library(glmnet)\n";
+        return rCode;
+    }
+
+    @Override
+    public String initializeResultObjects() {
+        String rCode = "# Initialize results\n";
+        for (int i = 0; i < Constants.NUMBERFOLDS; i++) {
+            rCode += "coefsEN_" + i + "<-matrix(data=NA,nrow=dim(DesignMatrix)[2]+1,ncol=" + Constants.ITERATIONS + ")\n";
+            rCode += "R2_en_" + i + "<-matrix(data=NA,nrow=1,ncol=" + Constants.ITERATIONS + ")\n";
+            rCode += "en_frac_" + i + "<-matrix(data=NA,nrow=1,ncol=" + Constants.ITERATIONS + ")\n";
+            rCode += "en_lambda_" + i + "<-matrix(data=NA,nrow=1,ncol=" + Constants.ITERATIONS + ")\n";
+            rCode += "test_" + i + "test1_en<-matrix(data=NA,nrow=" + Constants.ITERATIONS + ",ncol=2)\n";
+        }
         return rCode;
     }
 
     @Override
     public String getAnalysis() {
-        throw new UnsupportedOperationException("Not supported yet.");
-
-//enFit1 <- train(tr1, trainFlesh1, "glmnet", metric="RMSE",tuneLength = 10, trControl = con)
-//
-//en_frac_1[,index]<-enFit1$finalModel$tuneValue$.alpha
-//en_lambda_1[,index]<-enFit1$finalModel$tuneValue$.lambda
-//
-//coefsEN1[,index]<-as.matrix(coef(enFit1$finalModel,s=enFit1$finalModel$tuneValue$.lambda))
-//
-//predsEN1<-predict(enFit1$finalModel,newx=tr1,s=enFit1$finalModel$tuneValue$.lambda, type ="response")
-//
-//y_fit_en1<-predsEN1[,1]
-//
-//R2_en1[,index]<-(cor(trainFlesh1,y_fit_en1)^2)*100
-//
-//
-//bhModels1_en <- list(glmnet=enFit1)
-//#bhPred1_en<- predict(bhModels1_en, newdata = testBH1)
-//allPred1_en <- extractPrediction(bhModels1_en, testX = testBH1, testY = testFlesh1)
-//testPred1_en <- subset(allPred1_en, dataType == "Test")
-//sorted1_en<-as.matrix(by(testPred1_en, list(model = testPred1_en$model), function(x) postResample(x$pred, x$obs)))
-//test1_en[index,]<-sorted1_en[,1]$glmnet
+        String rCode = "#Elastic Net Analysis\n";
+        rCode += "for (index in 1:" + Constants.ITERATIONS + ") {\n";
+        rCode += getTrainingSets();
+        rCode += "  con <- trainControl(method = \"cv\", number = " + Constants.NUMBERFOLDS + "\n"; //TODO: Ask animesh if number=10 has something to do with Constants.NUMBERFOLDS
+        for (int i = 0; i < Constants.NUMBERFOLDS; i++) {
+            int j = i + 1;
+            rCode += "  ##Round: " + j + "\n";
+            rCode += "  predictorTrainSet" + i + " <- DesignMatrix[trainingSet" + i + ",]\n";
+            rCode += "  predictorTestSet" + i + " <- DesignMatrix[-trainingSet" + i + ",]\n";// outer test set
+            rCode += "  responseTrainSet" + i + " <- dataSet$BRIX_P[trainingSet" + i + ",]\n";//FIXME: HARDCODED
+            rCode += "  responseTestSet" + i + " <- dataSet$BRIX_P[-trainingSet" + i + ",]\n";//FIXME: HARDCODED
+            rCode += "  enFit" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"glmnet\", metric = \"RMSE\", tuneLength = 10, trControl = con)\n";
+            rCode += "  en_frac_" + i + "[, index] <- enFit" + i + "$finalModel$tuneValue$.alpha\n";
+            rCode += "  en_lambda_" + i + "[, index] <- enFit" + i + "$finalModel$tuneValue$.lambda\n";
+            rCode += "  coefsEN_" + i + "[, index] <- as.matrix(coef(enFit" + i + "$finalModel, s = enFit" + i + "$finalModel$tuneValue$.lambda))\n";
+            rCode += "  predsEN_" + i + " <- predict(enFit" + i + "$finalModel, newx = predictorTrainSet, s = enFit" + i + "$finalModel$tuneValue$.lambda, type = \"response\")\n";
+            rCode += "  y_fit_en_" + i + " <- predsEN_" + i + "[, 1]\n";
+            rCode += "  R2_en_" + i + "[, index] <- (cor(responseTestSet" + i + ", y_fit_en_" + i + ")^2) * 100\n";//TODO: On how many samples is this R2 calculated?
+            rCode += "  bhModels" + i + "_en <- list(glmnet = enFit" + i + ")\n";
+            rCode += "  allPred" + i + "_en <- extractPrediction(bhModels" + i + "_en, testX = predictorTestSet, testY = responseTestSet)\n";
+            rCode += "  testPred" + i + "_en <- subset(allPred" + i + "_en, dataType == \"Test\")\n";
+            rCode += "  sorted" + i + "_en <- as.matrix(by(testPred" + i + "_en, list(model = testPred" + i + "_en$model), function(x) postResample(x$pred, x$obs)))\n";
+            rCode += "  test" + i + "_en[index, ] <- sorted" + i + "_en[, 1]$glmnet\n";
+            //TODO: cleanup of unused objects?
+        }
+        //TODO: Calculate R2, for the previous sets, after finishing this 10 folds?
+        rCode += "}\n";
+        return rCode;
     }
 
     @Override
-    public String getPostProcessing() {
-        throw new UnsupportedOperationException("Not supported yet.");
-//        EN_Train_Coeff<-cbind(coefsEN1,coefsEN2,coefsEN3,coefsEN4,coefsEN5,coefsEN6,coefsEN7,coefsEN8, coefsEN9,coefsEN10)
-//#EN_Train_Coeff<-cbind(coefsEN1,coefsEN2,coefsEN3,coefsEN4,coefsEN5,coefsEN6,coefsEN7,coefsEN8, coefsEN9,coefsEN10)
-//
-//EN_Train_Fraction<-cbind(en_frac_1, en_frac_2, en_frac_3, en_frac_4, en_frac_5, en_frac_6, en_frac_7, en_frac_8, en_frac_9, en_frac_10)
-//EN_Train_Lambda<-cbind(en_lambda_1, en_lambda_2, en_lambda_3, en_lambda_4, en_lambda_5, en_lambda_6, en_lambda_7, en_lambda_8, en_lambda_9, en_lambda_10)
-//EN_Train_R2<-cbind(R2_en1,R2_en2,R2_en3,R2_en4,R2_en5,R2_en6,R2_en7,R2_en8,R2_en9,R2_en10)
-//#EN_Train_y_Fit<-cbind(y_fit_en1,y_fit_en2, y_fit_en3,y_fit_en4,y_fit_en5,y_fit_en6,y_fit_en7,y_fit_en8,y_fit_en9,y_fit_en10)
-//
-//write.csv(EN_Train_Coeff, paste("EN_coef", "_", totiter, sep=""))
-//write.csv(EN_Train_R2, paste("EN_R2", "_", totiter, sep=""))
-//write.csv(EN_Train_Fraction , paste("EN_Frac", "_", totiter, sep=""))
-//write.csv(EN_Train_Lambda , paste("EN_Lambda", "_", totiter, sep=""))
+    public String combineResults() {
+        String rCode = "# Combine results\n";
+        String trainCoeff = "EN_Train_Coeff <- cbind(";
+        String trainFraction = "EN_Train_Fraction <- cbind(";
+        String trainLambda = "EN_Train_Lambda <- cbind(";
+        String trainR2 = "EN_Train_R2 <- cbind(";
+
+        for (int i = 0; i < Constants.NUMBERFOLDS; i++) {
+            trainCoeff += "coefsEN_" + i;
+            trainFraction += "en_frac_" + i;
+            trainLambda += "en_lambda_" + i;
+            trainR2 += "R2_en_" + i;
+            if (i < 10) {
+                trainCoeff += ",";
+                trainFraction += ",";
+                trainLambda += ",";
+                trainR2 += ",";
+            }
+        }
+        return rCode + trainCoeff + ")\n" + trainFraction + ")\n" + trainLambda + ")\n" + trainR2 + ")\n";
     }
-//con<-trainControl(method="cv",number=10)
-//
-//fit_glm <- NULL
-//fit_glm233<-train(X, y,method="glmnet",metric="RMSE",trControl=con,tuneLength = 10)
-//fit_glm233$finalModel$tuneValue
-//fit_glm233$finalModel$tuneValue$.alpha
-//glmnetcalc<-glmnet(X,y,alpha=fit_glm233$finalModel$tuneValue$.alpha)
-//
-//fitcoef<-predict(glmnetcalc,s=fit_glm233$finalModel$tuneValue$.alpha,type="coefficients")
-//CoefEN<-as.matrix(fitcoef)
-//filename15<-paste(trtname,"Enet_coef_GLM.xls",sep="_")
-//write.xls(CoefEN[2:(dim(X)[2]+1)], filename15)
-//
-//# for predicting with optimal alpha
-//
-//expred <- extractPrediction(list(fit_glm233))
-//plotObsVsPred(expred)
-//filename16<-paste(trtname,"Enet_pred_GLM.xls",sep="_")
-//write.xls(expred, filename16)
-//
-//# The following code can also be used which has a similar function as avove
-//fit_predict<-predict(fit_glm233,newdata=X)
-//
-//
-//pr<-cbind(pr,expred)
-//coef_enetglm<-CoefEN[2:(dim(X)[2]+1)]
-//co<-cbind(co,coef_enetglm)
-//
-//# extracting coeffcients ????
+
+    @Override
+    public String writeResults() {
+        String rCode = "# Write results to disk\n";
+        rCode += "write.csv(EN_Train_Coeff, paste(\"EN_coef\", \"_\", totiter, sep = \"\"))\n";
+        rCode += "write.csv(EN_Train_R2, paste(\"EN_R2\", \"_\", totiter, sep = \"\"))\n";
+        rCode += "write.csv(EN_Train_Lambda, paste(\"EN_Lambda\", \"_\", totiter, sep = \"\"))\n";
+        rCode += "write.csv(EN_Train_Fraction, paste(\"EN_Frac\", \"_\", totiter, sep = \"\"))\n";
+        return rCode;
+    }
 }

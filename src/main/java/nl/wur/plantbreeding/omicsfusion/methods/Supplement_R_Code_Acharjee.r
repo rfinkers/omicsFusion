@@ -555,7 +555,6 @@ for (index in 1:totiter) {
     y_fit_PLS1 <- predict(plsFit1$finalModel, ncomp = plsFit1$finalModel$tuneValue$.ncomp)
     R2_pls1[, index] <- (cor(y_fit_PLS1, trainFlesh1)^2) * 100
     opt_comp_pls1[, index] <- plsFit1$finalModel$tuneValue$.ncomp
-
     bhModels1_pls <- list(pls = plsFit1)
     #bhPred1_pls <- predict(bhModels1_pls, newdata = testBH1)
     allPred1_pls <- extractPrediction(bhModels1_pls, testX = testBH1, testY = testFlesh1)
@@ -571,7 +570,6 @@ for (index in 1:totiter) {
     predsEN1 <- predict(enFit1$finalModel, newx = tr1, s = enFit1$finalModel$tuneValue$.lambda, type = "response")
     y_fit_en1 <- predsEN1[, 1]
     R2_en1[, index] <- (cor(trainFlesh1, y_fit_en1)^2) * 100
-
     bhModels1_en <- list(glmnet = enFit1)
     #bhPred1_en<- predict(bhModels1_en, newdata = testBH1)
     allPred1_en <- extractPrediction(bhModels1_en, testX = testBH1, testY = testFlesh1)
