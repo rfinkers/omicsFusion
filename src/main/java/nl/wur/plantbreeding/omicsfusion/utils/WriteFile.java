@@ -10,8 +10,9 @@ import java.io.IOException;
 import java.util.logging.Logger;
 
 /**
- *
- * @author finke002
+ * Write files to the filesystem.
+ * @author Richard Finkers
+ * @version 1.0
  */
 public class WriteFile {
 
@@ -19,10 +20,10 @@ public class WriteFile {
     private static final Logger LOG = Logger.getLogger(WriteFile.class.getName());
 
     /**
-     * Writes the data to a textfile
-     * @param fileName
-     * @param content
-     * @throws IOException
+     * Writes data to a textfile.
+     * @param fileName Name of the target file.
+     * @param content Text contents.
+     * @throws IOException if something witn wring with file IO.
      */
     public void WriteFile(String fileName, String content) throws IOException {
 
@@ -33,9 +34,8 @@ public class WriteFile {
             fop.write(content.getBytes());
             fop.flush();
             fop.close();
-            System.out.println("The data has been written");
         } else {
-            System.out.println("This file does not exist");//TODO throw exception
+            LOG.warning("This file does not exist");//TODO throw exception?
         }
     }
 }

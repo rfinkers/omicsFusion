@@ -2,48 +2,45 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package nl.wur.plantbreeding.omicsfusion.methods;
 
+import java.util.logging.Logger;
+import nl.wur.plantbreeding.omicsfusion.utils.Constants;
+
 /**
- * Application of PCR
+ * Application of Principal Component Regression
  * @author Richard Finkers
+ * @version 1.0
  */
-public class PCR {
-//data1<-data.frame(y,X=I(X))
-//
-//
-//pcrres<-pcr(y ~ X, data=data1, validation="CV")
-//
-//# To find out optimum component for PCR
-//
-//plot(RMSEP(pcrres), legendpos="topright", xlim=c(0,100))
-//
-//# By seeing the first plot it seems tht components lies betweeen
-//#18 and 25 so, I want to magify this
-//# this is not automated!
-//
-//plot(RMSEP(pcrres), legendpos="topright", xlim=c(40,50))
-//rmsep<-RMSEP(pcrres)
-//opt_pcr<- which(rmsep$val["adjCV",1,]==min(rmsep$val["adjCV",1,])) - 1
-//opt_pcr
-//
-//explvar(pcrres)
-//
-//
-//coefpcr<-coef(pcrres, ncomp=opt_pcr)
-//filename12<-paste(trtname,"PCR_coef.xls")
-//write.xls(coefpcr,filename12)
-//
-//
-//
-//# NOTE: these are fitted values, not independent predictions for new data !!
-//# Prediction of the flesh colour data
-//
-//predpcr<-predict(pcrres, ncomp=42)
-//filename13<-paste(trtname,"PCR_pred.xls")
-//write.xls(predpcr,filename13)
-//
-//pr<-cbind(pr,predpcr)
-//co<-cbind(co,coefpcr)
+public class PCR extends Analysis {
+
+    /** The logger */
+    private static final Logger LOG = Logger.getLogger(PCR.class.getName());
+
+    @Override
+    protected String initializeResultObjects() {
+        return super.initializeResultObjects("pcr");
+    }
+
+    @Override
+    protected String getRequiredLibraries() {
+        String rCode = "# Load requried libraries for PCR\n";
+        rCode += "library(pls)\n";
+        return rCode;
+    }
+
+    @Override
+    public String getAnalysis() {
+        return super.getAnalysis("pcr");
+    }
+
+    @Override
+    public String writeResults() {//TODO: check
+        String rCode = "# Write results to disk\n";
+        rCode += "write.csv(Train_Coeff, paste(\"PCR_coef\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
+        rCode += "write.csv(Train_R2, paste(\"PCR_R2\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
+        rCode += "write.csv(methodResults, paste(\"PCR_Frac\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
+        //rCode += "write.xls(methodResults, \"PCRnew.xls\")"; FIXME: implement
+        return rCode;
+    }
 }

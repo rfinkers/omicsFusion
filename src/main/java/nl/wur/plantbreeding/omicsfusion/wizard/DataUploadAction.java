@@ -1,9 +1,6 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package nl.wur.plantbreeding.omicsfusion.wizard;
 
+import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import nl.wur.plantbreeding.omicsfusion.excel.ValidateDataSheets;
 import java.io.File;
@@ -16,13 +13,17 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.struts2.interceptor.ServletRequestAware;
 
 /**
- * Action which handles upload of the data sheets and validates the if they are conform the requried standards. Data will be stored in a database?
+ * Action which handles upload of the data sheets and validates the if they are
+ * conform the requried standards. Data will be stored in a database?
  * 
  * @author Richard Finkers
+ * @version 1.0
  */
 public class DataUploadAction extends DataUploadValidationForm implements ServletRequestAware {
 
     private static final long serialVersionUID = 170610L;
+    /** The logger */
+    private static final Logger LOG = Logger.getLogger(DataUploadAction.class.getName());
     /** the request */
     private HttpServletRequest request;
 

@@ -1,23 +1,30 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package nl.wur.plantbreeding.omicsfusion.wizard;
 
 import com.opensymphony.xwork2.ActionSupport;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import nl.wur.plantbreeding.omicsfusion.methods.ElasticNet;
 import nl.wur.plantbreeding.omicsfusion.methods.Lasso;
+import nl.wur.plantbreeding.omicsfusion.methods.PCR;
+import nl.wur.plantbreeding.omicsfusion.methods.PartialLeasedSquares;
+import nl.wur.plantbreeding.omicsfusion.methods.RandomForest;
+import nl.wur.plantbreeding.omicsfusion.methods.Ridge;
+import nl.wur.plantbreeding.omicsfusion.methods.SVM;
+import nl.wur.plantbreeding.omicsfusion.methods.SparsePLS;
 import nl.wur.plantbreeding.omicsfusion.methods.Univariate;
 import nl.wur.plantbreeding.omicsfusion.utils.CmdExec;
 import nl.wur.plantbreeding.omicsfusion.utils.WriteFile;
 import org.apache.struts2.interceptor.ServletRequestAware;
 
 /**
- * Runs the selected analysis methods on the
+ * Creates the SGE compatible R scripts for the selected methods. The scripts
+ * will be submitted to the DEFAULT SGE queue.
  * @author Richard Finkers
+ * @version 1.0
  */
 public class RunAnalysisAction extends ActionSupport implements ServletRequestAware {
 
@@ -30,55 +37,103 @@ public class RunAnalysisAction extends ActionSupport implements ServletRequestAw
 
     @Override
     public String execute() throws Exception {
-        //Read the selected methods
-
-        System.out.println("load univariate");
-        //Create the relevant run scripts
+        //Read the relevant data from the session
         @SuppressWarnings("unchecked")
         HashMap<String, String> sheets = (HashMap<String, String>) getRequest().getSession().getAttribute("sheets");
+        @SuppressWarnings("unchecked")
+        ArrayList<String> methods = (ArrayList<String>) getRequest().getSession().getAttribute("methods");
 
-        System.out.println("Response: " + sheets.get("response"));
-        System.out.println("Predictor: " + sheets.get("predictor"));
-        //split up in test cases first? <-reusable for all others (as testCase.RData)?
+        //we want to write text files.
 
-        //TODO: slowest methods first
-        if ("test".equals("test")) {
-            //do something
+        //Get the list with jobId's from SGE
+         ArrayList<Integer> jobIds = new ArrayList<Integer>();
+
+        //which methods to run?
+        for (String method : methods) {
+            if (method.equals("ridge")) {
+                Ridge mth = new Ridge();
+                String mthString = mth.getAnalysisScript(sheets);
+                writeScriptFile("ridge.R", mthString);
+                jobIds.add(submitToSGE("ridge"));
+            } else if (method.equals("en")) {
+                ElasticNet mth = new ElasticNet();
+                String mthString = mth.getAnalysisScript(sheets);
+                writeScriptFile("en.R", mthString);
+                jobIds.add(submitToSGE("en"));
+            } else if (method.equals("rf")) {
+                RandomForest mth = new RandomForest();
+                String mthString = mth.getAnalysisScript(sheets);
+                writeScriptFile("rf.R", mthString);
+                jobIds.add(submitToSGE("rf"));
+            } else if (method.equals("svm")) {
+                SVM mth = new SVM();
+                String mthString = mth.getAnalysisScript(sheets);
+                writeScriptFile("svm.R", mthString);
+                jobIds.add(submitToSGE("svm"));
+            } else if (method.equals("pcr")) {
+                PCR mth = new PCR();
+                String mthString = mth.getAnalysisScript(sheets);
+                writeScriptFile("pcr.R", mthString);
+                jobIds.add(submitToSGE("pcr"));
+            } else if (method.equals("pls")) {
+                PartialLeasedSquares mth = new PartialLeasedSquares();
+                String mthString = mth.getAnalysisScript(sheets);
+                writeScriptFile("pls.R", mthString);
+                jobIds.add(submitToSGE("pls"));
+            } else if (method.equals("spls")) {
+                SparsePLS mth = new SparsePLS();
+                String mthString = mth.getAnalysisScript(sheets);
+                writeScriptFile("spls.R", mthString);
+                jobIds.add(submitToSGE("spls"));
+            } else if (method.equals("lasso")) {
+                Lasso mth = new Lasso();
+                String mthString = mth.getAnalysisScript(sheets);
+                writeScriptFile("lasso.R", mthString);
+                jobIds.add(submitToSGE("lasso"));
+            } else if (method.equals("univariate")) {
+                Univariate mth = new Univariate();
+                String mthString = mth.getAnalysisScript(sheets);
+                writeScriptFile("univariate.R", mthString);
+                jobIds.add(submitToSGE("univariate"));
+            }
         }
 
-        Lasso en = new Lasso();
-        String elasticNet = en.getAnalysisScript(sheets);
-
-        Univariate uv = new Univariate();//FIXME: only Univariate during initial testing phase.
-        String script = uv.analysisisRScript("/tmp/" + getRequest().getSession().getId());
-
-        System.out.println("call writefile");
-        WriteFile wf = new WriteFile();
-        System.out.println("use writefile");
-        wf.WriteFile("/tmp/" + getRequest().getSession().getId() + "/elasticNet.R", elasticNet);
-        wf.WriteFile("/tmp/" + getRequest().getSession().getId() + "/univariate.R", script);
-        LOG.info("Univariate script written to disk");
-        wf.WriteFile("/tmp/" + getRequest().getSession().getId() + "/batch.sh",
-                "#!/bin/sh\ncd /tmp/" + getRequest().getSession().getId() + "\nR --no-save < univariate.R");
-        LOG.info("Writing invocation script");
-
-        //Submit jobs to the SGE QUEUE
-        int jobId = CmdExec.CmdExec("/tmp/" + getRequest().getSession().getId() + "/");
-        //TODO: get the logId's. Handle logId=0 error in case of problem? Store the logId's in a database or textfile?
-        if (jobId == 0) {
-            LOG.severe("error during submission");
-        } else {
-            LOG.info("Subitted to que with jobId: " + jobId);
-        }
-        //Submit successfull Message?
-
-        //Info on identifyer for job status
-        System.out.println("Running Analysis");
-
+        LOG.log(Level.INFO, "Submitted {0} jobs to SGE.", jobIds.size());
 
         //Send out the email with details
         //Session invalidate and forward last details via request
         return SUCCESS;
+    }
+
+    /**
+     * Write the R analysis script to the filesystem.
+     * @param scriptName Name of the script file.
+     * @param script Contents of the script.
+     * @throws IOException When writing to disk fails.
+     */
+    public void writeScriptFile(String scriptName, String script) throws IOException {
+        WriteFile wf = new WriteFile();
+        wf.WriteFile("/tmp/" + getRequest().getSession().getId() + "/" + scriptName, script);
+    }
+
+    /**
+     * Create the SGE submission script and submit the job to SGE.
+     * @param scriptName Name of the scripts.
+     * @return The jobID.
+     * @throws IOException When writing to disk fails.
+     */
+    public int submitToSGE(String scriptName) throws IOException {
+        WriteFile wf = new WriteFile();
+        wf.WriteFile("/tmp/" + getRequest().getSession().getId() + "/" + scriptName + ".sh",
+                "#!/bin/sh\ncd /tmp/" + getRequest().getSession().getId() + "\nR --no-save < " + scriptName + ".R");
+        //Submit jobs to the SGE QUEUE
+        int jobId = CmdExec.CmdExec("/tmp/" + getRequest().getSession().getId() + "/");
+        if (jobId == 0) {
+            LOG.severe("error during submission");//TODO: implement exception?
+        } else {
+            LOG.log(Level.INFO, "Subitted to que with jobId: {0}", jobId);
+        }
+        return jobId;
     }
 
     @Override
