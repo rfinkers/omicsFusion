@@ -5,22 +5,24 @@
 package nl.wur.plantbreeding.omicsfusion.excel;
 
 /**
- *
- * @author finke002
+ * Exception which is thrown when there is an error during the
+ * Excel sheet validation.
+ * @author Richard Finkers
+ * @version 1.0
  */
 public class DataSheetValidationException extends Exception {
 
     private static final long serialVersionUID = 20100815L;
 
     /**
-     *
+     * Excel sheet validation exception.
      */
     public DataSheetValidationException() {
         super();
     }
 
     /**
-     *
+     * Excel sheet validation exception.
      * @param cause
      */
     public DataSheetValidationException(Throwable cause) {
@@ -28,7 +30,7 @@ public class DataSheetValidationException extends Exception {
     }
 
     /**
-     *
+     * Excel sheet validation exception.
      * @param message
      * @param cause
      */
@@ -37,7 +39,7 @@ public class DataSheetValidationException extends Exception {
     }
 
     /**
-     * 
+     * Excel sheet validation exception.
      * @param message
      */
     public DataSheetValidationException(String message) {

@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package nl.wur.plantbreeding.omicsfusion.excel;
 
 import org.apache.poi.ss.usermodel.Cell;
@@ -12,13 +8,13 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellReference;
 
 /**
- *
- * @author finke002
+ * Functions to work with excel sheets.
+ * @author Richard Finkers
  */
 public class ManipulateExcelSheet {
 
     /**
-     * Extracts the contents of the matrix formatted excel sheets and writes the 
+     * Extracts the contents of the matrix formatted excel sheets and writes the
      * contents to an list type of excel sheet? Alternatively: leave this to R
      * and use this method to validate the sheet?
      * @param wb An excel workbook

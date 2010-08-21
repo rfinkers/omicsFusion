@@ -1,5 +1,6 @@
 package nl.wur.plantbreeding.omicsfusion.wizard;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import nl.wur.plantbreeding.omicsfusion.excel.ValidateDataSheets;
@@ -15,7 +16,7 @@ import org.apache.struts2.interceptor.ServletRequestAware;
 /**
  * Action which handles upload of the data sheets and validates the if they are
  * conform the requried standards. Data will be stored in a database?
- * 
+ *
  * @author Richard Finkers
  * @version 1.0
  */
@@ -31,16 +32,23 @@ public class DataUploadAction extends DataUploadValidationForm implements Servle
     public String execute() throws Exception {
         try {
 
-            File responseSheet = new File("/tmp/" + request.getSession().getId() + "/" + getDataSheetResponseFileFileName());//TODO: get tmp directory from environment
-            File predictorSheet = new File("/tmp/" + request.getSession().getId() + "/" + getDataSheetPredictorFileFileName());//TODO: get tmp directory from environment
-            //Copy the uploaded excel sheets to a temporary directory?  Test if required
+            String tempdir = System.getProperty("java.io.tmpdir");
+            if (!(tempdir.endsWith("/") || tempdir.endsWith("\\"))) {
+                tempdir += System.getProperty("file.separator");
+            }
+
+            File responseSheet = new File(tempdir + request.getSession().getId()
+                    + "/" + getDataSheetResponseFileFileName());
+            File predictorSheet = new File(tempdir + request.getSession().getId()
+                    + "/" + getDataSheetPredictorFileFileName());
+            //Copy the uploaded excel sheets to a temporary directory
             FileUtils.copyFile(getDataSheetPredictorFile(), predictorSheet);
             FileUtils.copyFile(getDataSheetResponseFile(), responseSheet);
 
-            System.out.println("Predictor: " + getDataSheetPredictorFileFileName());
-            System.out.println("Type: " + getPredictorType());
-            System.out.println("Response: " + getDataSheetResponseFileFileName());
-            System.out.println("Type: " + getResponseType());
+            LOG.log(Level.INFO, "Predictor: {0}", getDataSheetPredictorFileFileName());
+            LOG.log(Level.INFO, "Type: {0}", getPredictorType());
+            LOG.log(Level.INFO, "Response: {0}", getDataSheetResponseFileFileName());
+            LOG.log(Level.INFO, "Type: {0}", getResponseType());
 
             //validate the correctness of the format of the excelsheet.
             ValidateDataSheets.validateExcelSheets(responseSheet, predictorSheet);
@@ -59,7 +67,7 @@ public class DataUploadAction extends DataUploadValidationForm implements Servle
             addActionError(e.getMessage());
             return INPUT;
         }
-        System.out.println("Action: upload data completed");//TODO; remove debug code
+        LOG.info("Action: upload data completed");//TODO; remove debug code
 
         HashMap<String, String> sheets = new HashMap<String, String>(2);
         sheets.put("predictor", getDataSheetPredictorFileFileName());

@@ -34,11 +34,26 @@ public class PartialLeasedSquares extends Analysis {
         return super.getAnalysis("pls");
     }
 
+        @Override
+    protected String combineResults() {
+        String rCode = super.combineResults();
+        rCode += "# Combine Method specific results\n";
+        String trainNcomp = "Train_Ncomp <- cbind(";
+        for (int i = 0; i < Constants.NUMBERFOLDS; i++) {
+            trainNcomp += "opt_comp_" + i;
+            if (i < 9) {
+                trainNcomp += ", ";
+            }
+        }
+        return rCode + trainNcomp + ")\n\n";
+    }
+
     @Override
-    public String writeResults() {//TODO: check
+    public String writeResults() {
         String rCode = "# Write results to disk\n";
         rCode += "write.csv(Train_Coeff, paste(\"PLS_coef\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
         rCode += "write.csv(Train_R2, paste(\"PLS_R2\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
+        rCode += "write.csv(Train_Ncomp, paste(\"PLS_comp\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
         rCode += "write.csv(methodResults, paste(\"PLS_Frac\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
         //rCode += "write.xls(methodResults, \"PLSnew.xls\")";
         return rCode;

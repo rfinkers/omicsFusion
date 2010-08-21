@@ -35,12 +35,28 @@ public class PCR extends Analysis {
     }
 
     @Override
-    public String writeResults() {//TODO: check
+    protected String combineResults() {
+        String rCode = super.combineResults();
+        rCode += "# Combine Method specific results\n";
+        String trainNcomp = "Train_Ncomp <- cbind(";
+        for (int i = 0; i < Constants.NUMBERFOLDS; i++) {
+            trainNcomp += "opt_comp_" + i;
+            if (i < 9) {
+                trainNcomp += ", ";
+            }
+        }
+        return rCode + trainNcomp + ")\n\n";
+    }
+
+    @Override
+    public String writeResults() {
         String rCode = "# Write results to disk\n";
         rCode += "write.csv(Train_Coeff, paste(\"PCR_coef\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
         rCode += "write.csv(Train_R2, paste(\"PCR_R2\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
-        rCode += "write.csv(methodResults, paste(\"PCR_Frac\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
-        //rCode += "write.xls(methodResults, \"PCRnew.xls\")"; FIXME: implement
+        rCode += "write.csv(Train_Ncomp, paste(\"PCR_Ncomp\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
+        rCode += "write.csv(methodResults, paste(\"PCR\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
+        //rCode += "write.xls(methodResults, \"PCRnew.xls\")";
+
         return rCode;
     }
 }

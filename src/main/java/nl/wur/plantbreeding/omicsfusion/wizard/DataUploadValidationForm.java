@@ -5,12 +5,12 @@
 package nl.wur.plantbreeding.omicsfusion.wizard;
 
 import com.opensymphony.xwork2.ActionSupport;
-import com.opensymphony.xwork2.util.logging.Logger;
 import java.io.File;
 
 /**
- *
+ * Form containing information about the uploaded file's.
  * @author Richard Finkers
+ * @version 1.0
  */
 public class DataUploadValidationForm extends ActionSupport {
 
@@ -96,14 +96,6 @@ public class DataUploadValidationForm extends ActionSupport {
         this.responseType = responseType;
     }
 
-    public static Logger getLOG() {
-        return LOG;
-    }
-
-    public static void setLOG(Logger LOG) {
-        ActionSupport.LOG = LOG;
-    }
-
     @Override
     public void validate() {
 
@@ -123,10 +115,7 @@ public class DataUploadValidationForm extends ActionSupport {
 
         //TODO: filenames are not kept after validation error. Type, however, is kept.
 
-
-
-
-//        if(dataSheetFileFileName.equals("")){
+        //        if(dataSheetFileFileName.equals("")){
 //              addActionError("please select a file");//TODO: via validation.xml?
 //        }
 

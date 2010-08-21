@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package nl.wur.plantbreeding.omicsfusion.email;
 
 import java.util.Properties;
@@ -15,8 +11,9 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 /**
- *
- * @author Robert
+ * Sends notification emails to users.
+ * @author Richard Finkers
+ * @version 1.0
  */
 public class EmailSender {
 
@@ -27,6 +24,15 @@ public class EmailSender {
     private String auth;
     private String from;
 
+    /**
+     * Initializes the email wiht all requied data.
+     * @param smtpServer
+     * @param port
+     * @param user
+     * @param password
+     * @param auth
+     * @param from
+     */
     public EmailSender(String smtpServer, String port, String user, String password, String auth, String from) {
         this.smtpServer = smtpServer;
         this.port = port;
@@ -36,6 +42,10 @@ public class EmailSender {
         this.from = from;
     }
 
+    /**
+     * Set the properties.
+     * @return An object wiht relevant system properties.
+     */
     private Properties prepareProperties() {
         Properties props = new Properties();
         props.setProperty("mail.smtp.host", smtpServer);
@@ -46,6 +56,16 @@ public class EmailSender {
         return props;
     }
 
+    /**
+     * Prepare the email.
+     * @param mailSession
+     * @param charset
+     * @param from
+     * @param subject
+     * @param HtmlMessage
+     * @param recipient
+     * @return
+     */
     private MimeMessage prepareMessage(Session mailSession, String charset,
             String from, String subject,
             String HtmlMessage, String[] recipient) {
@@ -65,6 +85,12 @@ public class EmailSender {
         return message;
     }
 
+    /**
+     * Send the email.
+     * @param subject
+     * @param HtmlMessage
+     * @param to
+     */
     public void sendEmail(String subject, String HtmlMessage, String[] to) {
         Transport transport = null;
         try {

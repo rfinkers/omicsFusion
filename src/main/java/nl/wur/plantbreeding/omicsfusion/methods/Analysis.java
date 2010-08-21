@@ -95,18 +95,17 @@ public class Analysis {
     protected String initializeResultObjects(String analysisMethod) {
         String rCode = "# Initialize results\n";
         for (int i = 0; i < Constants.NUMBERFOLDS; i++) {
+            rCode += "test_" + i + " <- matrix(data=NA,nrow=" + Constants.ITERATIONS + ",ncol=2)\n\n";
+            rCode += "y_fit" + i + " <- matrix(data = NA, nrow = dim(DesignMatrix)[2], ncol =" + Constants.ITERATIONS + ")\n";
+            rCode += "R2_" + i + " <- matrix(data=NA,nrow=1,ncol=" + Constants.ITERATIONS + ")\n";
             if (analysisMethod.equals("en") || analysisMethod.equals("ridge") || analysisMethod.equals("lasso")) {
-                rCode += "coefs_" + i + " <- matrix(data = NA,nrow = dim(DesignMatrix)[2]+1,ncol=" + Constants.ITERATIONS + ")\n";//FIXME: which method needs [2]+1?
+                rCode += "lambda_" + i + " <- matrix(data = NA, nrow = 1, ncol = " + Constants.ITERATIONS + ")\n";
+                rCode += "coefs_" + i + " <- matrix(data = NA,nrow = dim(DesignMatrix)[2]+1,ncol=" + Constants.ITERATIONS + ")\n";                
             } else if (analysisMethod.equals("pcr") || analysisMethod.equals("spls") || analysisMethod.equals("pls")) {
                 rCode += "coefs_" + i + " <- matrix(data = NA,nrow = dim(DesignMatrix)[2],ncol=" + Constants.ITERATIONS + ")\n";
             }
-            rCode += "y_fit" + i + " <- matrix(data = NA, nrow = dim(DesignMatrix)[2], ncol =" + Constants.ITERATIONS + ")\n";
-            rCode += "R2_" + i + " <- matrix(data=NA,nrow=1,ncol=" + Constants.ITERATIONS + ")\n";
             if (analysisMethod.equals("en")) {
                 rCode += "frac_" + i + " <- matrix(data=NA,nrow=1,ncol=" + Constants.ITERATIONS + ")\n";
-            }
-            if (analysisMethod.equals("en") || analysisMethod.equals("ridge") || analysisMethod.equals("lasso")) {
-                rCode += "lambda_" + i + " <- matrix(data = NA, nrow = 1, ncol = " + Constants.ITERATIONS + ")\n";
             }
             if (analysisMethod.equals("pcr") || analysisMethod.equals("pls")) {
                 rCode += "opt_comp_" + i + " <- matrix(data = NA, nrow = 1, ncol =" + Constants.ITERATIONS + ")\n";
@@ -119,7 +118,10 @@ public class Analysis {
                 rCode += "tune_cost_" + i + " <- matrix(data = NA, nrow = dim(DesignMatrix)[2], ncol = " + Constants.ITERATIONS + ")\n";
                 rCode += "tune_sigma_" + i + " <- matrix(data = NA, nrow = dim(DesignMatrix)[2], ncol = " + Constants.ITERATIONS + ")\n";
             }
-            rCode += "test_" + i + " <- matrix(data=NA,nrow=" + Constants.ITERATIONS + ",ncol=2)\n\n";
+            if (analysisMethod.equals("spls")) {
+                rCode += "eta_" + i + " <- matrix(data = NA, nrow = 1, ncol =" + Constants.ITERATIONS + ")\n";
+                rCode += "K_" + i + " <- matrix(data = NA, nrow = 1, ncol =" + Constants.ITERATIONS + ")\n";
+            }
         }
         return rCode;
     }
@@ -209,8 +211,7 @@ public class Analysis {
                 rCode += "      tune_sigma_" + i + "[, index] <- fit_" + i + "$bestTune$.sigma\n";
             } else if (analysisMethod.equals("spls")) {
                 rCode += "      y_fit_" + i + " <- predict(fit_" + i + "$finalModel)\n";
-                //TODO: replace?
-                rCode += "      coefs_" + i + "[, index] <- coef(fit_" + i + "$finalModel, type = \"coefficient\", fit_" + i + "$finalModel$tuneValue$.eta, fit_" + i + "$finalModel$tuneValue$.K)\n";
+                rCode += "      coefs_" + i + "[, index] <- predict(fit_" + i + "$finalModel, type = \"coefficient\", fit_" + i + "$finalModel$tuneValue$.eta, fit_" + i + "$finalModel$tuneValue$.K)\n";
                 rCode += "      K_" + i + "[, index] <- fit_" + i + "$finalModel$tuneValue$.K\n";
                 rCode += "      eta_" + i + "[, index] <- fit_" + i + "$finalModel$tuneValue$.eta\n";
             }
@@ -242,7 +243,7 @@ public class Analysis {
                 rCode += "      test_" + i + "[index, ] <- sorted_" + i + "[, 1]$rf\n\n";
             } else if (analysisMethod.equals("svm")) {
                 rCode += "      test_" + i + "[index, ] <- sorted_" + i + "[, 1]$svm\n\n";
-            } else if (analysisMethod.equals("svm")) {
+            } else if (analysisMethod.equals("spls")) {
                 rCode += "      test_" + i + "[index, ] <- sorted_" + i + "[, 1]$spls\n\n";
             }
             //TODO: cleanup of unused objects?

@@ -58,7 +58,7 @@ public class RandomForest extends Analysis {
     }
 
     @Override
-    public String writeResults() {//TODO: check
+    public String writeResults() {
         String rCode = "# Write results to disk\n";
         rCode += "write.csv(Train_R2, paste(\"RF_R2\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
         rCode += "write.csv(Train_varImp, paste(\"RF_varImp\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";

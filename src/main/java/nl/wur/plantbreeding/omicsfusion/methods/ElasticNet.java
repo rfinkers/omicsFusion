@@ -40,7 +40,7 @@ public class ElasticNet extends Analysis {
 
         for (int i = 0; i < Constants.NUMBERFOLDS; i++) {
             trainCoeff += "coefs_" + i;
-            trainFraction += "frac_" + i;//TODO: not for PCR?
+            trainFraction += "frac_" + i;
             trainLambda += "lambda_" + i;
             trainR2 += "R2_" + i;
             test += "test_" + i;
@@ -63,7 +63,7 @@ public class ElasticNet extends Analysis {
         rCode += "write.csv(Train_Lambda, paste(\"EN_Lambda\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
         rCode += "write.csv(Train_Fraction, paste(\"EN_Frac\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
         rCode += "write.csv(methodResults, paste(\"EN_Frac\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
-        //rCode += "write.xls(methodResults, \"ennew.xls\")"; FIXME: implement
+        //rCode += "write.xls(methodResults, \"ennew.xls\")";
         return rCode;
     }
 }

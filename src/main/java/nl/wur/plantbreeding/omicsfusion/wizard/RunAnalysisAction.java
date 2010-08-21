@@ -46,7 +46,7 @@ public class RunAnalysisAction extends ActionSupport implements ServletRequestAw
         //we want to write text files.
 
         //Get the list with jobId's from SGE
-         ArrayList<Integer> jobIds = new ArrayList<Integer>();
+        ArrayList<Integer> jobIds = new ArrayList<Integer>();
 
         //which methods to run?
         for (String method : methods) {
@@ -113,7 +113,7 @@ public class RunAnalysisAction extends ActionSupport implements ServletRequestAw
      */
     public void writeScriptFile(String scriptName, String script) throws IOException {
         WriteFile wf = new WriteFile();
-        wf.WriteFile("/tmp/" + getRequest().getSession().getId() + "/" + scriptName, script);
+        wf.WriteFile(getTempDir() + getRequest().getSession().getId() + "/" + scriptName, script);
     }
 
     /**
@@ -124,16 +124,28 @@ public class RunAnalysisAction extends ActionSupport implements ServletRequestAw
      */
     public int submitToSGE(String scriptName) throws IOException {
         WriteFile wf = new WriteFile();
-        wf.WriteFile("/tmp/" + getRequest().getSession().getId() + "/" + scriptName + ".sh",
-                "#!/bin/sh\ncd /tmp/" + getRequest().getSession().getId() + "\nR --no-save < " + scriptName + ".R");
+        wf.WriteFile(getTempDir() + getRequest().getSession().getId() + "/" + scriptName + ".sh",
+                "#!/bin/sh\ncd " + getTempDir() + getRequest().getSession().getId() + "\nR --no-save < " + scriptName + ".R");
         //Submit jobs to the SGE QUEUE
-        int jobId = CmdExec.CmdExec("/tmp/" + getRequest().getSession().getId() + "/");
+        int jobId = CmdExec.CmdExec(getTempDir() + getRequest().getSession().getId() + "/");
         if (jobId == 0) {
             LOG.severe("error during submission");//TODO: implement exception?
         } else {
             LOG.log(Level.INFO, "Subitted to que with jobId: {0}", jobId);
         }
         return jobId;
+    }
+
+    /**
+     * Get the temp directory from the system.
+     * @return the location of the temp directory (including slash or backslash).
+     */
+    private String getTempDir() {
+        String tempdir = System.getProperty("java.io.tmpdir");
+        if (!(tempdir.endsWith("/") || tempdir.endsWith("\\"))) {
+            tempdir += System.getProperty("file.separator");
+        }
+        return tempdir;
     }
 
     @Override

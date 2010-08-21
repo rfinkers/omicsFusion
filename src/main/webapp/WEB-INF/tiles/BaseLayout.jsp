@@ -28,11 +28,12 @@
         <s:head/>
         <sj:head/>
 
-        <!-- javascript-->
-        <script type="text/javascript" src="<s:url value="/js/mbMenu.min.js"/>"></script>
+        <!-- javascript. jQuery/ jQueryUI libraries are loaded via an alternative tag instead of script element. -->
+        <!-- mbMenu -->
+        <script type="text/javascript" src="<s:url value="/js/mbMenu.js"/>"></script>
         <script type="text/javascript" src="<s:url value="/js/jquery.metadata.js"/>"></script>
         <script type="text/javascript" src="<s:url value="/js/jquery.hoverIntent.js"/>"></script>
-        <script type="text/javascript" src="<s:url value="/js/menu.js"/>"></script>
+        <!-- other -->
         <script type="text/javascript" src="<s:url value="/js/jquery.blockUI.2.31.js"/>"></script>
         <script type="text/javascript" src="<s:url value="/js/jquery.breeDB.0.1.js"/>"></script>
     </head>
