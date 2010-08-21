@@ -36,8 +36,8 @@ public class SparsePLS extends Analysis {
     protected String combineResults() {
         String rCode = super.combineResults();
         rCode += "# Combine Method specific results\n";
-        String Train_eta = "Train_Ncomp <- cbind(";
-        String Train_K = "Train_Ncomp <- cbind(";
+        String Train_eta = "Train_eta <- cbind(";
+        String Train_K = "Train_K <- cbind(";
         for (int i = 0; i < Constants.NUMBERFOLDS; i++) {
             Train_eta += "eta_" + i;
             Train_K += "K_" + i;

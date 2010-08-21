@@ -28,7 +28,8 @@ public class Analysis {
     protected String loadExcelSheets(HashMap<String, String> excelSheets) {
         String rCode = "# Load the generic R libraries \n";
         rCode += "library(gdata)\n";//Used to load excel sheets
-        rCode += "library(caret)\n\n";//Used for createfolds in training set
+        rCode += "library(caret)\n";//Used for createfolds in training set
+        rCode += "library(snow)\n\n";//Just to test if things get paralized automatically.
         rCode += "# Load the excel sheets\n";
         rCode += "predictorSheet <- read.xls(\"" + excelSheets.get("predictor") + "\")\n";
         rCode += "responseSheet  <- read.xls(\"" + excelSheets.get("response") + "\")\n";
@@ -95,12 +96,12 @@ public class Analysis {
     protected String initializeResultObjects(String analysisMethod) {
         String rCode = "# Initialize results\n";
         for (int i = 0; i < Constants.NUMBERFOLDS; i++) {
-            rCode += "test_" + i + " <- matrix(data=NA,nrow=" + Constants.ITERATIONS + ",ncol=2)\n\n";
+            rCode += "test_" + i + " <- matrix(data=NA,nrow=" + Constants.ITERATIONS + ",ncol=2)\n";
             rCode += "y_fit" + i + " <- matrix(data = NA, nrow = dim(DesignMatrix)[2], ncol =" + Constants.ITERATIONS + ")\n";
             rCode += "R2_" + i + " <- matrix(data=NA,nrow=1,ncol=" + Constants.ITERATIONS + ")\n";
             if (analysisMethod.equals("en") || analysisMethod.equals("ridge") || analysisMethod.equals("lasso")) {
                 rCode += "lambda_" + i + " <- matrix(data = NA, nrow = 1, ncol = " + Constants.ITERATIONS + ")\n";
-                rCode += "coefs_" + i + " <- matrix(data = NA,nrow = dim(DesignMatrix)[2]+1,ncol=" + Constants.ITERATIONS + ")\n";                
+                rCode += "coefs_" + i + " <- matrix(data = NA,nrow = dim(DesignMatrix)[2]+1,ncol=" + Constants.ITERATIONS + ")\n";
             } else if (analysisMethod.equals("pcr") || analysisMethod.equals("spls") || analysisMethod.equals("pls")) {
                 rCode += "coefs_" + i + " <- matrix(data = NA,nrow = dim(DesignMatrix)[2],ncol=" + Constants.ITERATIONS + ")\n";
             }
@@ -122,6 +123,7 @@ public class Analysis {
                 rCode += "eta_" + i + " <- matrix(data = NA, nrow = 1, ncol =" + Constants.ITERATIONS + ")\n";
                 rCode += "K_" + i + " <- matrix(data = NA, nrow = 1, ncol =" + Constants.ITERATIONS + ")\n";
             }
+            rCode += "\n";
         }
         return rCode;
     }
@@ -178,20 +180,22 @@ public class Analysis {
                 rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"glmnet\", metric = \"RMSE\", tuneLength = 10, tuneGrid = data.frame(.lambda = seq(0, 100, by = 0.1), .alpha = 0), trControl = con)\n";
             } else if (analysisMethod.equals("svm")) {
                 rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"svmRadial\", metric = \"RMSE\", tuneLength = 10, trControl = con)\n";
+            } else if (analysisMethod.equals("pls")) {
+                rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"pls\", metric = \"RMSE\", tuneLength = 10, trControl = con)\n";
             } else if (analysisMethod.equals("spls")) {
                 rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"spls\", metric = \"RMSE\", tuneLength = 10, trControl = con)\n";
-            } else if (analysisMethod.equals("pcr")) {
-                rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"pcr\", metric = \"RMSE\", tuneLength = 50, trControl = con)\n";
-            } else if (analysisMethod.equals("pls")) {
-                rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"pls\", metric = \"RMSE\", tuneLength = 50, trControl = con)\n";
             } else if (analysisMethod.equals("rf")) {
-                rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"rf\", metric = \"RMSE\", tuneLength = 50, trControl = con)\n";
-            }
+                rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"rf\", metric = \"RMSE\", tuneLength = 10, trControl = con)\n";
+            }else if (analysisMethod.equals("pcr")) {
+                rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"pcr\", metric = \"RMSE\", tuneLength = 50, trControl = con)\n";
+            } 
             if (analysisMethod.equals("en")) {
                 rCode += "      frac_" + i + "[, index] <- fit_" + i + "$finalModel$tuneValue$.alpha\n";
             }
-            if (analysisMethod.equals("en") || analysisMethod.equals("ridge") || analysisMethod.equals("lasso")) {
+            if (analysisMethod.equals("en")) {
                 rCode += "      lambda_" + i + "[, index] <- fit_" + i + "$finalModel$tuneValue$.lambda\n";
+            } else if (analysisMethod.equals("lasso") || analysisMethod.equals("ridge")) {
+                rCode += "      lambda_" + i + "[, index] <- fit_" + i + "$bestTune$.lambda\n";
             }
             if (analysisMethod.equals("en") || analysisMethod.equals("lasso") || analysisMethod.equals("ridge")) {
                 rCode += "      coefs_" + i + "[, index] <- as.matrix(coef(fit_" + i + "$finalModel, s = fit_" + i + "$finalModel$tuneValue$.lambda))\n";
