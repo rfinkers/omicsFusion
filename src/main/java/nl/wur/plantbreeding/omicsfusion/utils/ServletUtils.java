@@ -9,8 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.struts2.ServletActionContext;
 
 /**
- *
- * @author finke002
+ * Generic methods to use the request / context.
+ * @author Richard Finkers.
+ * @version 1.0
  */
 public class ServletUtils {
 

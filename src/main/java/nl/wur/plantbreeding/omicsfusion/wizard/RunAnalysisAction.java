@@ -49,22 +49,27 @@ public class RunAnalysisAction extends ActionSupport implements ServletRequestAw
         ArrayList<Integer> jobIds = new ArrayList<Integer>();
 
         //which methods to run?
+        //Order here is equal to the order on the SGE submission queue. Schedule slow jobs first!
         for (String method : methods) {
-            if (method.equals("ridge")) {
+            if (method.equals("rf")) {
+                RandomForest mth = new RandomForest();
+                String mthString = mth.getAnalysisScript(sheets);
+                writeScriptFile("rf.R", mthString);
+                jobIds.add(submitToSGE("rf"));
+            }
+            else if(method.equals("ridge")) {
                 Ridge mth = new Ridge();
                 String mthString = mth.getAnalysisScript(sheets);
-                writeScriptFile("ridge.R", mthString);
-                jobIds.add(submitToSGE("ridge"));
+                writeScriptFile(method + ".R", mthString);
+                int job = submitToSGE(method);
+                if (job != 0) {
+                    jobIds.add(job);
+                }
             } else if (method.equals("en")) {
                 ElasticNet mth = new ElasticNet();
                 String mthString = mth.getAnalysisScript(sheets);
                 writeScriptFile("en.R", mthString);
                 jobIds.add(submitToSGE("en"));
-            } else if (method.equals("rf")) {
-                RandomForest mth = new RandomForest();
-                String mthString = mth.getAnalysisScript(sheets);
-                writeScriptFile("rf.R", mthString);
-                jobIds.add(submitToSGE("rf"));
             } else if (method.equals("svm")) {
                 SVM mth = new SVM();
                 String mthString = mth.getAnalysisScript(sheets);
@@ -106,7 +111,7 @@ public class RunAnalysisAction extends ActionSupport implements ServletRequestAw
     }
 
     /**
-     * Write the R analysis script to the filesystem.
+     * Write the R analysis script to the file system.
      * @param scriptName Name of the script file.
      * @param script Contents of the script.
      * @throws IOException When writing to disk fails.
@@ -127,7 +132,7 @@ public class RunAnalysisAction extends ActionSupport implements ServletRequestAw
         wf.WriteFile(getTempDir() + getRequest().getSession().getId() + "/" + scriptName + ".sh",
                 "#!/bin/sh\ncd " + getTempDir() + getRequest().getSession().getId() + "\nR --no-save < " + scriptName + ".R");
         //Submit jobs to the SGE QUEUE
-        int jobId = CmdExec.CmdExec(getTempDir() + getRequest().getSession().getId() + "/");
+        int jobId = CmdExec.ExecuteQSubCmd(getTempDir() + getRequest().getSession().getId() + "/", scriptName);
         if (jobId == 0) {
             LOG.severe("error during submission");//TODO: implement exception?
         } else {

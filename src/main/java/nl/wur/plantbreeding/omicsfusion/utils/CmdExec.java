@@ -11,8 +11,9 @@ import java.util.StringTokenizer;
 import java.util.logging.Logger;
 
 /**
- * Executes a SGE batch script and returns the nr of the submission
- * @author finke002
+ * Methods for interaction with the Sun Grid Engine.
+ * @author Richard Finkers
+ * @version 1.0
  */
 public class CmdExec {
 
@@ -22,9 +23,16 @@ public class CmdExec {
     private CmdExec() {
     }
 
-    public static int CmdExec(String executionDir) throws IOException {
+    /**
+     * Executes a SGE batch script and returns the job id of the submission.
+     * @param executionDir Name of the directory where the job scripts / data resides.
+     * @param method Method to be executed.
+     * @return JobID on the SGE grid.
+     * @throws IOException Batch job script not found.
+     */
+    public static int ExecuteQSubCmd(String executionDir, String method) throws IOException {
 
-        Process p = Runtime.getRuntime().exec("qsub -S /bin/bash " + executionDir + "batch.sh");
+        Process p = Runtime.getRuntime().exec("qsub -S /bin/bash " + executionDir + method + ".sh");
         BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
         String line = input.readLine();
         input.close();
@@ -45,5 +53,29 @@ public class CmdExec {
             }
         }//FIXME: else throw exception?? or handle jobId=0 at a different level?
         return jobId;
+    }
+
+    public static boolean CheckJobStatus(int jobId) throws IOException, InterruptedException {
+        boolean finished = false;
+        String line;
+        Process p = Runtime.getRuntime().exec("qstat -j " + jobId);
+        BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
+        p.waitFor();
+        int exitVal = p.exitValue();
+        System.out.println("Process exitValue: " + exitVal);
+
+        
+
+        while ((line = input.readLine()) != null) {
+            System.out.println("result: " + line);
+        }
+
+        //String line = input.readLine();
+        input.close();
+        System.out.println("line");
+        if (line.equals("Following jobs do not exist:")) {
+            finished = true;
+        }
+        return finished;
     }
 }
