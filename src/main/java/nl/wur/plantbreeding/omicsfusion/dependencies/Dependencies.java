@@ -5,11 +5,15 @@
 
 package nl.wur.plantbreeding.omicsfusion.dependencies;
 
+import java.util.logging.Logger;
+
 /**
- *
- * @author finke002
+ * Check if the required dependencies are available.
+ * @author Richard Finkers
+ * @version 1.0
  */
 public class Dependencies {
+    private static final Logger LOG = Logger.getLogger(Dependencies.class.getName());
 //library(xlsReadWrite)
 //library(randomForest)
 //library(spls)

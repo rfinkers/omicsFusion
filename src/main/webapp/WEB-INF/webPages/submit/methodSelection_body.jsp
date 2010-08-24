@@ -12,12 +12,12 @@
     <s:checkbox key="analysis.method.elasticNet" name="elasticNet" checked="checked"/>
     <s:checkbox key="analysis.method.pcr" name="pcr" checked="checked"/>
     <s:checkbox key="analysis.method.pls" name="pls"checked="checked" />
-    <s:checkbox key="analysis.method.rf" name="rf" checked="checked"/>
+    <s:checkbox key="analysis.method.rf" name="rf" />
     <s:checkbox key="analysis.method.ridge" name="ridge" checked="checked"/>
     <s:checkbox key="analysis.method.svm" name="svm" checked="checked"/>
-    <s:checkbox key="analysis.method.spls" name="spls" checked="checked"/>
+    <s:checkbox key="analysis.method.spls" name="spls" checked="checked" selectAllLabel="Select All"/>
     <s:checkbox key="analysis.method.univariate" name="univariate" checked="checked"/>
-
+<!--TODO: select all / deselect all buttons-->
     <s:text name="analysis.methods.variable.selection"/>
 
     <s:submit key="method.submit"/> <s:reset key="button.reset"/>

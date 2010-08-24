@@ -57,25 +57,29 @@ public class CmdExec {
 
     public static boolean CheckJobStatus(int jobId) throws IOException, InterruptedException {
         boolean finished = false;
-        String line;
+        //String line;
         Process p = Runtime.getRuntime().exec("qstat -j " + jobId);
         BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
+        BufferedReader error = new BufferedReader(new InputStreamReader(p.getErrorStream()));
         p.waitFor();
         int exitVal = p.exitValue();
         System.out.println("Process exitValue: " + exitVal);
 
-        
+        String line = input.readLine();
+        String errors = error.readLine();
 
-        while ((line = input.readLine()) != null) {
-            System.out.println("result: " + line);
-        }
-
-        //String line = input.readLine();
-        input.close();
-        System.out.println("line");
-        if (line.equals("Following jobs do not exist:")) {
+        if (errors != null&& errors.contains("do not exist")) {
+            System.out.println("Errors check");
+            System.out.println("errors:" + errors);
             finished = true;
+        } else if (line != null) {
+            System.out.println("input check");
+            while ((line = input.readLine()) != null) {
+                System.out.println("result: " + line);
+            }
         }
+        input.close();
+        error.close();
         return finished;
     }
 }

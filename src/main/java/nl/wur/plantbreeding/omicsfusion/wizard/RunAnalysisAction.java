@@ -103,6 +103,8 @@ public class RunAnalysisAction extends ActionSupport implements ServletRequestAw
             }
         }
 
+        // TODO: log userId or sessionID as primary key? / method / jobId / startTime / sessionId / (finishTime <- status update daemon).
+
         LOG.log(Level.INFO, "Submitted {0} jobs to SGE.", jobIds.size());
 
         //Send out the email with details
