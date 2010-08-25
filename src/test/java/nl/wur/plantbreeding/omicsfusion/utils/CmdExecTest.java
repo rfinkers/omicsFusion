@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package nl.wur.plantbreeding.omicsfusion.utils;
 
 import org.junit.Ignore;
@@ -40,9 +35,10 @@ public class CmdExecTest {
 
     /**
      * Test of ExecuteQSubCmd method, of class CmdExec.
+     * @throws Exception
      */
     @Test
-    //@Ignore
+    @Ignore
     public void testExecuteQSubCmd() throws Exception {
         System.out.println("ExecuteQSubCmd");
         String executionDir = "/home/finke002/NetBeansProjects/omicsFusion/src/main/resources"; //FIXME: refer to a valid test test case.
@@ -54,14 +50,14 @@ public class CmdExecTest {
 
     /**
      * Test of CheckJobStatus method, of class CmdExec.
+     * @throws Exception 
      */
     @Test
     public void testCheckJobStatus() throws Exception {
         System.out.println("CheckJobStatus");
         int jobId = 2;
-        boolean expResult = true;
+        boolean expResult = true;//Job is finished
         boolean result = CmdExec.CheckJobStatus(jobId);
         assertEquals(expResult, result);
     }
-
 }

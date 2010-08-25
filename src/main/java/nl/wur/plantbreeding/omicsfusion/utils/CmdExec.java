@@ -32,7 +32,7 @@ public class CmdExec {
      */
     public static int ExecuteQSubCmd(String executionDir, String method) throws IOException {
 
-        Process p = Runtime.getRuntime().exec("qsub -S /bin/bash " + executionDir + method + ".sh");
+        Process p = Runtime.getRuntime().exec("qsub -S /bin/bash " + executionDir + method + ".pbs");
         BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
         String line = input.readLine();
         input.close();

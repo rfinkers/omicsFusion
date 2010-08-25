@@ -131,8 +131,8 @@ public class RunAnalysisAction extends ActionSupport implements ServletRequestAw
      */
     public int submitToSGE(String scriptName) throws IOException {
         WriteFile wf = new WriteFile();
-        wf.WriteFile(getTempDir() + getRequest().getSession().getId() + "/" + scriptName + ".sh",
-                "#!/bin/sh\ncd " + getTempDir() + getRequest().getSession().getId() + "\nR --no-save < " + scriptName + ".R");
+        wf.WriteFile(getTempDir() + getRequest().getSession().getId() + "/" + scriptName + ".pbs",
+                "#!/bin/sh\ncd " + getTempDir() + getRequest().getSession().getId() + "\nR --no-save < " + scriptName + ".R\n");
         //Submit jobs to the SGE QUEUE
         int jobId = CmdExec.ExecuteQSubCmd(getTempDir() + getRequest().getSession().getId() + "/", scriptName);
         if (jobId == 0) {
