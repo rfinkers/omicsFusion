@@ -7,10 +7,11 @@ package nl.wur.plantbreeding.omicsfusion.run.status;
 
 import com.opensymphony.xwork2.ActionSupport;
 import java.util.logging.Logger;
+import nl.wur.plantbreeding.logic.util.Validation;
 
 /**
- *
- * @author finke002
+ * Validates the SessionID within the run status validation scripts.
+ * @author Richard Finkers
  */
 public class RunStatusValidationForm extends ActionSupport {
     /** The logger */
@@ -25,7 +26,17 @@ public class RunStatusValidationForm extends ActionSupport {
     }
 
     public void setSessionId(String sessionId) {
-        this.sessionId = sessionId;
+        this.sessionId = sessionId.trim();
     }
 
+    @Override
+    public void validate() {
+        System.out.println("Validate");
+       if(Validation.containsSpecialCharactersCheck(sessionId)==true){
+           //do something like throwing an error
+           System.out.println("TRUE");
+       }
+        //TODO: we expect a fixed length for the sessionID Include a length check
+
+    }
 }

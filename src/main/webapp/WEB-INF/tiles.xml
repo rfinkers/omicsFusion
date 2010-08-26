@@ -62,6 +62,15 @@
         <put-attribute name="title" value="Please wait" />
         <put-attribute name="body" value="/WEB-INF/webPages/submit/wait_body.jsp" />
     </definition>
+    <!-- Run status -->
+    <definition name="showRunStatus" extends="baseLayout">
+        <put-attribute name="title" value="omicsFusion" />
+        <put-attribute name="body" value="/WEB-INF/webPages/status/showRunStatus_body.jsp" />
+    </definition>
+    <definition name="runStatus" extends="baseLayout">
+        <put-attribute name="title" value="Run status" />
+        <put-attribute name="body" value="/WEB-INF/webPages/status/runStatus_body.jsp" />
+    </definition>
     <!-- View results -->
     <definition name="resultsIndex" extends="baseLayout">
         <put-attribute name="title" value="omicsFusion" />

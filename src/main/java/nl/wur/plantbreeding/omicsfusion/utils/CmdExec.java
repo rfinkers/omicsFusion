@@ -55,15 +55,21 @@ public class CmdExec {
         return jobId;
     }
 
+    /**
+     * Check the status of the jobs with the SGE cluster.
+     * @param jobId Job to check.
+     * @return 
+     * @throws IOException
+     * @throws InterruptedException
+     */
     public static boolean CheckJobStatus(int jobId) throws IOException, InterruptedException {
+        //TODO: boolean or String? Probably String as this can contain more information about currently runnign jobs (e.g. start time etc.).
         boolean finished = false;
         //String line;
         Process p = Runtime.getRuntime().exec("qstat -j " + jobId);
         BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
         BufferedReader error = new BufferedReader(new InputStreamReader(p.getErrorStream()));
         p.waitFor();
-        int exitVal = p.exitValue();
-        System.out.println("Process exitValue: " + exitVal);
 
         String line = input.readLine();
         String errors = error.readLine();
@@ -74,6 +80,8 @@ public class CmdExec {
             finished = true;
         } else if (line != null) {
             System.out.println("input check");
+            //submission_time:
+            
             while ((line = input.readLine()) != null) {
                 System.out.println("result: " + line);
             }

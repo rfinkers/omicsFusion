@@ -4,10 +4,10 @@
         "http://struts.apache.org/dtds/struts-2.0.dtd">
 
 <struts>
-    <package name="pipeline" namespace="/analysis" extends="struts-default">
-        <action name="pipeline" class="nl.wur.plantbreeding.omicsfusion.pipeline.AnalysisAction">
-            <result name="input">/submit/methodSelection.jsp</result>
-            <result name="success">/submit/run.jsp</result>
+    <package name="runStatus" namespace="/runStatus" extends="struts-default">
+        <action name="runStatus" class="nl.wur.plantbreeding.omicsfusion.run.status.RunStatusAction">
+            <result name="input">/submit/showRunStatus.jsp</result>
+            <result name="success">/status/runStatus.jsp</result>
         </action>
     </package>
 </struts>

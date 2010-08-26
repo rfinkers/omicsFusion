@@ -55,7 +55,7 @@ public class CmdExecTest {
     @Test
     public void testCheckJobStatus() throws Exception {
         System.out.println("CheckJobStatus");
-        int jobId = 2;
+        int jobId = 4550;
         boolean expResult = true;//Job is finished
         boolean result = CmdExec.CheckJobStatus(jobId);
         assertEquals(expResult, result);

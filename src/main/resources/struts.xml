@@ -13,6 +13,8 @@
 <!--              Actions for the framework-->
     <include file="submitWizard.xml"/>
 
+    <include file="runStatus.xml"/>
+
     <package name="default" extends="struts-default" namespace="/">
         <result-types>
             <result-type name="tiles"
