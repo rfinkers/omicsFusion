@@ -16,10 +16,6 @@
         <put-attribute name="title" value="omicsFusion" />
         <put-attribute name="body" value="/WEB-INF/webPages/index_body.jsp" />
     </definition>
-    <definition name="todo" extends="baseLayout">
-        <put-attribute name="title" value="todo list" />
-        <put-attribute name="body" value="/WEB-INF/webPages/results/todo_body.jsp" />
-    </definition>
     <!--Error Pages-->
     <definition name="403" extends="baseLayout">
         <put-attribute name="title" value="403 - Not authorized" />
@@ -75,5 +71,41 @@
     <definition name="resultsIndex" extends="baseLayout">
         <put-attribute name="title" value="omicsFusion" />
         <put-attribute name="body" value="/WEB-INF/webPages/results/index_body.jsp" />
+    </definition>
+    <definition name="enResults" extends="baseLayout">
+        <put-attribute name="title" value="omicsFusion" />
+        <put-attribute name="body" value="/WEB-INF/webPages/results/enResults_body.jsp" />
+    </definition>
+    <definition name="lassoResults" extends="baseLayout">
+        <put-attribute name="title" value="omicsFusion" />
+        <put-attribute name="body" value="/WEB-INF/webPages/results/lassoResults_body.jsp" />
+    </definition>
+    <definition name="pcrResults" extends="baseLayout">
+        <put-attribute name="title" value="omicsFusion" />
+        <put-attribute name="body" value="/WEB-INF/webPages/results/pcrResults_body.jsp" />
+    </definition>
+    <definition name="plsResults" extends="baseLayout">
+        <put-attribute name="title" value="omicsFusion" />
+        <put-attribute name="body" value="/WEB-INF/webPages/results/plsResults_body.jsp" />
+    </definition>
+    <definition name="rfResults" extends="baseLayout">
+        <put-attribute name="title" value="omicsFusion" />
+        <put-attribute name="body" value="/WEB-INF/webPages/results/rfResults_body.jsp" />
+    </definition>
+    <definition name="ridgeResults" extends="baseLayout">
+        <put-attribute name="title" value="omicsFusion" />
+        <put-attribute name="body" value="/WEB-INF/webPages/results/ridgeResults_body.jsp" />
+    </definition>
+    <definition name="splsResults" extends="baseLayout">
+        <put-attribute name="title" value="omicsFusion" />
+        <put-attribute name="body" value="/WEB-INF/webPages/results/splsResults_body.jsp" />
+    </definition>
+    <definition name="svmResults" extends="baseLayout">
+        <put-attribute name="title" value="omicsFusion" />
+        <put-attribute name="body" value="/WEB-INF/webPages/results/svmResults_body.jsp" />
+    </definition>
+    <definition name="univariateResults" extends="baseLayout">
+        <put-attribute name="title" value="omicsFusion" />
+        <put-attribute name="body" value="/WEB-INF/webPages/results/univariateResults_body.jsp" />
     </definition>
 </tiles-definitions>

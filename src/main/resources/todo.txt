@@ -1,3 +1,48 @@
 TODO:
 - Add storage of user details / selected procedures / sessionid to the database
 - Show the version of the (System details /) R packages on a page?
+
+Solve (in part) NxP problem. 
+
+Univariate, with FDR                Single      rank
+Principal component regression      All         rank
+PLS                                 All         rank
+sPLS                                <P          rank & selection
+Ridge regression                    All         rank
+Lasso regression                    <N          rank & selection
+Elestic net                         <p          rank & selection
+Support vector machine regression               mostly selection
+random forest                       Often all   mostly rank
+    -> using GenesRF: classification with RF
+
+Could you send me the program that you have now used for the paper. Please also make a copy of the program in a folder with a name that makes clear
+that this was the exact version with which the results included in the paper were generated. Then also copy the exact data files as you used them as
+input for the program to this folder and (in a separate sub-folder) the raw results files and the processed results files that you used to make the
+tables and figures. Once you have a submitted version of the paper, make sure that you store all the tables and figures and the exact version of the
+paper that was submitted, to a folder also. The idea is that if people later on have questions that you should not have too much trouble in finding back
+the exact program, input and results. Make also a backup of these. For your own sake, it will be good to keep track of the exact submitted version of
+the paper, as this is the one you will be working on later on if the referees or the editors have comments, additional input is required etc.
+
+For the future I think we will need a version of the program that can:
+
+* Perform all methods as you used them: univariate, univariate with FDR correction, lasso, ridge, enet, pcr, pls, spls, rf, svm
+* In a double cross validation scheme (optimization parameters, estimation of prediction error, also produce a final model using all the data)
+* MSEP estimation, R2-training, R2-test, ranks of the variables, estimates of regression coefficients, and absolute values of these regression
+  coefficients (for ranking regardless of the plus or minus sign), predicted response per method, selected set of variables (their identification).
+* Variation in these measures over the iterations, sd for the MSEP, R2, but also variation in the numbers of variables selected, the ranks of variables,
+  consistency of the top 1, top 5, top 10, top 20, etc. over the iterations.
+
+* At some stage: a permutation test, to establish significance for the variables, to create a null hypothesis distribution for all the parameters of
+  interest (What R2, MSEP etc can still be obtained in a permuted data set?) to help us to know whether the result really has significance, relevance, biological meaning.
+* At some stage: the possibility to run the software with different choices for centering and autoscaling of the y and the x variables.
+* At some stage: Easy formatting of the output results. Good summary files. Especially the importance of variables should be clear, not just in the estimates
+  but also visually (maybe colour like I did for Martijn Eggink), the output and visualisation should also help the comparison of the variables across methods.
+* At some stage: Easy and clear visualization of the results. Good graphs, tables, diagrams.
+* At some stage: Automated calculation of correlations among the 1) selected variables from variable selection procedures, 2) top something of the ranking procedures or,
+  3) a 'significant' set of variables based on permutation results.
+* Maybe: a bootstrap procedure to assess variability ? Maybe not necessary with the cross validation scheme.
+
+In addition we will need a clear description of all the methods with all their pros and cons (advantages, disadvantages, peculiarities, behaviour),
+not just from a theoretical perspective but also for guidance in the application by non-statistical users. It will have to include sort of a recommendation:
+if this and this is your situation and you are interested in this and this type of biological question then you should use this and this method and certainly
+not that and that method. The paper should actually already contain most of this information, so that a reference will be also good.

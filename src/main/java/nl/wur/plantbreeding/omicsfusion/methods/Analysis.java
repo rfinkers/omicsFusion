@@ -35,7 +35,8 @@ public class Analysis {
         rCode += "responseSheet  <- read.xls(\"" + excelSheets.get("response") + "\")\n";
         rCode += "response <- colnames(responseSheet[2])\n";//TODO: Tric does not work
         rCode += "dataSet=cbind(responseSheet[2],predictorSheet[-1])\n";
-        rCode += "dataSet=na.omit(dataSet)\n\n";//TODO: handle differently? Added in addition to the script of Animesh.
+        //TODO: better na.omit strategies. Imputation? Added in addition to the script of Animesh.
+        rCode += "dataSet=na.omit(dataSet)\n\n";
         return rCode;
     }
 
@@ -46,6 +47,7 @@ public class Analysis {
     protected String preProcessMatrix() {
         String rCode = "# Pre process data matrix\n";
         rCode += "DesignMatrix <- model.matrix(dataSet$BRIX_P ~ . - 1, dataSet)\n";//FIXME: dataSet[1] coding does not work / HARDCODED dataSet%BRIX_M
+        //TODO: different centering and autoscaling algorithms? User selectable.
         rCode += "DesignMatrix <- scale(DesignMatrix)\n\n";
         return rCode;
     }
@@ -55,6 +57,7 @@ public class Analysis {
      * @return R program code.
      */
     protected String getTrainingSets() {
+        //TODO: we might get different training and test sets profided via the dataset upload.
         String rCode = " # Create training sets\n";
         //FIXME: dataSet[1] coding does not work. HARDCODED dataSet%BRIX_M
         rCode += "  inTrainingSet <- createFolds(dataSet$BRIX_P, k = " + Constants.NUMBERFOLDS + ", list = TRUE, returnTrain = T)\n";
@@ -78,8 +81,9 @@ public class Analysis {
     protected String initializeResultObjects() {
         String rCode = "# Initialize results\n";
         for (int i = 0; i < Constants.NUMBERFOLDS; i++) {
-            rCode += "coefs_" + i + " <- matrix(data = NA,nrow = dim(DesignMatrix)[2],ncol=" + Constants.ITERATIONS + ")\n";
+            rCode += "coefs_" + i + " <- matrix(data = NA,nrow = dim(DesignMatrix)[2], ncol =" + Constants.ITERATIONS + ")\n";
             rCode += "y_fit" + i + " <- matrix(data = NA, nrow = dim(DesignMatrix)[2], ncol =" + Constants.ITERATIONS + ")\n";
+            //TODO: We might what to have a second R2 object which contains absolute values.
             rCode += "R2_" + i + " <- matrix(data=NA,nrow=1,ncol=" + Constants.ITERATIONS + ")\n";
             rCode += "frac_" + i + " <- matrix(data=NA,nrow=1,ncol=" + Constants.ITERATIONS + ")\n";
             rCode += "lambda_" + i + " <- matrix(data=NA,nrow=1,ncol=" + Constants.ITERATIONS + ")\n";
@@ -101,9 +105,12 @@ public class Analysis {
             rCode += "R2_" + i + " <- matrix(data=NA,nrow=1,ncol=" + Constants.ITERATIONS + ")\n";
             if (analysisMethod.equals("en") || analysisMethod.equals("ridge") || analysisMethod.equals("lasso")) {
                 rCode += "lambda_" + i + " <- matrix(data = NA, nrow = 1, ncol = " + Constants.ITERATIONS + ")\n";
+                //TODO: what is the added column for these analysis? Is it equeal for each method (and alwasy row 1)?
                 rCode += "coefs_" + i + " <- matrix(data = NA,nrow = dim(DesignMatrix)[2]+1,ncol=" + Constants.ITERATIONS + ")\n";
+                rCode += "rownames(coefs_" + i + ") <- c(\"unknown\",colnames(DesignMatrix))\n";//FIXME: correct assumption?
             } else if (analysisMethod.equals("pcr") || analysisMethod.equals("spls") || analysisMethod.equals("pls")) {
                 rCode += "coefs_" + i + " <- matrix(data = NA,nrow = dim(DesignMatrix)[2],ncol=" + Constants.ITERATIONS + ")\n";
+                rCode += "rownames(coefs_" + i + ") <- colnames(DesignMatrix)\n";//FIXME: correct assumption?
             }
             if (analysisMethod.equals("en")) {
                 rCode += "frac_" + i + " <- matrix(data=NA,nrow=1,ncol=" + Constants.ITERATIONS + ")\n";
@@ -167,6 +174,7 @@ public class Analysis {
                 rCode += "      ## RF Round: " + j + "\n";
             }
             rCode += "      ## Create predictor and response test and training sets\n";
+            //TODO: test set can be an separate set of sheets!
             rCode += "      predictorTrainSet" + i + " <- DesignMatrix[trainingSet" + i + ",]\n";
             rCode += "      predictorTestSet" + i + " <- DesignMatrix[-trainingSet" + i + ",]\n";// outer test set
             rCode += "      responseTrainSet" + i + " <- dataSet$BRIX_P[trainingSet" + i + "]\n";//FIXME hardcoded. dataSet[1] does not work. Selects potentially wrong columns
@@ -175,6 +183,7 @@ public class Analysis {
             if (analysisMethod.equals("en")) {
                 rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"glmnet\", metric = \"RMSE\", tuneLength = 10, trControl = con)\n";
             } else if (analysisMethod.equals("lasso")) {
+                //TODO: function of tuneGrid? If there is a default on the other methods, perhaps we should code them anyway?
                 rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"glmnet\", metric = \"RMSE\", tuneLength = 10, tuneGrid = data.frame(.lambda = seq(0, 1, by = 0.1), .alpha = 1), trControl = con)\n";
             } else if (analysisMethod.equals("ridge")) {
                 rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"glmnet\", metric = \"RMSE\", tuneLength = 10, tuneGrid = data.frame(.lambda = seq(0, 100, by = 0.1), .alpha = 0), trControl = con)\n";
@@ -186,9 +195,10 @@ public class Analysis {
                 rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"spls\", metric = \"RMSE\", tuneLength = 10, trControl = con)\n";
             } else if (analysisMethod.equals("rf")) {
                 rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"rf\", metric = \"RMSE\", tuneLength = 10, trControl = con)\n";
-            }else if (analysisMethod.equals("pcr")) {
+            } else if (analysisMethod.equals("pcr")) {
+                //TODO: why tuneLength = 50 for this method only?
                 rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"pcr\", metric = \"RMSE\", tuneLength = 50, trControl = con)\n";
-            } 
+            }
             if (analysisMethod.equals("en")) {
                 rCode += "      frac_" + i + "[, index] <- fit_" + i + "$finalModel$tuneValue$.alpha\n";
             }
@@ -197,6 +207,10 @@ public class Analysis {
             } else if (analysisMethod.equals("lasso") || analysisMethod.equals("ridge")) {
                 rCode += "      lambda_" + i + "[, index] <- fit_" + i + "$bestTune$.lambda\n";
             }
+            //TODO: are the different methods to obtain y_fit necessary?
+            //TODO: what is the (different) meaning for coefs? contains .lamda, .k or .ncomp depending on the method.
+            //TODO: why somethimes type="response" and other times type="coefficient" in predecit function?
+            //TODO: overall. what is the impact of the difference used within the functions on the overall comparability.
             if (analysisMethod.equals("en") || analysisMethod.equals("lasso") || analysisMethod.equals("ridge")) {
                 rCode += "      coefs_" + i + "[, index] <- as.matrix(coef(fit_" + i + "$finalModel, s = fit_" + i + "$finalModel$tuneValue$.lambda))\n";
                 rCode += "      preds_" + i + " <- predict(fit_" + i + "$finalModel, newx = predictorTrainSet" + i + ", s = fit_" + i + "$finalModel$tuneValue$.lambda, type = \"response\")\n";
@@ -219,6 +233,7 @@ public class Analysis {
                 rCode += "      K_" + i + "[, index] <- fit_" + i + "$finalModel$tuneValue$.K\n";
                 rCode += "      eta_" + i + "[, index] <- fit_" + i + "$finalModel$tuneValue$.eta\n";
             }
+            //TODO: absolute R2?
             rCode += "      R2_" + i + "[, index] <- (cor(responseTrainSet" + i + ", y_fit_" + i + ")^2) * 100\n";//TODO: On how many samples is this R2 calculated?
             rCode += "      ## Running model??????\n";
             if (analysisMethod.equals("en") || analysisMethod.equals("lasso") || analysisMethod.equals("ridge")) {
