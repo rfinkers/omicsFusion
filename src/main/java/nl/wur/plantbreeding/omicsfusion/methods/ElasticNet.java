@@ -4,7 +4,7 @@ import java.util.logging.Logger;
 import nl.wur.plantbreeding.omicsfusion.utils.Constants;
 
 /**
- * Elastic net application using GLMNET and caret
+ * Elastic net (glm)
  * @author Richard Finkers
  * @version 1.0
  */

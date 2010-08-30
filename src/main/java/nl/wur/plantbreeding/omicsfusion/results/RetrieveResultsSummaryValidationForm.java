@@ -12,9 +12,9 @@ import java.util.logging.Logger;
  *
  * @author finke002
  */
-public class RetrieveResultsValidationForm extends ActionSupport {
+public class RetrieveResultsSummaryValidationForm extends ActionSupport {
     /** The logger */
-    private static final Logger LOG = Logger.getLogger(RetrieveResultsValidationForm.class.getName());
+    private static final Logger LOG = Logger.getLogger(RetrieveResultsSummaryValidationForm.class.getName());
     /** Serial Version UID */
     private static final long serialVersionUID = 1L;
     /** session token */

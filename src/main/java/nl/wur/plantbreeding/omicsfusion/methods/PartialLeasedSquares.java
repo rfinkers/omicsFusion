@@ -8,7 +8,7 @@ import java.util.logging.Logger;
 import nl.wur.plantbreeding.omicsfusion.utils.Constants;
 
 /**
- * Application of PLS
+ * Application of Partial least squares
  * @author Richard Finkers
  * @version 1.0
  */

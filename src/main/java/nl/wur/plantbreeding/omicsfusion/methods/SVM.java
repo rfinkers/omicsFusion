@@ -44,8 +44,8 @@ public class SVM extends Analysis {
         for (int i = 0; i < Constants.NUMBER_FOLDS_OUTER; i++) {
             trainR2 += "R2_" + i;
             test += "test_" + i;
-            sigma += "" + i;
-            cost += "" + i;
+            sigma += "tune_sigma_" + i;
+            cost += "tune_cost_" + i;
             if (i < 9) {
                 trainR2 += ", ";
                 test += ", ";

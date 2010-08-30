@@ -7,7 +7,7 @@ package nl.wur.plantbreeding.omicsfusion.methods;
 import nl.wur.plantbreeding.omicsfusion.utils.Constants;
 
 /**
- * Sparse PLS analysis
+ * Sparse partial least squares analysis
  * @author Richard Finkers
  */
 public class SparsePLS extends Analysis {

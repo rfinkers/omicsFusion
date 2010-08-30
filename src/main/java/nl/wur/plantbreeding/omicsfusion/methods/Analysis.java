@@ -28,8 +28,11 @@ public class Analysis {
     protected String loadExcelSheets(HashMap<String, String> excelSheets) {
         String rCode = "# Load the generic R libraries \n";
         rCode += "library(gdata)\n";//Used to load excel sheets
+        rCode += "library(lattice)\n";//dependencies of caret
+        rCode += "library(reshape)\n";//dependencies of caret
+        rCode += "library(plyr)\n";//dependencies of caret
         rCode += "library(caret)\n";//Used for createfolds in training set
-        rCode += "library(snow)\n\n";//Just to test if things get paralized automatically.
+        rCode += "library(snow)\n\n";//train() from caret can use snow or library(doMPI) alternatively.
         rCode += "# Load the excel sheets\n";
         rCode += "predictorSheet <- read.xls(\"" + excelSheets.get("predictor") + "\")\n";
         rCode += "responseSheet  <- read.xls(\"" + excelSheets.get("response") + "\")\n";
@@ -304,6 +307,22 @@ public class Analysis {
             }
         }
         return rCode + trainCoeff + ")\n" + trainR2 + ")\n" + test + ")\n\n";
+    }
+
+    /**
+     * Calculate the row average and SD for each row in the data matrix.
+     * TODO: also calculate the rank of each metabolite?
+     * @return R compaticle code.
+     */
+    protected String getRowMeansAndSD() {
+        String rCode = "# Get row means and SD";
+        //TODO: take the row average, SD and rank? for each row in the Train_Coeff matrix (=after binding together).
+        //rowMeans() function. (preffered over the apply function)
+        //Or:
+        //apply(t(predictorSheet[,-1]),1,mean)
+        //apply(t(predictorSheet[,-1]),1,sd)
+        //rank(apply(t(predictorSheet[,-1]),1,sd))
+        return rCode;
     }
 
     /**

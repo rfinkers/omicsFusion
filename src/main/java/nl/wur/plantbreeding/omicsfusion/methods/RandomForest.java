@@ -8,7 +8,7 @@ import java.util.logging.Logger;
 import nl.wur.plantbreeding.omicsfusion.utils.Constants;
 
 /**
- * Random Forest analysis
+ * Random forests analysis
  * @author Richard Finkers
  * @version 1.0
  */
