@@ -20,8 +20,10 @@ public class Constants {
     /** The total number of iterations on the dataset. */
     public static final int ITERATIONS = 3;//FIXME: set to 100 for final program.
     /** outer cross validation (to optimize parameters. */
-    public static final int NUMBERFOLDS = 10;
-
+    public static final int NUMBER_FOLDS_OUTER = 10;
+    /** inner cross validation (to optimize parameters. */
+    public static final int NUMBER_FOLDS_INNER = 10;
+    
     private Constants() {
     }
 }

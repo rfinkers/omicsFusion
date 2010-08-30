@@ -39,7 +39,7 @@ public class PartialLeasedSquares extends Analysis {
         String rCode = super.combineResults();
         rCode += "# Combine Method specific results\n";
         String trainNcomp = "Train_Ncomp <- cbind(";
-        for (int i = 0; i < Constants.NUMBERFOLDS; i++) {
+        for (int i = 0; i < Constants.NUMBER_FOLDS_OUTER; i++) {
             trainNcomp += "opt_comp_" + i;
             if (i < 9) {
                 trainNcomp += ", ";

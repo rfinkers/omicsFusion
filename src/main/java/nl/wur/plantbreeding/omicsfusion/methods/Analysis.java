@@ -60,8 +60,9 @@ public class Analysis {
         //TODO: we might get different training and test sets profided via the dataset upload.
         String rCode = " # Create training sets\n";
         //FIXME: dataSet[1] coding does not work. HARDCODED dataSet%BRIX_M
-        rCode += "  inTrainingSet <- createFolds(dataSet$BRIX_P, k = " + Constants.NUMBERFOLDS + ", list = TRUE, returnTrain = T)\n";
-        for (int i = 0; i < Constants.NUMBERFOLDS; i++) {
+        //Can do different procedures. E.G. bootstraps, resampling, leaf-one-out, etc. User selectable?
+        rCode += "  inTrainingSet <- createFolds(dataSet$BRIX_P, k = " + Constants.NUMBER_FOLDS_OUTER + ", list = TRUE, returnTrain = T)\n";
+        for (int i = 0; i < Constants.NUMBER_FOLDS_OUTER; i++) {
             int j = i + 1;//R object contains 1-10 instead of 0-9!
             rCode += "  trainingSet" + i + " <- inTrainingSet$\"" + j + "\"\n";
         }
@@ -80,10 +81,10 @@ public class Analysis {
 
     protected String initializeResultObjects() {
         String rCode = "# Initialize results\n";
-        for (int i = 0; i < Constants.NUMBERFOLDS; i++) {
+        for (int i = 0; i < Constants.NUMBER_FOLDS_OUTER; i++) {
+            //TODO: We might what to have a second coef object which contains absolute values.
             rCode += "coefs_" + i + " <- matrix(data = NA,nrow = dim(DesignMatrix)[2], ncol =" + Constants.ITERATIONS + ")\n";
             rCode += "y_fit" + i + " <- matrix(data = NA, nrow = dim(DesignMatrix)[2], ncol =" + Constants.ITERATIONS + ")\n";
-            //TODO: We might what to have a second R2 object which contains absolute values.
             rCode += "R2_" + i + " <- matrix(data=NA,nrow=1,ncol=" + Constants.ITERATIONS + ")\n";
             rCode += "frac_" + i + " <- matrix(data=NA,nrow=1,ncol=" + Constants.ITERATIONS + ")\n";
             rCode += "lambda_" + i + " <- matrix(data=NA,nrow=1,ncol=" + Constants.ITERATIONS + ")\n";
@@ -99,15 +100,15 @@ public class Analysis {
      */
     protected String initializeResultObjects(String analysisMethod) {
         String rCode = "# Initialize results\n";
-        for (int i = 0; i < Constants.NUMBERFOLDS; i++) {
+        for (int i = 0; i < Constants.NUMBER_FOLDS_OUTER; i++) {
             rCode += "test_" + i + " <- matrix(data=NA,nrow=" + Constants.ITERATIONS + ",ncol=2)\n";
             rCode += "y_fit" + i + " <- matrix(data = NA, nrow = dim(DesignMatrix)[2], ncol =" + Constants.ITERATIONS + ")\n";
             rCode += "R2_" + i + " <- matrix(data=NA,nrow=1,ncol=" + Constants.ITERATIONS + ")\n";
             if (analysisMethod.equals("en") || analysisMethod.equals("ridge") || analysisMethod.equals("lasso")) {
                 rCode += "lambda_" + i + " <- matrix(data = NA, nrow = 1, ncol = " + Constants.ITERATIONS + ")\n";
-                //TODO: what is the added column for these analysis? Is it equeal for each method (and alwasy row 1)?
+                //row 1 is always the intercept. This is always the first row.
                 rCode += "coefs_" + i + " <- matrix(data = NA,nrow = dim(DesignMatrix)[2]+1,ncol=" + Constants.ITERATIONS + ")\n";
-                rCode += "rownames(coefs_" + i + ") <- c(\"unknown\",colnames(DesignMatrix))\n";//FIXME: correct assumption?
+                rCode += "rownames(coefs_" + i + ") <- c(\"intercept\",colnames(DesignMatrix))\n";
             } else if (analysisMethod.equals("pcr") || analysisMethod.equals("spls") || analysisMethod.equals("pls")) {
                 rCode += "coefs_" + i + " <- matrix(data = NA,nrow = dim(DesignMatrix)[2],ncol=" + Constants.ITERATIONS + ")\n";
                 rCode += "rownames(coefs_" + i + ") <- colnames(DesignMatrix)\n";//FIXME: correct assumption?
@@ -150,11 +151,13 @@ public class Analysis {
      * @return R compatible code.
      */
     protected String getAnalysis(String analysisMethod) {
-        String rCode = "#Elastic Net Analysis\n";
+        String rCode = "# Analysis Loop \n";//TODO: generalize
         rCode += "for (index in 1:" + Constants.ITERATIONS + ") {\n";
         rCode += getTrainingSets();
-        rCode += "  con <- trainControl(method = \"cv\", number = " + Constants.NUMBERFOLDS + ")\n"; //TODO: Ask animesh if number=10 has something to do with Constants.NUMBERFOLDS
-        for (int i = 0; i < Constants.NUMBERFOLDS; i++) {
+        // innerLoop = how many times to do the inner loop cross validation.
+        // The NUMBER_FOLDS_INNER reflects how the test / predictor subsets are made! 10 means automatically 10 % / 90 % while 20 means 5% / 95%.
+        rCode += "  innerLoop <- trainControl(method = \"cv\", number = " + Constants.NUMBER_FOLDS_INNER + ")\n";
+        for (int i = 0; i < Constants.NUMBER_FOLDS_OUTER; i++) {
             int j = i + 1;
             if (analysisMethod.equals("en")) {
                 rCode += "      ## Elastic Net Round: " + j + "\n";
@@ -179,40 +182,44 @@ public class Analysis {
             rCode += "      predictorTestSet" + i + " <- DesignMatrix[-trainingSet" + i + ",]\n";// outer test set
             rCode += "      responseTrainSet" + i + " <- dataSet$BRIX_P[trainingSet" + i + "]\n";//FIXME hardcoded. dataSet[1] does not work. Selects potentially wrong columns
             rCode += "      responseTestSet" + i + " <- dataSet$BRIX_P[-trainingSet" + i + "]\n";//FIXME hardcoded. dataSet[1] does not work
+            //TODO: write trainingset to a file.
             rCode += "      ## Parameter optimalization\n";
             if (analysisMethod.equals("en")) {
-                rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"glmnet\", metric = \"RMSE\", tuneLength = 10, trControl = con)\n";
+                rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"glmnet\", metric = \"RMSE\", tuneLength = 10, trControl = innerLoop)\n";
             } else if (analysisMethod.equals("lasso")) {
                 //TODO: function of tuneGrid? If there is a default on the other methods, perhaps we should code them anyway?
-                rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"glmnet\", metric = \"RMSE\", tuneLength = 10, tuneGrid = data.frame(.lambda = seq(0, 1, by = 0.1), .alpha = 1), trControl = con)\n";
+                // tunegrid:
+                // .alpha depens on the method
+                rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"glmnet\", metric = \"RMSE\", tuneLength = 10, tuneGrid = data.frame(.lambda = seq(0, 1, by = 0.1), .alpha = 1), trControl = innerLoop)\n";
             } else if (analysisMethod.equals("ridge")) {
-                rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"glmnet\", metric = \"RMSE\", tuneLength = 10, tuneGrid = data.frame(.lambda = seq(0, 100, by = 0.1), .alpha = 0), trControl = con)\n";
+                rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"glmnet\", metric = \"RMSE\", tuneLength = 10, tuneGrid = data.frame(.lambda = seq(0, 100, by = 0.1), .alpha = 0), trControl = innerLoop)\n";
             } else if (analysisMethod.equals("svm")) {
-                rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"svmRadial\", metric = \"RMSE\", tuneLength = 10, trControl = con)\n";
+                rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"svmRadial\", metric = \"RMSE\", tuneLength = 10, trControl = innerLoop)\n";
             } else if (analysisMethod.equals("pls")) {
-                rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"pls\", metric = \"RMSE\", tuneLength = 10, trControl = con)\n";
+                rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"pls\", metric = \"RMSE\", tuneLength = 10, trControl = innerLoop)\n";
             } else if (analysisMethod.equals("spls")) {
-                rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"spls\", metric = \"RMSE\", tuneLength = 10, trControl = con)\n";
+                rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"spls\", metric = \"RMSE\", tuneLength = 10, trControl = innerLoop)\n";
             } else if (analysisMethod.equals("rf")) {
-                rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"rf\", metric = \"RMSE\", tuneLength = 10, trControl = con)\n";
+                rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"rf\", metric = \"RMSE\", tuneLength = 10, trControl = innerLoop)\n";
             } else if (analysisMethod.equals("pcr")) {
-                //TODO: why tuneLength = 50 for this method only?
-                rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"pcr\", metric = \"RMSE\", tuneLength = 50, trControl = con)\n";
-            }
-            if (analysisMethod.equals("en")) {
-                rCode += "      frac_" + i + "[, index] <- fit_" + i + "$finalModel$tuneValue$.alpha\n";
-            }
-            if (analysisMethod.equals("en")) {
-                rCode += "      lambda_" + i + "[, index] <- fit_" + i + "$finalModel$tuneValue$.lambda\n";
-            } else if (analysisMethod.equals("lasso") || analysisMethod.equals("ridge")) {
-                rCode += "      lambda_" + i + "[, index] <- fit_" + i + "$bestTune$.lambda\n";
+                // tuneLenght is an arbitrary value. Can be optomized by method. Now just choosen a value. 10 is a default of the method. PCR somtimes requires more.
+                // if you choose 10, you cannot get more components than 10?
+                rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"pcr\", metric = \"RMSE\", tuneLength = 50, trControl = innerLoop)\n";
             }
             //TODO: are the different methods to obtain y_fit necessary?
             //TODO: what is the (different) meaning for coefs? contains .lamda, .k or .ncomp depending on the method.
             //TODO: why somethimes type="response" and other times type="coefficient" in predecit function?
             //TODO: overall. what is the impact of the difference used within the functions on the overall comparability.
+            //parameter optimalization & back-rediction of the outer training set and coefficients under that optimized model.
             if (analysisMethod.equals("en") || analysisMethod.equals("lasso") || analysisMethod.equals("ridge")) {
+                if (analysisMethod.equals("en")) {
+                    rCode += "      frac_" + i + "[, index] <- fit_" + i + "$finalModel$tuneValue$.alpha\n";
+                    rCode += "      lambda_" + i + "[, index] <- fit_" + i + "$finalModel$qtuneValue$.lambda\n";
+                } else if (analysisMethod.equals("lasso") || analysisMethod.equals("ridge")) {
+                    rCode += "      lambda_" + i + "[, index] <- fit_" + i + "$bestTune$.lambda\n";
+                }
                 rCode += "      coefs_" + i + "[, index] <- as.matrix(coef(fit_" + i + "$finalModel, s = fit_" + i + "$finalModel$tuneValue$.lambda))\n";
+                //pridection on outer training set.
                 rCode += "      preds_" + i + " <- predict(fit_" + i + "$finalModel, newx = predictorTrainSet" + i + ", s = fit_" + i + "$finalModel$tuneValue$.lambda, type = \"response\")\n";
                 rCode += "      y_fit_" + i + " <- preds_" + i + "[, 1]\n";
             } else if (analysisMethod.equals("pcr") || analysisMethod.equals("pls")) {
@@ -233,9 +240,10 @@ public class Analysis {
                 rCode += "      K_" + i + "[, index] <- fit_" + i + "$finalModel$tuneValue$.K\n";
                 rCode += "      eta_" + i + "[, index] <- fit_" + i + "$finalModel$tuneValue$.eta\n";
             }
-            //TODO: absolute R2?
+            //R2 calculated on the outer training set.
             rCode += "      R2_" + i + "[, index] <- (cor(responseTrainSet" + i + ", y_fit_" + i + ")^2) * 100\n";//TODO: On how many samples is this R2 calculated?
-            rCode += "      ## Running model??????\n";
+            rCode += "      ## Outer test set.\n";
+            //Outer test set
             if (analysisMethod.equals("en") || analysisMethod.equals("lasso") || analysisMethod.equals("ridge")) {
                 rCode += "      bhModels_" + i + " <- list(glmnet = fit_" + i + ")\n";
             } else if (analysisMethod.equals("pcr")) {
@@ -251,7 +259,10 @@ public class Analysis {
             }
             rCode += "      allPred_" + i + " <- extractPrediction(bhModels_" + i + ", testX = predictorTestSet" + i + ", testY = responseTestSet" + i + ")\n";
             rCode += "      testPred_" + i + " <- subset(allPred_" + i + ", dataType == \"Test\")\n";
+            //Contins MSEP and corresponding R2 value for outer test data. Only on 9 individuals in CxE flesh test set!!
             rCode += "      sorted_" + i + " <- as.matrix(by(testPred_" + i + ", list(model = testPred_" + i + "$model), function(x) postResample(x$pred, x$obs)))\n";
+            //test contains the MSEP and fraction
+            //TODO: colnames
             if (analysisMethod.equals("en") || analysisMethod.equals("lasso") || analysisMethod.equals("ridge")) {
                 rCode += "      test_" + i + "[index, ] <- sorted_" + i + "[, 1]$glmnet\n\n";
             } else if (analysisMethod.equals("pcr")) {
@@ -267,7 +278,7 @@ public class Analysis {
             }
             //TODO: cleanup of unused objects?
         }
-        //TODO: Calculate R2, for the previous sets, after finishing this 10 folds?
+        //TODO: Calculate R2, for the previous sets, after finishing this 10 folds? Combine all 10 testPred_i and
         rCode += "}\n\n";
         return rCode;
     }
@@ -282,7 +293,7 @@ public class Analysis {
         String trainR2 = "Train_R2 <- cbind(";
         String test = "methodResults <- cbind(";
 
-        for (int i = 0; i < Constants.NUMBERFOLDS; i++) {
+        for (int i = 0; i < Constants.NUMBER_FOLDS_OUTER; i++) {
             trainCoeff += "coefs_" + i;
             trainR2 += "R2_" + i;
             test += "test_" + i;

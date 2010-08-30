@@ -41,7 +41,7 @@ public class SVM extends Analysis {
         String cost = "Train_cost <- cbind(";
         String test = "methodResults <- cbind(";
 
-        for (int i = 0; i < Constants.NUMBERFOLDS; i++) {
+        for (int i = 0; i < Constants.NUMBER_FOLDS_OUTER; i++) {
             trainR2 += "R2_" + i;
             test += "test_" + i;
             sigma += "" + i;

@@ -38,7 +38,7 @@ public class ElasticNet extends Analysis {
         String trainR2 = "Train_R2 <- cbind(";
         String test = "methodResults <- cbind(";
 
-        for (int i = 0; i < Constants.NUMBERFOLDS; i++) {
+        for (int i = 0; i < Constants.NUMBER_FOLDS_OUTER; i++) {
             trainCoeff += "coefs_" + i;
             trainFraction += "frac_" + i;
             trainLambda += "lambda_" + i;

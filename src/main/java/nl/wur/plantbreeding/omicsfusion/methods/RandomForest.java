@@ -42,7 +42,7 @@ public class RandomForest extends Analysis {
         String trainR2 = "Train_R2 <- cbind(";
         String test = "methodResults <- cbind(";
 
-        for (int i = 0; i < Constants.NUMBERFOLDS; i++) {
+        for (int i = 0; i < Constants.NUMBER_FOLDS_OUTER; i++) {
             trainMtry += "mtry_" + i;
             trainVarImp += "imp_" + i;
             trainR2 += "R2_" + i;
