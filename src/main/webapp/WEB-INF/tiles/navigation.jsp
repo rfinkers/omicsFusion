@@ -12,12 +12,10 @@ Test: Navigation
 <!-- start vertical menu -->
 <s:div class="vertMenu">
     <table class="rootVoices vertical" cellspacing='0' cellpadding='0' border='0'>
-        <tr><td class="rootVoice {menu: 'empty'}" onclick="window.open('<html:rewrite page='/'/>','_self')"><bean:message key="menu.home"/></td></tr>
-        <tr><td class="rootVoice {menu: 'empty'}" onclick="window.open('<html:rewrite page='/submit/'/>','_self')"><bean:message key="menu.submit"/></td></tr>
-        <tr><td class="rootVoice {menu: 'empty'}" onclick="window.open('<html:rewrite page='/retrieve/'/>','_self')"><bean:message key="menu.retrieve"/></td></tr>
+        <tr><td class="rootVoice {menu: 'empty'}" onclick="window.open('<s:url value='/'/>','_self')"><s:text name="menu.home"/></td></tr>
+        <tr><td class="rootVoice {menu: 'empty'}" onclick="window.open('<s:url value='/submit/'/>','_self')"><s:text name="menu.submit"/></td></tr>
+        <tr><td class="rootVoice {menu: 'empty'}" onclick="window.open('<s:url value='/retrieve/'/>','_self')"><s:text name="menu.retrieve"/></td></tr>
     </table>
 </s:div>
 <!-- end vertical menu -->
-
-
-<!-- end menues -->
+<!-- end menu -->

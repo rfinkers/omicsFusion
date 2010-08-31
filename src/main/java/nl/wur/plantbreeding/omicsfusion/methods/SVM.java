@@ -57,8 +57,16 @@ public class SVM extends Analysis {
     }
 
     @Override
+    protected String getRowMeansAndSD() {
+        String rCode = "# Get row means, SD and (absolute) rank\n";
+        //TODO: Implement for SVM
+        return rCode;
+    }
+
+    @Override
     public String writeResults() {
         String rCode = "# Write results to disk\n";
+        //TODO: implement summary method
         rCode += "write.csv(Train_R2, paste(\"SVM_R2\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
         rCode += "write.csv(Train_sigma, paste(\"SVM_Sigma\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
         rCode += "write.csv(Train_cost, paste(\"SVM_Cost\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";

@@ -58,10 +58,22 @@ public class RandomForest extends Analysis {
     }
 
     @Override
+    protected String getRowMeansAndSD() {
+        String rCode = "# Get row means, SD and (absolute) rank\n";
+        //dataSet contains predictor column. So, function == trye when the Train_Coef also contains the intercept.
+        rCode += "means<-apply(Train_varImp,1,mean)\n";
+        rCode += "sd<-apply(Train_varImp,1,sd)\n";
+        rCode += "ra<-rank(abs(apply(Train_varImp,1,mean)))\n";
+        rCode += "Train_varImp_Summary <- cbind (means,sd,ra)\n";
+        return rCode;
+    }
+
+    @Override
     public String writeResults() {
         String rCode = "# Write results to disk\n";
         rCode += "write.csv(Train_R2, paste(\"RF_R2\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
         rCode += "write.csv(Train_varImp, paste(\"RF_varImp\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
+        rCode += "write.csv(Train_varImp_Summary, paste(\"RF_varImp_Summary\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
         rCode += "write.csv(Train_mtry, paste(\"RF_mtry\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
         rCode += "write.csv(methodResults, paste(\"RF\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
         //rCode += "write.xls(methodResults, \"RFnew.xls\")";

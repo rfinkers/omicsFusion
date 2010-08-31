@@ -116,6 +116,10 @@ public class Analysis {
                 rCode += "coefs_" + i + " <- matrix(data = NA,nrow = dim(DesignMatrix)[2],ncol=" + Constants.ITERATIONS + ")\n";
                 rCode += "rownames(coefs_" + i + ") <- colnames(DesignMatrix)\n";//FIXME: correct assumption?
             }
+            if (analysisMethod.equals("spls")) {
+                rCode += "eta_" + i + " <- matrix(data = NA, nrow = 1, ncol =" + Constants.ITERATIONS + ")\n";
+                rCode += "K_" + i + " <- matrix(data = NA, nrow = 1, ncol =" + Constants.ITERATIONS + ")\n";
+            }
             if (analysisMethod.equals("en")) {
                 rCode += "frac_" + i + " <- matrix(data=NA,nrow=1,ncol=" + Constants.ITERATIONS + ")\n";
             }
@@ -129,10 +133,6 @@ public class Analysis {
             if (analysisMethod.equals("svm")) {
                 rCode += "tune_cost_" + i + " <- matrix(data = NA, nrow = dim(DesignMatrix)[2], ncol = " + Constants.ITERATIONS + ")\n";
                 rCode += "tune_sigma_" + i + " <- matrix(data = NA, nrow = dim(DesignMatrix)[2], ncol = " + Constants.ITERATIONS + ")\n";
-            }
-            if (analysisMethod.equals("spls")) {
-                rCode += "eta_" + i + " <- matrix(data = NA, nrow = 1, ncol =" + Constants.ITERATIONS + ")\n";
-                rCode += "K_" + i + " <- matrix(data = NA, nrow = 1, ncol =" + Constants.ITERATIONS + ")\n";
             }
             rCode += "\n";
         }
@@ -217,7 +217,7 @@ public class Analysis {
             if (analysisMethod.equals("en") || analysisMethod.equals("lasso") || analysisMethod.equals("ridge")) {
                 if (analysisMethod.equals("en")) {
                     rCode += "      frac_" + i + "[, index] <- fit_" + i + "$finalModel$tuneValue$.alpha\n";
-                    rCode += "      lambda_" + i + "[, index] <- fit_" + i + "$finalModel$qtuneValue$.lambda\n";
+                    rCode += "      lambda_" + i + "[, index] <- fit_" + i + "$finalModel$tuneValue$.lambda\n";
                 } else if (analysisMethod.equals("lasso") || analysisMethod.equals("ridge")) {
                     rCode += "      lambda_" + i + "[, index] <- fit_" + i + "$bestTune$.lambda\n";
                 }
@@ -311,17 +311,22 @@ public class Analysis {
 
     /**
      * Calculate the row average and SD for each row in the data matrix.
-     * TODO: also calculate the rank of each metabolite?
-     * @return R compaticle code.
+     * @return R compatible code fragment.
      */
     protected String getRowMeansAndSD() {
-        String rCode = "# Get row means and SD";
-        //TODO: take the row average, SD and rank? for each row in the Train_Coeff matrix (=after binding together).
-        //rowMeans() function. (preffered over the apply function)
-        //Or:
-        //apply(t(predictorSheet[,-1]),1,mean)
-        //apply(t(predictorSheet[,-1]),1,sd)
-        //rank(apply(t(predictorSheet[,-1]),1,sd))
+        String rCode = "# Get row means, SD and (absolute) rank\n";
+        //dataSet contains predictor column. So, function == trye when the Train_Coef also contains the intercept.
+        rCode += "if (dim(dataSet)[2] == dim(Train_Coeff)[1])\n";
+        rCode += "{\n";
+        rCode += "  means<-apply(Train_Coeff[-1,],1,mean)\n";
+        rCode += "  sd<-apply(Train_Coeff[-1,],1,sd)\n";
+        rCode += "  ra<-rank(abs(apply(Train_Coeff[-1,],1,mean)))\n";
+        rCode += "} else {\n";
+        rCode += "  means<-apply(Train_Coeff,1,mean)\n";
+        rCode += "  sd<-apply(Train_Coeff,1,sd)\n";
+        rCode += "  ra<-rank(abs(apply(Train_Coeff,1,mean)))\n";
+        rCode += "}\n";
+        rCode += "Train_Coeff_Summary <- cbind (means,sd,ra)\n";
         return rCode;
     }
 
@@ -347,6 +352,7 @@ public class Analysis {
         rScript += getRequiredLibraries();
         rScript += getAnalysis();
         rScript += combineResults();
+        rScript += getRowMeansAndSD();
         rScript += writeResults();
         return rScript;
     }

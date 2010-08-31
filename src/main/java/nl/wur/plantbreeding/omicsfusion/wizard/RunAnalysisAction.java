@@ -50,14 +50,19 @@ public class RunAnalysisAction extends ActionSupport implements ServletRequestAw
 
         //which methods to run?
         //Order here is equal to the order on the SGE submission queue. Schedule slow jobs first!
+        //RF - 50 SPLS - 34 Ridge - 32 EN - 8 PCR - 2 PLS - 1 LASSO - 1
         for (String method : methods) {
             if (method.equals("rf")) {
                 RandomForest mth = new RandomForest();
                 String mthString = mth.getAnalysisScript(sheets);
                 writeScriptFile("rf.R", mthString);
                 jobIds.add(submitToSGE("rf"));
-            }
-            else if(method.equals("ridge")) {
+            } else if (method.equals("spls")) {
+                SparsePLS mth = new SparsePLS();
+                String mthString = mth.getAnalysisScript(sheets);
+                writeScriptFile("spls.R", mthString);
+                jobIds.add(submitToSGE("spls"));
+            } else if (method.equals("ridge")) {
                 Ridge mth = new Ridge();
                 String mthString = mth.getAnalysisScript(sheets);
                 writeScriptFile(method + ".R", mthString);
@@ -65,16 +70,16 @@ public class RunAnalysisAction extends ActionSupport implements ServletRequestAw
                 if (job != 0) {
                     jobIds.add(job);
                 }
-            } else if (method.equals("en")) {
-                ElasticNet mth = new ElasticNet();
-                String mthString = mth.getAnalysisScript(sheets);
-                writeScriptFile("en.R", mthString);
-                jobIds.add(submitToSGE("en"));
             } else if (method.equals("svm")) {
                 SVM mth = new SVM();
                 String mthString = mth.getAnalysisScript(sheets);
                 writeScriptFile("svm.R", mthString);
                 jobIds.add(submitToSGE("svm"));
+            } else if (method.equals("en")) {
+                ElasticNet mth = new ElasticNet();
+                String mthString = mth.getAnalysisScript(sheets);
+                writeScriptFile("en.R", mthString);
+                jobIds.add(submitToSGE("en"));
             } else if (method.equals("pcr")) {
                 PCR mth = new PCR();
                 String mthString = mth.getAnalysisScript(sheets);
@@ -85,11 +90,6 @@ public class RunAnalysisAction extends ActionSupport implements ServletRequestAw
                 String mthString = mth.getAnalysisScript(sheets);
                 writeScriptFile("pls.R", mthString);
                 jobIds.add(submitToSGE("pls"));
-            } else if (method.equals("spls")) {
-                SparsePLS mth = new SparsePLS();
-                String mthString = mth.getAnalysisScript(sheets);
-                writeScriptFile("spls.R", mthString);
-                jobIds.add(submitToSGE("spls"));
             } else if (method.equals("lasso")) {
                 Lasso mth = new Lasso();
                 String mthString = mth.getAnalysisScript(sheets);

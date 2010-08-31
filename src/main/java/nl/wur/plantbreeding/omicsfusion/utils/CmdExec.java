@@ -31,8 +31,13 @@ public class CmdExec {
      * @throws IOException Batch job script not found.
      */
     public static int ExecuteQSubCmd(String executionDir, String method) throws IOException {
-
-        Process p = Runtime.getRuntime().exec("qsub -S /bin/bash " + executionDir + method + ".pbs");
+        Process p;
+        if (method.equals("rf") || method.equals("spls") || method.equals("ridge")) {
+            //FIXME: check how to use priority
+            p = Runtime.getRuntime().exec("qsub -S /bin/bash -p 10 " + executionDir + method + ".pbs");
+        } else {
+            p = Runtime.getRuntime().exec("qsub -S /bin/bash " + executionDir + method + ".pbs");
+        }
         BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
         String line = input.readLine();
         input.close();
@@ -58,7 +63,7 @@ public class CmdExec {
     /**
      * Check the status of the jobs with the SGE cluster.
      * @param jobId Job to check.
-     * @return 
+     * @return
      * @throws IOException
      * @throws InterruptedException
      */
@@ -74,14 +79,14 @@ public class CmdExec {
         String line = input.readLine();
         String errors = error.readLine();
 
-        if (errors != null&& errors.contains("do not exist")) {
+        if (errors != null && errors.contains("do not exist")) {
             System.out.println("Errors check");
             System.out.println("errors:" + errors);
             finished = true;
         } else if (line != null) {
             System.out.println("input check");
             //submission_time:
-            
+
             while ((line = input.readLine()) != null) {
                 System.out.println("result: " + line);
             }

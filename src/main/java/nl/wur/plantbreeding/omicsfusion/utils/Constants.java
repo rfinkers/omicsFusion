@@ -18,7 +18,7 @@ public class Constants {
     /** Minimum number of columns for response sheet. */
     public final static int RESPONSE_COLUMNS = 1;
     /** The total number of iterations on the dataset. */
-    public static final int ITERATIONS = 3;//FIXME: set to 100 for final program.
+    public static final int ITERATIONS = 1;//FIXME: set to 100 for final program.
     /** outer cross validation (to optimize parameters. */
     public static final int NUMBER_FOLDS_OUTER = 10;
     /** inner cross validation (to optimize parameters. */
