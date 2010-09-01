@@ -9,6 +9,7 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -41,13 +42,14 @@ public class CSVTest {
      * Test of readSummaryCsv method, of class CSV.
      */
     @Test
+    //@Ignore//FIXME: we do not want to ignore this
     public void testReadSummaryCsv() throws Exception {
         System.out.println("readSummaryCsv");
-        String fileName = "/home/finke002/Desktop/d89339e9c510a1e4e13ce46cc02b/SPLS_coef_Sum_1.csv";
+        String fileName = "/home/finke002/Desktop/e125586fcf9ba1b02a33093a2c17/SPLS_coef_Sum_1.csv";
         CSV instance = new CSV();
         instance.readSummaryCsv(fileName);
         // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        
     }
 
 }

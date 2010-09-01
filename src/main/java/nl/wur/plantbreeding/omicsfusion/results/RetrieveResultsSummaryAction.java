@@ -4,9 +4,15 @@
  */
 package nl.wur.plantbreeding.omicsfusion.results;
 
+import com.csvreader.CsvReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.logging.Logger;
 import nl.wur.plantbreeding.logic.util.FileOrDirectoryExists;
+import nl.wur.plantbreeding.omicsfusion.datatypes.CsvSummaryDataType;
+import nl.wur.plantbreeding.omicsfusion.utils.CSV;
 
 /**
  * Action class that summarizes the results of the pipeline.
@@ -22,13 +28,10 @@ public class RetrieveResultsSummaryAction extends RetrieveResultsSummaryValidati
 
     @Override
     public String execute() throws Exception {
-        //take the sessionID token
-        String sessionID = getSessionId();
         //Check the status of the submitted jobs?
         //Check the availability of the respults file. Just scan for all possible results files?
-        ArrayList<String> methResults = new ArrayList<String>();
-        getMethodsWithResultsSummaryFiles(methResults);
-        if(methResults.isEmpty()){
+        HashMap<String, ArrayList<CsvSummaryDataType>> methResults = getMethodsWithResultsSummaryFiles(getSessionId());
+        if (methResults.isEmpty()) {
             addActionError("No results found");
             return ERROR;
         }
@@ -38,11 +41,14 @@ public class RetrieveResultsSummaryAction extends RetrieveResultsSummaryValidati
         return SUCCESS;
     }
 
-    private void getMethodsWithResultsSummaryFiles(ArrayList<String> methResults) {
-        if (FileOrDirectoryExists.FileOrDirectoryExists("LASSO_coef_Sum.csv")) {
-            methResults.add("lasso");
+    private HashMap<String, ArrayList<CsvSummaryDataType>> getMethodsWithResultsSummaryFiles(String sessionID) throws FileNotFoundException, IOException {
+        HashMap<String, ArrayList<CsvSummaryDataType>> results = new HashMap<String, ArrayList<CsvSummaryDataType>>();
+        String tempDir = "/home/finke002/e125586fcf9ba1b02a33093a2c17/";
+        if (FileOrDirectoryExists.FileOrDirectoryExists(tempDir + "LASSO_coef_Sum.csv")) {
+            results.put("lasso", CSV.readSummaryCsv(tempDir + "LASSO_coef_Sum.csv"));
         } //Calculate the rank and sort acoordingly
         //Create a table (with background colors).
+        return results;
     }
 
     /**
@@ -60,7 +66,7 @@ public class RetrieveResultsSummaryAction extends RetrieveResultsSummaryValidati
         float value = result - min;
         range *= 100;
         value *= 100;
-        int group = (int) Math.abs(value / ( range / 20 ));
+        int group = (int) Math.abs(value / (range / 20));
         switch (group) {
             case 1:
                 background = "#f3f4f8";
