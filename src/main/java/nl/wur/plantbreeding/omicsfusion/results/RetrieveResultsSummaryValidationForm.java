@@ -2,17 +2,18 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package nl.wur.plantbreeding.omicsfusion.results;
 
 import com.opensymphony.xwork2.ActionSupport;
 import java.util.logging.Logger;
+import nl.wur.plantbreeding.logic.util.Validation;
 
 /**
  *
  * @author finke002
  */
 public class RetrieveResultsSummaryValidationForm extends ActionSupport {
+
     /** The logger */
     private static final Logger LOG = Logger.getLogger(RetrieveResultsSummaryValidationForm.class.getName());
     /** Serial Version UID */
@@ -28,4 +29,13 @@ public class RetrieveResultsSummaryValidationForm extends ActionSupport {
         this.sessionId = sessionId;
     }
 
+    @Override
+    public void validate() {
+        System.out.println("Validate");
+        if (Validation.containsSpecialCharactersCheck(sessionId) == true) {
+            //do something like throwing an error
+            System.out.println("TRUE");
+        }
+        //TODO: we expect a fixed length for the sessionID Include a length check
+    }
 }

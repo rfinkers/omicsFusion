@@ -37,6 +37,5 @@ public class RunStatusValidationForm extends ActionSupport {
            System.out.println("TRUE");
        }
         //TODO: we expect a fixed length for the sessionID Include a length check
-
     }
 }

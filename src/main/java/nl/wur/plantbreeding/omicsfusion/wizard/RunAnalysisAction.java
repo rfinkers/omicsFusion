@@ -49,8 +49,9 @@ public class RunAnalysisAction extends ActionSupport implements ServletRequestAw
         ArrayList<Integer> jobIds = new ArrayList<Integer>();
 
         //which methods to run?
-        //Order here is equal to the order on the SGE submission queue. Schedule slow jobs first!
-        //RF - 50 SPLS - 34 Ridge - 32 EN - 8 PCR - 2 PLS - 1 LASSO - 1
+        //Order here is equal to the order on the SGE submission queue? Schedule slow jobs first! Or can should this be controlled via order in submission screen / orther ordening options / queue weight?
+        //Relative timings on the CxE Flesh color /Metabolite dataset.
+        //RF - 50 /SPLS - 34 /Ridge - 32 /EN - 8 /SVM - 5 /PCR - 2 /PLS - 1 /LASSO - 1
         for (String method : methods) {
             if (method.equals("rf")) {
                 RandomForest mth = new RandomForest();
@@ -70,16 +71,16 @@ public class RunAnalysisAction extends ActionSupport implements ServletRequestAw
                 if (job != 0) {
                     jobIds.add(job);
                 }
-            } else if (method.equals("svm")) {
-                SVM mth = new SVM();
-                String mthString = mth.getAnalysisScript(sheets);
-                writeScriptFile("svm.R", mthString);
-                jobIds.add(submitToSGE("svm"));
             } else if (method.equals("en")) {
                 ElasticNet mth = new ElasticNet();
                 String mthString = mth.getAnalysisScript(sheets);
                 writeScriptFile("en.R", mthString);
                 jobIds.add(submitToSGE("en"));
+            } else if (method.equals("svm")) {
+                SVM mth = new SVM();
+                String mthString = mth.getAnalysisScript(sheets);
+                writeScriptFile("svm.R", mthString);
+                jobIds.add(submitToSGE("svm"));
             } else if (method.equals("pcr")) {
                 PCR mth = new PCR();
                 String mthString = mth.getAnalysisScript(sheets);
@@ -149,7 +150,7 @@ public class RunAnalysisAction extends ActionSupport implements ServletRequestAw
      */
     private String getTempDir() {
         String tempdir = System.getProperty("java.io.tmpdir");
-        if (!(tempdir.endsWith("/") || tempdir.endsWith("\\"))) {
+        if (!( tempdir.endsWith("/") || tempdir.endsWith("\\") )) {
             tempdir += System.getProperty("file.separator");
         }
         return tempdir;

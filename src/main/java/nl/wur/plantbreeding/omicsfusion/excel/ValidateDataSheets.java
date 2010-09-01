@@ -49,9 +49,9 @@ public class ValidateDataSheets {
         Workbook predictorWorkbook;
 
         responseWorkbook = loadExcelSheet(responseSheet);
-        responseRows = checkWorkbookDimensions(responseWorkbook, responseSheet.getName(), Constants.RESPONSE_COLUMNS + 1);// +1 because of column containing the labels.
+        responseRows = checkWorkbookDimensions(responseWorkbook, responseSheet.getName(), Constants.MIN_RESPONSE_COLUMNS + 1);// +1 because of column containing the labels.
         predictorWorkbook = loadExcelSheet(predictorSheet);
-        predictorRows = checkWorkbookDimensions(predictorWorkbook, predictorSheet.getName(), Constants.PREDICTOR_COLUMNS + 1);// +1 because of columns containing the labels.
+        predictorRows = checkWorkbookDimensions(predictorWorkbook, predictorSheet.getName(), Constants.MIN_PREDICTOR_COLUMNS + 1);// +1 because of columns containing the labels.
 
         if (predictorRows == responseRows) {
             compareIndividualNames(responseWorkbook, predictorWorkbook);
