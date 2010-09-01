@@ -83,6 +83,7 @@ public class Analysis {
     }
 
     protected String initializeResultObjects() {
+        //FIXME: is this one used??? Implement with Super and with specific implentations?
         String rCode = "# Initialize results and add column names\n";
         for (int i = 0; i < Constants.NUMBER_FOLDS_OUTER; i++) {
             rCode += "coln <-  paste(" + i + ",seq(1:" + Constants.ITERATIONS + "),sep=\"_\")\n";

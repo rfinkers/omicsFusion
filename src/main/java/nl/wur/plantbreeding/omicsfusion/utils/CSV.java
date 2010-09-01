@@ -29,16 +29,23 @@ public class CSV {
 
         reader.readHeaders();
 
+        int i=1;
         while (reader.readRecord()) {
             {
-                String variable = reader.get("variable");
-                Double mean = Double.valueOf(reader.get("mean"));
+                //TODO: add null / other error checking (NotANumberexception etc).
+                //TODO: add formating of the numbers
+                String variable = reader.get("");
+                //System.out.println("Variable: " + variable);
+                Double mean = Double.valueOf(reader.get("means"));
+                //System.out.println("Mean: " + mean);
                 Double sd = Double.valueOf(reader.get("sd"));
-                Integer rank = Integer.valueOf(reader.get("rank"));
+                //System.out.println("SD: " + sd);
+                Double rank = Double.valueOf(reader.get("ra"));
+               // System.out.println("Rank: " + rank);
+                System.out.println(i + " Variable: " + variable + " Mean: " + mean + " SD " + sd + " Rank " + rank);
+                i++;
             }
-
-            reader.close();
         }
-
+        reader.close();
     }
 }
