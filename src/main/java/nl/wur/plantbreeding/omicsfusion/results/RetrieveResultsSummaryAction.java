@@ -4,7 +4,6 @@
  */
 package nl.wur.plantbreeding.omicsfusion.results;
 
-import com.csvreader.CsvReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -35,19 +34,38 @@ public class RetrieveResultsSummaryAction extends RetrieveResultsSummaryValidati
             addActionError("No results found");
             return ERROR;
         }
+
+        ArrayList<CsvSummaryDataType> lasso = methResults.get("lasso");
+
+        Double min = Double.POSITIVE_INFINITY;
+        Double max = Double.NEGATIVE_INFINITY;
+        for (CsvSummaryDataType csvSummaryDataType : lasso) {
+            Double value = csvSummaryDataType.getMean();
+            if (min < value) {
+                min = value;
+            }
+            if (max > value) {
+                max = value;
+            }
+        }
+
+        System.out.println("Max: " + max);
+        System.out.println("Min: " + min);
         //Take the summaries from the CSV file's
         //Calculate the rank and sort acoordingly
         //Create a table (with background colors).
+
         return SUCCESS;
     }
 
     private HashMap<String, ArrayList<CsvSummaryDataType>> getMethodsWithResultsSummaryFiles(String sessionID) throws FileNotFoundException, IOException {
         HashMap<String, ArrayList<CsvSummaryDataType>> results = new HashMap<String, ArrayList<CsvSummaryDataType>>();
+        //FIXME: hardcoded
         String tempDir = "/home/finke002/e125586fcf9ba1b02a33093a2c17/";
         if (FileOrDirectoryExists.FileOrDirectoryExists(tempDir + "LASSO_coef_Sum.csv")) {
             results.put("lasso", CSV.readSummaryCsv(tempDir + "LASSO_coef_Sum.csv"));
-        } //Calculate the rank and sort acoordingly
-        //Create a table (with background colors).
+        }
+
         return results;
     }
 

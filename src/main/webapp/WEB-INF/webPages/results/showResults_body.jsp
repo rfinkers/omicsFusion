@@ -10,7 +10,7 @@
 <s:text name="welcome.heading" />
 show results
 get the sessionId from an input field
-<s:form action="/results/results" >
+<s:form action="/results/resultsSummary" >
     <s:textfield name="sessionId"/>
     <s:submit/>
 </s:form>

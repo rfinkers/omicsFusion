@@ -10,10 +10,10 @@
     <constant name="struts.custom.i18n.resources"
               value="nl.wur.plantbreeding.omicsfusion.resources.OmicsFusion" />
 
-<!--              Actions for the framework-->
+    <!-- Actions for the framework-->
     <include file="submitWizard.xml"/>
-
     <include file="runStatus.xml"/>
+    <include file="resultsWizard.xml"/>
 
     <package name="default" extends="struts-default" namespace="/">
         <result-types>

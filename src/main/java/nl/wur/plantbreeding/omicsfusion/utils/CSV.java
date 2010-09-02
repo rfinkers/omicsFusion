@@ -35,28 +35,20 @@ public class CSV {
 
         reader.readHeaders();
 
-        int i=1;
         CsvSummaryDataType dataPoint;
         while (reader.readRecord()) {
             {
                 dataPoint = new CsvSummaryDataType();
                 //TODO: add null / other error checking (NotANumberexception etc).
                 //TODO: add formating of the numbers
-                String variable = reader.get("");
-                //System.out.println("Variable: " + variable);
-                Double mean = Double.valueOf(reader.get("means"));
-                //System.out.println("Mean: " + mean);
-                Double sd = Double.valueOf(reader.get("sd"));
-                //System.out.println("SD: " + sd);
-                Double rank = Double.valueOf(reader.get("ra"));
-               // System.out.println("Rank: " + rank);
-                System.out.println(i + " Variable: " + variable + " Mean: " + mean + " SD " + sd + " Rank " + rank);
-                i++;
+                dataPoint.setResponsVariable(reader.get(""));
+                dataPoint.setMean(Double.valueOf(reader.get("means")));
+                dataPoint.setSd(Double.valueOf(reader.get("sd")));
+                dataPoint.setRank(Double.valueOf(reader.get("ra")));
                 csvSum.add(dataPoint);
             }
         }
         reader.close();
-        System.out.println("list: " + csvSum.size() );
         return csvSum;
     }
 }

@@ -12,12 +12,17 @@ public class CsvSummaryDataType {
 
     /** response variable */
     private String responsVariable;
-    /** Mean observatio */
+    /** Mean observation */
     private Double mean;
+    /** background color in table */
+    private String htmlColor;
     /** Standard deviation */
     private Double sd;
     /** rank */
     private Double rank;
+
+    public CsvSummaryDataType() {
+    }
 
     public Double getMean() {
         return mean;
@@ -51,6 +56,14 @@ public class CsvSummaryDataType {
         this.sd = sd;
     }
 
+    public String getHtmlColor() {
+        return htmlColor;
+    }
+
+    public void setHtmlColor(String htmlColor) {
+        this.htmlColor = htmlColor;
+    }
+
     @Override
     public boolean equals(Object obj) {
         return super.equals(obj);
@@ -68,6 +81,6 @@ public class CsvSummaryDataType {
 
     @Override
     public String toString() {
-        return "CsvSummaryDataType{" + "responsVariable=" + responsVariable + "mean=" + mean + "sd=" + sd + "rank=" + rank + '}';
+        return "CsvSummaryDataType{" + "responsVariable= " + responsVariable + " mean= " + mean + " htmlColor= " + htmlColor + " sd= " + sd + " rank= " + rank + '}';
     }
 }

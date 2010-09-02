@@ -8,6 +8,6 @@
 <%@taglib uri="http://displaytag.sf.net" prefix="display" %>
 
 <s:text name="welcome.heading" />
-Results summary
-<display:table name="requestScope.status" class="displayTable" export="false" pagesize="50"/>
+Results Overview
+<%--<display:table name="requestScope.status" class="displayTable" export="false" pagesize="50"/>--%>
 <!--TODO: finish when a final object is available-->
