@@ -8,6 +8,10 @@
 <%@taglib uri="http://displaytag.sf.net" prefix="display" %>
 
 <s:text name="welcome.heading" />
-Results Overview
-<%--<display:table name="requestScope.status" class="displayTable" export="false" pagesize="50"/>--%>
-<!--TODO: finish when a final object is available-->
+show results
+<s:actionerror/>
+get the sessionId from an input field
+<s:form action="/results/summaryResults" >
+    <s:textfield name="sessionId"/>
+    <s:submit/>
+</s:form>

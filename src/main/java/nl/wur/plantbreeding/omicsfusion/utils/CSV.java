@@ -7,6 +7,7 @@ package nl.wur.plantbreeding.omicsfusion.utils;
 import com.csvreader.CsvReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 import nl.wur.plantbreeding.omicsfusion.datatypes.CsvSummaryDataType;

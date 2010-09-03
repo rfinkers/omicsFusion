@@ -8,9 +8,8 @@
 <%@taglib uri="http://displaytag.sf.net" prefix="display" %>
 
 <s:text name="welcome.heading" />
-show results
-get the sessionId from an input field
-<s:form action="/results/resultsSummary" >
-    <s:textfield name="sessionId"/>
-    <s:submit/>
-</s:form>
+Results Overview
+<%--<display:table name="requestScope.status" class="displayTable" export="false" pagesize="50"/>--%>
+<!--TODO: finish when a final object is available-->
+<% String table = (String) request.getAttribute("table"); %>
+<%= table %>

@@ -72,13 +72,13 @@
         <put-attribute name="title" value="omicsFusion" />
         <put-attribute name="body" value="/WEB-INF/webPages/results/index_body.jsp" />
     </definition>
-    <definition name="showResults" extends="baseLayout">
+    <definition name="showResultsSummary" extends="baseLayout">
         <put-attribute name="title" value="omicsFusion" />
-        <put-attribute name="body" value="/WEB-INF/webPages/results/showResults_body.jsp" />
+        <put-attribute name="body" value="/WEB-INF/webPages/results/showResultsSummary_body.jsp" />
     </definition>
     <definition name="resultsSummary" extends="baseLayout">
         <put-attribute name="title" value="omicsFusion" />
-        <put-attribute name="body" value="/WEB-INF/webPages/results/resultsOverview_body.jsp" />
+        <put-attribute name="body" value="/WEB-INF/webPages/results/resultsSummary_body.jsp" />
     </definition>
     <definition name="enResults" extends="baseLayout">
         <put-attribute name="title" value="omicsFusion" />

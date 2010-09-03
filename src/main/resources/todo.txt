@@ -1,6 +1,7 @@
 TODO:
 - Add storage of user details / selected procedures / sessionid to the database
 - Show the version of the (System details /) R packages on a page?
+- Add handling of action errors / action messages to the JSP pages
 
 Solve (in part) NxP problem. 
 
