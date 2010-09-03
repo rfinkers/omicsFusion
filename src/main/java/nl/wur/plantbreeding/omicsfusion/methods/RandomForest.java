@@ -73,7 +73,7 @@ public class RandomForest extends Analysis {
         String rCode = "# Write results to disk\n";
         rCode += "write.csv(Train_R2, paste(\"RF_R2\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
         rCode += "write.csv(Train_varImp, paste(\"RF_varImp\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
-        rCode += "write.csv(Train_varImp_Summary, paste(\"RF_varImp_Summary\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
+        rCode += "write.csv(Train_varImp_Summary, paste(\"RF_varImp_Summary\", \".csv\" , sep = \"\"))\n";
         rCode += "write.csv(Train_mtry, paste(\"RF_mtry\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
         rCode += "write.csv(methodResults, paste(\"RF\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
         //rCode += "write.xls(methodResults, \"RFnew.xls\")";

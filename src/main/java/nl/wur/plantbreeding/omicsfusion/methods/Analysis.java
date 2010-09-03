@@ -130,7 +130,7 @@ public class Analysis {
             } else if (analysisMethod.equals("pcr") || analysisMethod.equals("spls") || analysisMethod.equals("pls")) {
                 rCode += "coefs_" + i + " <- matrix(data = NA,nrow = dim(DesignMatrix)[2],ncol=" + Constants.ITERATIONS + ")\n";
                 rCode += "colnames(coefs_" + i + ") <- coln\n";
-                rCode += "rownames(coefs_" + i + ") <- colnames(DesignMatrix)\n";//FIXME: correct assumption?
+                rCode += "rownames(coefs_" + i + ") <- colnames(DesignMatrix)\n";
             }
             if (analysisMethod.equals("spls")) {
                 rCode += "eta_" + i + " <- matrix(data = NA, nrow = 1, ncol =" + Constants.ITERATIONS + ")\n";
@@ -150,6 +150,7 @@ public class Analysis {
                 rCode += "mtry_" + i + " <- matrix(data = NA, nrow = 1, ncol = " + Constants.ITERATIONS + ")\n";
                 rCode += "colnames(mtry_" + i + ") <- coln\n";
                 rCode += "imp_" + i + " <- matrix(data = NA, nrow = dim(DesignMatrix)[2], ncol = " + Constants.ITERATIONS + ")\n";
+                rCode += "rownames(imp_" + i + ") <- colnames(DesignMatrix)\n";
                 rCode += "colnames(imp_" + i + ") <- coln\n";
             }
             if (analysisMethod.equals("svm")) {

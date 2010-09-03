@@ -331,7 +331,8 @@ public class RetrieveResultsSummaryAction extends RetrieveResultsSummaryValidati
     private HashMap<String, ArrayList<CsvSummaryDataType>> getMethodsWithResultsSummaryFiles(String sessionID) throws FileNotFoundException, IOException {
         HashMap<String, ArrayList<CsvSummaryDataType>> results = new HashMap<String, ArrayList<CsvSummaryDataType>>();
         //FIXME: hardcoded
-        String tempDir = "/home/finke002/Desktop/e125586fcf9ba1b02a33093a2c17ex/";
+        //String tempDir = "/home/finke002/Desktop/e125586fcf9ba1b02a33093a2c17ex/";//CE Flesh
+        String tempDir = "/home/finke002/Desktop/81df58ab8635eaea6211020de5b5/";//BRIX
         if (FileOrDirectoryExists.FileOrDirectoryExists(tempDir + "LASSO_coef_Sum.csv") == true) {
             results.put("lasso", CSV.readSummaryCsv(tempDir + "LASSO_coef_Sum.csv"));
         }
@@ -379,10 +380,10 @@ public class RetrieveResultsSummaryAction extends RetrieveResultsSummaryValidati
         range *= 1000;
         value *= 1000;
         int group = (int) Math.abs(value / (range / 20));
-        //Part of the largest observations resolves to a value > 20 using 
+        //Part of the largest observations resolves to a value > 20 using
         //this equation. Set them manually to the max value.
-        if(group>20){
-            group=20;
+        if (group > 20) {
+            group = 20;
         }
         System.out.println("Color Code: " + group);
         switch (group) {

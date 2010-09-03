@@ -52,7 +52,7 @@ public class PCR extends Analysis {
     public String writeResults() {
         String rCode = "# Write results to disk\n";
         rCode += "write.csv(Train_Coeff, paste(\"PCR_coef\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
-        rCode += "write.csv(Train_Coeff_Summary, paste(\"PCR_coef_Sum\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
+        rCode += "write.csv(Train_Coeff_Summary, paste(\"PCR_coef_Sum\", \".csv\" , sep = \"\"))\n";
         rCode += "write.csv(Train_R2, paste(\"PCR_R2\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
         rCode += "write.csv(Train_Ncomp, paste(\"PCR_Ncomp\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
         rCode += "write.csv(methodResults, paste(\"PCR\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";

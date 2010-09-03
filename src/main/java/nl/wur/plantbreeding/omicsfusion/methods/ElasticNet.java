@@ -60,7 +60,7 @@ public class ElasticNet extends Analysis {
     public String writeResults() {
         String rCode = "# Write results to disk\n";
         rCode += "write.csv(Train_Coeff, paste(\"EN_coef\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
-        rCode += "write.csv(Train_Coeff_Summary, paste(\"EN_coef_Sum\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
+        rCode += "write.csv(Train_Coeff_Summary, paste(\"EN_coef_Sum\", \".csv\" , sep = \"\"))\n";
         rCode += "write.csv(Train_R2, paste(\"EN_R2\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
         rCode += "write.csv(Train_Lambda, paste(\"EN_Lambda\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
         rCode += "write.csv(Train_Fraction, paste(\"EN_Frac\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
