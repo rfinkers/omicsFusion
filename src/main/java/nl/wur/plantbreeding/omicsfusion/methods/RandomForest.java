@@ -24,7 +24,8 @@ public class RandomForest extends Analysis {
 
     @Override
     protected String getRequiredLibraries() {
-        String rCode = "# Load requried libraries for Random Forest\n";
+        String rCode = super.getRequiredLibraries();
+        rCode += "# Load requried libraries for Random Forest\n";
         rCode += "library(randomForest)\n";
         return rCode;
     }

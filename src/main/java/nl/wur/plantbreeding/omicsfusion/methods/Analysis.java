@@ -27,12 +27,6 @@ public class Analysis {
      */
     protected String loadExcelSheets(HashMap<String, String> excelSheets) {
         String rCode = "# Load the generic R libraries \n";
-        rCode += "library(gdata)\n";//Used to load excel sheets
-        rCode += "library(lattice)\n";//dependencies of caret
-        rCode += "library(reshape)\n";//dependencies of caret
-        rCode += "library(plyr)\n";//dependencies of caret
-        rCode += "library(caret)\n";//Used for createfolds in training set
-        rCode += "library(snow)\n\n";//train() from caret can use snow or library(doMPI) alternatively.
         rCode += "# Load the excel sheets\n";
         rCode += "predictorSheet <- read.xls(\"" + excelSheets.get("predictor") + "\")\n";
         rCode += "responseSheet  <- read.xls(\"" + excelSheets.get("response") + "\")\n";
@@ -78,7 +72,13 @@ public class Analysis {
      * @return R compatible code.
      */
     protected String getRequiredLibraries() {
-        String rCode = "# Load requried libraries\n";
+        String rCode = "# Load requried generic libraries\n";
+        rCode += "library(gdata)\n";//Used to load excel sheets
+        rCode += "library(lattice)\n";//dependencies of caret
+        rCode += "library(reshape)\n";//dependencies of caret
+        rCode += "library(plyr)\n";//dependencies of caret
+        rCode += "library(caret)\n";//Used for createfolds in training set
+        //rCode += "library(snow)\n\n";//train() from caret can use snow or library(doMPI) alternatively.
         return rCode;
     }
 
@@ -228,7 +228,20 @@ public class Analysis {
             } else if (analysisMethod.equals("spls")) {
                 rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"spls\", metric = \"RMSE\", tuneLength = 10, trControl = innerLoop)\n";
             } else if (analysisMethod.equals("rf")) {
+                if (Constants.MAX_NUMBER_CPU > 1) {
+                    //TODO: start in the first itteration only? Then, move if statement to R level
+                    //Required additional packages: foreach, iterators, codetools, Rmpi
+                    rCode += "      library(doMPI)\n";
+                    // there is also an: maxcores= parameter on startMPIcluster
+                    rCode += "      cl <- startMPIcluster(count = " + Constants.MAX_NUMBER_CPU + ", verbose = TRUE)\n";
+                    //TODO: count = 2 means two workers & one main?
+                    rCode += "      registerDoMPI(cl)\n";
+                }
                 rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"rf\", metric = \"RMSE\", tuneLength = 10, trControl = innerLoop)\n";
+                if (Constants.MAX_NUMBER_CPU > 1) {
+                    //TODO: stop in the last itteration only?
+                    rCode += "      closeCluster(cl)\n";
+                }
             } else if (analysisMethod.equals("pcr")) {
                 // tuneLenght is an arbitrary value. Can be optomized by method. Now just choosen a value. 10 is a default of the method. PCR somtimes requires more.
                 // if you choose 10, you cannot get more components than 10?
@@ -371,10 +384,10 @@ public class Analysis {
      */
     public String getAnalysisScript(HashMap<String, String> excelSheets) {
         String rScript = "# Concatenating analisis script\n";
+        rScript += getRequiredLibraries();
         rScript += loadExcelSheets(excelSheets);
         rScript += preProcessMatrix();
         rScript += initializeResultObjects();
-        rScript += getRequiredLibraries();
         rScript += getAnalysis();
         rScript += combineResults();
         rScript += getRowMeansAndSD();

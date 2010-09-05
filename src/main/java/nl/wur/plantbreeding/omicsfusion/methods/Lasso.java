@@ -20,7 +20,8 @@ public class Lasso extends Analysis {
 
     @Override
     protected String getRequiredLibraries() {
-        String rCode = "# Load requried libraries for Lasso\n";
+        String rCode = super.getRequiredLibraries();
+        rCode += "# Load requried libraries for Lasso\n";
         rCode += "library(glmnet)\n";
         rCode += "library(Matrix)\n";
         return rCode;
@@ -31,7 +32,7 @@ public class Lasso extends Analysis {
         return super.getAnalysis("lasso");
     }
 
-        protected String combineResults() {
+    protected String combineResults() {
         String rCode = "# Combine results\n";
         String trainCoeff = "Train_Coeff <- cbind(";
         String trainLambda = "Train_Lambda <- cbind(";

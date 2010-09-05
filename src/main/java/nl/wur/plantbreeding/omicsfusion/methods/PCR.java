@@ -24,7 +24,8 @@ public class PCR extends Analysis {
 
     @Override
     protected String getRequiredLibraries() {
-        String rCode = "# Load requried libraries for PCR\n";
+        String rCode = super.getRequiredLibraries();
+        rCode += "# Load requried libraries for PCR\n";
         rCode += "library(pls)\n";
         return rCode;
     }

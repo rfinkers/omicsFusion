@@ -23,7 +23,8 @@ public class SVM extends Analysis {
 
     @Override
     protected String getRequiredLibraries() {
-        String rCode = "# Load requried libraries for svm\n";
+        String rCode = super.getRequiredLibraries();
+        rCode += "# Load requried libraries for svm\n";
         rCode += "library(kernlab)\n";
         return rCode;
     }

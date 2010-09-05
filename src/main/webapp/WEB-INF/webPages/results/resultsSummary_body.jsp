@@ -8,7 +8,8 @@
 <%@taglib uri="http://displaytag.sf.net" prefix="display" %>
 
 <s:text name="welcome.heading" />
-Results Overview
+<p>Results Overview</p>
+
 <%--<display:table name="requestScope.status" class="displayTable" export="false" pagesize="50"/>--%>
 <!--TODO: finish when a final object is available-->
 <% String table = (String) request.getAttribute("table"); %>

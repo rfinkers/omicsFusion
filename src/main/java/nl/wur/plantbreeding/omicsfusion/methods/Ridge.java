@@ -23,7 +23,8 @@ public class Ridge extends Analysis {
 
     @Override
     protected String getRequiredLibraries() {
-        String rCode = "# Load requried libraries for RIDGE\n";
+        String rCode = super.getRequiredLibraries();
+        rCode += "# Load requried libraries for RIDGE\n";
         rCode += "library(glmnet)\n";
         rCode += "library(Matrix)\n";
         return rCode;
@@ -35,7 +36,7 @@ public class Ridge extends Analysis {
     }
 
     @Override
-        protected String combineResults() {
+    protected String combineResults() {
         String rCode = "# Combine results\n";
         String trainCoeff = "Train_Coeff <- cbind(";
         String trainLambda = "Train_Lambda <- cbind(";

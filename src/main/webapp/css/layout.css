@@ -18,6 +18,13 @@ body #canvas {
     border-top:1px solid #fff;
 }
 
+table {
+    border: 0px;
+}
+
+.wwFormTable {
+    border: 0px;
+}
 #canvas #logobar {
     position:absolute;
     top:20px;
@@ -45,7 +52,7 @@ body #canvas {
     width:30%;
 }
 
-#canvas #menubackground  #hornav 
+#canvas #menubackground  #hornav
 {
     /*This (and the next) style is only for placing the div on the page and some other stuff.
 	The rest is to be found in the file: SpryMenuBarHorizontal.css in the map SpryAssets*/
@@ -58,7 +65,7 @@ body #canvas {
     margin-right: 170px;
 }
 
-#canvas #menubackground 
+#canvas #menubackground
 {
     /*See the commment in the style above.*/
     position:absolute;

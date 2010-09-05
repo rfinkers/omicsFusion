@@ -19,7 +19,8 @@ public class SparsePLS extends Analysis {
 
     @Override
     protected String getRequiredLibraries() {
-        String rCode = "# Load requried libraries for PLS\n";
+        String rCode = super.getRequiredLibraries();
+        rCode += "# Load requried libraries for PLS\n";
         rCode += "library(pls)\n";
         rCode += "library(MASS)\n";
         rCode += "library(nnet)\n";

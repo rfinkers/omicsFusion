@@ -34,6 +34,7 @@ public class CmdExec {
         Process p;
         if (method.equals("rf") || method.equals("spls") || method.equals("ridge")) {
             //FIXME: check how to use priority
+            // -l slots=2 does not work. Use parallel environments. Check:
             p = Runtime.getRuntime().exec("qsub -S /bin/bash -p 10 " + executionDir + method + ".pbs");
         } else {
             p = Runtime.getRuntime().exec("qsub -S /bin/bash " + executionDir + method + ".pbs");

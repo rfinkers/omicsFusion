@@ -23,6 +23,8 @@ public class Constants {
     public static final int NUMBER_FOLDS_OUTER = 10;
     /** inner cross validation (to optimize parameters. */
     public static final int NUMBER_FOLDS_INNER = 10;
+    /** How many CPU's can be used for one method. */
+    public static final int MAX_NUMBER_CPU = 2;
     
     private Constants() {
     }

@@ -11,10 +11,10 @@ Test: Navigation
 
 <!-- start vertical menu -->
 <s:div class="vertMenu">
-    <table class="rootVoices vertical" cellspacing='0' cellpadding='0' border='0'>
+    <table class="rootVoices vertical">
         <tr><td class="rootVoice {menu: 'empty'}" onclick="window.open('<s:url value='/'/>','_self')"><s:text name="menu.home"/></td></tr>
-        <tr><td class="rootVoice {menu: 'empty'}" onclick="window.open('<s:url value='/submit/'/>','_self')"><s:text name="menu.submit"/></td></tr>
-        <tr><td class="rootVoice {menu: 'empty'}" onclick="window.open('<s:url value='/retrieve/'/>','_self')"><s:text name="menu.retrieve"/></td></tr>
+        <tr><td class="rootVoice {menu: 'empty'}" onclick="window.open('<s:url value='/submit/userDetails.jsp'/>','_self')"><s:text name="menu.submit"/></td></tr>
+        <tr><td class="rootVoice {menu: 'empty'}" onclick="window.open('<s:url value='/results/showResultsSummary.jsp'/>','_self')"><s:text name="menu.retrieve"/></td></tr>
     </table>
 </s:div>
 <!-- end vertical menu -->

@@ -24,8 +24,9 @@ public class PartialLeasedSquares extends Analysis {
 
     @Override
     protected String getRequiredLibraries() {
-        String rCode = "# Load requried libraries for PLS\n";
-        //rCode += "library(glmnet)\n";
+        String rCode = super.getRequiredLibraries();
+        rCode += "# Load requried libraries for PLS\n";
+        rCode += "library(pls)\n";
         return rCode;
     }
 
@@ -34,7 +35,7 @@ public class PartialLeasedSquares extends Analysis {
         return super.getAnalysis("pls");
     }
 
-        @Override
+    @Override
     protected String combineResults() {
         String rCode = super.combineResults();
         rCode += "# Combine Method specific results\n";

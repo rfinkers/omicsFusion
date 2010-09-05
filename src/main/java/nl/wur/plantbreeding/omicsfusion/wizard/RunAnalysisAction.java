@@ -11,6 +11,7 @@ import nl.wur.plantbreeding.omicsfusion.methods.ElasticNet;
 import nl.wur.plantbreeding.omicsfusion.methods.Lasso;
 import nl.wur.plantbreeding.omicsfusion.methods.PCR;
 import nl.wur.plantbreeding.omicsfusion.methods.PartialLeasedSquares;
+import nl.wur.plantbreeding.omicsfusion.methods.RSessionInfo;
 import nl.wur.plantbreeding.omicsfusion.methods.RandomForest;
 import nl.wur.plantbreeding.omicsfusion.methods.Ridge;
 import nl.wur.plantbreeding.omicsfusion.methods.SVM;
@@ -51,6 +52,7 @@ public class RunAnalysisAction extends ActionSupport implements ServletRequestAw
         //which methods to run?
         //Order here is equal to the order on the SGE submission queue? Schedule slow jobs first! Or can should this be controlled via order in submission screen / orther ordening options / queue weight?
         //Relative timings on the CxE Flesh color /Metabolite dataset.
+
         //RF - 50 /SPLS - 34 /Ridge - 32 /EN - 8 /SVM - 5 /PCR - 2 /PLS - 1 /LASSO - 1
         for (String method : methods) {
             if (method.equals("rf")) {
@@ -103,6 +105,11 @@ public class RunAnalysisAction extends ActionSupport implements ServletRequestAw
                 jobIds.add(submitToSGE("univariate"));
             }
         }
+        //Always run the RSessionInfo job
+        RSessionInfo rsi = new RSessionInfo();
+        String mthString = rsi.getAnalysisScript(sheets);
+        writeScriptFile("sessionInfo.R", mthString);
+        jobIds.add(submitToSGE("sessionInfo"));
 
         // TODO: log userId or sessionID as primary key? / method / jobId / startTime / sessionId / (finishTime <- status update daemon).
 
@@ -135,6 +142,7 @@ public class RunAnalysisAction extends ActionSupport implements ServletRequestAw
         wf.WriteFile(getTempDir() + getRequest().getSession().getId() + "/" + scriptName + ".pbs",
                 "#!/bin/sh\ncd " + getTempDir() + getRequest().getSession().getId() + "\nR --no-save < " + scriptName + ".R\n");
         //Submit jobs to the SGE QUEUE
+        //FIXME: We should add an parameter if the current job (e.g. the RF job) will use multiple CPU's
         int jobId = CmdExec.ExecuteQSubCmd(getTempDir() + getRequest().getSession().getId() + "/", scriptName);
         if (jobId == 0) {
             LOG.severe("error during submission");//TODO: implement exception?
@@ -150,7 +158,7 @@ public class RunAnalysisAction extends ActionSupport implements ServletRequestAw
      */
     private String getTempDir() {
         String tempdir = System.getProperty("java.io.tmpdir");
-        if (!( tempdir.endsWith("/") || tempdir.endsWith("\\") )) {
+        if (!(tempdir.endsWith("/") || tempdir.endsWith("\\"))) {
             tempdir += System.getProperty("file.separator");
         }
         return tempdir;

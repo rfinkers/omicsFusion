@@ -20,7 +20,8 @@ public class ElasticNet extends Analysis {
 
     @Override
     public String getRequiredLibraries() {
-        String rCode = "# Load requried libraries for ElasticNet\n";
+        String rCode = super.getRequiredLibraries();
+        rCode += "# Load requried libraries for ElasticNet\n";
         rCode += "library(glmnet)\n";
         return rCode;
     }
