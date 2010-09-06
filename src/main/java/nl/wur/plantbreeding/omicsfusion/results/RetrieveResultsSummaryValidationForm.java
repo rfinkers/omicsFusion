@@ -37,5 +37,6 @@ public class RetrieveResultsSummaryValidationForm extends ActionSupport {
             System.out.println("TRUE");
         }
         //TODO: we expect a fixed length for the sessionID Include a length check
+        //TODO: null check
     }
 }

@@ -80,6 +80,10 @@
         <put-attribute name="title" value="omicsFusion" />
         <put-attribute name="body" value="/WEB-INF/webPages/results/resultsSummary_body.jsp" />
     </definition>
+        <definition name="predRespXYScatter" extends="baseLayout">
+        <put-attribute name="title" value="omicsFusion" />
+        <put-attribute name="body" value="/WEB-INF/webPages/results/predRespXYScatter_body.jsp" />
+    </definition>
     <definition name="enResults" extends="baseLayout">
         <put-attribute name="title" value="omicsFusion" />
         <put-attribute name="body" value="/WEB-INF/webPages/results/enResults_body.jsp" />

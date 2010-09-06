@@ -47,8 +47,8 @@ public class CSVTest {
     //@Ignore//FIXME: we do not want to ignore this
     public void testReadSummaryCsv() throws Exception {
         System.out.println("readSummaryCsv");
-        //String fileName = "/home/finke002/Desktop/d89339e9c510a1e4e13ce46cc02b/SPLS_coef_Sum_1.csv";//Work
-        String fileName = "/home/finke002/Desktop/e125586fcf9ba1b02a33093a2c17ex/SPLS_coef_Sum.csv";//Home
+        String fileName = "/home/finke002/Desktop/d89339e9c510a1e4e13ce46cc02b/SPLS_coef_Sum.csv";//Work
+//        String fileName = "/home/finke002/Desktop/e125586fcf9ba1b02a33093a2c17ex/SPLS_coef_Sum.csv";//Home
         ArrayList<CsvSummaryDataType> readSummaryCsv = CSV.readSummaryCsv(fileName);
         for (CsvSummaryDataType csvSummaryDataType : readSummaryCsv) {
             System.out.println("Data: " + csvSummaryDataType.toString());

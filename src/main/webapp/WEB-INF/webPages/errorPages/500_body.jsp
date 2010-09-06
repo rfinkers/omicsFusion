@@ -4,7 +4,6 @@
     Author     : finke002
 --%>
 
-<%@ taglib uri="http://struts.apache.org/tags-bean" prefix="bean" %>
-
+TODO: 500
 <h2><bean:message key="error.page.heading"/></h2>
 <bean:message key="error.500"/>

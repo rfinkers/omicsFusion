@@ -186,71 +186,74 @@ public class RetrieveResultsSummaryAction extends RetrieveResultsSummaryValidati
         DecimalFormat df = new DecimalFormat("#.###");
 
         //Concatenate the HTML table.
-        String table = "<table>";
+        String table = "<table class='boxpart'>";
         //Add the header row.
+        //TODO: resource bundle
         table += "<tr><th>Predictor</th>";
-        if (methResults.get("lasso") != null) {
-            table += "<th>Lasso</th>";
-        }
-        if (methResults.get("ridge") != null) {
-            table += "<th>Ridge</th>";
+        if (methResults.get("univariate") != null) {
+            table += "<th style='background-color: #330099;'>Univariate</th>";
         }
         if (methResults.get("rf") != null) {
-            table += "<th>Random Forest</th>";
-        }
-        if (methResults.get("pcr") != null) {
-            table += "<th>PCR</th>";
-        }
-        if (methResults.get("pls") != null) {
-            table += "<th>PLS</th>";
-        }
-        if (methResults.get("spls") != null) {
-            table += "<th>SPLS</th>";
+            table += "<th style='background-color: #FF0000;'>Random Forest</th>";
         }
         if (methResults.get("svm") != null) {
-            table += "<th>SVM</th>";
+            table += "<th style='background-color: #FF0000;'>SVM</th>";
+        }
+        if (methResults.get("pcr") != null) {
+            table += "<th style='background-color: #00CC66;'>PCR</th>";
+        }
+        if (methResults.get("pls") != null) {
+            table += "<th style='background-color: #00CC66;'>PLS</th>";
+        }
+        if (methResults.get("ridge") != null) {
+            table += "<th style='background-color: #00CC66;'>Ridge</th>";
+        }
+        if (methResults.get("lasso") != null) {
+            table += "<th style='background-color: #FFCC00;'>Lasso</th>";
         }
         if (methResults.get("en") != null) {
-            table += "<th>Elastic net</th>";
+            table += "<th style='background-color: #FFCC00;'>Elastic net</th>";
         }
-        if (methResults.get("univariate") != null) {
-            table += "<th>Univariate</th>";
+        if (methResults.get("spls") != null) {
+            table += "<th style='background-color: #FFCC00;'>SPLS</th>";
         }
         table += "</tr>\n";
 
         //Add data to the table
         for (int i = 0; i < lasso.size(); i++) {
             int element = rank[i][0];
-            table += "<tr>";
+            table += "<tr align='right'>";
             //Only add the rowname once (from the first available result set).
-            if (methResults.get("lasso") != null) {
-                table += "<td>" + lasso.get(element).getResponsVariable() + "</td>";
-            } else if (methResults.get("ridge") != null) {
-                table += "<td>" + ridge.get(element).getResponsVariable() + "</td>";
+            if (methResults.get("univariate") != null) {
+                table += "<td>" + univariate.get(element).getResponsVariable() + "</td>";
             } else if (methResults.get("rf") != null) {
-                table += "<td>" + rf.get(element).getResponsVariable() + "</td>";
+                table += "<td>" + lasso.get(element).getResponsVariable() + "</td>";
+            } else if (methResults.get("svm") != null) {
+                table += "<td>" + svm.get(element).getResponsVariable() + "</td>";
             } else if (methResults.get("pcr") != null) {
                 table += "<td>" + pcr.get(element).getResponsVariable() + "</td>";
             } else if (methResults.get("pls") != null) {
                 table += "<td>" + pls.get(element).getResponsVariable() + "</td>";
-            } else if (methResults.get("spls") != null) {
-                table += "<td>" + spls.get(element).getResponsVariable() + "</td>";
-            } else if (methResults.get("svm") != null) {
-                table += "<td>" + svm.get(element).getResponsVariable() + "</td>";
+            } else if (methResults.get("ridge") != null) {
+                table += "<td>" + ridge.get(element).getResponsVariable() + "</td>";
+            } else if (methResults.get("lasso") != null) {
+                table += "<td>" + rf.get(element).getResponsVariable() + "</td>";
             } else if (methResults.get("en") != null) {
                 table += "<td>" + en.get(element).getResponsVariable() + "</td>";
             } else if (methResults.get("univariate") != null) {
                 table += "<td>" + univariate.get(element).getResponsVariable() + "</td>";
+            } else if (methResults.get("spls") != null) {
+                table += "<td>" + spls.get(element).getResponsVariable() + "</td>";
             }
             //Results
-            if (methResults.get("lasso") != null) {
-                table += "<td bgcolor=\"" + lasso.get(element).getHtmlColor() + "\">" + df.format(lasso.get(element).getMean()) + " (" + df.format(lasso.get(element).getSd()) + ")</td>";
-            }
-            if (methResults.get("ridge") != null) {
-                table += "<td bgcolor=\"" + ridge.get(element).getHtmlColor() + "\">" + df.format(ridge.get(element).getMean()) + " (" + df.format(ridge.get(element).getSd()) + ")</td>";
+            if (methResults.get("univariate") != null) {
+                table += "<td bgcolor=\"" + univariate.get(element).getHtmlColor() + "\">" + df.format(univariate.get(element).getMean()) + " (" + df.format(univariate.get(element).getSd()) + ")</td>";
             }
             if (methResults.get("rf") != null) {
                 table += "<td bgcolor=\"" + rf.get(element).getHtmlColor() + "\">" + df.format(rf.get(element).getMean()) + " (" + df.format(rf.get(element).getSd()) + ")</td>";
+            }
+            if (methResults.get("svm") != null) {
+                table += "<td bgcolor=\"" + svm.get(element).getHtmlColor() + "\">" + df.format(svm.get(element).getMean()) + " (" + df.format(svm.get(element).getSd()) + ")</td>";
             }
             if (methResults.get("pcr") != null) {
                 table += "<td bgcolor=\"" + pcr.get(element).getHtmlColor() + "\">" + df.format(pcr.get(element).getMean()) + " (" + df.format(pcr.get(element).getSd()) + ")</td>";
@@ -258,29 +261,32 @@ public class RetrieveResultsSummaryAction extends RetrieveResultsSummaryValidati
             if (methResults.get("pls") != null) {
                 table += "<td bgcolor=\"" + pls.get(element).getHtmlColor() + "\">" + df.format(pls.get(element).getMean()) + " (" + df.format(pls.get(element).getSd()) + ")</td>";
             }
-            if (methResults.get("spls") != null) {
-                table += "<td bgcolor=\"" + spls.get(element).getHtmlColor() + "\">" + df.format(spls.get(element).getMean()) + " (" + df.format(spls.get(element).getSd()) + ")</td>";
+            if (methResults.get("ridge") != null) {
+                table += "<td bgcolor=\"" + ridge.get(element).getHtmlColor() + "\">" + df.format(ridge.get(element).getMean()) + " (" + df.format(ridge.get(element).getSd()) + ")</td>";
             }
-            if (methResults.get("svm") != null) {
-                table += "<td bgcolor=\"" + svm.get(element).getHtmlColor() + "\">" + df.format(svm.get(element).getMean()) + " (" + df.format(svm.get(element).getSd()) + ")</td>";
+            if (methResults.get("lasso") != null) {
+                if (lasso.get(element).getMean() != 0) {
+                    table += "<td bgcolor=\"" + lasso.get(element).getHtmlColor() + "\">" + df.format(lasso.get(element).getMean()) + " (" + df.format(lasso.get(element).getSd()) + ")</td>";
+                }
             }
             if (methResults.get("en") != null) {
-                table += "<td bgcolor=\"" + en.get(element).getHtmlColor() + "\">" + df.format(en.get(element).getMean()) + " (" + df.format(en.get(element).getSd()) + ")</td>";
+                if (en.get(element).getMean() != 0) {
+                    table += "<td bgcolor=\"" + en.get(element).getHtmlColor() + "\">" + df.format(en.get(element).getMean()) + " (" + df.format(en.get(element).getSd()) + ")</td>";
+                }
             }
-            if (methResults.get("univariate") != null) {
-                table += "<td bgcolor=\"" + univariate.get(element).getHtmlColor() + "\">" + df.format(univariate.get(element).getMean()) + " (" + df.format(univariate.get(element).getSd()) + ")</td>";
+            if (methResults.get("spls") != null) {
+                if (spls.get(element).getMean() != 0) {
+                    table += "<td bgcolor=\"" + spls.get(element).getHtmlColor() + "\">" + df.format(spls.get(element).getMean()) + " (" + df.format(spls.get(element).getSd()) + ")</td>";
+                }
             }
             table += "</tr>\n";
-
         }
         table += "</table>";
-
         //To allow tests without usage of request scope?
         if (ServletUtils.getServletRequest() != null) {
             HttpServletRequest servletRequest = ServletUtils.getServletRequest();
             servletRequest.setAttribute("table", table);
         }
-
         return SUCCESS;
     }
 
@@ -331,8 +337,11 @@ public class RetrieveResultsSummaryAction extends RetrieveResultsSummaryValidati
     private HashMap<String, ArrayList<CsvSummaryDataType>> getMethodsWithResultsSummaryFiles(String sessionID) throws FileNotFoundException, IOException {
         HashMap<String, ArrayList<CsvSummaryDataType>> results = new HashMap<String, ArrayList<CsvSummaryDataType>>();
         //FIXME: hardcoded
-        //String tempDir = "/home/finke002/Desktop/e125586fcf9ba1b02a33093a2c17ex/";//CE Flesh
-        String tempDir = "/home/finke002/Desktop/81df58ab8635eaea6211020de5b5/";//BRIX
+        String tempDir = "/home/finke002/Desktop/d89339e9c510a1e4e13ce46cc02b/";//Work
+//        String tempDir = "/home/finke002/Desktop/e125586fcf9ba1b02a33093a2c17ex/";//CE Flesh
+//        String tempDir = "/home/finke002/Desktop/81df58ab8635eaea6211020de5b5/";//BRIX
+
+
         if (FileOrDirectoryExists.FileOrDirectoryExists(tempDir + "LASSO_coef_Sum.csv") == true) {
             results.put("lasso", CSV.readSummaryCsv(tempDir + "LASSO_coef_Sum.csv"));
         }
@@ -356,8 +365,7 @@ public class RetrieveResultsSummaryAction extends RetrieveResultsSummaryValidati
         }
         if (FileOrDirectoryExists.FileOrDirectoryExists(tempDir + "SVM_coef_Sum.csv") == true) {
             results.put("svm", CSV.readSummaryCsv(tempDir + "SVM_coef_Sum.csv"));
-        }
-        //Disable univariate for now
+        } //Disable univariate for now
         //if (FileOrDirectoryExists.FileOrDirectoryExists(tempDir + "UNIVARIATE_coef_Sum.csv") == true) {
         //    results.put("lasso", CSV.readSummaryCsv(tempDir + "UNIVARIATE_coef_Sum.csv"));
         //}
@@ -379,7 +387,7 @@ public class RetrieveResultsSummaryAction extends RetrieveResultsSummaryValidati
         Double value = Math.abs(result) - Math.abs(min);
         range *= 1000;
         value *= 1000;
-        int group = (int) Math.abs(value / (range / 20));
+        int group = (int) Math.abs(value / ( range / 20 ));
         //Part of the largest observations resolves to a value > 20 using
         //this equation. Set them manually to the max value.
         if (group > 20) {

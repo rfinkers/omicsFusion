@@ -4,7 +4,8 @@
     Author     : Richard Finkers
 --%>
 
-<%@ taglib uri="http://struts.apache.org/tags-bean" prefix="bean" %>
+
+TODO: 404
 
 <h2><bean:message key="error.page.heading"/></h2>
 <bean:message key="error.404"/>

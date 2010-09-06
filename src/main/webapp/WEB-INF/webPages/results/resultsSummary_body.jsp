@@ -5,7 +5,7 @@
 --%>
 
 <%@ taglib prefix="s" uri="/struts-tags"%>
-<%@taglib uri="http://displaytag.sf.net" prefix="display" %>
+<%--<%@taglib uri="http://displaytag.sf.net" prefix="display" %>--%>
 
 <s:text name="welcome.heading" />
 <p>Results Overview</p>

@@ -8,7 +8,19 @@
         <action name="summaryResults" class="nl.wur.plantbreeding.omicsfusion.results.RetrieveResultsSummaryAction">
             <result name="input">/results/showResultsSummary.jsp</result>
             <result name="error">/results/showResultsSummary.jsp</result>
-            <result name="success">/results/resultsSummary.jsp</result>            
+            <result name="success">/results/resultsSummary.jsp</result>
+        </action>
+    </package>
+    <package name="charts" namespace="/results" extends="struts-default, jfreechart-default">
+        <action name="predRespXYScatter">
+            <result>/results/predRespXYScatter.jsp</result>
+        </action>
+<!--        <action name="chart" class="org.apache.struts2.dispatcher.ChartResult">-->
+        <action name="chart" class="nl.wur.plantbreeding.omicsfusion.results.PredictorResponseXYScatterAction">
+            <result type="chart">
+                <param name="width">750</param>
+                <param name="height">500</param>
+            </result>
         </action>
     </package>
 </struts>
