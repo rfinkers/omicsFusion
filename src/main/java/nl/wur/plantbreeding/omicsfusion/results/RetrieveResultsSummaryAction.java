@@ -42,7 +42,8 @@ public class RetrieveResultsSummaryAction extends RetrieveResultsSummaryValidati
         ArrayList<CsvSummaryDataType> pls = null;
         ArrayList<CsvSummaryDataType> spls = null;
         ArrayList<CsvSummaryDataType> svm = null;
-        ArrayList<CsvSummaryDataType> univariate = null;
+        ArrayList<CsvSummaryDataType> univariate_p = null;
+        ArrayList<CsvSummaryDataType> univariate_bh = null;
 
         //Check the availability of one or more respults file for this sessionID.
         //All potential summary files are scanned. Only methods with results are
@@ -106,10 +107,16 @@ public class RetrieveResultsSummaryAction extends RetrieveResultsSummaryValidati
             resultRows[resultRowsCounter] = en.size();
             resultRowsCounter++;
         }
-        if (methResults.get("univariate") != null) {
-            univariate = methResults.get("univariate");
-            addTableBackgroundColors(univariate);
-            resultRows[resultRowsCounter] = univariate.size();
+        if (methResults.get("univariate_p") != null) {
+            univariate_p = methResults.get("univariate_p");
+            addTableBackgroundColors(univariate_p);//FIXME: add different background colors (on pValues?) to Univariate
+            resultRows[resultRowsCounter] = univariate_p.size();
+            resultRowsCounter++;
+        }
+        if (methResults.get("univariate_bh") != null) {
+            univariate_bh = methResults.get("univariate_bh");
+            addTableBackgroundColors(univariate_bh);//FIXME: add different background colors (on pValues?) to Univariate
+            resultRows[resultRowsCounter] = univariate_bh.size();
             resultRowsCounter++;
         }
 
@@ -164,8 +171,12 @@ public class RetrieveResultsSummaryAction extends RetrieveResultsSummaryValidati
                 sumRank += en.get(i).getRank();
                 count++;
             }
-            if (methResults.get("univariate") != null) {
-                sumRank += univariate.get(i).getRank();
+            if (methResults.get("univariate_p") != null) {
+                sumRank += univariate_p.get(i).getRank();
+                count++;
+            }
+            if (methResults.get("univariate_bh") != null) {
+                sumRank += univariate_bh.get(i).getRank();
                 count++;
             }
             rank[i][0] = i;
@@ -173,25 +184,25 @@ public class RetrieveResultsSummaryAction extends RetrieveResultsSummaryValidati
         }
 
 
-        for (int[] is : rank) {
-            System.out.println("Nr: " + is[0] + " rank: " + is[1]);
-        }
+//        for (int[] is : rank) {
+//            System.out.println("Nr: " + is[0] + " rank: " + is[1]);
+//        }
         //Sort the array according to the rank
         sortRankArray(rank);
-        System.out.println("Sorted");
-        for (int[] is : rank) {
-            System.out.println("Nr: " + is[0] + " rank: " + is[1]);
-        }
+//        for (int[] is : rank) {
+//            System.out.println("Nr: " + is[0] + " rank: " + is[1]);
+//        }
 
         DecimalFormat df = new DecimalFormat("#.###");
-
         //Concatenate the HTML table.
         String table = "<table class='boxpart'>";
-        //Add the header row.
         //TODO: resource bundle
         table += "<tr><th>Predictor</th>";
-        if (methResults.get("univariate") != null) {
-            table += "<th style='background-color: #330099;'>Univariate</th>";
+        if (methResults.get("univariate_p") != null) {
+            table += "<th style='background-color: #330099;'>Univariate pval</th>";
+        }
+        if (methResults.get("univariate_bh") != null) {
+            table += "<th style='background-color: #330099;'>Univariate BH</th>";
         }
         if (methResults.get("rf") != null) {
             table += "<th style='background-color: #FF0000;'>Random Forest</th>";
@@ -218,14 +229,15 @@ public class RetrieveResultsSummaryAction extends RetrieveResultsSummaryValidati
             table += "<th style='background-color: #FFCC00;'>SPLS</th>";
         }
         table += "</tr>\n";
-
         //Add data to the table
-        for (int i = 0; i < lasso.size(); i++) {
+        for (int i = 0; i < oldResultRows; i++) {
             int element = rank[i][0];
             table += "<tr align='right'>";
             //Only add the rowname once (from the first available result set).
-            if (methResults.get("univariate") != null) {
-                table += "<td>" + univariate.get(element).getResponsVariable() + "</td>";
+            if (methResults.get("univariate_p") != null) {
+                table += "<td>" + univariate_p.get(element).getResponsVariable() + "</td>";
+            } else if (methResults.get("univariate_bh") != null) {
+                table += "<td>" + univariate_bh.get(element).getResponsVariable() + "</td>";
             } else if (methResults.get("rf") != null) {
                 table += "<td>" + lasso.get(element).getResponsVariable() + "</td>";
             } else if (methResults.get("svm") != null) {
@@ -240,14 +252,15 @@ public class RetrieveResultsSummaryAction extends RetrieveResultsSummaryValidati
                 table += "<td>" + rf.get(element).getResponsVariable() + "</td>";
             } else if (methResults.get("en") != null) {
                 table += "<td>" + en.get(element).getResponsVariable() + "</td>";
-            } else if (methResults.get("univariate") != null) {
-                table += "<td>" + univariate.get(element).getResponsVariable() + "</td>";
             } else if (methResults.get("spls") != null) {
                 table += "<td>" + spls.get(element).getResponsVariable() + "</td>";
             }
             //Results
-            if (methResults.get("univariate") != null) {
-                table += "<td bgcolor=\"" + univariate.get(element).getHtmlColor() + "\">" + df.format(univariate.get(element).getMean()) + " (" + df.format(univariate.get(element).getSd()) + ")</td>";
+            if (methResults.get("univariate_p") != null) {
+                table += "<td bgcolor=\"" + univariate_p.get(element).getHtmlColor() + "\">" + df.format(univariate_p.get(element).getMean()) + "</td>";
+            }
+            if (methResults.get("univariate_bh") != null) {
+                table += "<td bgcolor=\"" + univariate_bh.get(element).getHtmlColor() + "\">" + df.format(univariate_bh.get(element).getMean()) + "</td>";
             }
             if (methResults.get("rf") != null) {
                 table += "<td bgcolor=\"" + rf.get(element).getHtmlColor() + "\">" + df.format(rf.get(element).getMean()) + " (" + df.format(rf.get(element).getSd()) + ")</td>";
@@ -337,9 +350,10 @@ public class RetrieveResultsSummaryAction extends RetrieveResultsSummaryValidati
     private HashMap<String, ArrayList<CsvSummaryDataType>> getMethodsWithResultsSummaryFiles(String sessionID) throws FileNotFoundException, IOException {
         HashMap<String, ArrayList<CsvSummaryDataType>> results = new HashMap<String, ArrayList<CsvSummaryDataType>>();
         //FIXME: hardcoded
-        String tempDir = "/home/finke002/Desktop/d89339e9c510a1e4e13ce46cc02b/";//Work
+        //String tempDir = "/home/finke002/Desktop/d89339e9c510a1e4e13ce46cc02b/";//Work
 //        String tempDir = "/home/finke002/Desktop/e125586fcf9ba1b02a33093a2c17ex/";//CE Flesh
 //        String tempDir = "/home/finke002/Desktop/81df58ab8635eaea6211020de5b5/";//BRIX
+        String tempDir = "/tmp/d2159ab79390aae6f5aea5e08254/";
 
 
         if (FileOrDirectoryExists.FileOrDirectoryExists(tempDir + "LASSO_coef_Sum.csv") == true) {
@@ -366,9 +380,12 @@ public class RetrieveResultsSummaryAction extends RetrieveResultsSummaryValidati
         if (FileOrDirectoryExists.FileOrDirectoryExists(tempDir + "SVM_coef_Sum.csv") == true) {
             results.put("svm", CSV.readSummaryCsv(tempDir + "SVM_coef_Sum.csv"));
         } //Disable univariate for now
-        //if (FileOrDirectoryExists.FileOrDirectoryExists(tempDir + "UNIVARIATE_coef_Sum.csv") == true) {
-        //    results.put("lasso", CSV.readSummaryCsv(tempDir + "UNIVARIATE_coef_Sum.csv"));
-        //}
+        if (FileOrDirectoryExists.FileOrDirectoryExists(tempDir + "univariate_bh_coef.csv") == true) {
+            results.put("univariate_bh", CSV.readSummaryCsv(tempDir + "univariate_bh_coef.csv"));
+        }
+        if (FileOrDirectoryExists.FileOrDirectoryExists(tempDir + "univariate_p_coef.csv") == true) {
+            results.put("univariate_p", CSV.readSummaryCsv(tempDir + "univariate_p_coef.csv"));
+        }
         return results;
     }
 
@@ -393,7 +410,6 @@ public class RetrieveResultsSummaryAction extends RetrieveResultsSummaryValidati
         if (group > 20) {
             group = 20;
         }
-        System.out.println("Color Code: " + group);
         switch (group) {
             case 1:
                 background = "#f3f4f8";

@@ -44,7 +44,7 @@ public class CSVTest {
      * @throws Exception 
      */
     @Test
-    //@Ignore//FIXME: we do not want to ignore this
+    @Ignore//FIXME: we do not want to ignore this
     public void testReadSummaryCsv() throws Exception {
         System.out.println("readSummaryCsv");
         String fileName = "/home/finke002/Desktop/d89339e9c510a1e4e13ce46cc02b/SPLS_coef_Sum.csv";//Work
