@@ -1,4 +1,4 @@
-package nl.wur.plantbreeding.jfreechart;
+package nl.wur.plantbreeding.logic.jfreechart;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;

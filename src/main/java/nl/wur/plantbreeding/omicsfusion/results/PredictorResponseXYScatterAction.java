@@ -6,7 +6,7 @@ package nl.wur.plantbreeding.omicsfusion.results;
 
 import java.awt.Color;
 import java.util.logging.Logger;
-import nl.wur.plantbreeding.jfreechart.GenotypeXYToolTipGenerator;
+import nl.wur.plantbreeding.logic.jfreechart.GenotypeXYToolTipGenerator;
 import nl.wur.plantbreeding.logic.jfreechart.GenotypeXYDataset;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;

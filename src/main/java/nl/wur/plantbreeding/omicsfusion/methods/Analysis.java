@@ -7,10 +7,12 @@ package nl.wur.plantbreeding.omicsfusion.methods;
 import java.util.HashMap;
 import java.util.logging.Logger;
 import nl.wur.plantbreeding.omicsfusion.utils.Constants;
+//FIXME: implement as abstract? Check manuals.
 
 /**
- * Analysis scripts for the omicsFusion pipeline.
+ * Generic Analysis class for the omicsFusion pipeline. Each method needs to implement its own specification, but might inherit code from this class.
  * @author Richard Finkers
+ * @version 1.0
  */
 public class Analysis {
 
@@ -21,7 +23,7 @@ public class Analysis {
     }
 
     /**
-     * Loads The Excel sheets from the filesystem.
+     * Loads The Excel sheets from the file system.
      * @param excelSheets The names of the predictor and response excel sheets.
      * @return R program code.
      */
@@ -82,6 +84,10 @@ public class Analysis {
         return rCode;
     }
 
+    /**
+     * Initialization of the most commonly used empty variables to store the results. Most methods do, however, require their own initialization.
+     * @return R compatible code.
+     */
     protected String initializeResultObjects() {
         //FIXME: is this one used??? Implement with Super and with specific implentations?
         String rCode = "# Initialize results and add column names\n";
@@ -105,8 +111,8 @@ public class Analysis {
 
     /**
      * Initialization of empty variables to store the results.
-     * @param analysisMethod
-     * @return
+     * @param analysisMethod Name of the analysis method. Allowed names are: rf, en, ridge, lasso, pls, spls, pcr, univariate, & svm.
+     * @return R compatible code.
      */
     protected String initializeResultObjects(String analysisMethod) {
         String rCode = "# Initialize results\n";

@@ -1,4 +1,4 @@
-package nl.wur.plantbreeding.jfreechart;
+package nl.wur.plantbreeding.logic.jfreechart;
 
 import java.util.logging.Logger;
 import nl.wur.plantbreeding.logic.jfreechart.GenotypeXYDataset;
