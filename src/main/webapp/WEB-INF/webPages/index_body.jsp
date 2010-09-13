@@ -8,6 +8,9 @@
 
 <s:text name="welcome.heading" />
 
+<s:text name="omicsFusion.text" />
+
+<s:text name="omicsFusion.lastUpdate"/>
 <h1>omicsFusion</h1>
 
 Flow of the website
@@ -24,3 +27,4 @@ Flow of the website
 </ul>
 
 <s:a value="/submit/userDetails.jsp">Start</s:a>
+<!--TODO:different button?-->

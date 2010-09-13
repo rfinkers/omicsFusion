@@ -28,6 +28,7 @@ public class PredictorResponseXYScatterAction extends PredictorResponseXYScatter
     private static final Logger LOG = Logger.getLogger(PredictorResponseXYScatterAction.class.getName());
     /** Serial Version UID */
     private static final long serialVersionUID = 100906L;
+    /** Chart object */
     private JFreeChart chart;
 
     @Override
@@ -35,8 +36,8 @@ public class PredictorResponseXYScatterAction extends PredictorResponseXYScatter
 
         DefaultXYDataset xyDataset = getDataSet();
 
-        ValueAxis xAxis = new NumberAxis("Response");
-        ValueAxis yAxis = new NumberAxis("Predictor");
+        ValueAxis xAxis = new NumberAxis("Predictor");
+        ValueAxis yAxis = new NumberAxis("Response");
 
         //XYURLGenerator urlGen = new GenotypeXYUrlGenerator();
         XYToolTipGenerator tooltipGen = new GenotypeXYToolTipGenerator();
@@ -52,7 +53,7 @@ public class PredictorResponseXYScatterAction extends PredictorResponseXYScatter
 
         // set my chart variable
         chart = new JFreeChart(
-                "Predictor vs Response",
+                "Predictor vs Response",//TODO: add custom title
                 JFreeChart.DEFAULT_TITLE_FONT,
                 plot,
                 false);
@@ -71,13 +72,15 @@ public class PredictorResponseXYScatterAction extends PredictorResponseXYScatter
         //Get the column with genotype names
 
         //Parse the excel column in the data object. Deal with missig data (Omit from object?)
+
+        //x: predictor and y: response
         
-        double[][] data = new double[2][100];
-        String[] genotypeLabels = new String[100];
+        double[][] data = new double[2][100];//TODO: 100 -> length results
+        String[] genotypeLabels = new String[100];//TODO: 100 -> length results
 
         for (int i = 0; i < 100; i++) {
-            data[0][i] = i;
-            data[1][i] = Math.random();
+            data[0][i] = i;//predictor
+            data[1][i] = Math.random();//response
             genotypeLabels[i] = "test";
         }
         DefaultXYDataset xy = new GenotypeXYDataset("Genotype", data, genotypeLabels, genotypeLabels);

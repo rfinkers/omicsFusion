@@ -82,7 +82,7 @@ public class ValidateDataSheets {
     private static int checkWorkbookDimensions(Workbook wb, String fileName, int minColumns) throws DataSheetValidationException {
         int rows = wb.getSheetAt(0).getLastRowNum();
         int cols = wb.getSheetAt(0).getRow(0).getLastCellNum();
-        System.out.println("wb:" + wb.getSheetName(0) + " MinCol " + minColumns);
+        LOG.log(Level.INFO, "wb:{0} MinCol {1}", new Object[]{wb.getSheetName(0), minColumns});
         LOG.log(Level.INFO, "ROWS: {0} Columns: {1}", new Object[]{rows, cols});
         if (rows < 5 || cols < minColumns) {
             //return false. TODO: better handeling of this error and report message to the user

@@ -31,7 +31,7 @@ public class PredictorResponseXYScatterForm extends ActionSupport {
     }
 
     public void setPredictor(String predictor) {
-        this.predictor = predictor;
+        this.predictor = predictor.trim();
     }
 
     public String getResponse() {
@@ -39,7 +39,7 @@ public class PredictorResponseXYScatterForm extends ActionSupport {
     }
 
     public void setResponse(String response) {
-        this.response = response;
+        this.response = response.trim();
     }
 
     public String getSessionId() {
@@ -47,7 +47,7 @@ public class PredictorResponseXYScatterForm extends ActionSupport {
     }
 
     public void setSessionId(String sessionId) {
-        this.sessionId = sessionId;
+        this.sessionId = sessionId.trim();
     }
 
     @Override

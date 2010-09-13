@@ -172,7 +172,7 @@ public class RunAnalysisAction extends ActionSupport implements ServletRequestAw
     /**
      * @return the request
      */
-    public HttpServletRequest getRequest() {
+    private HttpServletRequest getRequest() {
         return request;
     }
 

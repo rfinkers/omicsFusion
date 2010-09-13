@@ -1,7 +1,12 @@
 TODO:
-- Add storage of user details / selected procedures / sessionid to the database
+- Add storage of user details / selected procedures / session id to the database
 - Show the version of the (System details /) R packages on a page?
 - Add handling of action errors / action messages to the JSP pages
+- Add implementation for multiple response variables? 
+- Add action messages to provide additional status data?
+    - E.G. the dimensions of the excel sheet on the method selection page?
+- Explore grid computing?
+- HPC cloud in ubuntu? How is scheduling of jobs organized?
 
 Solve (in part) NxP problem. 
 

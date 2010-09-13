@@ -64,4 +64,4 @@ public class MethodSelectionAction extends MethodSelectionValidationForm impleme
     public void setServletRequest(HttpServletRequest request) {
         this.request = request;
     }
-    }
+}

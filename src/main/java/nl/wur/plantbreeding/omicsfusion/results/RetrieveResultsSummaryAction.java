@@ -193,68 +193,75 @@ public class RetrieveResultsSummaryAction extends RetrieveResultsSummaryValidati
 //            System.out.println("Nr: " + is[0] + " rank: " + is[1]);
 //        }
 
+        String baseURL = "/";//FIXME: implement
         DecimalFormat df = new DecimalFormat("#.###");
         //Concatenate the HTML table.
         String table = "<table class='boxpart'>";
         //TODO: resource bundle
         table += "<tr><th>Predictor</th>";
         if (methResults.get("univariate_p") != null) {
-            table += "<th style='background-color: #330099;'>Univariate pval</th>";
+            table += "<th style='background-color: #330099;'><a href=''>Univariate pval</a></th>";
         }
         if (methResults.get("univariate_bh") != null) {
-            table += "<th style='background-color: #330099;'>Univariate BH</th>";
+            table += "<th style='background-color: #330099;'><a href=''>Univariate BH</a></th>";
         }
         if (methResults.get("rf") != null) {
-            table += "<th style='background-color: #FF0000;'>Random Forest</th>";
+            table += "<th style='background-color: #FF0000;'><a href=''>Random Forest</a></th>";
         }
         if (methResults.get("svm") != null) {
-            table += "<th style='background-color: #FF0000;'>SVM</th>";
+            table += "<th style='background-color: #FF0000;'><a href=''>SVM</a></th>";
         }
         if (methResults.get("pcr") != null) {
-            table += "<th style='background-color: #00CC66;'>PCR</th>";
+            table += "<th style='background-color: #00CC66;'><a href=''>PCR</a></th>";
         }
         if (methResults.get("pls") != null) {
-            table += "<th style='background-color: #00CC66;'>PLS</th>";
+            table += "<th style='background-color: #00CC66;'><a href=''>PLS</a></th>";
         }
         if (methResults.get("ridge") != null) {
-            table += "<th style='background-color: #00CC66;'>Ridge</th>";
+            table += "<th style='background-color: #00CC66;'><a href='/results/ridge.jsp'>Ridge</a></th>";
         }
         if (methResults.get("lasso") != null) {
-            table += "<th style='background-color: #FFCC00;'>Lasso</th>";
+            table += "<th style='background-color: #FFCC00;'><a href=''>Lasso</a></th>";
         }
         if (methResults.get("en") != null) {
-            table += "<th style='background-color: #FFCC00;'>Elastic net</th>";
+            table += "<th style='background-color: #FFCC00;'><a href=''>Elastic net</a></th>";
         }
         if (methResults.get("spls") != null) {
-            table += "<th style='background-color: #FFCC00;'>SPLS</th>";
+            table += "<th style='background-color: #FFCC00;'><a href=''>SPLS</a></th>";
         }
         table += "</tr>\n";
         //Add data to the table
         for (int i = 0; i < oldResultRows; i++) {
             int element = rank[i][0];
             table += "<tr align='right'>";
+            table += "<td>";
+            String responseVariable = "";
             //Only add the rowname once (from the first available result set).
             if (methResults.get("univariate_p") != null) {
-                table += "<td>" + univariate_p.get(element).getResponsVariable() + "</td>";
+                responseVariable = univariate_p.get(element).getResponsVariable();
             } else if (methResults.get("univariate_bh") != null) {
-                table += "<td>" + univariate_bh.get(element).getResponsVariable() + "</td>";
+                responseVariable = univariate_bh.get(element).getResponsVariable();
             } else if (methResults.get("rf") != null) {
-                table += "<td>" + lasso.get(element).getResponsVariable() + "</td>";
+                responseVariable = lasso.get(element).getResponsVariable();
             } else if (methResults.get("svm") != null) {
-                table += "<td>" + svm.get(element).getResponsVariable() + "</td>";
+                responseVariable = svm.get(element).getResponsVariable();
             } else if (methResults.get("pcr") != null) {
-                table += "<td>" + pcr.get(element).getResponsVariable() + "</td>";
+                responseVariable = pcr.get(element).getResponsVariable();
             } else if (methResults.get("pls") != null) {
-                table += "<td>" + pls.get(element).getResponsVariable() + "</td>";
+                responseVariable = pls.get(element).getResponsVariable();
             } else if (methResults.get("ridge") != null) {
-                table += "<td>" + ridge.get(element).getResponsVariable() + "</td>";
+                responseVariable = ridge.get(element).getResponsVariable();
             } else if (methResults.get("lasso") != null) {
-                table += "<td>" + rf.get(element).getResponsVariable() + "</td>";
+                responseVariable = rf.get(element).getResponsVariable();
             } else if (methResults.get("en") != null) {
-                table += "<td>" + en.get(element).getResponsVariable() + "</td>";
+                responseVariable = en.get(element).getResponsVariable();
             } else if (methResults.get("spls") != null) {
-                table += "<td>" + spls.get(element).getResponsVariable() + "</td>";
+                responseVariable = spls.get(element).getResponsVariable();
             }
+            //table row annotation & url
+            table += "<a href='" + baseURL + "tableAction?variable=" + responseVariable
+                    + "'>" + responseVariable + "</a>";//TODO: add URL, use baseURL!
+            table += "</td>";
             //Results
             if (methResults.get("univariate_p") != null) {
                 table += "<td bgcolor=\"" + univariate_p.get(element).getHtmlColor() + "\">" + df.format(univariate_p.get(element).getMean()) + "</td>";
@@ -404,7 +411,7 @@ public class RetrieveResultsSummaryAction extends RetrieveResultsSummaryValidati
         Double value = Math.abs(result) - Math.abs(min);
         range *= 1000;
         value *= 1000;
-        int group = (int) Math.abs(value / ( range / 20 ));
+        int group = (int) Math.abs(value / (range / 20));
         //Part of the largest observations resolves to a value > 20 using
         //this equation. Set them manually to the max value.
         if (group > 20) {

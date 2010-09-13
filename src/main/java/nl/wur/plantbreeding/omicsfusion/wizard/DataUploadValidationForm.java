@@ -6,6 +6,7 @@ package nl.wur.plantbreeding.omicsfusion.wizard;
 
 import com.opensymphony.xwork2.ActionSupport;
 import java.io.File;
+import java.util.logging.Logger;
 
 /**
  * Form containing information about the uploaded file's.
@@ -31,6 +32,10 @@ public class DataUploadValidationForm extends ActionSupport {
     private String dataSheetPredictorFileFileName;
     /** Type of the predictor variables */
     private String predictorType;
+    /** The logger */
+    private static final Logger LOG = Logger.getLogger(DataUploadValidationForm.class.getName());
+    /** File containing the xxxxx */
+    private String dataSheetResponsePredictorFiles;//TODO: check and implement further
 
     public File getDataSheetPredictorFile() {
         return dataSheetPredictorFile;

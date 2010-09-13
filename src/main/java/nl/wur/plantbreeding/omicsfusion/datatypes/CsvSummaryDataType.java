@@ -4,6 +4,8 @@
  */
 package nl.wur.plantbreeding.omicsfusion.datatypes;
 
+import java.util.logging.Logger;
+
 /**
  * Datatype containing the summary results.
  * @author Richard Finkers
@@ -20,6 +22,8 @@ public class CsvSummaryDataType {
     private Double sd;
     /** rank */
     private Double rank;
+    /** The logger */
+    private static final Logger LOG = Logger.getLogger(CsvSummaryDataType.class.getName());
 
     public CsvSummaryDataType() {
     }

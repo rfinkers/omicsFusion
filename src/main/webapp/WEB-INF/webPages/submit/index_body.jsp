@@ -7,3 +7,4 @@
 <%@ taglib prefix="s" uri="/struts-tags"%>
 
 <s:text name="welcome.heading" />
+<s:text name="omicsFusion.submit" />

@@ -26,15 +26,15 @@ public class RetrieveResultsSummaryValidationForm extends ActionSupport {
     }
 
     public void setSessionId(String sessionId) {
-        this.sessionId = sessionId;
+        this.sessionId = sessionId.trim();
     }
 
     @Override
     public void validate() {
-        System.out.println("Validate");
+        LOG.info("Validate");
         if (Validation.containsSpecialCharactersCheck(sessionId) == true) {
             //do something like throwing an error
-            System.out.println("TRUE");
+           LOG.info("TRUE");
         }
         //TODO: we expect a fixed length for the sessionID Include a length check
         //TODO: null check

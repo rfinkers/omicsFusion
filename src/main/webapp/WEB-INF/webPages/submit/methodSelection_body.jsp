@@ -11,7 +11,8 @@
     <!--    Univariate TODO: resource bundle-->
     Machine learning
     <s:checkbox key="analysis.method.rf" name="rf" />
-    <s:checkbox key="analysis.method.svm" name="svm" checked="checked"/>
+<!--    TODO: remove SVM? or is disabled working-->
+<s:checkbox key="analysis.method.svm" name="svm" disabled="true"/>
     Variable selection
     <s:checkbox key="analysis.method.lasso" name="lasso" checked="checked"/>
     <s:checkbox key="analysis.method.elasticNet" name="elasticNet" checked="checked"/>

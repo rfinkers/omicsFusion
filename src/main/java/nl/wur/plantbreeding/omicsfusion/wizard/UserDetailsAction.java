@@ -8,7 +8,7 @@ import nl.wur.plantbreeding.omicsfusion.utils.Constants;
 import org.apache.struts2.interceptor.SessionAware;
 
 /**
- * Proces the user information and makes it available on the session scope.
+ * process the user information and makes it available on the session scope.
  * @author Richard Finkers
  * @version 1.0
  */
@@ -38,7 +38,9 @@ public class UserDetailsAction extends UserDetailsValidationForm implements Sess
 
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Exception: {0}", ex.getMessage());
+            addActionError("An exceoption occured");
             ex.printStackTrace();
+            return ERROR;
         }
         return SUCCESS;
     }

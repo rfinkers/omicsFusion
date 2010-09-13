@@ -9,13 +9,13 @@
 <h2><s:text name="submit.complete.heading" /></h2>
 <s:actionerror/>
 <s:actionmessage/>
+<s:text name="submit.complete.salutation"/> <s:property value="#session.omicsFusionUser.firstName"/><s:property value="#session.omicsFusionUser.lastName"/>,
 <s:text name="submit.complete.explanation"/>
 
 <h4><s:text name="submit.complete.user"/></h4>
 <s:property value="email"/><s:property value="#session.omicsFusionUser.email"/>
 
 <h4><s:text name="submit.complete.upload"/></h4>
-
 
 <h4><s:text name="submit.complete.methods"/></h4>
 
