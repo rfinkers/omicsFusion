@@ -15,6 +15,7 @@ import nl.wur.plantbreeding.logic.util.FileOrDirectoryExists;
 import nl.wur.plantbreeding.omicsfusion.datatypes.CsvSummaryDataType;
 import nl.wur.plantbreeding.omicsfusion.utils.CSV;
 import nl.wur.plantbreeding.omicsfusion.utils.ServletUtils;
+import org.apache.struts2.interceptor.ServletRequestAware;
 
 /**
  * Action class that summarizes the results of the pipeline. Although the
@@ -24,12 +25,14 @@ import nl.wur.plantbreeding.omicsfusion.utils.ServletUtils;
  * @author Richard Finkers
  * @version 1.0
  */
-public class RetrieveResultsSummaryAction extends RetrieveResultsSummaryValidationForm {
+public class RetrieveResultsSummaryAction extends RetrieveResultsSummaryValidationForm implements ServletRequestAware {
 
     /** The Logger */
     private static final Logger LOG = Logger.getLogger(RetrieveResultsSummaryAction.class.getName());
     /** Serial Version UID */
     private static final long serialVersionUID = 1L;
+    /** the request */
+    private HttpServletRequest request;
 
     @Override
     public String execute() throws Exception {
@@ -193,7 +196,7 @@ public class RetrieveResultsSummaryAction extends RetrieveResultsSummaryValidati
 //            System.out.println("Nr: " + is[0] + " rank: " + is[1]);
 //        }
 
-        String baseURL = "/";//FIXME: implement
+        String baseURL = request.getContextPath();
         DecimalFormat df = new DecimalFormat("#.###");
         //Concatenate the HTML table.
         String table = "<table class='boxpart'>";
@@ -259,8 +262,8 @@ public class RetrieveResultsSummaryAction extends RetrieveResultsSummaryValidati
                 responseVariable = spls.get(element).getResponsVariable();
             }
             //table row annotation & url
-            table += "<a href='" + baseURL + "tableAction?variable=" + responseVariable
-                    + "'>" + responseVariable + "</a>";//TODO: add URL, use baseURL!
+            table += "<a href='" + baseURL + "/results/predRespXYScatter?variable=" + responseVariable
+                    + "&predictor=trait'>" + responseVariable + "</a>";//TODO: add URL, use baseURL!
             table += "</td>";
             //Results
             if (methResults.get("univariate_p") != null) {
@@ -358,9 +361,9 @@ public class RetrieveResultsSummaryAction extends RetrieveResultsSummaryValidati
         HashMap<String, ArrayList<CsvSummaryDataType>> results = new HashMap<String, ArrayList<CsvSummaryDataType>>();
         //FIXME: hardcoded
         //String tempDir = "/home/finke002/Desktop/d89339e9c510a1e4e13ce46cc02b/";//Work
-//        String tempDir = "/home/finke002/Desktop/e125586fcf9ba1b02a33093a2c17ex/";//CE Flesh
+        String tempDir = "/home/finke002/Desktop/e125586fcf9ba1b02a33093a2c17ex/";//CE Flesh
 //        String tempDir = "/home/finke002/Desktop/81df58ab8635eaea6211020de5b5/";//BRIX
-        String tempDir = "/tmp/d2159ab79390aae6f5aea5e08254/";
+//        String tempDir = "/tmp/d2159ab79390aae6f5aea5e08254/";
 
 
         if (FileOrDirectoryExists.FileOrDirectoryExists(tempDir + "LASSO_coef_Sum.csv") == true) {
@@ -487,5 +490,10 @@ public class RetrieveResultsSummaryAction extends RetrieveResultsSummaryValidati
                 break;
         }
         return background;
+    }
+
+    @Override
+    public void setServletRequest(HttpServletRequest request) {
+        this.request = request;
     }
 }

@@ -5,9 +5,12 @@
 package nl.wur.plantbreeding.omicsfusion.results;
 
 import java.awt.Color;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.servlet.http.HttpServletRequest;
 import nl.wur.plantbreeding.logic.jfreechart.GenotypeXYToolTipGenerator;
 import nl.wur.plantbreeding.logic.jfreechart.GenotypeXYDataset;
+import org.apache.struts2.interceptor.ServletRequestAware;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.axis.ValueAxis;
@@ -22,7 +25,7 @@ import org.jfree.data.xy.DefaultXYDataset;
  * @author Richard Finkers
  * @version 1.0.
  */
-public class PredictorResponseXYScatterAction extends PredictorResponseXYScatterForm {
+public class PredictorResponseXYScatterAction extends PredictorResponseXYScatterForm implements ServletRequestAware {
 
     /** The logger */
     private static final Logger LOG = Logger.getLogger(PredictorResponseXYScatterAction.class.getName());
@@ -30,9 +33,15 @@ public class PredictorResponseXYScatterAction extends PredictorResponseXYScatter
     private static final long serialVersionUID = 100906L;
     /** Chart object */
     private JFreeChart chart;
+    /** the request */
+    private HttpServletRequest request;
 
     @Override
     public String execute() throws Exception {
+
+        String variable = request.getParameter("variable");
+
+        LOG.log(Level.INFO, "Variable: {0}", variable);
 
         DefaultXYDataset xyDataset = getDataSet();
 
@@ -74,7 +83,7 @@ public class PredictorResponseXYScatterAction extends PredictorResponseXYScatter
         //Parse the excel column in the data object. Deal with missig data (Omit from object?)
 
         //x: predictor and y: response
-        
+
         double[][] data = new double[2][100];//TODO: 100 -> length results
         String[] genotypeLabels = new String[100];//TODO: 100 -> length results
 
@@ -89,5 +98,10 @@ public class PredictorResponseXYScatterAction extends PredictorResponseXYScatter
 
     public JFreeChart getChart() {
         return chart;
+    }
+
+    @Override
+    public void setServletRequest(HttpServletRequest request) {
+        this.request = request;
     }
 }
