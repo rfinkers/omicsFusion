@@ -20,6 +20,8 @@ public class RetrieveResultsSummaryValidationForm extends ActionSupport {
     private static final long serialVersionUID = 1L;
     /** session token */
     private String sessionId;
+    /** The response variable */
+    private String variable;
 
     public String getSessionId() {
         return sessionId;
@@ -27,6 +29,14 @@ public class RetrieveResultsSummaryValidationForm extends ActionSupport {
 
     public void setSessionId(String sessionId) {
         this.sessionId = sessionId.trim();
+    }
+
+    public String getVariable() {
+        return variable;
+    }
+
+    public void setVariable(String variable) {
+        this.variable = variable;
     }
 
     @Override

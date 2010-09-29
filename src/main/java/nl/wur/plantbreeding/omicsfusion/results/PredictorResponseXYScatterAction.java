@@ -41,6 +41,8 @@ public class PredictorResponseXYScatterAction extends PredictorResponseXYScatter
 
         String variable = request.getParameter("variable");
 
+        System.out.println("Request: " + request.getRequestedSessionId());
+
         LOG.log(Level.INFO, "Variable: {0}", variable);
 
         DefaultXYDataset xyDataset = getDataSet();
@@ -94,6 +96,13 @@ public class PredictorResponseXYScatterAction extends PredictorResponseXYScatter
         }
         DefaultXYDataset xy = new GenotypeXYDataset("Genotype", data, genotypeLabels, genotypeLabels);
         return xy;
+    }
+
+    private DefaultXYDataset getDataSet2() {
+
+        //DefaultXYDataset xy = new GenotypeXYDataset("Genotype", data, genotypeLabels, genotypeLabels)
+        //return xy;
+        return  new GenotypeXYDataset(SUCCESS, null, null, null);
     }
 
     public JFreeChart getChart() {
