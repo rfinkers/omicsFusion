@@ -20,6 +20,9 @@ public class CSV {
 
     private static final Logger LOG = Logger.getLogger(CSV.class.getName());
 
+    private CSV() {
+    }
+
     /**
      * Read the summary CSV files for a method.
      * @param fileName Name of the result file
