@@ -32,6 +32,7 @@ public class DataUploadAction extends DataUploadValidationForm implements Servle
     public String execute() throws Exception {
         try {
 
+            LOG.info("Execute upload");
             String tempdir = System.getProperty("java.io.tmpdir");
             if (!(tempdir.endsWith("/") || tempdir.endsWith("\\"))) {
                 tempdir += System.getProperty("file.separator");
@@ -65,6 +66,10 @@ public class DataUploadAction extends DataUploadValidationForm implements Servle
             return INPUT;
         } catch (IOException e) {
             addActionError(e.getMessage());
+            return INPUT;
+        } catch(Exception e){
+            addActionError(e.getMessage());
+            LOG.severe("Exception caught");
             return INPUT;
         }
         LOG.info("Action: upload data completed");//TODO; remove debug code

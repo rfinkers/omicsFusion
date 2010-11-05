@@ -28,6 +28,11 @@
     <listener>
         <listener-class>org.apache.struts2.tiles.StrutsTilesListener</listener-class>
     </listener>
+    <context-param>
+        <description>Directory where the results will be stored</description>
+        <param-name>resultsDirectory</param-name>
+        <param-value>/tmp</param-value>
+    </context-param>
     <filter>
         <filter-name>struts2</filter-name>
         <filter-class>org.apache.struts2.dispatcher.FilterDispatcher</filter-class>

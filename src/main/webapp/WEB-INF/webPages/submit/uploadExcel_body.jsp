@@ -20,6 +20,6 @@ Form
     <s:file name="dataSheetResponseFile" key="dataSheetResponseFile" /><s:select key="dataset.type" name="responseType" headerValue="-- Please select --" headerKey="select" list="#{'ph':'Phenomics','me':'Metabolomics','tr':'Trascriptomics','ma':'Markers (Binary)'}"/>
     <s:file name="dataSheetPredictorFile" key="dataSheetPredictorFile"/><s:select key="dataset.type" name="predictorType" headerValue="-- Please select --" headerKey="select" list="#{'ph':'Phenomics','me':'Metabolomics','tr':'Trascriptomics','ma':'Markers (Binary)'}"/>
 <!--    TODO: separate this from the lines above? Add instructions-->
-    <s:file name="dataSheetPredictResponseFile" key="dataSheetPredictResponseFile"/>
+<!--    <s:file name="dataSheetPredictResponseFile" key="dataSheetPredictResponseFile"/>-->
     <s:reset/><s:submit/>
 </s:form>

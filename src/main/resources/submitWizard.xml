@@ -14,7 +14,7 @@
     <package name="dataUpload" namespace="/userRegistration" extends="struts-default">
         <action name="dataUpload" class="nl.wur.plantbreeding.omicsfusion.wizard.DataUploadAction">
             <interceptor-ref name="fileUpload">
-                <param name="maximumSize">2097152</param>
+                <param name="maximumSize">8388608</param><!--Approx 8MB-->
                 <param name="allowedTypes">
                     application/vnd.ms-excel
 <!--			application/vnd.ms-excel,image/png example for multiple types-->

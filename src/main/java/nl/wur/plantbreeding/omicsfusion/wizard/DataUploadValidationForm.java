@@ -35,7 +35,9 @@ public class DataUploadValidationForm extends ActionSupport {
     /** The logger */
     private static final Logger LOG = Logger.getLogger(DataUploadValidationForm.class.getName());
     /** File containing the xxxxx */
-    private String dataSheetResponsePredictorFiles;//TODO: check and implement further
+    private File dataSheetPredictResponseFile;//TODO: check and implement further
+    /** Name */
+    private String dataSheetPredictResponseFileFileName;
 
     public File getDataSheetPredictorFile() {
         return dataSheetPredictorFile;
@@ -103,6 +105,7 @@ public class DataUploadValidationForm extends ActionSupport {
 
     @Override
     public void validate() {
+        LOG.info("Start validation");
 
         //Order of importance for the order that the messages are shown.
         if (dataSheetResponseFile == null || dataSheetPredictorFile == null) {//TODO: via validation.xml?

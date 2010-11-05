@@ -63,7 +63,7 @@ public class Analysis {
         rCode += "  inTrainingSet <- createFolds(dataSet$BRIX_P, k = " + Constants.NUMBER_FOLDS_OUTER + ", list = TRUE, returnTrain = T)\n";
         for (int i = 0; i < Constants.NUMBER_FOLDS_OUTER; i++) {
             int j = i + 1;//R object contains 1-10 instead of 0-9!
-            rCode += "  trainingSet" + i + " <- inTrainingSet$\"" + j + "\"\n";
+            rCode += "  trainingSet" + i + " <- inTrainingSet[" + j + "]\n";
         }
         rCode += "\n";
         return rCode;
@@ -121,7 +121,7 @@ public class Analysis {
             rCode += "test_" + i + " <- matrix(data=NA,nrow=" + Constants.ITERATIONS + ",ncol=2)\n";
             rCode += "RMSE <- paste(\"RMSE_" + i + "\",seq(1:" + Constants.ITERATIONS + "),sep=\"_\")\n";
             rCode += "R2 <- paste(\"R2_" + i + "\",seq(1:" + Constants.ITERATIONS + "),sep=\"_\")\n";
-            rCode += "colnames(test_" + i + ") <- c(RMSE,R2)\n";
+            rCode += "colnames(test_" + i + ") <- c(\"RMSE\",\"R2\")\n";
             rCode += "y_fit" + i + " <- matrix(data = NA, nrow = dim(DesignMatrix)[2], ncol =" + Constants.ITERATIONS + ")\n";
             rCode += "colnames(y_fit" + i + ") <- coln\n";
             rCode += "R2_" + i + " <- matrix(data=NA,nrow=1,ncol=" + Constants.ITERATIONS + ")\n";
