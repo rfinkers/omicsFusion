@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import nl.wur.plantbreeding.logic.util.FileOrDirectoryExists;
@@ -127,11 +128,11 @@ public class RetrieveResultsSummaryAction extends RetrieveResultsSummaryValidati
         int oldResultRows = 0;
         for (int row : resultRows) {
             if (row != 0) {
-                if (oldResultRows != 0) {
-                    if (row != oldResultRows) {
-                        addActionError("Lengt of the results does not match");
-                        return ERROR;
-                    }
+                if (oldResultRows != 0 && row != oldResultRows) {
+                    addActionError("Lengt of the results does not match");//TODO: resource bundle
+                    LOG.log(Level.WARNING, "Number of rows set A: {0}", oldResultRows);
+                    LOG.log(Level.WARNING, "Number of rows set B: {0}", row);
+                    return ERROR;
                 }
                 oldResultRows = row;
             }
@@ -360,10 +361,17 @@ public class RetrieveResultsSummaryAction extends RetrieveResultsSummaryValidati
     private HashMap<String, ArrayList<CsvSummaryDataType>> getMethodsWithResultsSummaryFiles(String sessionID) throws FileNotFoundException, IOException {
         HashMap<String, ArrayList<CsvSummaryDataType>> results = new HashMap<String, ArrayList<CsvSummaryDataType>>();
         //FIXME: hardcoded
-        String tempDir = "/home/finke002/Desktop/d89339e9c510a1e4e13ce46cc02b/";//Work
+        String tempDir = null;
+        if (sessionID == null || sessionID.isEmpty()) {
+            tempDir = "/home/finke002/Desktop/d89339e9c510a1e4e13ce46cc02b/";//Work
 //        String tempDir = "/home/finke002/Desktop/e125586fcf9ba1b02a33093a2c17ex/";//CE Flesh
 //        String tempDir = "/home/finke002/Desktop/81df58ab8635eaea6211020de5b5/";//BRIX
 //        String tempDir = "/tmp/d2159ab79390aae6f5aea5e08254/";
+        } else {
+            tempDir = System.getProperty("java.io.tmpdir") + "/" + sessionID + "/";//TODO:check
+        }
+
+        LOG.log(Level.INFO, "Tempdir: {0}", tempDir);
 
 
         if (FileOrDirectoryExists.FileOrDirectoryExists(tempDir + "LASSO_coef_Sum.csv") == true) {

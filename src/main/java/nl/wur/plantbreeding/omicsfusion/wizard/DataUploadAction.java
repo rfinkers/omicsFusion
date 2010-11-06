@@ -52,7 +52,10 @@ public class DataUploadAction extends DataUploadValidationForm implements Servle
             LOG.log(Level.INFO, "Type: {0}", getResponseType());
 
             //validate the correctness of the format of the excelsheet.
-            ValidateDataSheets.validateExcelSheets(responseSheet, predictorSheet);
+            if (!responseSheet.getName().contains("csv") && !predictorSheet.getName().contains("csv")) {
+                //FIXME: one of the files is csv. No validation possible
+                ValidateDataSheets.validateExcelSheets(responseSheet, predictorSheet);
+            }
 
             //TODO: should we prepare the list with selectionboxes here depending of the type of sheets?
         } catch (InvalidFormatException e) {
@@ -67,7 +70,7 @@ public class DataUploadAction extends DataUploadValidationForm implements Servle
         } catch (IOException e) {
             addActionError(e.getMessage());
             return INPUT;
-        } catch(Exception e){
+        } catch (Exception e) {
             addActionError(e.getMessage());
             LOG.severe("Exception caught");
             return INPUT;

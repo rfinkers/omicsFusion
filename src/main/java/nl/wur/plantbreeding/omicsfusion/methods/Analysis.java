@@ -30,8 +30,17 @@ public class Analysis {
     protected String loadExcelSheets(HashMap<String, String> excelSheets) {
         String rCode = "# Load the generic R libraries \n";
         rCode += "# Load the excel sheets\n";
-        rCode += "predictorSheet <- read.xls(\"" + excelSheets.get("predictor") + "\")\n";
-        rCode += "responseSheet  <- read.xls(\"" + excelSheets.get("response") + "\")\n";
+        //TODO: test how generic the CSV import works
+        if (excelSheets.get("predictor").contains("csv")) {
+            rCode += "predictorSheet <- read.csv2(\"" + excelSheets.get("predictor") + "\")\n";
+        } else {
+            rCode += "predictorSheet <- read.xls(\"" + excelSheets.get("predictor") + "\")\n";
+        }
+        if (excelSheets.get("response").contains("csv")) {
+            rCode += "responseSheet  <- read.csv2(\"" + excelSheets.get("response") + "\")\n";
+        } else {
+            rCode += "responseSheet  <- read.xls(\"" + excelSheets.get("response") + "\")\n";
+        }
         rCode += "response <- colnames(responseSheet[2])\n";//TODO: Tric does not work
         rCode += "dataSet=cbind(responseSheet[2],predictorSheet[-1])\n";
         //TODO: better na.omit strategies. Imputation? Added in addition to the script of Animesh.
@@ -45,7 +54,14 @@ public class Analysis {
      */
     protected String preProcessMatrix() {
         String rCode = "# Pre process data matrix\n";
-        rCode += "DesignMatrix <- model.matrix(dataSet$BRIX_P ~ . - 1, dataSet)\n";//FIXME: dataSet[1] coding does not work / HARDCODED dataSet%BRIX_M
+        //Let's Hack. FIXME: Isn't there another way than overriding the trait name?
+        rCode += "nameVector<-colnames(dataSet)\n";
+        rCode += "traitName<-nameVector[1]\n";
+        rCode += "write.table(file=\"analysis.txt\", traitName)\n";
+        rCode += "nameVector[1]<-\"Response\"\n";
+        rCode += "colnames(dataSet)<-nameVector\n";
+        //Ok, back to normal
+        rCode += "DesignMatrix <- model.matrix(dataSet$Response ~ . - 1, dataSet)\n";
         //TODO: different centering and autoscaling algorithms? User selectable.
         rCode += "DesignMatrix <- scale(DesignMatrix)\n\n";
         return rCode;
@@ -60,10 +76,10 @@ public class Analysis {
         String rCode = " # Create training sets\n";
         //FIXME: dataSet[1] coding does not work. HARDCODED dataSet%BRIX_M
         //Can do different procedures. E.G. bootstraps, resampling, leaf-one-out, etc. User selectable?
-        rCode += "  inTrainingSet <- createFolds(dataSet$BRIX_P, k = " + Constants.NUMBER_FOLDS_OUTER + ", list = TRUE, returnTrain = T)\n";
+        rCode += "  inTrainingSet <- createFolds(unlist(dataSet[1]), k = " + Constants.NUMBER_FOLDS_OUTER + ", list = TRUE, returnTrain = T)\n";
         for (int i = 0; i < Constants.NUMBER_FOLDS_OUTER; i++) {
             int j = i + 1;//R object contains 1-10 instead of 0-9!
-            rCode += "  trainingSet" + i + " <- inTrainingSet[" + j + "]\n";
+            rCode += "  trainingSet" + i + " <- unlist(inTrainingSet[" + j + "])\n";
         }
         rCode += "\n";
         return rCode;
@@ -214,8 +230,9 @@ public class Analysis {
             //TODO: test set can be an separate set of sheets!
             rCode += "      predictorTrainSet" + i + " <- DesignMatrix[trainingSet" + i + ",]\n";
             rCode += "      predictorTestSet" + i + " <- DesignMatrix[-trainingSet" + i + ",]\n";// outer test set
-            rCode += "      responseTrainSet" + i + " <- dataSet$BRIX_P[trainingSet" + i + "]\n";//FIXME hardcoded. dataSet[1] does not work. Selects potentially wrong columns
-            rCode += "      responseTestSet" + i + " <- dataSet$BRIX_P[-trainingSet" + i + "]\n";//FIXME hardcoded. dataSet[1] does not work
+            //FIXME: predictorSets are scaled, responseSets are not scaled??
+            rCode += "      responseTrainSet" + i + " <- unlist(dataSet[1])[trainingSet" + i + "]\n";//FIXME hardcoded. dataSet[1] does not work. Selects potentially wrong columns
+            rCode += "      responseTestSet" + i + " <- unlist(dataSet[1])[-trainingSet" + i + "]\n";//FIXME hardcoded. dataSet[1] does not work
             //TODO: write trainingset to a file.
             rCode += "      ## Parameter optimalization\n";
             if (analysisMethod.equals("en")) {
@@ -231,9 +248,7 @@ public class Analysis {
                 rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"svmRadial\", metric = \"RMSE\", tuneLength = 10, trControl = innerLoop)\n";
             } else if (analysisMethod.equals("pls")) {
                 rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"pls\", metric = \"RMSE\", tuneLength = 10, trControl = innerLoop)\n";
-            } else if (analysisMethod.equals("spls")) {
-                rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"spls\", metric = \"RMSE\", tuneLength = 10, trControl = innerLoop)\n";
-            } else if (analysisMethod.equals("rf")) {
+            } else if (analysisMethod.equals("rf") || analysisMethod.equals("spls")) {
                 if (Constants.MAX_NUMBER_CPU > 1) {
                     //TODO: start in the first itteration only? Then, move if statement to R level
                     //Required additional packages: foreach, iterators, codetools, Rmpi
@@ -243,7 +258,11 @@ public class Analysis {
                     //TODO: count = 2 means two workers & one main?
                     rCode += "      registerDoMPI(cl)\n";
                 }
-                rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"rf\", metric = \"RMSE\", tuneLength = 10, trControl = innerLoop)\n";
+                if (analysisMethod.equals("rf")) {
+                    rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"rf\", metric = \"RMSE\", tuneLength = 10, trControl = innerLoop)\n";
+                } else if (analysisMethod.equals("spls")) {
+                    rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"spls\", metric = \"RMSE\", tuneLength = 10, trControl = innerLoop)\n";
+                }
                 if (Constants.MAX_NUMBER_CPU > 1) {
                     //TODO: stop in the last itteration only?
                     rCode += "      closeCluster(cl)\n";
@@ -354,7 +373,9 @@ public class Analysis {
     }
 
     /**
-     * Calculate the row average and SD for each row in the data matrix.
+     * Calculate the row average and SD for each row in the data matrix. Some
+     * methods calculates an intercept, this function will ommit this from the
+     * results.
      * @return R compatible code fragment.
      */
     protected String getRowMeansAndSD() {
@@ -362,10 +383,12 @@ public class Analysis {
         //dataSet contains predictor column. So, function == trye when the Train_Coef also contains the intercept.
         rCode += "if (dim(dataSet)[2] == dim(Train_Coeff)[1])\n";
         rCode += "{\n";
+        //if true: remove the column with the response value only
         rCode += "  means<-apply(Train_Coeff[-1,],1,mean)\n";
         rCode += "  sd<-apply(Train_Coeff[-1,],1,sd)\n";
         rCode += "  ra<-rank(abs(apply(Train_Coeff[-1,],1,mean)))\n";
         rCode += "} else {\n";
+        //if false: do nothing TODO: this is not an really safe approach. The difference should be 1. Test for this?
         rCode += "  means<-apply(Train_Coeff,1,mean)\n";
         rCode += "  sd<-apply(Train_Coeff,1,sd)\n";
         rCode += "  ra<-rank(abs(apply(Train_Coeff,1,mean)))\n";
