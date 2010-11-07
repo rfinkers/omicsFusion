@@ -30,6 +30,9 @@ public class RSessionInfo extends Analysis {
         rCode += "library(nnet)\n";
         rCode += "library(spls)\n";
         rCode += "library(multtest)\n";
+        //Parralelization specific libraries.
+        rCode += "library(doMPI)\n";
+        rCode += "library(snow)\n";
         return rCode;
     }
 
