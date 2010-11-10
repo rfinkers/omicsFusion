@@ -33,28 +33,40 @@ public class DataUploadAction extends DataUploadValidationForm implements Servle
         try {
 
             LOG.info("Execute upload");
-            String tempdir = System.getProperty("java.io.tmpdir");
-            if (!(tempdir.endsWith("/") || tempdir.endsWith("\\"))) {
-                tempdir += System.getProperty("file.separator");
+            String resultsDirectory = System.getProperty("java.io.tmpdir");
+            if (!(resultsDirectory.endsWith("/") || resultsDirectory.endsWith("\\"))) {
+                resultsDirectory += System.getProperty("file.separator");
             }
 
-            File responseSheet = new File(tempdir + request.getSession().getId()
+            File responseSheet = new File(resultsDirectory + request.getSession().getId()
                     + "/" + getDataSheetResponseFileFileName());
-            File predictorSheet = new File(tempdir + request.getSession().getId()
+            File predictorSheet = new File(resultsDirectory + request.getSession().getId()
                     + "/" + getDataSheetPredictorFileFileName());
             //Copy the uploaded excel sheets to a temporary directory
             FileUtils.copyFile(getDataSheetPredictorFile(), predictorSheet);
             FileUtils.copyFile(getDataSheetResponseFile(), responseSheet);
+            File predictResponseSheet=null;
+            if (getDataSheetPredictResponseFile() != null) {
+                predictResponseSheet = new File(resultsDirectory + request.getSession().getId()
+                        + "/" + getDataSheetPredictResponseFileFileName());
+                FileUtils.copyFile(getDataSheetPredictResponseFile(), predictResponseSheet);
+            }
 
             LOG.log(Level.INFO, "Predictor: {0}", getDataSheetPredictorFileFileName());
             LOG.log(Level.INFO, "Type: {0}", getPredictorType());
             LOG.log(Level.INFO, "Response: {0}", getDataSheetResponseFileFileName());
             LOG.log(Level.INFO, "Type: {0}", getResponseType());
+            //File to predict the response for
+            LOG.log(Level.INFO, "Test: {0}", getDataSheetPredictResponseFileFileName());
 
             //validate the correctness of the format of the excelsheet.
             if (!responseSheet.getName().contains("csv") && !predictorSheet.getName().contains("csv")) {
                 //FIXME: one of the files is csv. No validation possible
                 ValidateDataSheets.validateExcelSheets(responseSheet, predictorSheet);
+            }
+
+            if (predictResponseSheet!=null ){
+                ValidateDataSheets.validatePredictResponseSheet();
             }
 
             //TODO: should we prepare the list with selectionboxes here depending of the type of sheets?
@@ -75,11 +87,14 @@ public class DataUploadAction extends DataUploadValidationForm implements Servle
             LOG.severe("Exception caught");
             return INPUT;
         }
-        LOG.info("Action: upload data completed");//TODO; remove debug code
+        LOG.info("Action: upload data completed");
 
-        HashMap<String, String> sheets = new HashMap<String, String>(2);
+        HashMap<String, String> sheets = new HashMap<String, String>(3);
         sheets.put("predictor", getDataSheetPredictorFileFileName());
         sheets.put("response", getDataSheetResponseFileFileName());
+        if (getDataSheetPredictResponseFileFileName() != null) {
+            sheets.put("predictResponse", getDataSheetPredictResponseFileFileName());
+        }
 
         request.getSession().setAttribute("sheets", sheets);
 

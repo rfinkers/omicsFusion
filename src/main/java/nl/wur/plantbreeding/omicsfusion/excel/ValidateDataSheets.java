@@ -60,8 +60,12 @@ public class ValidateDataSheets {
         }
     }
 
+    public static void validatePredictResponseSheet() {
+        //TODO: implement validatePredictResponseSheet
+    }
+
     /**
-     * Load an excelsheet from the file system.
+     * Load an excel sheet from the file system.
      * @param excelSheet
      * @return
      * @throws FileNotFoundException
@@ -83,7 +87,7 @@ public class ValidateDataSheets {
         int rows = wb.getSheetAt(0).getLastRowNum();
         int cols = wb.getSheetAt(0).getRow(0).getLastCellNum();
         LOG.log(Level.INFO, "wb:{0} MinCol {1}", new Object[]{wb.getSheetName(0), minColumns});
-        LOG.log(Level.INFO, "ROWS: {0} Columns: {1}", new Object[]{rows, cols});
+        LOG.log(Level.INFO, "Rows: {0} Columns: {1}", new Object[]{rows, cols});
         if (rows < 5 || cols < minColumns) {
             //return false. TODO: better handeling of this error and report message to the user
             throw new DataSheetValidationException("Expected dimensions of the sheet: " + fileName + " are not correct");
@@ -101,8 +105,6 @@ public class ValidateDataSheets {
                             + rowNumber + " does not match for both sheets (" + responseWorkbook.getSheetAt(0).getRow(i).getCell(0).getStringCellValue() + "/" + predictorWorkbook.getSheetAt(0).getRow(i).getCell(0).getStringCellValue() + ")");
                 }
             }
-
         }
-
     }
 }

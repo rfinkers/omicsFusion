@@ -33,11 +33,14 @@ public class CmdExec {
     public static int ExecuteQSubCmd(String executionDir, String method) throws IOException {
         Process p;
         if (method.equals("rf") || method.equals("spls") || method.equals("ridge")) {
-            //FIXME: check how to use priority
-            // -l slots=2 does not work. Use parallel environments. Check:
-            p = Runtime.getRuntime().exec("qsub -S /bin/bash -p 10 " + executionDir + method + ".pbs");
+            //TODO: -q queue my_job.pbs
+            //TODO: get queue nane from context
+            //TODO: -pe MPI 4 my_job.pbs
+            //TODO: tune priority?
+            //TODO: -P omicsFusion -> project name
+            p = Runtime.getRuntime().exec("qsub -S /bin/bash -p 10 -pe MPI -q stat -M richard.finkers@wur.nl " + executionDir + method + ".pbs");
         } else {
-            p = Runtime.getRuntime().exec("qsub -S /bin/bash " + executionDir + method + ".pbs");
+            p = Runtime.getRuntime().exec("qsub -S /bin/bash -q stat " + executionDir + method + ".pbs");
         }
         BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
         String line = input.readLine();

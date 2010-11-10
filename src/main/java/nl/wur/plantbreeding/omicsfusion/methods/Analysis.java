@@ -1,6 +1,7 @@
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
+ * TODO: if the datasets contains not recognized NA values, we get an error that RSME is not valid for train method.
  */
 package nl.wur.plantbreeding.omicsfusion.methods;
 
@@ -27,24 +28,46 @@ public class Analysis {
      * @param excelSheets The names of the predictor and response excel sheets.
      * @return R program code.
      */
-    protected String loadExcelSheets(HashMap<String, String> excelSheets) {
+    protected String loadPredictorAndResponseDataSheets(HashMap<String, String> excelSheets) {
         String rCode = "# Load the generic R libraries \n";
         rCode += "# Load the excel sheets\n";
-        //TODO: test how generic the CSV import works
+        //TODO: test how generic the CSV import works. Can we test for decimal point, etc?
         if (excelSheets.get("predictor").contains("csv")) {
-            rCode += "predictorSheet <- read.csv2(\"" + excelSheets.get("predictor") + "\")\n";
+            rCode += "predictorSheet <- read.csv2(\"" + excelSheets.get("predictor") + "\", header=TRUE,sep=\";\",dec=\".\")\n";
         } else {
             rCode += "predictorSheet <- read.xls(\"" + excelSheets.get("predictor") + "\")\n";
         }
         if (excelSheets.get("response").contains("csv")) {
-            rCode += "responseSheet  <- read.csv2(\"" + excelSheets.get("response") + "\")\n";
+            rCode += "responseSheet  <- read.csv2(\"" + excelSheets.get("response") + "\", header=TRUE,sep=\";\",dec=\".\")\n";
         } else {
             rCode += "responseSheet  <- read.xls(\"" + excelSheets.get("response") + "\")\n";
         }
-        rCode += "response <- colnames(responseSheet[2])\n";//TODO: Tric does not work
+        //Concatenate the final dataSet, containing 1 response and a predictor matrix
+        //The rownames are set acoording to the sample names
         rCode += "dataSet=cbind(responseSheet[2],predictorSheet[-1])\n";
+        //FIXME: set rownames
+        //rCode += "rownames(dataSet) <- responseSheet[1]\n";
         //TODO: better na.omit strategies. Imputation? Added in addition to the script of Animesh.
+        //option: replace NA with row mean.
         rCode += "dataSet=na.omit(dataSet)\n\n";
+        return rCode;
+    }
+
+    protected String loadPredictResponseDataSheet(HashMap<String, String> excelSheets) {
+        String rCode = "# Load the PredictResponse data sheet.\n";
+        //TODO: test how generic the CSV import works. Can we test for decimal point, etc?
+        if (excelSheets.get("predictResponse") != null) {
+            if (excelSheets.get("predictor").contains("csv")) {
+                rCode += "predictResponse <- read.csv2(\"" + excelSheets.get("predictResponse") + "\", header=TRUE,sep=\";\",dec=\".\")\n";
+            } else {
+                rCode += "predictResponse <- read.xls(\"" + excelSheets.get("predictResponse") + "\")\n";
+            }
+        } else {
+            //TODO: error handling
+        }
+
+        //TODO: file validation. Should also be done during upload
+
         return rCode;
     }
 
@@ -74,12 +97,16 @@ public class Analysis {
     protected String getTrainingSets() {
         //TODO: we might get different training and test sets profided via the dataset upload.
         String rCode = " # Create training sets\n";
-        //FIXME: dataSet[1] coding does not work. HARDCODED dataSet%BRIX_M
+        //FIXME: dataSet[1] coding does not work. currently using unlist(dataset[1]). Does this work, or should we code it now to dataSet$Response?
         //Can do different procedures. E.G. bootstraps, resampling, leaf-one-out, etc. User selectable?
-        rCode += "  inTrainingSet <- createFolds(unlist(dataSet[1]), k = " + Constants.NUMBER_FOLDS_OUTER + ", list = TRUE, returnTrain = T)\n";
+        rCode += "  inTrainingSet <- createFolds(dataSet$Response, k = " + Constants.NUMBER_FOLDS_OUTER + ", list = TRUE, returnTrain = T)\n";
         for (int i = 0; i < Constants.NUMBER_FOLDS_OUTER; i++) {
             int j = i + 1;//R object contains 1-10 instead of 0-9!
-            rCode += "  trainingSet" + i + " <- unlist(inTrainingSet[" + j + "])\n";
+            if (j < 10) {
+                rCode += "  trainingSet" + i + " <- inTrainingSet$Fold0" + j + "\n";
+            } else {
+                rCode += "  trainingSet" + i + " <- inTrainingSet$Fold" + j + "\n";
+            }
         }
         rCode += "\n";
         return rCode;
@@ -96,7 +123,7 @@ public class Analysis {
         rCode += "library(reshape)\n";//dependencies of caret
         rCode += "library(plyr)\n";//dependencies of caret
         rCode += "library(caret)\n";//Used for createfolds in training set
-        //rCode += "library(snow)\n\n";//train() from caret can use snow or library(doMPI) alternatively.
+        //rCode += "library(doMPI)\n\n";//train() from caret can use mpi. We use this for RF and SPSL
         return rCode;
     }
 
@@ -105,7 +132,7 @@ public class Analysis {
      * @return R compatible code.
      */
     protected String initializeResultObjects() {
-        //FIXME: is this one used??? Implement with Super and with specific implentations?
+        //TODO: how is this method used?
         String rCode = "# Initialize results and add column names\n";
         for (int i = 0; i < Constants.NUMBER_FOLDS_OUTER; i++) {
             rCode += "coln <-  paste(" + i + ",seq(1:" + Constants.ITERATIONS + "),sep=\"_\")\n";
@@ -231,8 +258,8 @@ public class Analysis {
             rCode += "      predictorTrainSet" + i + " <- DesignMatrix[trainingSet" + i + ",]\n";
             rCode += "      predictorTestSet" + i + " <- DesignMatrix[-trainingSet" + i + ",]\n";// outer test set
             //FIXME: predictorSets are scaled, responseSets are not scaled??
-            rCode += "      responseTrainSet" + i + " <- unlist(dataSet[1])[trainingSet" + i + "]\n";//FIXME hardcoded. dataSet[1] does not work. Selects potentially wrong columns
-            rCode += "      responseTestSet" + i + " <- unlist(dataSet[1])[-trainingSet" + i + "]\n";//FIXME hardcoded. dataSet[1] does not work
+            rCode += "      responseTrainSet" + i + " <- dataSet$Response[trainingSet" + i + "]\n";//FIXME hardcoded. dataSet[1] does not work. Selects potentially wrong columns
+            rCode += "      responseTestSet" + i + " <- dataSet$Response[-trainingSet" + i + "]\n";//FIXME hardcoded. dataSet[1] does not work
             //TODO: write trainingset to a file.
             rCode += "      ## Parameter optimalization\n";
             if (analysisMethod.equals("en")) {
@@ -374,7 +401,7 @@ public class Analysis {
 
     /**
      * Calculate the row average and SD for each row in the data matrix. Some
-     * methods calculates an intercept, this function will ommit this from the
+     * methods calculates an intercept, this function will omit this from the
      * results.
      * @return R compatible code fragment.
      */
@@ -407,6 +434,22 @@ public class Analysis {
     }
 
     /**
+     * Predict the response using a new set of predictors.
+     * @param analysisMethod Name of the method for which to predict the response.
+     * @return R compatible code.
+     */
+    protected String predictResponseFromNew(String analysisMethod) {
+        String rCode = "# Predict response for a new set of predictors.\n";
+        //Load the data sheet.
+
+        //Get the optimized parameters for the model.
+
+        //Calculate the new responses and safe them to a file.
+
+        return rCode;
+    }
+
+    /**
      * Generic run script.
      * @param excelSheets The names of the predictor and response excel sheets.
      * @return the complete R compatible script for the selected method.
@@ -414,7 +457,7 @@ public class Analysis {
     public String getAnalysisScript(HashMap<String, String> excelSheets) {
         String rScript = "# Concatenating analisis script\n";
         rScript += getRequiredLibraries();
-        rScript += loadExcelSheets(excelSheets);
+        rScript += loadPredictorAndResponseDataSheets(excelSheets);
         rScript += preProcessMatrix();
         rScript += initializeResultObjects();
         rScript += getAnalysis();

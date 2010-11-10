@@ -80,7 +80,7 @@ public class RSessionInfo extends Analysis {
     }
 
     @Override
-    protected String loadExcelSheets(HashMap<String, String> excelSheets) {
+    protected String loadPredictorAndResponseDataSheets(HashMap<String, String> excelSheets) {
         return "";
     }
 }

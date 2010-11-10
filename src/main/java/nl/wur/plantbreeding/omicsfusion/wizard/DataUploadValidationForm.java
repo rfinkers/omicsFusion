@@ -16,6 +16,8 @@ import java.util.logging.Logger;
 public class DataUploadValidationForm extends ActionSupport {
 
     private static final long serialVersionUID = 170610L;
+    /** The logger */
+    private static final Logger LOG = Logger.getLogger(DataUploadValidationForm.class.getName());
     /** File containing the response variables */
     private File dataSheetResponseFile;
     /** content type of the data sheet */
@@ -32,12 +34,12 @@ public class DataUploadValidationForm extends ActionSupport {
     private String dataSheetPredictorFileFileName;
     /** Type of the predictor variables */
     private String predictorType;
-    /** The logger */
-    private static final Logger LOG = Logger.getLogger(DataUploadValidationForm.class.getName());
     /** File containing the xxxxx */
-    private File dataSheetPredictResponseFile;//TODO: check and implement further
+    private File dataSheetPredictResponseFile = null;
     /** Name */
-    private String dataSheetPredictResponseFileFileName;
+    private String dataSheetPredictResponseFileFileName = null;
+    /** type of the PredictResponse */
+    private String dataSheetPredictResponseFileContentType = null;
 
     public File getDataSheetPredictorFile() {
         return dataSheetPredictorFile;
@@ -101,6 +103,30 @@ public class DataUploadValidationForm extends ActionSupport {
 
     public void setResponseType(String responseType) {
         this.responseType = responseType;
+    }
+
+    public File getDataSheetPredictResponseFile() {
+        return dataSheetPredictResponseFile;
+    }
+
+    public void setDataSheetPredictResponseFile(File dataSheetPredictResponseFile) {
+        this.dataSheetPredictResponseFile = dataSheetPredictResponseFile;
+    }
+
+    public String getDataSheetPredictResponseFileContentType() {
+        return dataSheetPredictResponseFileContentType;
+    }
+
+    public void setDataSheetPredictResponseFileContentType(String dataSheetPredictResponseFileContentType) {
+        this.dataSheetPredictResponseFileContentType = dataSheetPredictResponseFileContentType;
+    }
+
+    public String getDataSheetPredictResponseFileFileName() {
+        return dataSheetPredictResponseFileFileName;
+    }
+
+    public void setDataSheetPredictResponseFileFileName(String dataSheetPredictResponseFileFileName) {
+        this.dataSheetPredictResponseFileFileName = dataSheetPredictResponseFileFileName;
     }
 
     @Override

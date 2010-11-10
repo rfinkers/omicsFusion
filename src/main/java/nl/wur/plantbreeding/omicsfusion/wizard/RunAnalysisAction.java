@@ -53,67 +53,74 @@ public class RunAnalysisAction extends ActionSupport implements ServletRequestAw
         //Order here is equal to the order on the SGE submission queue? Schedule slow jobs first! Or can should this be controlled via order in submission screen / orther ordening options / queue weight?
         //Relative timings on the CxE Flesh color /Metabolite dataset.
 
-        //RF - 50 /SPLS - 34 /Ridge - 32 /EN - 8 /SVM - 5 /PCR - 2 /PLS - 1 /LASSO - 1
-        for (String method : methods) {
-            if (method.equals("rf")) {
-                RandomForest mth = new RandomForest();
-                String mthString = mth.getAnalysisScript(sheets);
-                writeScriptFile("rf.R", mthString);
-                jobIds.add(submitToSGE("rf"));
-            } else if (method.equals("spls")) {
-                SparsePLS mth = new SparsePLS();
-                String mthString = mth.getAnalysisScript(sheets);
-                writeScriptFile("spls.R", mthString);
-                jobIds.add(submitToSGE("spls"));
-            } else if (method.equals("ridge")) {
-                Ridge mth = new Ridge();
-                String mthString = mth.getAnalysisScript(sheets);
-                writeScriptFile(method + ".R", mthString);
-                int job = submitToSGE(method);
-                if (job != 0) {
-                    jobIds.add(job);
+        try {
+            //RF - 50 /SPLS - 34 /Ridge - 32 /EN - 8 /SVM - 5 /PCR - 2 /PLS - 1 /LASSO - 1
+            for (String method : methods) {
+                if (method.equals("rf")) {
+                    RandomForest mth = new RandomForest();
+                    String mthString = mth.getAnalysisScript(sheets);
+                    writeScriptFile("rf.R", mthString);
+                    jobIds.add(submitToSGE("rf"));
+                } else if (method.equals("spls")) {
+                    SparsePLS mth = new SparsePLS();
+                    String mthString = mth.getAnalysisScript(sheets);
+                    writeScriptFile("spls.R", mthString);
+                    jobIds.add(submitToSGE("spls"));
+                } else if (method.equals("ridge")) {
+                    Ridge mth = new Ridge();
+                    String mthString = mth.getAnalysisScript(sheets);
+                    writeScriptFile(method + ".R", mthString);
+                    int job = submitToSGE(method);
+                    if (job != 0) {
+                        jobIds.add(job);
+                    }
+                } else if (method.equals("en")) {
+                    ElasticNet mth = new ElasticNet();
+                    String mthString = mth.getAnalysisScript(sheets);
+                    writeScriptFile("en.R", mthString);
+                    jobIds.add(submitToSGE("en"));
+                } else if (method.equals("svm")) {
+                    SVM mth = new SVM();
+                    String mthString = mth.getAnalysisScript(sheets);
+                    writeScriptFile("svm.R", mthString);
+                    jobIds.add(submitToSGE("svm"));
+                } else if (method.equals("pcr")) {
+                    PCR mth = new PCR();
+                    String mthString = mth.getAnalysisScript(sheets);
+                    writeScriptFile("pcr.R", mthString);
+                    jobIds.add(submitToSGE("pcr"));
+                } else if (method.equals("pls")) {
+                    PartialLeasedSquares mth = new PartialLeasedSquares();
+                    String mthString = mth.getAnalysisScript(sheets);
+                    writeScriptFile("pls.R", mthString);
+                    jobIds.add(submitToSGE("pls"));
+                } else if (method.equals("lasso")) {
+                    Lasso mth = new Lasso();
+                    String mthString = mth.getAnalysisScript(sheets);
+                    writeScriptFile("lasso.R", mthString);
+                    jobIds.add(submitToSGE("lasso"));
+                } else if (method.equals("univariate")) {
+                    Univariate mth = new Univariate();
+                    String mthString = mth.getAnalysisScript(sheets);
+                    writeScriptFile("univariate.R", mthString);
+                    jobIds.add(submitToSGE("univariate"));
                 }
-            } else if (method.equals("en")) {
-                ElasticNet mth = new ElasticNet();
-                String mthString = mth.getAnalysisScript(sheets);
-                writeScriptFile("en.R", mthString);
-                jobIds.add(submitToSGE("en"));
-            } else if (method.equals("svm")) {
-                SVM mth = new SVM();
-                String mthString = mth.getAnalysisScript(sheets);
-                writeScriptFile("svm.R", mthString);
-                jobIds.add(submitToSGE("svm"));
-            } else if (method.equals("pcr")) {
-                PCR mth = new PCR();
-                String mthString = mth.getAnalysisScript(sheets);
-                writeScriptFile("pcr.R", mthString);
-                jobIds.add(submitToSGE("pcr"));
-            } else if (method.equals("pls")) {
-                PartialLeasedSquares mth = new PartialLeasedSquares();
-                String mthString = mth.getAnalysisScript(sheets);
-                writeScriptFile("pls.R", mthString);
-                jobIds.add(submitToSGE("pls"));
-            } else if (method.equals("lasso")) {
-                Lasso mth = new Lasso();
-                String mthString = mth.getAnalysisScript(sheets);
-                writeScriptFile("lasso.R", mthString);
-                jobIds.add(submitToSGE("lasso"));
-            } else if (method.equals("univariate")) {
-                Univariate mth = new Univariate();
-                String mthString = mth.getAnalysisScript(sheets);
-                writeScriptFile("univariate.R", mthString);
-                jobIds.add(submitToSGE("univariate"));
             }
-        }
-        //Always run the RSessionInfo job
-        RSessionInfo rsi = new RSessionInfo();
-        String mthString = rsi.getAnalysisScript(sheets);
-        writeScriptFile("sessionInfo.R", mthString);
-        jobIds.add(submitToSGE("sessionInfo"));
+            //Always run the RSessionInfo job
+            RSessionInfo rsi = new RSessionInfo();
+            String mthString = rsi.getAnalysisScript(sheets);
+            writeScriptFile("sessionInfo.R", mthString);
+            jobIds.add(submitToSGE("sessionInfo"));
 
+        } catch (IOException e) {
+            addActionError("qsub not found, please check your SGE configuration");//TODO: check
+            return ERROR;//TODO: configure
+        }
         // TODO: log userId or sessionID as primary key? / method / jobId / startTime / sessionId / (finishTime <- status update daemon).
 
         LOG.log(Level.INFO, "Submitted {0} jobs to SGE.", jobIds.size());
+
+        //TODO: session reset?
 
         //Send out the email with details
         //Session invalidate and forward last details via request
@@ -143,7 +150,9 @@ public class RunAnalysisAction extends ActionSupport implements ServletRequestAw
                 "#!/bin/sh\ncd " + getTempDir() + getRequest().getSession().getId() + "\nR --no-save < " + scriptName + ".R\n");
         //Submit jobs to the SGE QUEUE
         //FIXME: We should add an parameter if the current job (e.g. the RF job) will use multiple CPU's
-        int jobId = CmdExec.ExecuteQSubCmd(getTempDir() + getRequest().getSession().getId() + "/", scriptName);
+        int jobId = 0;
+        jobId = CmdExec.ExecuteQSubCmd(getTempDir() + getRequest().getSession().getId() + "/", scriptName);
+
         if (jobId == 0) {
             LOG.severe("error during submission");//TODO: implement exception?
         } else {

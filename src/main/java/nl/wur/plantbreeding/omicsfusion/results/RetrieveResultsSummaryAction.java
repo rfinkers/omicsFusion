@@ -358,6 +358,13 @@ public class RetrieveResultsSummaryAction extends RetrieveResultsSummaryValidati
         }
     }
 
+    /**
+     *
+     * @param sessionID
+     * @return
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
     private HashMap<String, ArrayList<CsvSummaryDataType>> getMethodsWithResultsSummaryFiles(String sessionID) throws FileNotFoundException, IOException {
         HashMap<String, ArrayList<CsvSummaryDataType>> results = new HashMap<String, ArrayList<CsvSummaryDataType>>();
         //FIXME: hardcoded
