@@ -27,9 +27,7 @@ import org.jfree.data.xy.DefaultXYDataset;
  */
 public class PredictorResponseXYScatterAction extends PredictorResponseXYScatterForm implements ServletRequestAware {
 
-    /** The logger */
-    private static final Logger LOG = Logger.getLogger(PredictorResponseXYScatterAction.class.getName());
-    /** Serial Version UID */
+     /** Serial Version UID */
     private static final long serialVersionUID = 100906L;
     /** Chart object */
     private JFreeChart chart;
@@ -41,9 +39,13 @@ public class PredictorResponseXYScatterAction extends PredictorResponseXYScatter
 
         String variable = request.getParameter("variable");
 
-        System.out.println("Request: " + request.getRequestedSessionId());
+        LOG.info("Request: " + request.getRequestedSessionId());
 
-        LOG.log(Level.INFO, "Variable: {0}", variable);
+        LOG.info("Variable: {0}", variable);
+
+        //response vs continues or response vs discrete.
+        
+        //Should also include model summaries?
 
         DefaultXYDataset xyDataset = getDataSet();
 
@@ -61,7 +63,7 @@ public class PredictorResponseXYScatterAction extends PredictorResponseXYScatter
 
         Plot plot = new XYPlot(xyDataset, xAxis, yAxis, renderer);
         plot.setNoDataMessage("NO DATA");
-
+        
         // set my chart variable
         chart = new JFreeChart(
                 "Predictor vs Response",//TODO: add custom title
@@ -69,7 +71,7 @@ public class PredictorResponseXYScatterAction extends PredictorResponseXYScatter
                 plot,
                 false);
         chart.setBackgroundPaint(java.awt.Color.white);
-
+        
         LOG.info("Chart created");
 
         return SUCCESS;

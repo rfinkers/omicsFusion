@@ -5,7 +5,6 @@
 package nl.wur.plantbreeding.omicsfusion.results;
 
 import com.opensymphony.xwork2.ActionSupport;
-import java.util.logging.Logger;
 
 /**
  * Show a XY scatterplot for a predictor / response variable. This form contains the variables.
@@ -15,7 +14,7 @@ import java.util.logging.Logger;
 public class PredictorResponseXYScatterForm extends ActionSupport {
 
     /** The logger */
-    private static final Logger LOG = Logger.getLogger(PredictorResponseXYScatterForm.class.getName());
+    //private static final Logger LOG = Logger.getLogger(PredictorResponseXYScatterForm.class.getName());
     /** Serial Version UID */
     private static final long serialVersionUID = 100906L;
 
@@ -52,6 +51,9 @@ public class PredictorResponseXYScatterForm extends ActionSupport {
 
     @Override
     public void validate() {
+        LOG.info("sessionID: {0}", getSessionId());
+        LOG.info("Predictor: {0}", getPredictor());
+        LOG.info("Response : {0}", getResponse());
 //        if (getSessionId() == null) {
 //            addActionError("Add a valid sessionID");
 //        }

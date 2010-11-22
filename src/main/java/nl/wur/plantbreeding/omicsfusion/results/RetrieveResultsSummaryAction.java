@@ -202,7 +202,8 @@ public class RetrieveResultsSummaryAction extends RetrieveResultsSummaryValidati
         //Concatenate the HTML table.
         String table = "<table class='boxpart'>";
         //TODO: resource bundle
-        table += "<tr><th>Predictor</th>";
+        //FIXME: get response from the filesystem
+        table += "<tr><th>set repsonse name</th>";
         if (methResults.get("univariate_p") != null) {
             table += "<th style='background-color: #330099;'><a href=''>Univariate pval</a></th>";
         }
@@ -239,32 +240,34 @@ public class RetrieveResultsSummaryAction extends RetrieveResultsSummaryValidati
             int element = rank[i][0];
             table += "<tr align='right'>";
             table += "<td>";
-            String responseVariable = "";
+            String predictorVariable = "";
             //Only add the rowname once (from the first available result set).
+            //FIXME: rename responseVariable to predictor variable?
             if (methResults.get("univariate_p") != null) {
-                responseVariable = univariate_p.get(element).getResponsVariable();
+                predictorVariable = univariate_p.get(element).getResponsVariable();
             } else if (methResults.get("univariate_bh") != null) {
-                responseVariable = univariate_bh.get(element).getResponsVariable();
+                predictorVariable = univariate_bh.get(element).getResponsVariable();
             } else if (methResults.get("rf") != null) {
-                responseVariable = lasso.get(element).getResponsVariable();
+                predictorVariable = lasso.get(element).getResponsVariable();
             } else if (methResults.get("svm") != null) {
-                responseVariable = svm.get(element).getResponsVariable();
+                predictorVariable = svm.get(element).getResponsVariable();
             } else if (methResults.get("pcr") != null) {
-                responseVariable = pcr.get(element).getResponsVariable();
+                predictorVariable = pcr.get(element).getResponsVariable();
             } else if (methResults.get("pls") != null) {
-                responseVariable = pls.get(element).getResponsVariable();
+                predictorVariable = pls.get(element).getResponsVariable();
             } else if (methResults.get("ridge") != null) {
-                responseVariable = ridge.get(element).getResponsVariable();
+                predictorVariable = ridge.get(element).getResponsVariable();
             } else if (methResults.get("lasso") != null) {
-                responseVariable = rf.get(element).getResponsVariable();
+                predictorVariable = rf.get(element).getResponsVariable();
             } else if (methResults.get("en") != null) {
-                responseVariable = en.get(element).getResponsVariable();
+                predictorVariable = en.get(element).getResponsVariable();
             } else if (methResults.get("spls") != null) {
-                responseVariable = spls.get(element).getResponsVariable();
+                predictorVariable = spls.get(element).getResponsVariable();
             }
             //table row annotation & url
-            table += "<a href='" + baseURL + "/results/predRespXYScatter?variable=" + responseVariable
-                    + "&predictor=trait'>" + responseVariable + "</a>";//TODO: add URL, use baseURL!
+            //Set sessionID & responsevariable on the request scope? Only predictor via URL
+            table += "<a href='" + baseURL + "/results/predRespXYScatter?predictor=" + predictorVariable
+                    + "&response=traitName&session="+getSessionId()+"'>" + predictorVariable + "</a>";//TODO: add URL
             table += "</td>";
             //Results
             if (methResults.get("univariate_p") != null) {

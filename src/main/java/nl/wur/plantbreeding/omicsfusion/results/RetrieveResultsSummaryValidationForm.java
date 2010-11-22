@@ -10,7 +10,7 @@ import nl.wur.plantbreeding.logic.util.Validation;
 
 /**
  *
- * @author finke002
+ * @author Richard Finkers
  */
 public class RetrieveResultsSummaryValidationForm extends ActionSupport {
 

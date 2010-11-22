@@ -4,6 +4,11 @@
         "http://struts.apache.org/dtds/struts-2.0.dtd">
 
 <struts>
+        <package name="startSubmitWizard" namespace="/userRegistration" extends="struts-default">
+        <action name="startSubmitWizard" class="nl.wur.plantbreeding.omicsfusion.wizard.StartSubmitWizardAction">
+            <result name="success">/submit/userDetails.jsp</result>
+        </action>
+    </package>
     <package name="userDetails" namespace="/userRegistration" extends="struts-default">
         <action name="userDetails" class="nl.wur.plantbreeding.omicsfusion.wizard.UserDetailsAction">
             <result name="input">/submit/userDetails.jsp</result>
