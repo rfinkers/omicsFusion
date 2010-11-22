@@ -38,7 +38,7 @@ public class CmdExec {
             //TODO: -pe MPI 4 my_job.pbs
             //TODO: tune priority?
             //TODO: -P omicsFusion -> project name
-            p = Runtime.getRuntime().exec("qsub -S /bin/bash -p 10 -pe MPI -q stat -M richard.finkers@wur.nl " + executionDir + method + ".pbs");
+            p = Runtime.getRuntime().exec("qsub -S /bin/bash -p 10 -pe MPI 4 -q stat -M richard.finkers@wur.nl " + executionDir + method + ".pbs");
         } else {
             p = Runtime.getRuntime().exec("qsub -S /bin/bash -q stat " + executionDir + method + ".pbs");
         }

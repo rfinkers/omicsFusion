@@ -30,7 +30,7 @@ public class Univariate extends Analysis {
         //run the analysis
         rCode += "for(i in 1:dim(DesignMatrix)[2])\n";
         rCode += "{\n";
-        rCode += "    lmres<-lm(dataSet$BRIX_P ~ DesignMatrix[,i])\n";//FIXME: hardcoded
+        rCode += "    lmres<-lm(dataSet$Response ~ DesignMatrix[,i])\n";//FIXME: hardcoded
         rCode += "    anovares<-anova(lmres)\n";
         rCode += "    sumres<-summary(lmres)\n";
         rCode += "    r2[i]<-sumres$r.squared\n";
