@@ -26,7 +26,7 @@ public class CSV {
     /**
      * Read the summary CSV files for a method.
      * @param fileName Name of the result file
-     * @return
+     * @return A list containing the data points from the parsed CSV file.
      * @throws FileNotFoundException
      * @throws IOException
      */

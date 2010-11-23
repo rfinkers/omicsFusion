@@ -33,7 +33,8 @@ public class DataUploadAction extends DataUploadValidationForm implements Servle
         try {
 
             LOG.info("Execute upload");
-            String resultsDirectory = System.getProperty("java.io.tmpdir");
+            //String resultsDirectory = System.getProperty("java.io.tmpdir");
+            String resultsDirectory = request.getSession().getServletContext().getInitParameter("resultsDirectory");
             if (!(resultsDirectory.endsWith("/") || resultsDirectory.endsWith("\\"))) {
                 resultsDirectory += System.getProperty("file.separator");
             }

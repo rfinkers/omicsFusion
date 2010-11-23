@@ -34,11 +34,9 @@ public class CmdExec {
         Process p;
         if (method.equals("rf") || method.equals("spls") || method.equals("ridge")) {
             //TODO: -q queue my_job.pbs
-            //TODO: get queue nane from context
-            //TODO: -pe MPI 4 my_job.pbs
-            //TODO: tune priority?
             //TODO: -P omicsFusion -> project name
-            p = Runtime.getRuntime().exec("qsub -S /bin/bash -p 10 -pe MPI 4 -q stat -M richard.finkers@wur.nl " + executionDir + method + ".pbs");
+            //TODO: queue from initParameters
+            p = Runtime.getRuntime().exec("qsub -S /bin/bash -p -100 -pe MPI 4 -q stat -M richard.finkers@wur.nl " + executionDir + method + ".pbs");
         } else {
             p = Runtime.getRuntime().exec("qsub -S /bin/bash -q stat " + executionDir + method + ".pbs");
         }
@@ -67,7 +65,7 @@ public class CmdExec {
     /**
      * Check the status of the jobs with the SGE cluster.
      * @param jobId Job to check.
-     * @return
+     * @return true if jobID does not exist on the SGE queue.
      * @throws IOException
      * @throws InterruptedException
      */

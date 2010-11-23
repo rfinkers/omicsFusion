@@ -17,9 +17,9 @@ public class Validation {
     }
 
     /**
-     * Validate if String contains special characters
+     * Validate if String contains special characters.
      * @param validation
-     * @return boolean
+     * @return TRUE if string contains special characters.
      */
     public static boolean containsSpecialCharactersCheck(String validation) {
         if (validation == null) {
@@ -36,9 +36,10 @@ public class Validation {
     }
 
     /**
-     * Validates int
+     * Validates int.
+     * TODO: int cannot store these characters anyway?
      * @param validation
-     * @return boolean
+     * @return TRUE if string contains special characters.
      */
     public static boolean containsSpecialCharactersCheck(int validation) {
         Pattern pattern = Pattern.compile("[!@#$%&|\\+?\\*;\"\']");
@@ -69,7 +70,7 @@ public class Validation {
     /**
      * See if float contains letters
      * @param floatValidation
-     * @return
+     * @return TRUE if string contains special characters.
      */
     public static boolean floatContainsLetters(String floatValidation) {
         Pattern digits = Pattern.compile("[A-Za-z]+");

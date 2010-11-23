@@ -135,7 +135,7 @@ public class RunAnalysisAction extends ActionSupport implements ServletRequestAw
      */
     public void writeScriptFile(String scriptName, String script) throws IOException {
         WriteFile wf = new WriteFile();
-        wf.WriteFile(getTempDir() + getRequest().getSession().getId() + "/" + scriptName, script);
+        wf.WriteFile(getResultsDir() + getRequest().getSession().getId() + "/" + scriptName, script);
     }
 
     /**
@@ -146,12 +146,12 @@ public class RunAnalysisAction extends ActionSupport implements ServletRequestAw
      */
     public int submitToSGE(String scriptName) throws IOException {
         WriteFile wf = new WriteFile();
-        wf.WriteFile(getTempDir() + getRequest().getSession().getId() + "/" + scriptName + ".pbs",
-                "#!/bin/sh\ncd " + getTempDir() + getRequest().getSession().getId() + "\nR --no-save < " + scriptName + ".R\n");
+        wf.WriteFile(getResultsDir() + getRequest().getSession().getId() + "/" + scriptName + ".pbs",
+                "#!/bin/sh\ncd " + getResultsDir() + getRequest().getSession().getId() + "\nR --no-save < " + scriptName + ".R\n");
         //Submit jobs to the SGE QUEUE
         //FIXME: We should add an parameter if the current job (e.g. the RF job) will use multiple CPU's
         int jobId = 0;
-        jobId = CmdExec.ExecuteQSubCmd(getTempDir() + getRequest().getSession().getId() + "/", scriptName);
+        jobId = CmdExec.ExecuteQSubCmd(getResultsDir() + getRequest().getSession().getId() + "/", scriptName);
 
         if (jobId == 0) {
             LOG.severe("error during submission");//TODO: implement exception?
@@ -165,12 +165,13 @@ public class RunAnalysisAction extends ActionSupport implements ServletRequestAw
      * Get the temp directory from the system.
      * @return the location of the temp directory (including slash or backslash).
      */
-    private String getTempDir() {
-        String tempdir = System.getProperty("java.io.tmpdir");
-        if (!(tempdir.endsWith("/") || tempdir.endsWith("\\"))) {
-            tempdir += System.getProperty("file.separator");
+    private String getResultsDir() {
+        //String resultsDirectory = System.getProperty("java.io.tmpdir");
+        String resultsDirectory = request.getSession().getServletContext().getInitParameter("resultsDirectory");
+        if (!(resultsDirectory.endsWith("/") || resultsDirectory.endsWith("\\"))) {
+            resultsDirectory += System.getProperty("file.separator");
         }
-        return tempdir;
+        return resultsDirectory;
     }
 
     @Override
