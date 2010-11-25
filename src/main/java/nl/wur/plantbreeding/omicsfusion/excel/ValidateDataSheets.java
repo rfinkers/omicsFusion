@@ -13,13 +13,12 @@ import java.util.logging.Logger;
 import nl.wur.plantbreeding.omicsfusion.utils.Constants;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
 
 /**
  *
  * @author Richard Finkers
  */
-public class ValidateDataSheets {
+public class ValidateDataSheets extends ManipulateExcelSheet {
 
     /** The logger */
     private static final Logger LOG = Logger.getLogger(ValidateDataSheets.class.getName());
@@ -62,18 +61,6 @@ public class ValidateDataSheets {
 
     public static void validatePredictResponseSheet() {
         //TODO: implement validatePredictResponseSheet
-    }
-
-    /**
-     * Load an excel sheet from the file system.
-     * @param excelSheet
-     * @return
-     * @throws FileNotFoundException
-     * @throws IOException
-     * @throws InvalidFormatException
-     */
-    private static Workbook loadExcelSheet(File excelSheet) throws FileNotFoundException, IOException, InvalidFormatException {
-        return WorkbookFactory.create(new FileInputStream(excelSheet)); //Is also check for valid workbook
     }
 
     /**

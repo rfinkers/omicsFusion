@@ -1,10 +1,16 @@
 package nl.wur.plantbreeding.omicsfusion.excel;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.ss.util.CellReference;
 
 /**
@@ -49,5 +55,17 @@ public class ManipulateExcelSheet {
                 }
             }
         }
+    }
+
+        /**
+     * Load an excel sheet from the file system.
+     * @param excelSheet
+     * @return
+     * @throws FileNotFoundException
+     * @throws IOException
+     * @throws InvalidFormatException
+     */
+    protected static Workbook loadExcelSheet(File excelSheet) throws FileNotFoundException, IOException, InvalidFormatException {
+        return WorkbookFactory.create(new FileInputStream(excelSheet)); //Is also check for valid workbook
     }
 }
