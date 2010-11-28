@@ -1,3 +1,4 @@
+
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
@@ -12,13 +13,27 @@
         <system>hudson</system>
         <url>http://dev2.plantbreeding.nl/hudson/job/omicsFusion/</url>
     </ciManagement>
+    <licenses>
+        <license>
+            <name>Apache 2</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+            <comments>A business-friendly OSS license</comments>
+        </license>
+    </licenses>
+    <organization>
+        <name>omicsools</name>
+        <url>http://www.finkers.tk</url>
+    </organization>
     <developers>
         <developer>
             <id>rf</id>
             <name>Richard Finkers</name>
             <email>richard.finkers@wur.nl</email>
+            <url>http://www.finkers.tk</url>
             <timezone>+1</timezone>
             <organization>Wageningen UR</organization>
+            <organizationUrl>http://www.finkers.tk</organizationUrl>
             <roles>
                 <role>Manager</role>
                 <role>developer</role>
