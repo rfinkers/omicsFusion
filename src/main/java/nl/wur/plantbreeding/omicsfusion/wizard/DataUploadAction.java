@@ -72,10 +72,12 @@ public class DataUploadAction extends DataUploadValidationForm implements Servle
 
             //TODO: should we prepare the list with selectionboxes here depending of the type of sheets?
         } catch (InvalidFormatException e) {
+            e.printStackTrace();
             addActionError(e.getMessage());
             return INPUT;
         } catch (DataSheetValidationException e) {
             addActionError(e.getMessage());
+            e.printStackTrace();
             return INPUT;
         } catch (FileNotFoundException e) {
             addActionError(e.getMessage());

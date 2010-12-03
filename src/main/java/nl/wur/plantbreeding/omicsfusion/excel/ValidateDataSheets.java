@@ -12,6 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import nl.wur.plantbreeding.omicsfusion.utils.Constants;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Workbook;
 
 /**
@@ -53,7 +54,8 @@ public class ValidateDataSheets extends ManipulateExcelSheet {
         predictorRows = checkWorkbookDimensions(predictorWorkbook, predictorSheet.getName(), Constants.MIN_PREDICTOR_COLUMNS + 1);// +1 because of columns containing the labels.
 
         if (predictorRows == responseRows) {
-            compareIndividualNames(responseWorkbook, predictorWorkbook);
+            //FIXME: temporarily disabled due to numeric / text column validation problem
+            //compareIndividualNames(responseWorkbook, predictorWorkbook);
         } else {
             throw new DataSheetValidationException("Number of individuals on the predictor and response variable sheets differ");
         }
@@ -86,7 +88,8 @@ public class ValidateDataSheets extends ManipulateExcelSheet {
         for (int i = 0; i < responseWorkbook.getSheetAt(0).getLastRowNum(); i++) {
             //Do not check the header row.
             if (i != 0) {
-                if (!responseWorkbook.getSheetAt(0).getRow(i).getCell(0).getStringCellValue().equals(predictorWorkbook.getSheetAt(0).getRow(i).getCell(0).getStringCellValue())) {
+                //field content can be text of numeric
+                if (!responseWorkbook.getSheetAt(0).getRow(i).getCell(0).equals(predictorWorkbook.getSheetAt(0).getRow(i).getCell(0))) {
                     int rowNumber = i + 1;
                     throw new DataSheetValidationException("The individual name in row:"
                             + rowNumber + " does not match for both sheets (" + responseWorkbook.getSheetAt(0).getRow(i).getCell(0).getStringCellValue() + "/" + predictorWorkbook.getSheetAt(0).getRow(i).getCell(0).getStringCellValue() + ")");

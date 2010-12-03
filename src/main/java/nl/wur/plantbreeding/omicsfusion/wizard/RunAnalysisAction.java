@@ -154,7 +154,7 @@ public class RunAnalysisAction extends ActionSupport implements ServletRequestAw
         jobId = CmdExec.ExecuteQSubCmd(getResultsDir() + getRequest().getSession().getId() + "/", scriptName);
 
         if (jobId == 0) {
-            LOG.severe("error during submission");//TODO: implement exception?
+            LOG.severe("error during submission");//TODO: implement exception? Also is thrown when a wrong queue name is selected
         } else {
             LOG.log(Level.INFO, "Subitted to que with jobId: {0}", jobId);
         }
