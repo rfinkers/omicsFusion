@@ -5,26 +5,18 @@
 --%>
 
 <%@ taglib prefix="s" uri="/struts-tags"%>
+<%@ taglib prefix="sj" uri="/struts-jquery-tags"%>
 
-<s:text name="welcome.heading" />
+<h1><s:text name="omicsFusion.heading" /></h1>
 
-<s:text name="omicsFusion.text" />
+<s:text name="omicsFusion.home.text" />
 
+<%--<s:url id="ajax" value="/submit/userDetails.jsp"/>
+<sj:a href="%{ajax}" button="true" targets="content" indicator="indicator" buttonIcon="ui-icon-play">Submit</sj:a>
+<sj:submit href="%{ajax}" button="true" value="Start wizard"/>--%>
+<s:form validate="false" action="/submit/userDetails.jsp">
+    <s:submit value="Start submission" />
+</s:form>
+<br/><br/>
 <s:text name="omicsFusion.lastUpdate"/>
-<h1>omicsFusion</h1>
-
-Flow of the website
-<ul>
-    <li>1 - Enter user details and show disclaimer?</li>
-    <li>Automatically generate a session token</li>
-    <li>2 - Upload excel</li>
-    <li>check excel</li>
-    <li>3 - Select methods</li>
-    <li>4 - run analysis</li>
-    <li>submit to SGE queue</li>
-    <li>5 - email results</li>
-    <li>show results using link in email</li>
-</ul>
-
-<s:a value="/submit/userDetails.jsp">Start</s:a>
 <!--TODO:different button?-->

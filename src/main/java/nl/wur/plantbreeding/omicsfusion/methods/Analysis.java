@@ -277,12 +277,12 @@ public class Analysis {
                 rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"pls\", metric = \"RMSE\", tuneLength = 10, trControl = innerLoop)\n";
             } else if (analysisMethod.equals("rf") || analysisMethod.equals("spls")) {
                 if (Constants.MAX_NUMBER_CPU > 1) {
+                    int workerCount = Constants.MAX_NUMBER_CPU - 1;
                     //TODO: start in the first itteration only? Then, move if statement to R level
                     //Required additional packages: foreach, iterators, codetools, Rmpi
                     rCode += "      library(doMPI)\n";
                     // there is also an: maxcores= parameter on startMPIcluster
-                    rCode += "      cl <- startMPIcluster(count = " + Constants.MAX_NUMBER_CPU + ", verbose = TRUE)\n";
-                    //TODO: count = 2 means two workers & one main?
+                    rCode += "      cl <- startMPIcluster(count = " + workerCount + ", verbose = TRUE)\n";
                     rCode += "      registerDoMPI(cl)\n";
                 }
                 if (analysisMethod.equals("rf")) {
@@ -312,7 +312,7 @@ public class Analysis {
                     rCode += "      lambda_" + i + "[, index] <- fit_" + i + "$bestTune$.lambda\n";
                 }
                 rCode += "      coefs_" + i + "[, index] <- as.matrix(coef(fit_" + i + "$finalModel, s = fit_" + i + "$finalModel$tuneValue$.lambda))\n";
-                //pridection on outer training set.
+                //predection on outer training set.
                 rCode += "      preds_" + i + " <- predict(fit_" + i + "$finalModel, newx = predictorTrainSet" + i + ", s = fit_" + i + "$finalModel$tuneValue$.lambda, type = \"response\")\n";
                 rCode += "      y_fit_" + i + " <- preds_" + i + "[, 1]\n";
             } else if (analysisMethod.equals("pcr") || analysisMethod.equals("pls")) {

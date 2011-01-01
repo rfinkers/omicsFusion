@@ -1,4 +1,4 @@
-<%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
+<%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="sj" uri="/struts-jquery-tags"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -19,14 +19,12 @@
         <meta name="reply-to" content="webmaster.plantbreeding@wur.nl" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
-<!--        <meta http-equiv="refresh" content="2;url<s:url/>"/> Only for wait.jsp / If thest?-->
-
         <!-- style sheets -->
         <link href="<s:url value="/css/themePBR.css"/>" rel="stylesheet" media="screen" type="text/css" title="Standaard" />
 
         <!-- taglib auto generated -->
         <s:head/>
-        <sj:head/>
+        <sj:head jqueryui="true"/>
 
         <!-- javascript. jQuery/ jQueryUI libraries are loaded via an alternative tag instead of script element. -->
         <!-- mbMenu -->

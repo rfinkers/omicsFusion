@@ -15,14 +15,13 @@ Form
 <s:fielderror/>
 <s:text name="uploadExcel.explanation"/>
 
-
-<s:form action="/userRegistration/dataUpload" enctype="multipart/form-data" >
-    <!-- TODO: use listKey instead of list?)
-    <s:file name="dataSheetResponseFile" key="dataSheetResponseFile" /><s:select key="dataset.type" name="responseType" headerValue="-- Please select --" headerKey="select" list="#{'ph':'Phenomics','me':'Metabolomics','tr':'Trascriptomics','ma':'Markers'}"/>
-    <s:file name="dataSheetPredictorFile" key="dataSheetPredictorFile"/><s:select key="dataset.type" name="predictorType" headerValue="-- Please select --" headerKey="select" list="#{'ph':'Phenomics','me':'Metabolomics','tr':'Trascriptomics','ma':'Markers'}"/>
     <!--    TODO: separate this from the lines above? Add instructions-->
-    Optionally, upload another excel to predict the response using this new set of predictors.
-    <br/>
+<s:form action="/userRegistration/dataUpload" enctype="multipart/form-data" >
+    <!-- TODO: use listKey instead of list?)-->
+    <s:file name="dataSheetResponseFile" key="dataSheetResponseFile" />
+    <s:select key="dataset.type" name="responseType" headerValue="-- Please select --" headerKey="select" list="#{'ph':'Phenomics','me':'Metabolomics','tr':'Trascriptomics','ma':'Markers'}"/>
+    <s:file name="dataSheetPredictorFile" key="dataSheetPredictorFile"/>
+    <s:select key="dataset.type" name="predictorType" headerValue="-- Please select --" headerKey="select" list="#{'ph':'Phenomics','me':'Metabolomics','tr':'Trascriptomics','ma':'Markers'}"/>
     <s:file name="dataSheetPredictResponseFile" key="dataSheetPredictResponseFile"/>
     <s:reset/><s:submit/>
 </s:form>

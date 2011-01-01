@@ -7,8 +7,6 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 
-Test: Navigation
-
 <!-- start vertical menu -->
 <s:div class="vertMenu">
     <table class="rootVoices vertical">

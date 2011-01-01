@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package nl.wur.plantbreeding.omicsfusion.utils;
 
 /**
@@ -19,9 +15,9 @@ public class Constants {
     public final static int MIN_RESPONSE_COLUMNS = 1;
     /** The total number of iterations on the dataset. */
     public static final int ITERATIONS = 10;//FIXME: set to 100 for final program.
-    /** outer cross validation (to optimize parameters. */
+    /** outer cross validation (to optimize parameters). */
     public static final int NUMBER_FOLDS_OUTER = 10;
-    /** inner cross validation (to optimize parameters. */
+    /** inner cross validation (to optimize parameters). */
     public static final int NUMBER_FOLDS_INNER = 10;
     /** How many CPU's can be used for one method. */
     public static final int MAX_NUMBER_CPU = 4;
