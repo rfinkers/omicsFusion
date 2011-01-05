@@ -5,10 +5,16 @@
 
 package nl.wur.plantbreeding.omicsfusion.dao;
 
+import java.util.logging.Logger;
+
 /**
  *
  * @author finke002
  */
 public class ExcelToDatabase {
+    private static final Logger LOG = Logger.getLogger(ExcelToDatabase.class.getName());
+
+    private ExcelToDatabase() {
+    }
 
 }

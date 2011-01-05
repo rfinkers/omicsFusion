@@ -46,7 +46,7 @@ public class DataUploadAction extends DataUploadValidationForm implements Servle
             //Copy the uploaded excel sheets to a temporary directory
             FileUtils.copyFile(getDataSheetPredictorFile(), predictorSheet);
             FileUtils.copyFile(getDataSheetResponseFile(), responseSheet);
-            File predictResponseSheet=null;
+            File predictResponseSheet = null;
             if (getDataSheetPredictResponseFile() != null) {
                 predictResponseSheet = new File(resultsDirectory + request.getSession().getId()
                         + "/" + getDataSheetPredictResponseFileFileName());
@@ -66,7 +66,7 @@ public class DataUploadAction extends DataUploadValidationForm implements Servle
                 ValidateDataSheets.validateExcelSheets(responseSheet, predictorSheet);
             }
 
-            if (predictResponseSheet!=null ){
+            if (predictResponseSheet != null) {
                 ValidateDataSheets.validatePredictResponseSheet();
             }
 

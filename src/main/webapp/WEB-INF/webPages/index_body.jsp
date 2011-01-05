@@ -14,7 +14,7 @@
 <%--<s:url id="ajax" value="/submit/userDetails.jsp"/>
 <sj:a href="%{ajax}" button="true" targets="content" indicator="indicator" buttonIcon="ui-icon-play">Submit</sj:a>
 <sj:submit href="%{ajax}" button="true" value="Start wizard"/>--%>
-<s:form validate="false" action="/submit/userDetails.jsp">
+<s:form validate="false" action="/userRegistration/startSubmitWizard">
     <s:submit value="Start submission" />
 </s:form>
 <br/><br/>

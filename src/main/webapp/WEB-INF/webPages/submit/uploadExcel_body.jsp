@@ -15,7 +15,7 @@ Form
 <s:fielderror/>
 <s:text name="uploadExcel.explanation"/>
 
-    <!--    TODO: separate this from the lines above? Add instructions-->
+<!--    TODO: separate this from the lines above? Add instructions-->
 <s:form action="/userRegistration/dataUpload" enctype="multipart/form-data" >
     <!-- TODO: use listKey instead of list?)-->
     <s:file name="dataSheetResponseFile" key="dataSheetResponseFile" />
@@ -25,3 +25,5 @@ Form
     <s:file name="dataSheetPredictResponseFile" key="dataSheetPredictResponseFile"/>
     <s:reset/><s:submit/>
 </s:form>
+
+

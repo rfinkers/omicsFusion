@@ -27,7 +27,7 @@ import org.jfree.data.xy.DefaultXYDataset;
  */
 public class PredictorResponseXYScatterAction extends PredictorResponseXYScatterForm implements ServletRequestAware {
 
-     /** Serial Version UID */
+    /** Serial Version UID */
     private static final long serialVersionUID = 100906L;
     /** Chart object */
     private JFreeChart chart;
@@ -44,7 +44,7 @@ public class PredictorResponseXYScatterAction extends PredictorResponseXYScatter
         LOG.info("Variable: {0}", variable);
 
         //response vs continues or response vs discrete.
-        
+
         //Should also include model summaries?
 
         DefaultXYDataset xyDataset = getDataSet();
@@ -63,7 +63,7 @@ public class PredictorResponseXYScatterAction extends PredictorResponseXYScatter
 
         Plot plot = new XYPlot(xyDataset, xAxis, yAxis, renderer);
         plot.setNoDataMessage("NO DATA");
-        
+
         // set my chart variable
         chart = new JFreeChart(
                 "Predictor vs Response",//TODO: add custom title
@@ -71,7 +71,7 @@ public class PredictorResponseXYScatterAction extends PredictorResponseXYScatter
                 plot,
                 false);
         chart.setBackgroundPaint(java.awt.Color.white);
-        
+
         LOG.info("Chart created");
 
         return SUCCESS;
@@ -104,7 +104,7 @@ public class PredictorResponseXYScatterAction extends PredictorResponseXYScatter
 
         //DefaultXYDataset xy = new GenotypeXYDataset("Genotype", data, genotypeLabels, genotypeLabels)
         //return xy;
-        return  new GenotypeXYDataset(SUCCESS, null, null, null);
+        return new GenotypeXYDataset(SUCCESS, null, null, null);
     }
 
     public JFreeChart getChart() {

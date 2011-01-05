@@ -36,7 +36,8 @@ public class CmdExec {
             //TODO: -q queue my_job.pbs
             //TODO: -P omicsFusion -> project name
             //TODO: queue from initParameters
-            p = Runtime.getRuntime().exec("qsub -S /bin/bash -p -100 -pe MPI 4 -q stat -M richard.finkers@wur.nl " + executionDir + method + ".pbs");
+            //TODO: replace email with email user?
+            p = Runtime.getRuntime().exec("qsub -S /bin/bash -p -100 -pe MPI 4 -q stat -m bea -M richard.finkers@wur.nl " + executionDir + method + ".pbs");
         } else {
             p = Runtime.getRuntime().exec("qsub -S /bin/bash -q stat " + executionDir + method + ".pbs");
         }

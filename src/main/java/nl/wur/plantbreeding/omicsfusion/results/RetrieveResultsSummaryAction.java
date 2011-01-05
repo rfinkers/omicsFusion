@@ -188,14 +188,8 @@ public class RetrieveResultsSummaryAction extends RetrieveResultsSummaryValidati
         }
 
 
-//        for (int[] is : rank) {
-//            System.out.println("Nr: " + is[0] + " rank: " + is[1]);
-//        }
         //Sort the array according to the rank
         sortRankArray(rank);
-//        for (int[] is : rank) {
-//            System.out.println("Nr: " + is[0] + " rank: " + is[1]);
-//        }
 
         String baseURL = request.getContextPath();
         DecimalFormat df = new DecimalFormat("#.###");
@@ -267,7 +261,7 @@ public class RetrieveResultsSummaryAction extends RetrieveResultsSummaryValidati
             //table row annotation & url
             //Set sessionID & responsevariable on the request scope? Only predictor via URL
             table += "<a href='" + baseURL + "/results/predRespXYScatter?predictor=" + predictorVariable
-                    + "&response=traitName&session="+getSessionId()+"'>" + predictorVariable + "</a>";//TODO: add URL
+                    + "&response=traitName&session=" + getSessionId() + "'>" + predictorVariable + "</a>";//TODO: add URL
             table += "</td>";
             //Results
             if (methResults.get("univariate_p") != null) {
@@ -371,48 +365,48 @@ public class RetrieveResultsSummaryAction extends RetrieveResultsSummaryValidati
     private HashMap<String, ArrayList<CsvSummaryDataType>> getMethodsWithResultsSummaryFiles(String sessionID) throws FileNotFoundException, IOException {
         HashMap<String, ArrayList<CsvSummaryDataType>> results = new HashMap<String, ArrayList<CsvSummaryDataType>>();
         //FIXME: hardcoded
-        String tempDir = null;
+        String resultsDirectory = request.getSession().getServletContext().getInitParameter("resultsDirectory");
         if (sessionID == null || sessionID.isEmpty()) {
-            tempDir = "/home/finke002/Desktop/d89339e9c510a1e4e13ce46cc02b/";//Work
+            resultsDirectory = "/home/finke002/Desktop/d89339e9c510a1e4e13ce46cc02b/";//Work
 //        String tempDir = "/home/finke002/Desktop/e125586fcf9ba1b02a33093a2c17ex/";//CE Flesh
 //        String tempDir = "/home/finke002/Desktop/81df58ab8635eaea6211020de5b5/";//BRIX
 //        String tempDir = "/tmp/d2159ab79390aae6f5aea5e08254/";
         } else {
-            tempDir = System.getProperty("java.io.tmpdir") + "/" + sessionID + "/";//TODO:check
+            resultsDirectory += "/" + sessionID + "/";
         }
 
-        LOG.log(Level.INFO, "Tempdir: {0}", tempDir);
+        LOG.log(Level.INFO, "Tempdir: {0}", resultsDirectory);
 
 
-        if (FileOrDirectoryExists.FileOrDirectoryExists(tempDir + "LASSO_coef_Sum.csv") == true) {
-            results.put("lasso", CSV.readSummaryCsv(tempDir + "LASSO_coef_Sum.csv"));
+        if (FileOrDirectoryExists.FileOrDirectoryExists(resultsDirectory + "LASSO_coef_Sum.csv") == true) {
+            results.put("lasso", CSV.readSummaryCsv(resultsDirectory + "LASSO_coef_Sum.csv"));
         }
-        if (FileOrDirectoryExists.FileOrDirectoryExists(tempDir + "RIDGE_coef_Sum.csv") == true) {
-            results.put("ridge", CSV.readSummaryCsv(tempDir + "RIDGE_coef_Sum.csv"));
+        if (FileOrDirectoryExists.FileOrDirectoryExists(resultsDirectory + "RIDGE_coef_Sum.csv") == true) {
+            results.put("ridge", CSV.readSummaryCsv(resultsDirectory + "RIDGE_coef_Sum.csv"));
         }
-        if (FileOrDirectoryExists.FileOrDirectoryExists(tempDir + "RF_varImp_Summary.csv") == true) {
-            results.put("rf", CSV.readSummaryCsv(tempDir + "RF_varImp_Summary.csv"));
+        if (FileOrDirectoryExists.FileOrDirectoryExists(resultsDirectory + "RF_varImp_Summary.csv") == true) {
+            results.put("rf", CSV.readSummaryCsv(resultsDirectory + "RF_varImp_Summary.csv"));
         }
-        if (FileOrDirectoryExists.FileOrDirectoryExists(tempDir + "EN_coef_Sum.csv") == true) {
-            results.put("en", CSV.readSummaryCsv(tempDir + "EN_coef_Sum.csv"));
+        if (FileOrDirectoryExists.FileOrDirectoryExists(resultsDirectory + "EN_coef_Sum.csv") == true) {
+            results.put("en", CSV.readSummaryCsv(resultsDirectory + "EN_coef_Sum.csv"));
         }
-        if (FileOrDirectoryExists.FileOrDirectoryExists(tempDir + "PCR_coef_Sum.csv") == true) {
-            results.put("pcr", CSV.readSummaryCsv(tempDir + "PCR_coef_Sum.csv"));
+        if (FileOrDirectoryExists.FileOrDirectoryExists(resultsDirectory + "PCR_coef_Sum.csv") == true) {
+            results.put("pcr", CSV.readSummaryCsv(resultsDirectory + "PCR_coef_Sum.csv"));
         }
-        if (FileOrDirectoryExists.FileOrDirectoryExists(tempDir + "PLS_coef_Sum.csv") == true) {
-            results.put("pls", CSV.readSummaryCsv(tempDir + "PLS_coef_Sum.csv"));
+        if (FileOrDirectoryExists.FileOrDirectoryExists(resultsDirectory + "PLS_coef_Sum.csv") == true) {
+            results.put("pls", CSV.readSummaryCsv(resultsDirectory + "PLS_coef_Sum.csv"));
         }
-        if (FileOrDirectoryExists.FileOrDirectoryExists(tempDir + "SPLS_coef_Sum.csv") == true) {
-            results.put("spls", CSV.readSummaryCsv(tempDir + "SPLS_coef_Sum.csv"));
+        if (FileOrDirectoryExists.FileOrDirectoryExists(resultsDirectory + "SPLS_coef_Sum.csv") == true) {
+            results.put("spls", CSV.readSummaryCsv(resultsDirectory + "SPLS_coef_Sum.csv"));
         }
-        if (FileOrDirectoryExists.FileOrDirectoryExists(tempDir + "SVM_coef_Sum.csv") == true) {
-            results.put("svm", CSV.readSummaryCsv(tempDir + "SVM_coef_Sum.csv"));
+        if (FileOrDirectoryExists.FileOrDirectoryExists(resultsDirectory + "SVM_coef_Sum.csv") == true) {
+            results.put("svm", CSV.readSummaryCsv(resultsDirectory + "SVM_coef_Sum.csv"));
         } //Disable univariate for now
-        if (FileOrDirectoryExists.FileOrDirectoryExists(tempDir + "univariate_bh_coef.csv") == true) {
-            results.put("univariate_bh", CSV.readSummaryCsv(tempDir + "univariate_bh_coef.csv"));
+        if (FileOrDirectoryExists.FileOrDirectoryExists(resultsDirectory + "univariate_bh_coef.csv") == true) {
+            results.put("univariate_bh", CSV.readSummaryCsv(resultsDirectory + "univariate_bh_coef.csv"));
         }
-        if (FileOrDirectoryExists.FileOrDirectoryExists(tempDir + "univariate_p_coef.csv") == true) {
-            results.put("univariate_p", CSV.readSummaryCsv(tempDir + "univariate_p_coef.csv"));
+        if (FileOrDirectoryExists.FileOrDirectoryExists(resultsDirectory + "univariate_p_coef.csv") == true) {
+            results.put("univariate_p", CSV.readSummaryCsv(resultsDirectory + "univariate_p_coef.csv"));
         }
         return results;
     }

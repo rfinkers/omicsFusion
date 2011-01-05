@@ -4,11 +4,18 @@
  */
 package nl.wur.plantbreeding.omicsfusion.email;
 
+import java.util.logging.Logger;
 import javax.mail.Authenticator;
 import javax.mail.PasswordAuthentication;
 
+/**
+ * 
+ * @author Richard Finkers
+ */
 public class SMTPAuthenticator extends Authenticator {
 
+    /** The logger */
+    private static final Logger LOG = Logger.getLogger(SMTPAuthenticator.class.getName());
     private String username;
     private String password;
     private boolean needAuth;

@@ -15,6 +15,8 @@ import org.apache.struts2.interceptor.ServletRequestAware;
  */
 public class StartSubmitWizardAction extends ActionSupport implements ServletRequestAware {
 
+    /** SUID */
+    private static final long serialVersionUID = 050111L;
     /** The logger */
     private static final Logger LOG = Logger.getLogger(StartSubmitWizardAction.class.getName());
     /** the request */

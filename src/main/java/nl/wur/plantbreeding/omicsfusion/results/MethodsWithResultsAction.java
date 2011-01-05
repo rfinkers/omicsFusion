@@ -21,7 +21,6 @@ public class MethodsWithResultsAction extends MethodsWithResultsForm implements 
     /** The logger */
     private static final Logger LOG = Logger.getLogger(MethodsWithResultsAction.class.getName());
 
-    
     //TODO: Shares method with retrieveSummaryAction. Refractor to have one results utility class?
     @Override
     public void setServletRequest(HttpServletRequest request) {
