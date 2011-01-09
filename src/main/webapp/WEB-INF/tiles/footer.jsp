@@ -2,11 +2,10 @@
 <%@ taglib prefix="s" uri="/struts-tags"%>
 
 <hr/>
+<img src="<s:url value="/images/eusol_1.jpg"/>" alt="<s:text name="footer.potato.hand.alt"/>"/>
+<img src="<s:url value="/images/eusol_2.jpg"/>" alt="<s:text name="footer.tomato.eating.alt"/>"/>
+<img src="<s:url value="/images/eusol_4.jpg"/>" alt="<s:text name="footer.potato.alt"/>"/>
+<img src="<s:url value="/images/eusol_5.jpg"/>" alt="<s:text name="footer.tomato.alt"/>"/>
+<img src="<s:url value="/images/eusol_6.jpg"/>" alt="<s:text name="footer.potato.flower.alt"/>"/>
+<s:a href="http://www.plantbreeding.wur.nl"><img src="<s:url value="/images/wur_logo.gif"/>"  alt="<s:text name="plantbreeding.alt.alt"/>"/></s:a>
 <s:url />
-<!--<html:img bundle="images" pageKey="footer.potato.hand" altKey="footer.potato.hand.alt" />
-<html:img bundle="images" pageKey="footer.tomato.eating" altKey="footer.tomato.eating.alt" />
-<html:img bundle="images" pageKey="footer.potato" altKey="footer.potato.alt" />
-<html:img bundle="images" pageKey="footer.tomato" altKey="footer.tomato.alt" />
-<html:img bundle="images" pageKey="footer.potato.flower" altKey="footer.potato.flower.alt" />
-<html:link bundle="images" href="http://www.plantbreeding.wur.nl" target="_bank"><html:img bundle="images" pageKey="plantbreeding.logo" altKey="plantbreeding.alt" /></html:link>-->
-

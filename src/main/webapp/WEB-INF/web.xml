@@ -12,14 +12,18 @@
         <param-value>stat</param-value>
     </context-param>
     <context-param>
+        <param-name>sendEmail</param-name>
+        <param-value>false</param-value>
+    </context-param>
+    <context-param>
         <description>Server used to send emails</description>
         <param-name>smtpServer</param-name>
-        <param-value>net.wur.nl</param-value>
+        <param-value>localhost</param-value>
     </context-param>
     <context-param>
         <description>From email address.</description>
-        <param-name>fromEmail</param-name>
-        <param-value>webmaster.plantbreeding@wur.nl</param-value>
+        <param-name>adminEmail</param-name>
+        <param-value>breedb@xs4all.nl</param-value>
     </context-param>
     <context-param>
         <param-name>tilesDefinitions</param-name>

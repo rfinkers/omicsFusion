@@ -7,6 +7,7 @@ package nl.wur.plantbreeding.omicsfusion.wizard;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
+import nl.wur.plantbreeding.omicsfusion.utils.Constants;
 import org.apache.struts2.interceptor.ServletRequestAware;
 
 /**
@@ -55,7 +56,7 @@ public class MethodSelectionAction extends MethodSelectionValidationForm impleme
             methods.add("univariate");
         }
 
-        request.getSession().setAttribute("methods", methods);
+        request.getSession().setAttribute(Constants.SelectedMethods, methods);
 
         return SUCCESS;
     }

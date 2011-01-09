@@ -15,7 +15,7 @@ Form
 
 <s:text name="userDetails.explanation"/>
 <s:form action="/userRegistration/userDetails" >
-    <s:textfield name="user.username" label="Username"/>
+    <%--<s:textfield name="user.username" label="Username"/>--%>
     <s:textfield key="name" />
     <s:textfield key="email" />
     <s:textfield key="affiliation" />

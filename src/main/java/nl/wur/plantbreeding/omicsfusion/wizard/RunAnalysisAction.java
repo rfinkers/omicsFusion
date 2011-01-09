@@ -1,5 +1,21 @@
+/*
+ * Copyright 2011 omicstools.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package nl.wur.plantbreeding.omicsfusion.wizard;
 
+import static nl.wur.plantbreeding.omicsfusion.email.SubmissionCompleteEmail.SubmissionCompleteEmail;
 import com.opensymphony.xwork2.ActionSupport;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -7,6 +23,7 @@ import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
+import nl.wur.plantbreeding.omicsfusion.email.ExceptionEmail;
 import nl.wur.plantbreeding.omicsfusion.methods.ElasticNet;
 import nl.wur.plantbreeding.omicsfusion.methods.Lasso;
 import nl.wur.plantbreeding.omicsfusion.methods.PCR;
@@ -120,10 +137,18 @@ public class RunAnalysisAction extends ActionSupport implements ServletRequestAw
 
         LOG.log(Level.INFO, "Submitted {0} jobs to SGE.", jobIds.size());
 
-        //TODO: session reset?
-
         //Send out the email with details
-        //Session invalidate and forward last details via request
+        try {
+            // TODO: add user details and sessionID to constructor
+            SubmissionCompleteEmail();
+        } catch (Exception e) {
+            LOG.log(Level.INFO, "exception on email initialization");
+            e.printStackTrace();
+            ExceptionEmail.SendExceptionEmail(e);
+            return ERROR;
+        }
+
+        //Session invalidate and forward last details via request. Moved to the submit
         return SUCCESS;
     }
 

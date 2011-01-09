@@ -6,5 +6,5 @@
 
 <%@ taglib prefix="s" uri="/struts-tags"%>
 
-running/ refresh?
-TODO: resource bundle
+<h2><s:text name="omicsFusion.heading"/></h2>
+<s:text name="omicsFusion.submitted"/>

@@ -8,7 +8,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
+import nl.wur.plantbreeding.omicsfusion.email.ExceptionEmail;
 import nl.wur.plantbreeding.omicsfusion.excel.DataSheetValidationException;
+import nl.wur.plantbreeding.omicsfusion.utils.Constants;
 import org.apache.commons.io.FileUtils;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.struts2.interceptor.ServletRequestAware;
@@ -88,6 +90,7 @@ public class DataUploadAction extends DataUploadValidationForm implements Servle
         } catch (Exception e) {
             addActionError(e.getMessage());
             LOG.severe("Exception caught");
+            ExceptionEmail.SendExceptionEmail(e);
             return INPUT;
         }
         LOG.info("Action: upload data completed");
@@ -99,7 +102,7 @@ public class DataUploadAction extends DataUploadValidationForm implements Servle
             sheets.put("predictResponse", getDataSheetPredictResponseFileFileName());
         }
 
-        request.getSession().setAttribute("sheets", sheets);
+        request.getSession().setAttribute(Constants.DataUpload, sheets);
 
         return SUCCESS;
     }

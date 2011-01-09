@@ -16,6 +16,10 @@
         <put-attribute name="title" value="omicsFusion" />
         <put-attribute name="body" value="/WEB-INF/webPages/index_body.jsp" />
     </definition>
+        <definition name="about" extends="baseLayout">
+        <put-attribute name="title" value="About omicsFusion" />
+        <put-attribute name="body" value="/WEB-INF/webPages/about_body.jsp" />
+    </definition>
     <!--Error Pages-->
     <definition name="403" extends="baseLayout">
         <put-attribute name="title" value="403 - Not authorized" />
@@ -119,5 +123,10 @@
     <definition name="univariateResults" extends="baseLayout">
         <put-attribute name="title" value="omicsFusion" />
         <put-attribute name="body" value="/WEB-INF/webPages/results/univariateResults_body.jsp" />
+    </definition>
+    <!-- Methods summary -->
+    <definition name="methodsIndex" extends="baseLayout">
+        <put-attribute name="title" value="omicsFusion" />
+        <put-attribute name="body" value="/WEB-INF/webPages/methods/index_body.jsp" />
     </definition>
 </tiles-definitions>

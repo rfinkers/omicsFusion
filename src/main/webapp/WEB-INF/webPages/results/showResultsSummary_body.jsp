@@ -1,17 +1,16 @@
-<%-- 
+<%--
     Document   : index_body
     Created on : Apr 10, 2009, 7:09:46 PM
     Author     : finke002
 --%>
 
 <%@ taglib prefix="s" uri="/struts-tags"%>
-<%@taglib uri="http://displaytag.sf.net" prefix="display" %>
 
-<s:text name="welcome.heading" />
-show results
+<h2><s:text name="results.heading" /></h2>
 <s:actionerror/>
-get the sessionId from an input field
+<s:text name="results.introduction" />
+<br/><br/>
 <s:form action="/results/summaryResults" >
-    <s:textfield name="sessionId"/>
+    <s:textfield name="sessionId" size="26"/>
     <s:submit/>
 </s:form>

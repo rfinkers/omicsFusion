@@ -35,7 +35,7 @@ public class EmailSender {
      * @param auth
      * @param from
      */
-    public EmailSender(String smtpServer, String port, String user, String password, String auth, String from) {
+    protected EmailSender(String smtpServer, String port, String user, String password, String auth, String from) {
         this.smtpServer = smtpServer;
         this.port = port;
         this.user = user;

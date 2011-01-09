@@ -8,23 +8,17 @@
 <s:text name="analisis.methods.explanation"/>
 
 <s:form action="/userRegistration/methodSelection">
-    <!--    Univariate TODO: resource bundle-->
-    Machine learning
     <s:checkbox key="analysis.method.rf" name="rf" />
-<!--    TODO: remove SVM? or is disabled working-->
-<s:checkbox key="analysis.method.svm" name="svm" disabled="true"/>
-    Variable selection
+    <s:checkbox key="analysis.method.svm" name="svm" disabled="true"/>
     <s:checkbox key="analysis.method.lasso" name="lasso" checked="checked"/>
     <s:checkbox key="analysis.method.elasticNet" name="elasticNet" checked="checked"/>
     <s:checkbox key="analysis.method.spls" name="spls" checked="checked" selectAllLabel="Select All"/>
-    Regression
     <s:checkbox key="analysis.method.ridge" name="ridge" checked="checked"/>
     <s:checkbox key="analysis.method.pcr" name="pcr" checked="checked"/>
     <s:checkbox key="analysis.method.pls" name="pls"checked="checked" />    
-    Univariate
     <s:checkbox key="analysis.method.univariate" name="univariate" checked="checked"/>
     <!--TODO: select all / deselect all buttons-->
-    <s:text name="analysis.methods.variable.selection"/>
-
+    <!--TODO: is there a way to add categories to the different type of methods in the form?
+    <s:text name="analysis.methods.variable.selection"/>-->
     <s:submit key="method.submit"/> <s:reset key="button.reset"/>
 </s:form>
