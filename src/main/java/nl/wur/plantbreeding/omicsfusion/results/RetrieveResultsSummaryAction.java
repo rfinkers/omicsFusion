@@ -291,7 +291,7 @@ public class RetrieveResultsSummaryAction extends RetrieveResultsSummaryValidati
                 table += "<td bgcolor=\"" + pcr.get(element).getHtmlColor() + "\">" + df.format(pcr.get(element).getMean()) + " (" + df.format(pcr.get(element).getSd()) + ")</td>";
             }
             if (methResults.get("pls") != null) {
-                table += "<td bgcolor=\"" + pls.get(element).getHtmlColor() + "\">" + df.format(pls.get(element).getMean()) + " (" + df.format(pls.get(element).getSd()) + ")</td>";
+                table += "<td bgcolor=\"" + pls.get(element).getHtmlColor() + "\"><a alt=\"rank: " + pls.get(element).getRank() + "\">" + df.format(pls.get(element).getMean()) + " (" + df.format(pls.get(element).getSd()) + ")</a></td>";
             }
             if (methResults.get("ridge") != null) {
                 table += "<td bgcolor=\"" + ridge.get(element).getHtmlColor() + "\">" + df.format(ridge.get(element).getMean()) + " (" + df.format(ridge.get(element).getSd()) + ")</td>";
@@ -437,7 +437,7 @@ public class RetrieveResultsSummaryAction extends RetrieveResultsSummaryValidati
         Double value = Math.abs(result) - Math.abs(min);
         range *= 1000;
         value *= 1000;
-        int group = (int) Math.abs(value / (range / 20));
+        int group = (int) Math.abs(value / ( range / 20 ));
         //Part of the largest observations resolves to a value > 20 using
         //this equation. Set them manually to the max value.
         if (group > 20) {
