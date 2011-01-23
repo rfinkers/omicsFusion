@@ -142,11 +142,11 @@ public class DataUploadValidationForm extends ActionSupport {
 
     @Override
     public void validate() {
-        LOG.info("Start validation");
+        LOG.info("Start Excel form validation");
 
-        //Order of importance for the order that the messages are shown.
-        if (dataSheetResponseFile == null || dataSheetPredictorFile == null) {//TODO: via validation.xml?
-            addActionError("Please select a response file");//TODO: resource bundle
+        //Order of test is important for the order in which the messages are shown.
+        if (dataSheetResponseFile == null) {//TODO: via validation.xml?
+            addActionError(getText("select.response"));//"Please select a response file");//TODO: resource bundle
         }
         if (responseType.equals("select")) {//TODO: via validation.xml?
             addActionError("Please select the type of data for the response file");//TODO: resource bundle
@@ -161,11 +161,11 @@ public class DataUploadValidationForm extends ActionSupport {
         //TODO: filenames are not kept after validation error. Type, however, is kept.
 
         //        if(dataSheetFileFileName.equals("")){
-//              addActionError("please select a file");//TODO: via validation.xml?
+//              addActionError("please select a file");
 //        }
 
 //        if (file1==null){
-//            addActionError("please select a file");//TODO: via validation.xml?
+//            addActionError("please select a file");
 //        }
 //        if (file1.canRead() == false) {
 //            addActionError("cannot read file");

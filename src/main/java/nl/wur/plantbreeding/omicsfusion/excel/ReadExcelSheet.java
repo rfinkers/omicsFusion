@@ -1,6 +1,17 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright 2011 omicstools.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package nl.wur.plantbreeding.omicsfusion.excel;
 
@@ -10,12 +21,13 @@ import java.io.IOException;
 import nl.wur.plantbreeding.logic.jfreechart.GenotypeXYDataset;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.jfree.data.xy.DefaultXYDataset;
 
 /**
- *
+ * Read excel sheets.
  * @author Richard Finkers
+ * @version 1.0
  */
 public class ReadExcelSheet extends ManipulateExcelSheet {
 
@@ -34,33 +46,48 @@ public class ReadExcelSheet extends ManipulateExcelSheet {
 
 
         /** wb for the response variables */
-        Workbook responseWorkbook;
+        Sheet respWbSheet;
         /** wb for the predictor variables */
-        Workbook predictorWorkbook;
+        Sheet predWbSheet;
 
-        responseWorkbook = loadExcelSheet(responseSheet);
-        predictorWorkbook = loadExcelSheet(predictorSheet);
-        Row row0 = responseWorkbook.getSheetAt(0).getRow(0);
-        Row row1 = responseWorkbook.getSheetAt(0).getRow(1);
-        Row row2 = predictorWorkbook.getSheetAt(0).getRow(1);
+        respWbSheet = loadExcelSheet(responseSheet).getSheetAt(0);//trait
+        predWbSheet = loadExcelSheet(predictorSheet).getSheetAt(0);//matrix
 
-        row0.getLastCellNum();
 
-        double[][] data = new double[2][row0.getLastCellNum()];
-        String[] genotypeLabels = new String[row0.getLastCellNum()];
-        //skip header row!
-        if (row2.getCell(0).getStringCellValue().equals(predictor)) {
-            for (int i = 1; i < row0.getLastCellNum(); i++) {
-                data[0][i] = row1.getCell(i).getNumericCellValue();//predictor
-                data[1][i] = row2.getCell(i).getNumericCellValue();//response
-                genotypeLabels[i] = row0.getCell(i).getStringCellValue();
+        //TODO: refractor for sheet instead of row!
+        Row predictorRow = predWbSheet.getRow(0);//matrix
+
+        int i = 0;
+        try {
+            //Find the right column.
+            for (i = 1; i < predictorRow.getLastCellNum(); i++) {//ommit the header column for the genotypes
+                System.out.println("row header:" + predictorRow.getCell(i).getStringCellValue());
+                if (predictorRow.getCell(i).getStringCellValue().trim().equals(predictor)) {
+                    break;
+                }
             }
+        } catch (Exception e) {
+            //handle null pointer (empty column & int errors
+            System.out.println("ERROR: " + e.getCause());
         }
 
+        System.out.println("Need column: " + i);
+
+        System.out.println("predictor: " + predWbSheet.getLastRowNum() + " Cell: " + predictorRow.getLastCellNum());
+
+        double[][] data = new double[2][predWbSheet.getLastRowNum()];
+        String[] genotypeLabels = new String[predWbSheet.getLastRowNum()];
+        //skip header row!
+
+        for (int j = 1; j < predWbSheet.getLastRowNum(); j++) {
+            //TODO: check
+            data[0][j] = respWbSheet.getRow(j).getCell(1).getNumericCellValue();//predictor
+            data[1][j] = predWbSheet.getRow(j).getCell(i).getNumericCellValue();//response
+            genotypeLabels[j] = respWbSheet.getRow(j).getCell(0).getStringCellValue();
+        }
 
         /** The dataset */
-        DefaultXYDataset dataSet = new GenotypeXYDataset(predictor, data, genotypeLabels, genotypeLabels);
-        dataSet.addSeries("test", data);
+        DefaultXYDataset dataSet = new GenotypeXYDataset("Genotype", data, genotypeLabels, genotypeLabels);
 
         //return dataset
         return dataSet;

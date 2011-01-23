@@ -20,7 +20,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
@@ -56,38 +55,44 @@ public class PredictorResponseXYScatterAction extends PredictorResponseXYScatter
     public String execute() throws Exception {
 
         try {
-            //Trim if not null.. otherwise throw exception 
+            //Trim if not null.. otherwise throw exception
             String predictor = request.getParameter("predictor");
             String response = (String) request.getAttribute("response");
             String session = request.getParameter("session");
+
             Enumeration<String> parameterNames = request.getParameterNames();
-            
+
             while (parameterNames.hasMoreElements()) {
                 System.out.println("Element: " + parameterNames.nextElement());
             }
+
             LOG.log(Level.INFO, "cur ses  : {0}", request.getRequestedSessionId());//This is the current ID, not the resultset ID
             LOG.log(Level.INFO, "Predictor: {0}", predictor);
             LOG.log(Level.INFO, "Response : {0}", response);
             LOG.log(Level.INFO, "Session  : {0}", session);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
+            //TODO: Check
             e.printStackTrace();
         }
 
-        String session="d8933";
-        String response="X.294_0182";
-        String predictor="Brix_P";
+        //FIXME: hardcoded
+        String session = "d8933";
+        String response = "X.294_0182";
+        String predictor = "Brix_P";
         //response vs continues or response vs discrete.
 
         //Should also include model summaries?
-
+        LOG.info("get data");
         DefaultXYDataset xyDataset = getDataSet();
-
+        LOG.info("got data");
         ValueAxis xAxis = new NumberAxis("Predictor");
         ValueAxis yAxis = new NumberAxis("Response");
 
         //XYURLGenerator urlGen = new GenotypeXYUrlGenerator();
+        //urlGen.generateURL(xyDataset, 1, 1);
         XYToolTipGenerator tooltipGen = new GenotypeXYToolTipGenerator();
+        //dtooltipGen.generateToolTip(xyDataset, 25, 25);
+
 
         DefaultXYItemRenderer renderer = new DefaultXYItemRenderer();
 
@@ -95,8 +100,10 @@ public class PredictorResponseXYScatterAction extends PredictorResponseXYScatter
         renderer.setSeriesLinesVisible(0, false);
         renderer.setBaseOutlinePaint(Color.WHITE);
 
+
         Plot plot = new XYPlot(xyDataset, xAxis, yAxis, renderer);
         plot.setNoDataMessage("NO DATA");
+
 
         // set my chart variable
         chart = new JFreeChart(
@@ -106,12 +113,13 @@ public class PredictorResponseXYScatterAction extends PredictorResponseXYScatter
                 false);
         chart.setBackgroundPaint(java.awt.Color.white);
 
+
         LOG.info("Chart created");
 
         return SUCCESS;
     }
 
-    private DefaultXYDataset getDataSet() {
+    private DefaultXYDataset getTestDataSet() {
         // chart creation logic...
         //Read excel sheets
 
@@ -122,10 +130,12 @@ public class PredictorResponseXYScatterAction extends PredictorResponseXYScatter
 
         //x: predictor and y: response
 
-        double[][] data = new double[2][100];//TODO: 100 -> length results
-        String[] genotypeLabels = new String[100];//TODO: 100 -> length results
+        int nrOfDataPoints = 100;
 
-        for (int i = 0; i < 100; i++) {
+        double[][] data = new double[2][nrOfDataPoints];
+        String[] genotypeLabels = new String[nrOfDataPoints];
+
+        for (int i = 0; i < nrOfDataPoints; i++) {
             data[0][i] = i;//predictor
             data[1][i] = Math.random();//response
             genotypeLabels[i] = "test";
@@ -134,30 +144,28 @@ public class PredictorResponseXYScatterAction extends PredictorResponseXYScatter
         return xy;
     }
 
-    private DefaultXYDataset getDataSet2() {
+    private DefaultXYDataset getDataSet() {
         //FIXME: filenames currently hardcoded
-       String predictorFile="/home/finke002/d8933/CE_Flesh.xls";
-       String responseFile="/home/finke002/d8933/CE_Met.xls";
-       
-       File predFile = new File(predictorFile);
-       File respFile = new File(responseFile);
-       DefaultXYDataset readPredictorAndResponseValue;
+        String responseFile = "/home/finke002/omicsFusion/d8933/CE_Flesh.xls";
+        String predictorFile = "/home/finke002/omicsFusion/d8933/CE_Met.xls";
+
+        File predFile = new File(predictorFile);
+        File respFile = new File(responseFile);
+        DefaultXYDataset readPredictorAndResponseValue = null;
         try {
-            readPredictorAndResponseValue = ReadExcelSheet.readPredictorAndResponseValue(respFile, predFile, "X.294_0182");
-        }
-        catch (FileNotFoundException ex) {
+            LOG.info("try");
+            readPredictorAndResponseValue = ReadExcelSheet.readPredictorAndResponseValue(respFile, predFile, "294_0182");//TODO: trim X.?
+        } catch (FileNotFoundException ex) {
             Logger.getLogger(PredictorResponseXYScatterAction.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        catch (InvalidFormatException ex) {
+        } catch (InvalidFormatException ex) {
             Logger.getLogger(PredictorResponseXYScatterAction.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        catch (IOException ex) {
+        } catch (IOException ex) {
             Logger.getLogger(PredictorResponseXYScatterAction.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         //DefaultXYDataset xy = new GenotypeXYDataset("Genotype", data, genotypeLabels, genotypeLabels)
         //return xy;
-        return new GenotypeXYDataset("Genotype", null, null, null);
+        return readPredictorAndResponseValue;
     }
 
     public JFreeChart getChart() {
