@@ -31,8 +31,8 @@ public class PredictorResponseXYScatterForm extends ActionSupport {
     /** Serial Version UID */
     private static final long serialVersionUID = 100906L;
 
-//    /** session token */
-//    private String session;
+    /** session token */
+    private String session;
 //    /** predictor */
 //    private String predictor;
 //    /** response variable */
@@ -49,18 +49,18 @@ public class PredictorResponseXYScatterForm extends ActionSupport {
 //    public String getResponse() {
 //        return response;
 //    }
-//
+////
 //    public void setResponse(String response) {
 //        this.response = response.trim();
 //    }
+
+    public String getSession() {
+        return session;
+    }
 //
-//    public String getSession() {
-//        return session;
-//    }
-//
-//    public void setSession(String sessionId) {
-//        this.session = sessionId.trim();
-//    }
+    public void setSession(String sessionId) {
+        this.session = sessionId.trim();
+    }
 
     @Override
     public void validate() {

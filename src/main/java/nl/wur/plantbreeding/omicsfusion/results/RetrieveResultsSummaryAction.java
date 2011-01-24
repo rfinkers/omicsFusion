@@ -383,7 +383,8 @@ public class RetrieveResultsSummaryAction extends RetrieveResultsSummaryValidati
 //        String tempDir = "/home/finke002/Desktop/81df58ab8635eaea6211020de5b5/";//BRIX
 //        String tempDir = "/tmp/d2159ab79390aae6f5aea5e08254/";
         } else {
-            resultsDirectory += "/" + sessionID + "/";
+            //TODO if ends.witth / then ok, otherwise add + "/" + sessionID!
+            resultsDirectory += sessionID + "/";
         }
 
         LOG.log(Level.INFO, "Tempdir: {0}", resultsDirectory);

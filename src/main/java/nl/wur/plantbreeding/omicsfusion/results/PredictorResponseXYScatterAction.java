@@ -20,6 +20,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Enumeration;
+import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
@@ -27,6 +29,7 @@ import nl.wur.plantbreeding.logic.jfreechart.GenotypeXYToolTipGenerator;
 import nl.wur.plantbreeding.logic.jfreechart.GenotypeXYDataset;
 import nl.wur.plantbreeding.omicsfusion.excel.ReadExcelSheet;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.struts2.interceptor.ParameterAware;
 import org.apache.struts2.interceptor.ServletRequestAware;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
@@ -42,7 +45,7 @@ import org.jfree.data.xy.DefaultXYDataset;
  * @author Richard Finkers
  * @version 1.0.
  */
-public class PredictorResponseXYScatterAction extends PredictorResponseXYScatterForm implements ServletRequestAware {
+public class PredictorResponseXYScatterAction extends PredictorResponseXYScatterForm implements ServletRequestAware, ParameterAware {
 
     /** Serial Version UID */
     private static final long serialVersionUID = 100906L;
@@ -50,6 +53,8 @@ public class PredictorResponseXYScatterAction extends PredictorResponseXYScatter
     private JFreeChart chart;
     /** the request */
     private HttpServletRequest request;
+    /** the paramter map */
+    private Map<String, String[]> parameters;
 
     @Override
     public String execute() throws Exception {
@@ -58,8 +63,15 @@ public class PredictorResponseXYScatterAction extends PredictorResponseXYScatter
             //Trim if not null.. otherwise throw exception
             String predictor = request.getParameter("predictor");
             String response = (String) request.getAttribute("response");
-            String session = request.getParameter("session");
+            String session2 = getServleRequest().getParameter("session");
 
+            parameters = this.getParameters();
+            Set<String>keys=parameters.keySet();
+            for (String keyString : keys) {
+                System.out.println("Key: " + keyString);
+            }
+
+            String test = getServleRequest().get
             Enumeration<String> parameterNames = request.getParameterNames();
 
             while (parameterNames.hasMoreElements()) {
@@ -69,7 +81,8 @@ public class PredictorResponseXYScatterAction extends PredictorResponseXYScatter
             LOG.log(Level.INFO, "cur ses  : {0}", request.getRequestedSessionId());//This is the current ID, not the resultset ID
             LOG.log(Level.INFO, "Predictor: {0}", predictor);
             LOG.log(Level.INFO, "Response : {0}", response);
-            LOG.log(Level.INFO, "Session  : {0}", session);
+            LOG.log(Level.INFO, "Session  : {0}", getSession());
+            LOG.log(Level.INFO, "Session  : {0}", session2);
         } catch (Exception e) {
             //TODO: Check
             e.printStackTrace();
@@ -175,5 +188,18 @@ public class PredictorResponseXYScatterAction extends PredictorResponseXYScatter
     @Override
     public void setServletRequest(HttpServletRequest request) {
         this.request = request;
+    }
+
+    public HttpServletRequest getServleRequest() {
+        return request;
+    }
+
+    @Override
+    public void setParameters(Map<String, String[]> parameters) {
+        this.parameters = parameters;
+    }
+
+    public Map<String, String[]> getParameters() {
+        return parameters;
     }
 }

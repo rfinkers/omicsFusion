@@ -15,7 +15,6 @@
         <action name="predRespXYScatter">
             <result>/results/predRespXYScatter.jsp</result>
         </action>
-<!--        <action name="chart" class="org.apache.struts2.dispatcher.ChartResult">-->
         <action name="chart" class="nl.wur.plantbreeding.omicsfusion.results.PredictorResponseXYScatterAction">
             <result type="chart">
                 <param name="width">750</param>
