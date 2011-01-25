@@ -273,9 +273,12 @@ public class RetrieveResultsSummaryAction extends RetrieveResultsSummaryValidati
             //Set sessionID & responsevariable on the request scope? Only predictor via URL
             request.getSession().setAttribute("resultSession", getSessionId());
             request.getSession().setAttribute("trait", "traitName");
+
             table += "<a href='" + baseURL + "/results/predRespXYScatter?predictor=" + predictorVariable
-                    + "&response=traitName&session=" + getSessionId() + "'>" + predictorVariable + "</a>";
-                    //+ "<s:url value = \"/results/predRespXYScatter\"><s:param name =\"test\" value=\"" + predictorVariable + "\" />" + predictorVariable + "</s:url>";//TODO: add URL
+                    //+ "&response=traitName&session=" + getSessionId() 
+                    + "'>" 
+                    + predictorVariable + "</a>";
+            //+ "<s:url value = \"/results/predRespXYScatter\"><s:param name =\"test\" value=\"" + predictorVariable + "\" />" + predictorVariable + "</s:url>";//TODO: add URL
             table += "</td>";
             //Results
             if (methResults.get("univariate_p") != null) {

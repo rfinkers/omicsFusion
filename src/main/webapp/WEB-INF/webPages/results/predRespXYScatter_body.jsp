@@ -5,7 +5,7 @@
 --%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 
-FIXME: Image map
+<!--FIXME: Image map-->
 <s:actionerror/>
 <s:actionmessage/>
 
@@ -14,4 +14,5 @@ FIXME: Image map
     <s:param name='chartId'>${chartType}</s:param>
 </s:url>
 <img alt="Custom generated XY scatterplot for a predictor and response value"  src='${chartUrl}' usemap="#imageMap" />
-<s:url value='/results/predRespXYScatter'><s:param name ='test' value='predictorVariable' />predictorVariable</s:url>
+<a href="<s:url value='/results/predRespXYScatter'><s:param name ='test'>test</s:param><s:param name ='focus'>package</s:param></s:url>">predictorVariable</a>
+<a href="<s:url action='predRespXYScatter'><s:param name ='test'>test</s:param><s:param name ='focus'>package</s:param></s:url>">predictorVariable</a>

@@ -79,11 +79,15 @@ public class ReadExcelSheet extends ManipulateExcelSheet {
         String[] genotypeLabels = new String[predWbSheet.getLastRowNum()];
         //skip header row!
 
-        for (int j = 1; j < predWbSheet.getLastRowNum(); j++) {
+        for (int j = 0; j < predWbSheet.getLastRowNum(); j++) {
             //TODO: check
+            int z=j-1;
             data[0][j] = respWbSheet.getRow(j).getCell(1).getNumericCellValue();//predictor
-            data[1][j] = predWbSheet.getRow(j).getCell(i).getNumericCellValue();//response
+            data[1][j] = predWbSheet.getRow(j).getCell(j).getNumericCellValue();//response
             genotypeLabels[j] = respWbSheet.getRow(j).getCell(0).getStringCellValue();
+            System.out.println("counter: " + j);
+            System.out.println("pred: " + data[0][z]);
+            System.out.println("resp: " + data[1][z]);
         }
 
         /** The dataset */

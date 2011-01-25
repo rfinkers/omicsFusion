@@ -68,18 +68,20 @@ public class PredictorResponseXYScatterAction extends PredictorResponseXYScatter
     @Override
     public String execute() throws Exception {
 
+        String response=null;
         try {
-            //Trim if not null.. otherwise throw exception
-            
-//            String predictor = request.getParameter("predictor");
-//            String response = (String) request.getAttribute("response");
-//            String session2 = getServleRequest().getParameter("session");
-            System.out.println("URI: " + request.getAttribute("javax.servlet.forward.request_uri"));
-
+            response=request.getHeader("referer");
+            String[] split = response.split("=");
+            response=split[1].trim();
+            if(response.startsWith("X.")){//TODO: not a perfect solution!!
+                response=response.substring(2);
+            }
         } catch (Exception e) {
             //TODO: Check
             e.printStackTrace();
         }
+        
+        System.out.println("Response: " + response);
 
         //FIXME: hardcoded
         //String session = "d8933";
@@ -89,7 +91,7 @@ public class PredictorResponseXYScatterAction extends PredictorResponseXYScatter
 
         //Should also include model summaries?
         LOG.info("get data");
-        DefaultXYDataset xyDataset = getDataSet();
+        DefaultXYDataset xyDataset = getDataSet(response);
         LOG.info("got data");
         ValueAxis xAxis = new NumberAxis("Predictor");
         ValueAxis yAxis = new NumberAxis("Response");
@@ -150,7 +152,7 @@ public class PredictorResponseXYScatterAction extends PredictorResponseXYScatter
         return xy;
     }
 
-    private DefaultXYDataset getDataSet() {
+    private DefaultXYDataset getDataSet(String response) {
         //FIXME: filenames currently hardcoded
         String responseFile = "/home/finke002/omicsFusion/d8933/CE_Flesh.xls";
         String predictorFile = "/home/finke002/omicsFusion/d8933/CE_Met.xls";
@@ -160,7 +162,7 @@ public class PredictorResponseXYScatterAction extends PredictorResponseXYScatter
         DefaultXYDataset readPredictorAndResponseValue = null;
         try {
             LOG.info("try");
-            readPredictorAndResponseValue = ReadExcelSheet.readPredictorAndResponseValue(respFile, predFile, "294_0182");//TODO: trim X.?
+            readPredictorAndResponseValue = ReadExcelSheet.readPredictorAndResponseValue(respFile, predFile, response);//TODO: trim X.?
         } catch (FileNotFoundException ex) {
             Logger.getLogger(PredictorResponseXYScatterAction.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InvalidFormatException ex) {
