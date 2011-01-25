@@ -271,8 +271,11 @@ public class RetrieveResultsSummaryAction extends RetrieveResultsSummaryValidati
             }
             //table row annotation & url
             //Set sessionID & responsevariable on the request scope? Only predictor via URL
+            request.getSession().setAttribute("resultSession", getSessionId());
+            request.getSession().setAttribute("trait", "traitName");
             table += "<a href='" + baseURL + "/results/predRespXYScatter?predictor=" + predictorVariable
-                    + "&response=traitName&session=" + getSessionId() + "'>" + predictorVariable + "</a>";//TODO: add URL
+                    + "&response=traitName&session=" + getSessionId() + "'>" + predictorVariable + "</a>";
+                    //+ "<s:url value = \"/results/predRespXYScatter\"><s:param name =\"test\" value=\"" + predictorVariable + "\" />" + predictorVariable + "</s:url>";//TODO: add URL
             table += "</td>";
             //Results
             if (methResults.get("univariate_p") != null) {
@@ -438,7 +441,7 @@ public class RetrieveResultsSummaryAction extends RetrieveResultsSummaryValidati
         Double value = Math.abs(result) - Math.abs(min);
         range *= 1000;
         value *= 1000;
-        int group = (int) Math.abs(value / ( range / 20 ));
+        int group = (int) Math.abs(value / (range / 20));
         //Part of the largest observations resolves to a value > 20 using
         //this equation. Set them manually to the max value.
         if (group > 20) {

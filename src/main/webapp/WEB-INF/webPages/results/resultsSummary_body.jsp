@@ -14,4 +14,4 @@
 <%--<display:table name="requestScope.status" class="displayTable" export="false" pagesize="50"/>--%>
 <!--TODO: finish when a final object is available-->
 <% String table = (String) request.getAttribute("table"); %>
-<%= table %>
+<%= table%>

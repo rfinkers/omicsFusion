@@ -15,11 +15,14 @@
  */
 package nl.wur.plantbreeding.omicsfusion.results;
 
+import com.opensymphony.xwork2.ognl.OgnlValueStack;
 import java.awt.Color;
+import java.awt.print.Pageable;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
@@ -30,7 +33,12 @@ import nl.wur.plantbreeding.logic.jfreechart.GenotypeXYDataset;
 import nl.wur.plantbreeding.omicsfusion.excel.ReadExcelSheet;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.struts2.interceptor.ParameterAware;
+import org.apache.struts2.interceptor.PrincipalAware;
+import org.apache.struts2.interceptor.PrincipalProxy;
+import org.apache.struts2.interceptor.RequestAware;
 import org.apache.struts2.interceptor.ServletRequestAware;
+import org.apache.struts2.interceptor.SessionAware;
+import org.apache.struts2.views.util.UrlHelper;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.axis.ValueAxis;
@@ -45,53 +53,38 @@ import org.jfree.data.xy.DefaultXYDataset;
  * @author Richard Finkers
  * @version 1.0.
  */
-public class PredictorResponseXYScatterAction extends PredictorResponseXYScatterForm implements ServletRequestAware, ParameterAware {
+public class PredictorResponseXYScatterAction extends PredictorResponseXYScatterForm implements ParameterAware, SessionAware, ServletRequestAware {
 
     /** Serial Version UID */
     private static final long serialVersionUID = 100906L;
     /** Chart object */
     private JFreeChart chart;
-    /** the request */
-    private HttpServletRequest request;
     /** the paramter map */
     private Map<String, String[]> parameters;
+    /** the session map */
+    private Map<String, Object> sessions;
+    HttpServletRequest request;
 
     @Override
     public String execute() throws Exception {
 
         try {
             //Trim if not null.. otherwise throw exception
-            String predictor = request.getParameter("predictor");
-            String response = (String) request.getAttribute("response");
-            String session2 = getServleRequest().getParameter("session");
+            
+//            String predictor = request.getParameter("predictor");
+//            String response = (String) request.getAttribute("response");
+//            String session2 = getServleRequest().getParameter("session");
+            System.out.println("URI: " + request.getAttribute("javax.servlet.forward.request_uri"));
 
-            parameters = this.getParameters();
-            Set<String>keys=parameters.keySet();
-            for (String keyString : keys) {
-                System.out.println("Key: " + keyString);
-            }
-
-            String test = getServleRequest().get
-            Enumeration<String> parameterNames = request.getParameterNames();
-
-            while (parameterNames.hasMoreElements()) {
-                System.out.println("Element: " + parameterNames.nextElement());
-            }
-
-            LOG.log(Level.INFO, "cur ses  : {0}", request.getRequestedSessionId());//This is the current ID, not the resultset ID
-            LOG.log(Level.INFO, "Predictor: {0}", predictor);
-            LOG.log(Level.INFO, "Response : {0}", response);
-            LOG.log(Level.INFO, "Session  : {0}", getSession());
-            LOG.log(Level.INFO, "Session  : {0}", session2);
         } catch (Exception e) {
             //TODO: Check
             e.printStackTrace();
         }
 
         //FIXME: hardcoded
-        String session = "d8933";
-        String response = "X.294_0182";
-        String predictor = "Brix_P";
+        //String session = "d8933";
+        //String response = "X.294_0182";
+        //String predictor = "Brix_P";
         //response vs continues or response vs discrete.
 
         //Should also include model summaries?
@@ -185,15 +178,14 @@ public class PredictorResponseXYScatterAction extends PredictorResponseXYScatter
         return chart;
     }
 
-    @Override
-    public void setServletRequest(HttpServletRequest request) {
-        this.request = request;
-    }
-
-    public HttpServletRequest getServleRequest() {
-        return request;
-    }
-
+//    @Override
+//    public void setServletRequest(HttpServletRequest request) {
+//        this.request = request;
+//    }
+//
+//    public HttpServletRequest getServleRequest() {
+//        return request;
+//    }
     @Override
     public void setParameters(Map<String, String[]> parameters) {
         this.parameters = parameters;
@@ -201,5 +193,15 @@ public class PredictorResponseXYScatterAction extends PredictorResponseXYScatter
 
     public Map<String, String[]> getParameters() {
         return parameters;
+    }
+
+    @Override
+    public void setSession(Map<String, Object> session) {
+        this.sessions = session;
+    }
+
+    @Override
+    public void setServletRequest(HttpServletRequest request) {
+        this.request = request;
     }
 }

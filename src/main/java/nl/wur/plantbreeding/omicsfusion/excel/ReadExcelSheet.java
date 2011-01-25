@@ -61,7 +61,7 @@ public class ReadExcelSheet extends ManipulateExcelSheet {
         try {
             //Find the right column.
             for (i = 1; i < predictorRow.getLastCellNum(); i++) {//ommit the header column for the genotypes
-                System.out.println("row header:" + predictorRow.getCell(i).getStringCellValue());
+                //System.out.println("row header:" + predictorRow.getCell(i).getStringCellValue());
                 if (predictorRow.getCell(i).getStringCellValue().trim().equals(predictor)) {
                     break;
                 }

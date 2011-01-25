@@ -14,3 +14,4 @@ FIXME: Image map
     <s:param name='chartId'>${chartType}</s:param>
 </s:url>
 <img alt="Custom generated XY scatterplot for a predictor and response value"  src='${chartUrl}' usemap="#imageMap" />
+<s:url value='/results/predRespXYScatter'><s:param name ='test' value='predictorVariable' />predictorVariable</s:url>
