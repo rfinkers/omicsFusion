@@ -70,6 +70,7 @@ public class ReadExcelSheet extends ManipulateExcelSheet {
             //handle null pointer (empty column & int errors
             System.out.println("ERROR: " + e.getCause());
         }
+        System.out.println("Predictor: " + predictor);
 
         System.out.println("Need column: " + i);
 
@@ -79,15 +80,18 @@ public class ReadExcelSheet extends ManipulateExcelSheet {
         String[] genotypeLabels = new String[predWbSheet.getLastRowNum()];
         //skip header row!
 
-        for (int j = 0; j < predWbSheet.getLastRowNum(); j++) {
-            //TODO: check
-            int z=j-1;
-            data[0][j] = respWbSheet.getRow(j).getCell(1).getNumericCellValue();//predictor
-            data[1][j] = predWbSheet.getRow(j).getCell(j).getNumericCellValue();//response
-            genotypeLabels[j] = respWbSheet.getRow(j).getCell(0).getStringCellValue();
-            System.out.println("counter: " + j);
-            System.out.println("pred: " + data[0][z]);
-            System.out.println("resp: " + data[1][z]);
+        try {
+            for (int j = 0; j < predWbSheet.getLastRowNum(); j++) {
+                //data matrix is 0 based, however, we have to start reading the excel sheet from row 1 (row0 = header).
+                int z=j+1;
+                data[0][j] = respWbSheet.getRow(z).getCell(1).getNumericCellValue();//predictor                
+                data[1][j] = predWbSheet.getRow(z).getCell(i).getNumericCellValue();//response                
+                genotypeLabels[j] = respWbSheet.getRow(z).getCell(0).getStringCellValue();
+                System.out.println("counter: " + z + " label:" + genotypeLabels[j] + " pred: " + data[0][j] + " resp: " + data[1][j]);
+            }
+        } catch (Exception e) {
+            //TODO: throw exception
+            System.out.println("Error in data");
         }
 
         /** The dataset */

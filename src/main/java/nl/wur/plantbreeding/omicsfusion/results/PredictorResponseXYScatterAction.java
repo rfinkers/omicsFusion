@@ -15,16 +15,11 @@
  */
 package nl.wur.plantbreeding.omicsfusion.results;
 
-import com.opensymphony.xwork2.ognl.OgnlValueStack;
 import java.awt.Color;
-import java.awt.print.Pageable;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
@@ -33,12 +28,7 @@ import nl.wur.plantbreeding.logic.jfreechart.GenotypeXYDataset;
 import nl.wur.plantbreeding.omicsfusion.excel.ReadExcelSheet;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.struts2.interceptor.ParameterAware;
-import org.apache.struts2.interceptor.PrincipalAware;
-import org.apache.struts2.interceptor.PrincipalProxy;
-import org.apache.struts2.interceptor.RequestAware;
 import org.apache.struts2.interceptor.ServletRequestAware;
-import org.apache.struts2.interceptor.SessionAware;
-import org.apache.struts2.views.util.UrlHelper;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.axis.ValueAxis;
@@ -53,54 +43,55 @@ import org.jfree.data.xy.DefaultXYDataset;
  * @author Richard Finkers
  * @version 1.0.
  */
-public class PredictorResponseXYScatterAction extends PredictorResponseXYScatterForm implements ParameterAware, SessionAware, ServletRequestAware {
+public class PredictorResponseXYScatterAction extends PredictorResponseXYScatterForm implements ParameterAware, ServletRequestAware {
 
     /** Serial Version UID */
     private static final long serialVersionUID = 100906L;
     /** Chart object */
     private JFreeChart chart;
-    /** the paramter map */
+    /** the parameter map */
     private Map<String, String[]> parameters;
-    /** the session map */
-    private Map<String, Object> sessions;
-    HttpServletRequest request;
+    /** the request */
+    private HttpServletRequest request;//TODO: use RequestAware (map version) instead?
 
     @Override
     public String execute() throws Exception {
 
-        String response=null;
+        String predictor = null;
         try {
-            response=request.getHeader("referer");
-            String[] split = response.split("=");
-            response=split[1].trim();
-            if(response.startsWith("X.")){//TODO: not a perfect solution!!
-                response=response.substring(2);
+            predictor = request.getHeader("referer");
+            String[] split = predictor.split("=");
+            predictor = split[1].trim();
+            if (predictor.startsWith("X.")) {
+                predictor = predictor.substring(2);
+            } else if (predictor.startsWith("X")) {//TODO: not a perfect solution!!
+                predictor = predictor.substring(1);
             }
         } catch (Exception e) {
             //TODO: Check
+            System.out.println("Error in parsing header: referer");
             e.printStackTrace();
         }
-        
-        System.out.println("Response: " + response);
-
+        String sessionName = (String) request.getSession().getAttribute("resultSession");
         //FIXME: hardcoded
-        //String session = "d8933";
-        //String response = "X.294_0182";
-        //String predictor = "Brix_P";
+        String response = "Flesh color";
         //response vs continues or response vs discrete.
 
         //Should also include model summaries?
         LOG.info("get data");
-        DefaultXYDataset xyDataset = getDataSet(response);
+        DefaultXYDataset xyDataset = getDataSet(predictor, sessionName);
         LOG.info("got data");
-        ValueAxis xAxis = new NumberAxis("Predictor");
-        ValueAxis yAxis = new NumberAxis("Response");
+        ValueAxis xAxis = new NumberAxis("Response: " + response);
+        ValueAxis yAxis = new NumberAxis("Predictor: " + predictor);
+        xAxis.setAutoRange(true);
 
         //XYURLGenerator urlGen = new GenotypeXYUrlGenerator();
         //urlGen.generateURL(xyDataset, 1, 1);
         XYToolTipGenerator tooltipGen = new GenotypeXYToolTipGenerator();
         //dtooltipGen.generateToolTip(xyDataset, 25, 25);
 
+        //TODO: imagemap
+        //TODO: regression line?
 
         DefaultXYItemRenderer renderer = new DefaultXYItemRenderer();
 
@@ -115,7 +106,7 @@ public class PredictorResponseXYScatterAction extends PredictorResponseXYScatter
 
         // set my chart variable
         chart = new JFreeChart(
-                "Predictor vs Response",//TODO: add custom title
+                response + " vs " + predictor,
                 JFreeChart.DEFAULT_TITLE_FONT,
                 plot,
                 false);
@@ -152,17 +143,17 @@ public class PredictorResponseXYScatterAction extends PredictorResponseXYScatter
         return xy;
     }
 
-    private DefaultXYDataset getDataSet(String response) {
+    private DefaultXYDataset getDataSet(String predictor, String sessionID) {
         //FIXME: filenames currently hardcoded
-        String responseFile = "/home/finke002/omicsFusion/d8933/CE_Flesh.xls";
-        String predictorFile = "/home/finke002/omicsFusion/d8933/CE_Met.xls";
+        String responseFile = "/home/finke002/omicsFusion/" + sessionID + "/CE_Flesh.xls";
+        String predictorFile = "/home/finke002/omicsFusion/" + sessionID + "/CE_Met.xls";
 
         File predFile = new File(predictorFile);
         File respFile = new File(responseFile);
         DefaultXYDataset readPredictorAndResponseValue = null;
         try {
             LOG.info("try");
-            readPredictorAndResponseValue = ReadExcelSheet.readPredictorAndResponseValue(respFile, predFile, response);//TODO: trim X.?
+            readPredictorAndResponseValue = ReadExcelSheet.readPredictorAndResponseValue(respFile, predFile, predictor);//TODO: trim X.?
         } catch (FileNotFoundException ex) {
             Logger.getLogger(PredictorResponseXYScatterAction.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InvalidFormatException ex) {
@@ -180,14 +171,6 @@ public class PredictorResponseXYScatterAction extends PredictorResponseXYScatter
         return chart;
     }
 
-//    @Override
-//    public void setServletRequest(HttpServletRequest request) {
-//        this.request = request;
-//    }
-//
-//    public HttpServletRequest getServleRequest() {
-//        return request;
-//    }
     @Override
     public void setParameters(Map<String, String[]> parameters) {
         this.parameters = parameters;
@@ -195,11 +178,6 @@ public class PredictorResponseXYScatterAction extends PredictorResponseXYScatter
 
     public Map<String, String[]> getParameters() {
         return parameters;
-    }
-
-    @Override
-    public void setSession(Map<String, Object> session) {
-        this.sessions = session;
     }
 
     @Override

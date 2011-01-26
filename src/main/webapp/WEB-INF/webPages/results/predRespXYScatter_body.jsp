@@ -14,5 +14,7 @@
     <s:param name='chartId'>${chartType}</s:param>
 </s:url>
 <img alt="Custom generated XY scatterplot for a predictor and response value"  src='${chartUrl}' usemap="#imageMap" />
-<a href="<s:url value='/results/predRespXYScatter'><s:param name ='test'>test</s:param><s:param name ='focus'>package</s:param></s:url>">predictorVariable</a>
-<a href="<s:url action='predRespXYScatter'><s:param name ='test'>test</s:param><s:param name ='focus'>package</s:param></s:url>">predictorVariable</a>
+<br/>
+<!--TODO: FORM with button instead of link-->
+<br/>
+<a href="<s:url action='summaryResults'><s:param name ='sessionId'>${resultSession}</s:param></s:url>"><s:submit value="Return to table"/></a>

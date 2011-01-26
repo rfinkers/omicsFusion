@@ -55,7 +55,7 @@ public class RetrieveResultsSummaryValidationForm extends ActionSupport {
         LOG.info("Validate");
         if (Validation.containsSpecialCharactersCheck(sessionId) == true) {
             //do something like throwing an error
-           LOG.info("TRUE");
+            LOG.info("TRUE");
         }
         //TODO: we expect a fixed length for the sessionID Include a length check
         //TODO: null check
