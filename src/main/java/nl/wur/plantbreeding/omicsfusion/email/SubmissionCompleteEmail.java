@@ -48,10 +48,14 @@ public class SubmissionCompleteEmail extends Email {
         //Email body shoudl consist of:
         emailBody = "Dear " + email.getUser().getUserName() + ", \n"
                 + "Thanks for using our omicsFusion service.\n"
-                + "results web address "
-                + "Local name: " + ServletActionContext.getRequest().getLocalName()
+                + "You can view your results by navigation to the following web address: "
+                + "http://" + ServletActionContext.getRequest().getLocalName() + ServletActionContext.getRequest().getLocalPort()
                 + ServletActionContext.getServletContext().getContextPath()
-                + "/results/summaryResults?sessionId=" + email.getSessionID() + "\n";
+                + "/results/summaryResults?sessionId=" + email.getSessionID() + "\n"
+                + "Alternatively, you can enter the unique identifyer " + email.getSessionID() + " on the omicsFusion website\n\n"
+                + "We are happy to recieve your feedback.\n"
+                + "Regards,\n"
+                + "Richard Finkers\n";
 
 
 

@@ -12,7 +12,7 @@
     <s:checkbox key="analysis.method.svm" name="svm" disabled="true"/>
     <s:checkbox key="analysis.method.lasso" name="lasso" checked="checked"/>
     <s:checkbox key="analysis.method.elasticNet" name="elasticNet" checked="checked"/>
-    <s:checkbox key="analysis.method.spls" name="spls" checked="checked" selectAllLabel="Select All"/>
+    <s:checkbox key="analysis.method.spls" name="spls" selectAllLabel="Select All"/>
     <s:checkbox key="analysis.method.ridge" name="ridge" checked="checked"/>
     <s:checkbox key="analysis.method.pcr" name="pcr" checked="checked"/>
     <s:checkbox key="analysis.method.pls" name="pls"checked="checked" />    
