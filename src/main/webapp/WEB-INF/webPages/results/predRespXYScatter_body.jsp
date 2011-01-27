@@ -17,4 +17,5 @@
 <br/>
 <!--TODO: FORM with button instead of link-->
 <br/>
-<a href="<s:url action='summaryResults'><s:param name ='sessionId'>${resultSession}</s:param></s:url>"><s:submit value="Return to table"/></a>
+<%--<a href="<s:url action='summaryResults'><s:param name ='sessionId'>${resultSession}</s:param></s:url>"><s:submit value="Return to table"/></a>--%>
+<a href="<s:url action='summaryResults'><s:param name ='sessionId'>${resultSession}</s:param></s:url>" class="button" onclick="this.blur();"><span>Return to table</span></a>
