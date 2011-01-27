@@ -16,7 +16,6 @@
 package nl.wur.plantbreeding.omicsfusion.email;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.mail.MessagingException;
@@ -49,23 +48,13 @@ public class SubmissionCompleteEmail extends Email {
         emailBody = "Dear " + email.getUser().getUserName() + ", \n"
                 + "Thanks for using our omicsFusion service.\n"
                 + "You can view your results by navigation to the following web address: "
-                + "http://" + ServletActionContext.getRequest().getLocalName() + ServletActionContext.getRequest().getLocalPort()
+                + "http://" + ServletActionContext.getRequest().getLocalName() + ":" + ServletActionContext.getRequest().getLocalPort()//TODO: http is now hardcoded
                 + ServletActionContext.getServletContext().getContextPath()
                 + "/results/summaryResults?sessionId=" + email.getSessionID() + "\n"
                 + "Alternatively, you can enter the unique identifyer " + email.getSessionID() + " on the omicsFusion website\n\n"
-                + "We are happy to recieve your feedback.\n"
+                + "We are happy to recieve your feedback.\n\n"
                 + "Regards,\n"
                 + "Richard Finkers\n";
-
-
-
-//        emailBody = "Dear " + context.getInitParameter("adminName") + ",\n\n"
-//                + "BreeDB has encountered an exception.\n"
-//                + "page         : " + req.getRequestURI() + " (" + req.getRequestURL() + ")\n"
-//                + "query        : " + req.getQueryString() + "\n"
-//                + "database     : " + context.getInitParameter("theme") + "\n"
-//                + "user         : " + req.getRemoteUser() + "\n"
-//                + "address      : " + req.getRemoteAddr() + "\n";
 
         try {
             Calendar now = Calendar.getInstance();
