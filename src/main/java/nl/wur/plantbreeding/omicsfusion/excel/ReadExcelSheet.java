@@ -87,7 +87,7 @@ public class ReadExcelSheet extends ManipulateExcelSheet {
                 data[0][j] = respWbSheet.getRow(z).getCell(1).getNumericCellValue();//predictor                
                 data[1][j] = predWbSheet.getRow(z).getCell(i).getNumericCellValue();//response                
                 genotypeLabels[j] = respWbSheet.getRow(z).getCell(0).getStringCellValue();
-                System.out.println("counter: " + z + " label:" + genotypeLabels[j] + " pred: " + data[0][j] + " resp: " + data[1][j]);
+                //System.out.println("counter: " + z + " label:" + genotypeLabels[j] + " pred: " + data[0][j] + " resp: " + data[1][j]);
             }
         } catch (Exception e) {
             //TODO: throw exception
