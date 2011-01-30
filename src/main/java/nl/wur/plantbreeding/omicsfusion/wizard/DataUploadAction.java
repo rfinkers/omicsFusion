@@ -26,6 +26,7 @@ import java.util.HashMap;
 import nl.wur.plantbreeding.omicsfusion.email.ExceptionEmail;
 import nl.wur.plantbreeding.omicsfusion.excel.DataSheetValidationException;
 import nl.wur.plantbreeding.omicsfusion.utils.Constants;
+import nl.wur.plantbreeding.omicsfusion.utils.WriteFile;
 import org.apache.commons.io.FileUtils;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.struts2.interceptor.ServletRequestAware;
@@ -50,12 +51,12 @@ public class DataUploadAction extends DataUploadValidationForm implements Servle
         try {
 
             LOG.info("Execute upload");
-            //String resultsDirectory = System.getProperty("java.io.tmpdir");
             String resultsDirectory = request.getSession().getServletContext().getInitParameter("resultsDirectory");
             if (!(resultsDirectory.endsWith("/") || resultsDirectory.endsWith("\\"))) {
                 resultsDirectory += System.getProperty("file.separator");
             }
 
+            //Check if the sheet is excel or csv. Set the name accordingly
             File responseSheet = new File(resultsDirectory + request.getSession().getId()
                     + "/" + getDataSheetResponseFileFileName());
             File predictorSheet = new File(resultsDirectory + request.getSession().getId()
@@ -69,6 +70,9 @@ public class DataUploadAction extends DataUploadValidationForm implements Servle
                         + "/" + getDataSheetPredictResponseFileFileName());
                 FileUtils.copyFile(getDataSheetPredictResponseFile(), predictResponseSheet);
             }
+
+            //prepare a file with the names of the input sheets. This will be used to read the names during the results wizard.
+            writeNamesToDisk();
 
             LOG.log(Level.INFO, "Predictor: {0}", getDataSheetPredictorFileFileName());
             LOG.log(Level.INFO, "Type: {0}", getPredictorType());
@@ -125,5 +129,32 @@ public class DataUploadAction extends DataUploadValidationForm implements Servle
     @Override
     public void setServletRequest(HttpServletRequest request) {
         this.request = request;
+    }
+
+    /**
+     * Write the names of the input data sheets to the filesystem.
+     * @throws IOException
+     */
+    private void writeNamesToDisk() throws IOException {
+        WriteFile wf = new WriteFile();
+        String content = getDataSheetResponseFileFileName() + "\n"
+                + getDataSheetPredictorFileFileName() + "\n";
+        if (getDataSheetPredictResponseFileFileName() != null) {
+            content += getDataSheetPredictResponseFileFileName() + "\n";
+        }
+        wf.WriteFile(getResultsDir() + request.getSession().getId() + "/filenames.txt", content);
+    }
+
+    /**
+     * Get the temp directory from the system.
+     * @return the location of the temp directory (including slash or backslash).
+     */
+    private String getResultsDir() {
+        //String resultsDirectory = System.getProperty("java.io.tmpdir");
+        String resultsDirectory = request.getSession().getServletContext().getInitParameter("resultsDirectory");
+        if (!(resultsDirectory.endsWith("/") || resultsDirectory.endsWith("\\"))) {
+            resultsDirectory += System.getProperty("file.separator");
+        }
+        return resultsDirectory;
     }
 }

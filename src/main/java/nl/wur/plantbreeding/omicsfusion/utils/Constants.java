@@ -40,6 +40,8 @@ public class Constants {
     public static final int NUMBER_FOLDS_INNER = 10;
     /** How many CPU's can be used for one method. */
     public static final int MAX_NUMBER_CPU = 1;
+    /** What is the maximum number of results to show in the summary table. */
+    public static final int MAX_SUMMARY_RESULTS = 750;
     
     private Constants() {
     }

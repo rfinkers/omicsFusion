@@ -26,6 +26,8 @@ import javax.servlet.http.HttpServletRequest;
 import nl.wur.plantbreeding.logic.util.FileOrDirectoryExists;
 import nl.wur.plantbreeding.omicsfusion.datatypes.CsvSummaryDataType;
 import nl.wur.plantbreeding.omicsfusion.utils.CSV;
+import nl.wur.plantbreeding.omicsfusion.utils.Constants;
+import nl.wur.plantbreeding.omicsfusion.utils.ReadFile;
 import nl.wur.plantbreeding.omicsfusion.utils.ServletUtils;
 import org.apache.struts2.interceptor.ServletRequestAware;
 
@@ -60,13 +62,25 @@ public class RetrieveResultsSummaryAction extends RetrieveResultsSummaryValidati
         ArrayList<CsvSummaryDataType> univariate_p = null;
         ArrayList<CsvSummaryDataType> univariate_bh = null;
 
+        //Location of the results directory
+        String resultsDirectory = request.getSession().getServletContext().getInitParameter("resultsDirectory");
+
         //Check the availability of one or more respults file for this sessionID.
         //All potential summary files are scanned. Only methods with results are
         //added tot the HashMap.
-        HashMap<String, ArrayList<CsvSummaryDataType>> methResults = getMethodsWithResultsSummaryFiles(getSessionId());
+        HashMap<String, ArrayList<CsvSummaryDataType>> methResults = getMethodsWithResultsSummaryFiles(getSessionId(), resultsDirectory);
         if (methResults.isEmpty()) {
             addActionError("No results found");
             return ERROR;
+        }
+
+        //Get the name of the response file.
+        ReadFile rrn = new ReadFile();
+        String responseName = null;
+        try {
+            responseName = rrn.ReadResponseName(resultsDirectory + getSessionId() + "/analysis.txt");
+        } catch (IOException iOException) {
+            responseName = "Not found!";
         }
 
         int[] resultRows = new int[9];
@@ -76,61 +90,61 @@ public class RetrieveResultsSummaryAction extends RetrieveResultsSummaryValidati
         // is used for highlighting the results.
         if (methResults.get("lasso") != null) {
             lasso = methResults.get("lasso");
-            addTableBackgroundColors(lasso);
+            addTableBackgroundColors(lasso, false);
             resultRows[resultRowsCounter] = lasso.size();
             resultRowsCounter++;
         }
         if (methResults.get("ridge") != null) {
             ridge = methResults.get("ridge");
-            addTableBackgroundColors(ridge);
+            addTableBackgroundColors(ridge, false);
             resultRows[resultRowsCounter] = ridge.size();
             resultRowsCounter++;
         }
         if (methResults.get("rf") != null) {
             rf = methResults.get("rf");
-            addTableBackgroundColors(rf);
+            addTableBackgroundColors(rf, false);
             resultRows[resultRowsCounter] = rf.size();
             resultRowsCounter++;
         }
         if (methResults.get("pcr") != null) {
             pcr = methResults.get("pcr");
-            addTableBackgroundColors(pcr);
+            addTableBackgroundColors(pcr, false);
             resultRows[resultRowsCounter] = pcr.size();
             resultRowsCounter++;
         }
         if (methResults.get("pls") != null) {
             pls = methResults.get("pls");
-            addTableBackgroundColors(pls);
+            addTableBackgroundColors(pls, false);
             resultRows[resultRowsCounter] = pls.size();
             resultRowsCounter++;
         }
         if (methResults.get("spls") != null) {
             spls = methResults.get("spls");
-            addTableBackgroundColors(spls);
+            addTableBackgroundColors(spls, false);
             resultRows[resultRowsCounter] = spls.size();
             resultRowsCounter++;
         }
         if (methResults.get("svm") != null) {
             svm = methResults.get("svm");
-            addTableBackgroundColors(svm);
+            addTableBackgroundColors(svm, false);
             resultRows[resultRowsCounter] = svm.size();
             resultRowsCounter++;
         }
         if (methResults.get("en") != null) {
             en = methResults.get("en");
-            addTableBackgroundColors(en);
+            addTableBackgroundColors(en, false);
             resultRows[resultRowsCounter] = en.size();
             resultRowsCounter++;
         }
         if (methResults.get("univariate_p") != null) {
             univariate_p = methResults.get("univariate_p");
-            addTableBackgroundColors(univariate_p);//FIXME: add different background colors (on pValues?) to Univariate
+            addTableBackgroundColors(univariate_p, true);//FIXME: add different background colors (on pValues?) to Univariate
             resultRows[resultRowsCounter] = univariate_p.size();
             resultRowsCounter++;
         }
         if (methResults.get("univariate_bh") != null) {
             univariate_bh = methResults.get("univariate_bh");
-            addTableBackgroundColors(univariate_bh);//FIXME: add different background colors (on pValues?) to Univariate
+            addTableBackgroundColors(univariate_bh, true);//FIXME: add different background colors (on pValues?) to Univariate
             resultRows[resultRowsCounter] = univariate_bh.size();
             resultRowsCounter++;
         }
@@ -149,6 +163,170 @@ public class RetrieveResultsSummaryAction extends RetrieveResultsSummaryValidati
             }
         }
 
+        //Get the mean rank for each predictor
+        int[][] rank = getMeanRank(oldResultRows, methResults, lasso, ridge, rf, pcr, pls, spls, svm, en, univariate_p, univariate_bh);
+
+        //Sort the array according to the rank
+        sortRankArray(rank);
+
+        //concatenate the HTML table.
+        String table = getHtmlTableString(oldResultRows, responseName, methResults, rank, univariate_p, univariate_bh, lasso, svm, pcr, pls, ridge, rf, en, spls);
+
+        //Set sessionID & responsevariable on the request scope. Only predictor via URL
+        request.getSession().setAttribute("resultSession", getSessionId());
+        request.getSession().setAttribute("responseName", responseName);
+
+        //To allow tests without usage of request scope?
+        if (ServletUtils.getServletRequest() != null) {
+            HttpServletRequest servletRequest = ServletUtils.getServletRequest();
+            servletRequest.setAttribute("table", table);
+        }
+        return SUCCESS;
+    }
+
+    private String getHtmlTableString(int oldResultRows, String responseName, HashMap<String, ArrayList<CsvSummaryDataType>> methResults, int[][] rank, ArrayList<CsvSummaryDataType> univariate_p, ArrayList<CsvSummaryDataType> univariate_bh, ArrayList<CsvSummaryDataType> lasso, ArrayList<CsvSummaryDataType> svm, ArrayList<CsvSummaryDataType> pcr, ArrayList<CsvSummaryDataType> pls, ArrayList<CsvSummaryDataType> ridge, ArrayList<CsvSummaryDataType> rf, ArrayList<CsvSummaryDataType> en, ArrayList<CsvSummaryDataType> spls) {
+        String baseURL = request.getContextPath();
+        DecimalFormat df = new DecimalFormat("#.###");
+        //We want an counter for overall rank of the response variable.
+        int negativeCounter = oldResultRows;
+        boolean maxSummary=false;
+        //Concatenate the HTML table.
+        String table = "<table class='boxpart'>";
+        table = getHtmlTableHeaderString(table, responseName, methResults);
+        //Add data to the table
+        for (int i = 0; i < oldResultRows; i++) {
+            table = getHtmlTableRowString(rank, i, table, methResults, univariate_p, univariate_bh, lasso, svm, pcr, pls, ridge, rf, en, spls, baseURL, negativeCounter, df);
+            negativeCounter -= 1;
+            if (i > Constants.MAX_SUMMARY_RESULTS) {
+                maxSummary=true;
+                break;
+            }
+        }
+        table += "</table>";
+        if(maxSummary==true){
+            table += "Note: more than " + Constants.MAX_SUMMARY_RESULTS + " results retrieved. This table only shows the top " + Constants.MAX_SUMMARY_RESULTS + " ranking predictor variables!";
+        }
+        return table;
+    }
+
+    private String getHtmlTableRowString(int[][] rank, int i, String table, HashMap<String, ArrayList<CsvSummaryDataType>> methResults, ArrayList<CsvSummaryDataType> univariate_p, ArrayList<CsvSummaryDataType> univariate_bh, ArrayList<CsvSummaryDataType> lasso, ArrayList<CsvSummaryDataType> svm, ArrayList<CsvSummaryDataType> pcr, ArrayList<CsvSummaryDataType> pls, ArrayList<CsvSummaryDataType> ridge, ArrayList<CsvSummaryDataType> rf, ArrayList<CsvSummaryDataType> en, ArrayList<CsvSummaryDataType> spls, String baseURL, int negativeCounter, DecimalFormat df) {
+        int element = rank[i][0];
+        table += "<tr align='right'>";
+        table += "<td>";
+        String predictorVariable = "";
+        //Only add the rowname once (from the first available result set).
+        //FIXME: rename responseVariable to predictor variable?
+        if (methResults.get("univariate_p") != null) {
+            predictorVariable = univariate_p.get(element).getResponsVariable();
+        } else if (methResults.get("univariate_bh") != null) {
+            predictorVariable = univariate_bh.get(element).getResponsVariable();
+        } else if (methResults.get("rf") != null) {
+            predictorVariable = lasso.get(element).getResponsVariable();
+        } else if (methResults.get("svm") != null) {
+            predictorVariable = svm.get(element).getResponsVariable();
+        } else if (methResults.get("pcr") != null) {
+            predictorVariable = pcr.get(element).getResponsVariable();
+        } else if (methResults.get("pls") != null) {
+            predictorVariable = pls.get(element).getResponsVariable();
+        } else if (methResults.get("ridge") != null) {
+            predictorVariable = ridge.get(element).getResponsVariable();
+        } else if (methResults.get("lasso") != null) {
+            predictorVariable = rf.get(element).getResponsVariable();
+        } else if (methResults.get("en") != null) {
+            predictorVariable = en.get(element).getResponsVariable();
+        } else if (methResults.get("spls") != null) {
+            predictorVariable = spls.get(element).getResponsVariable();
+        }
+        //table row annotation & url
+        //table row annotation & url
+        //TODO: can we use <s:url> instead?
+        table += "<a href='" + baseURL + "/results/predRespXYScatter?predictor=" + predictorVariable
+                //+ "&response=traitName&session=" + getSessionId()
+                + "'>"
+                + predictorVariable + " (" + negativeCounter + ")</a>";
+
+        //+ "<s:url value = \"/results/predRespXYScatter\"><s:param name =\"test\" value=\"" + predictorVariable + "\" />" + predictorVariable + "</s:url>";//TODO: add URL
+        table += "</td>";
+        //Results
+        if (methResults.get("univariate_p") != null) {
+            table += "<td bgcolor=\"" + univariate_p.get(element).getHtmlColor() + "\"><a title=\"rank: " + univariate_p.get(element).getRank() + "\"> " + df.format(univariate_p.get(element).getMean()) + "</td>";
+        }
+        if (methResults.get("univariate_bh") != null) {
+            table += "<td bgcolor=\"" + univariate_bh.get(element).getHtmlColor() + "\"><a title=\"rank: " + univariate_bh.get(element).getRank() + "\"> " + df.format(univariate_bh.get(element).getMean()) + "</td>";
+        }
+        if (methResults.get("rf") != null) {
+            table += "<td bgcolor=\"" + rf.get(element).getHtmlColor() + "\"><a title=\"rank: " + rf.get(element).getRank() + " / sd: " + df.format(rf.get(element).getSd()) + " \"> " + df.format(rf.get(element).getMean()) + " </a></td>";
+        }
+        if (methResults.get("svm") != null) {
+            table += "<td bgcolor=\"" + svm.get(element).getHtmlColor() + "\"><a title=\"rank: " + svm.get(element).getRank() + " / sd: " + df.format(svm.get(element).getSd()) + " \"> " + df.format(svm.get(element).getMean()) + " </a></td>";
+        }
+        if (methResults.get("pcr") != null) {
+            table += "<td bgcolor=\"" + pcr.get(element).getHtmlColor() + "\"><a title=\"rank: " + pcr.get(element).getRank() + " / sd: " + df.format(pcr.get(element).getSd()) + " \"> " + df.format(pcr.get(element).getMean()) + " </a></td>";
+        }
+        if (methResults.get("pls") != null) {
+            table += "<td bgcolor=\"" + pls.get(element).getHtmlColor() + "\"><a title=\"rank: " + pls.get(element).getRank() + " / sd: " + df.format(pls.get(element).getSd()) + " \"> " + df.format(pls.get(element).getMean()) + " </a></td>";
+        }
+        if (methResults.get("ridge") != null) {
+            table += "<td bgcolor=\"" + ridge.get(element).getHtmlColor() + "\"><a title=\"rank: " + ridge.get(element).getRank() + " / sd: " + df.format(ridge.get(element).getSd()) + " \"> " + df.format(ridge.get(element).getMean()) + " </a></td>";
+        }
+        if (methResults.get("lasso") != null) {
+            if (lasso.get(element).getMean() != 0) {
+                table += "<td bgcolor=\"" + lasso.get(element).getHtmlColor() + "\"><a title=\"rank: " + lasso.get(element).getRank() + " / sd: " + df.format(lasso.get(element).getSd()) + " \"> " + df.format(lasso.get(element).getMean()) + " </a></td>";
+            }
+        }
+        if (methResults.get("en") != null) {
+            if (en.get(element).getMean() != 0) {
+                table += "<td bgcolor=\"" + en.get(element).getHtmlColor() + "\"><a title=\"rank: " + en.get(element).getRank() + " / sd: " + df.format(en.get(element).getSd()) + " \"> " + df.format(en.get(element).getMean()) + " </a></td>";
+            }
+        }
+        if (methResults.get("spls") != null) {
+            if (spls.get(element).getMean() != 0) {
+                table += "<td bgcolor=\"" + spls.get(element).getHtmlColor() + "\"><a title=\"rank: " + spls.get(element).getRank() + " / sd: " + df.format(spls.get(element).getSd()) + " \"> " + df.format(spls.get(element).getMean()) + " </a></td>";
+            }
+        }
+        table += "</tr>\n";
+        return table;
+    }
+
+    private String getHtmlTableHeaderString(String table, String responseName, HashMap<String, ArrayList<CsvSummaryDataType>> methResults) {
+        //TODO: resource bundle
+        //TODO: title back to href! with implementation of specific pages
+        table += "<tr><th>Response:<br/>" + responseName + "</th>";
+        if (methResults.get("univariate_p") != null) {
+            table += "<th style='background-color: #BB99FF;'><a title='univariate'>Univariate pval</a></th>";
+        }
+        if (methResults.get("univariate_bh") != null) {
+            table += "<th style='background-color: #BB99FF;'><a title='BH'>Univariate BH</a></th>";
+        }
+        if (methResults.get("rf") != null) {
+            table += "<th style='background-color: #FF0000;'><a title='RF'>Random Forest</a></th>";
+        }
+        if (methResults.get("svm") != null) {
+            table += "<th style='background-color: #FF0000;'><a title='SVM'>SVM</a></th>";
+        }
+        if (methResults.get("pcr") != null) {
+            table += "<th style='background-color: #00CC66;'><a title='PCR'>PCR</a></th>";
+        }
+        if (methResults.get("pls") != null) {
+            table += "<th style='background-color: #00CC66;'><a title='PLS'>PLS</a></th>";
+        }
+        if (methResults.get("ridge") != null) {
+            table += "<th style='background-color: #00CC66;'><a title='Ridge'>Ridge</a></th>";
+        }
+        if (methResults.get("lasso") != null) {
+            table += "<th style='background-color: #FFCC00;'><a title='Lasso'>Lasso</a></th>";
+        }
+        if (methResults.get("en") != null) {
+            table += "<th style='background-color: #FFCC00;'><a title='EN'>Elastic net</a></th>";
+        }
+        if (methResults.get("spls") != null) {
+            table += "<th style='background-color: #FFCC00;'><a title='SPLS'>SPLS</a></th>";
+        }
+        table += "</tr>\n";
+        return table;
+    }
+
+    private int[][] getMeanRank(int oldResultRows, HashMap<String, ArrayList<CsvSummaryDataType>> methResults, ArrayList<CsvSummaryDataType> lasso, ArrayList<CsvSummaryDataType> ridge, ArrayList<CsvSummaryDataType> rf, ArrayList<CsvSummaryDataType> pcr, ArrayList<CsvSummaryDataType> pls, ArrayList<CsvSummaryDataType> spls, ArrayList<CsvSummaryDataType> svm, ArrayList<CsvSummaryDataType> en, ArrayList<CsvSummaryDataType> univariate_p, ArrayList<CsvSummaryDataType> univariate_bh) {
         //TODO: add mean rank and use this for sorting (or instead of for loop?).
         int[][] rank = new int[oldResultRows][2];
         for (int i = 0; i < oldResultRows; i++) {
@@ -197,141 +375,7 @@ public class RetrieveResultsSummaryAction extends RetrieveResultsSummaryValidati
             rank[i][0] = i;
             rank[i][1] = sumRank / count;
         }
-
-
-        //Sort the array according to the rank
-        sortRankArray(rank);
-
-        String baseURL = request.getContextPath();
-        DecimalFormat df = new DecimalFormat("#.###");
-        //We want an counter for overall rank of the response variable.
-        int negativeCounter = oldResultRows;
-        //Concatenate the HTML table.
-        String table = "<table class='boxpart'>";
-        //TODO: resource bundle
-        //FIXME: get response from the filesystem
-        //TODO: title back to href! with implementation of specific pages
-        table += "<tr><th>Response: Flesh color</th>";//TODO: hardcoded
-        if (methResults.get("univariate_p") != null) {
-            table += "<th style='background-color: #330099;'><a title='univariate'>Univariate pval</a></th>";
-        }
-        if (methResults.get("univariate_bh") != null) {
-            table += "<th style='background-color: #330099;'><a title='BH'>Univariate BH</a></th>";
-        }
-        if (methResults.get("rf") != null) {
-            table += "<th style='background-color: #FF0000;'><a title='RF'>Random Forest</a></th>";
-        }
-        if (methResults.get("svm") != null) {
-            table += "<th style='background-color: #FF0000;'><a title='SVM'>SVM</a></th>";
-        }
-        if (methResults.get("pcr") != null) {
-            table += "<th style='background-color: #00CC66;'><a title='PCR'>PCR</a></th>";
-        }
-        if (methResults.get("pls") != null) {
-            table += "<th style='background-color: #00CC66;'><a title='PLS'>PLS</a></th>";
-        }
-        if (methResults.get("ridge") != null) {
-            table += "<th style='background-color: #00CC66;'><a title='Ridge'>Ridge</a></th>";
-        }
-        if (methResults.get("lasso") != null) {
-            table += "<th style='background-color: #FFCC00;'><a title='Lasso'>Lasso</a></th>";
-        }
-        if (methResults.get("en") != null) {
-            table += "<th style='background-color: #FFCC00;'><a title='EN'>Elastic net</a></th>";
-        }
-        if (methResults.get("spls") != null) {
-            table += "<th style='background-color: #FFCC00;'><a title='SPLS'>SPLS</a></th>";
-        }
-        table += "</tr>\n";
-        //Add data to the table
-        for (int i = 0; i < oldResultRows; i++) {
-            int element = rank[i][0];
-            table += "<tr align='right'>";
-            table += "<td>";
-            String predictorVariable = "";
-            //Only add the rowname once (from the first available result set).
-            //FIXME: rename responseVariable to predictor variable?
-            if (methResults.get("univariate_p") != null) {
-                predictorVariable = univariate_p.get(element).getResponsVariable();
-            } else if (methResults.get("univariate_bh") != null) {
-                predictorVariable = univariate_bh.get(element).getResponsVariable();
-            } else if (methResults.get("rf") != null) {
-                predictorVariable = lasso.get(element).getResponsVariable();
-            } else if (methResults.get("svm") != null) {
-                predictorVariable = svm.get(element).getResponsVariable();
-            } else if (methResults.get("pcr") != null) {
-                predictorVariable = pcr.get(element).getResponsVariable();
-            } else if (methResults.get("pls") != null) {
-                predictorVariable = pls.get(element).getResponsVariable();
-            } else if (methResults.get("ridge") != null) {
-                predictorVariable = ridge.get(element).getResponsVariable();
-            } else if (methResults.get("lasso") != null) {
-                predictorVariable = rf.get(element).getResponsVariable();
-            } else if (methResults.get("en") != null) {
-                predictorVariable = en.get(element).getResponsVariable();
-            } else if (methResults.get("spls") != null) {
-                predictorVariable = spls.get(element).getResponsVariable();
-            }
-            //table row annotation & url
-            //Set sessionID & responsevariable on the request scope? Only predictor via URL
-            request.getSession().setAttribute("resultSession", getSessionId());
-            request.getSession().setAttribute("trait", "traitName");
-
-
-            //TODO: can we use <s:url> instead?
-            table += "<a href='" + baseURL + "/results/predRespXYScatter?predictor=" + predictorVariable
-                    //+ "&response=traitName&session=" + getSessionId()
-                    + "'>"
-                    + predictorVariable + " (" + negativeCounter + ")</a>";
-            negativeCounter -= 1;
-            //+ "<s:url value = \"/results/predRespXYScatter\"><s:param name =\"test\" value=\"" + predictorVariable + "\" />" + predictorVariable + "</s:url>";//TODO: add URL
-            table += "</td>";
-            //Results
-            if (methResults.get("univariate_p") != null) {
-                table += "<td bgcolor=\"" + univariate_p.get(element).getHtmlColor() + "\"><a title=\"rank: " + univariate_p.get(element).getRank() + "\"> " + df.format(univariate_p.get(element).getMean()) + "</td>";
-            }
-            if (methResults.get("univariate_bh") != null) {
-                table += "<td bgcolor=\"" + univariate_bh.get(element).getHtmlColor() + "\"><a title=\"rank: " + univariate_bh.get(element).getRank() + "\"> " + df.format(univariate_bh.get(element).getMean()) + "</td>";
-            }
-            if (methResults.get("rf") != null) {
-                table += "<td bgcolor=\"" + rf.get(element).getHtmlColor() + "\"><a title=\"rank: " + rf.get(element).getRank() + " / sd: " + df.format(rf.get(element).getSd()) + " \"> " + df.format(rf.get(element).getMean()) + " </a></td>";
-            }
-            if (methResults.get("svm") != null) {
-                table += "<td bgcolor=\"" + svm.get(element).getHtmlColor() + "\"><a title=\"rank: " + svm.get(element).getRank() + " / sd: " + df.format(svm.get(element).getSd()) + " \"> " + df.format(svm.get(element).getMean()) + " </a></td>";
-            }
-            if (methResults.get("pcr") != null) {
-                table += "<td bgcolor=\"" + pcr.get(element).getHtmlColor() + "\"><a title=\"rank: " + pcr.get(element).getRank() + " / sd: " + df.format(pcr.get(element).getSd()) + " \"> " + df.format(pcr.get(element).getMean()) + " </a></td>";
-            }
-            if (methResults.get("pls") != null) {
-                table += "<td bgcolor=\"" + pls.get(element).getHtmlColor() + "\"><a title=\"rank: " + pls.get(element).getRank() + " / sd: " + df.format(pls.get(element).getSd()) + " \"> " + df.format(pls.get(element).getMean()) + " </a></td>";
-            }
-            if (methResults.get("ridge") != null) {
-                table += "<td bgcolor=\"" + ridge.get(element).getHtmlColor() + "\"><a title=\"rank: " + ridge.get(element).getRank() + " / sd: " + df.format(ridge.get(element).getSd()) + " \"> " + df.format(ridge.get(element).getMean()) + " </a></td>";
-            }
-            if (methResults.get("lasso") != null) {
-                if (lasso.get(element).getMean() != 0) {
-                    table += "<td bgcolor=\"" + lasso.get(element).getHtmlColor() + "\"><a title=\"rank: " + lasso.get(element).getRank() + " / sd: " + df.format(lasso.get(element).getSd()) + " \"> " + df.format(lasso.get(element).getMean()) + " </a></td>";
-                }
-            }
-            if (methResults.get("en") != null) {
-                if (en.get(element).getMean() != 0) {
-                    table += "<td bgcolor=\"" + en.get(element).getHtmlColor() + "\"><a title=\"rank: " + en.get(element).getRank() + " / sd: " + df.format(en.get(element).getSd()) + " \"> " + df.format(en.get(element).getMean()) + " </a></td>";
-                }
-            }
-            if (methResults.get("spls") != null) {
-                if (spls.get(element).getMean() != 0) {
-                    table += "<td bgcolor=\"" + spls.get(element).getHtmlColor() + "\"><a title=\"rank: " + spls.get(element).getRank() + " / sd: " + df.format(spls.get(element).getSd()) + " \"> " + df.format(spls.get(element).getMean()) + " </a></td>";
-                }
-            }
-            table += "</tr>\n";
-        }
-        table += "</table>";
-        //To allow tests without usage of request scope?
-        if (ServletUtils.getServletRequest() != null) {
-            HttpServletRequest servletRequest = ServletUtils.getServletRequest();
-            servletRequest.setAttribute("table", table);
-        }
-        return SUCCESS;
+        return rank;
     }
 
     /**
@@ -355,10 +399,10 @@ public class RetrieveResultsSummaryAction extends RetrieveResultsSummaryValidati
     }
 
     /**
-     *
+     *Add background color to the cells.
      * @param results
      */
-    private void addTableBackgroundColors(ArrayList<CsvSummaryDataType> results) {
+    private void addTableBackgroundColors(ArrayList<CsvSummaryDataType> results, boolean inverse) {
         //Initialize to the extreme values.
         Double min = Double.POSITIVE_INFINITY;
         Double max = Double.NEGATIVE_INFINITY;
@@ -374,7 +418,7 @@ public class RetrieveResultsSummaryAction extends RetrieveResultsSummaryValidati
         }
         //Create a table (with background colors).
         for (CsvSummaryDataType csvSummaryDataType : results) {
-            csvSummaryDataType.setHtmlColor(getBackgroundColor(csvSummaryDataType.getMean(), min, max));
+            csvSummaryDataType.setHtmlColor(getBackgroundColor(csvSummaryDataType.getMean(), min, max, inverse));
         }
     }
 
@@ -385,22 +429,15 @@ public class RetrieveResultsSummaryAction extends RetrieveResultsSummaryValidati
      * @throws FileNotFoundException
      * @throws IOException
      */
-    private HashMap<String, ArrayList<CsvSummaryDataType>> getMethodsWithResultsSummaryFiles(String sessionID) throws FileNotFoundException, IOException {
+    private HashMap<String, ArrayList<CsvSummaryDataType>> getMethodsWithResultsSummaryFiles(String sessionID, String resultsDirectory) throws FileNotFoundException, IOException {
         HashMap<String, ArrayList<CsvSummaryDataType>> results = new HashMap<String, ArrayList<CsvSummaryDataType>>();
-        //FIXME: hardcoded
-        String resultsDirectory = request.getSession().getServletContext().getInitParameter("resultsDirectory");
+
         if (sessionID == null || sessionID.isEmpty()) {
             resultsDirectory = "/home/finke002/Desktop/d89339e9c510a1e4e13ce46cc02b/";//Work
-//        String tempDir = "/home/finke002/Desktop/e125586fcf9ba1b02a33093a2c17ex/";//CE Flesh
-//        String tempDir = "/home/finke002/Desktop/81df58ab8635eaea6211020de5b5/";//BRIX
-//        String tempDir = "/tmp/d2159ab79390aae6f5aea5e08254/";
+            //TODO: throw exception // move to form validation!
         } else {
-            //TODO if ends.witth / then ok, otherwise add + "/" + sessionID!
             resultsDirectory += sessionID + "/";
         }
-
-        LOG.log(Level.INFO, "Tempdir: {0}", resultsDirectory);
-
 
         if (FileOrDirectoryExists.FileOrDirectoryExists(resultsDirectory + "LASSO_coef_Sum.csv") == true) {
             results.put("lasso", CSV.readSummaryCsv(resultsDirectory + "LASSO_coef_Sum.csv"));
@@ -441,9 +478,10 @@ public class RetrieveResultsSummaryAction extends RetrieveResultsSummaryValidati
      * @param result
      * @param min
      * @param max
+     * @param inverse
      * @return String containing the color code.
      */
-    protected String getBackgroundColor(Double result, Double min, Double max) {
+    protected String getBackgroundColor(Double result, Double min, Double max, boolean inverse) {
         String background = "#ffffff"; //White is default color.
 
         Double range = Math.abs(max) - Math.abs(min);
@@ -455,6 +493,11 @@ public class RetrieveResultsSummaryAction extends RetrieveResultsSummaryValidati
         //this equation. Set them manually to the max value.
         if (group > 20) {
             group = 20;
+        }
+
+        if (inverse == true) {
+            int newgroup = 20 - group;
+            group = newgroup;
         }
         switch (group) {
             case 1:

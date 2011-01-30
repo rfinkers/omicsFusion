@@ -258,8 +258,8 @@ public class Analysis {
             rCode += "      predictorTrainSet" + i + " <- DesignMatrix[trainingSet" + i + ",]\n";
             rCode += "      predictorTestSet" + i + " <- DesignMatrix[-trainingSet" + i + ",]\n";// outer test set
             //FIXME: predictorSets are scaled, responseSets are not scaled??
-            rCode += "      responseTrainSet" + i + " <- dataSet$Response[trainingSet" + i + "]\n";//FIXME hardcoded. dataSet[1] does not work. Selects potentially wrong columns
-            rCode += "      responseTestSet" + i + " <- dataSet$Response[-trainingSet" + i + "]\n";//FIXME hardcoded. dataSet[1] does not work
+            rCode += "      responseTrainSet" + i + " <- dataSet$Response[trainingSet" + i + "]\n";//dataSet[1] does not work. Selects potentially wrong columns
+            rCode += "      responseTestSet" + i + " <- dataSet$Response[-trainingSet" + i + "]\n";//dataSet[1] does not work
             //TODO: write trainingset to a file.
             rCode += "      ## Parameter optimalization\n";
             if (analysisMethod.equals("en")) {

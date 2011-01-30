@@ -9,7 +9,6 @@
 <s:actionerror/>
 <s:actionmessage/>
 
-
 <s:url id='chartUrl' action='chart'>
     <s:param name='chartId'>${chartType}</s:param>
 </s:url>

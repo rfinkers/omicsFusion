@@ -19,15 +19,14 @@ import java.awt.Color;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import nl.wur.plantbreeding.logic.jfreechart.GenotypeXYToolTipGenerator;
 import nl.wur.plantbreeding.logic.jfreechart.GenotypeXYDataset;
 import nl.wur.plantbreeding.omicsfusion.excel.ReadExcelSheet;
+import nl.wur.plantbreeding.omicsfusion.utils.ReadFile;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.struts2.interceptor.ParameterAware;
 import org.apache.struts2.interceptor.ServletRequestAware;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
@@ -43,20 +42,18 @@ import org.jfree.data.xy.DefaultXYDataset;
  * @author Richard Finkers
  * @version 1.0.
  */
-public class PredictorResponseXYScatterAction extends PredictorResponseXYScatterForm implements ParameterAware, ServletRequestAware {
+public class PredictorResponseXYScatterAction extends PredictorResponseXYScatterForm implements ServletRequestAware {
 
     /** Serial Version UID */
     private static final long serialVersionUID = 100906L;
     /** Chart object */
     private JFreeChart chart;
-    /** the parameter map */
-    private Map<String, String[]> parameters;
     /** the request */
-    private HttpServletRequest request;//TODO: use RequestAware (map version) instead?
+    private HttpServletRequest request;//TODO: use RequestAware (map version) instead!
 
     @Override
     public String execute() throws Exception {
-
+        
         String predictor = null;
         try {
             predictor = request.getHeader("referer");
@@ -73,13 +70,25 @@ public class PredictorResponseXYScatterAction extends PredictorResponseXYScatter
             e.printStackTrace();
         }
         String sessionName = (String) request.getSession().getAttribute("resultSession");
-        //FIXME: hardcoded
-        String response = "Flesh color";
+        String response = (String) request.getSession().getAttribute("responseName");
         //response vs continues or response vs discrete.
 
         //Should also include model summaries?
         LOG.info("get data");
-        DefaultXYDataset xyDataset = getDataSet(predictor, sessionName);
+        DefaultXYDataset xyDataset = null;
+        try {
+            xyDataset = getDataSet(predictor, sessionName);
+        } catch (InvalidFormatException invalidFormatException) {
+            addActionError("You have used an undocumented input format for your omicsFusion run (likely a cvs file). We currently do not support viewing the XY scatter for this format!");
+            LOG.log(Level.INFO, "XYScatter, invalid format: {0}", invalidFormatException.getMessage());
+        } catch (FileNotFoundException e) {
+            addActionError("File not found");
+        } catch (Exception e) {
+            addActionError("Exception occured.");
+            //This one will be catched when no valid input format is available. Due to the forward, the exception message gets lost?
+            LOG.info("Exception: " + e.getMessage());
+        }
+        
         LOG.info("got data");
         ValueAxis xAxis = new NumberAxis("Response: " + response);
         ValueAxis yAxis = new NumberAxis("Predictor: " + predictor);
@@ -94,12 +103,12 @@ public class PredictorResponseXYScatterAction extends PredictorResponseXYScatter
         //TODO: regression line?
 
         DefaultXYItemRenderer renderer = new DefaultXYItemRenderer();
-
+        
         renderer.setSeriesToolTipGenerator(0, tooltipGen);
         renderer.setSeriesLinesVisible(0, false);
         renderer.setBaseOutlinePaint(Color.WHITE);
-
-
+        
+        
         Plot plot = new XYPlot(xyDataset, xAxis, yAxis, renderer);
         plot.setNoDataMessage("NO DATA");
 
@@ -111,29 +120,24 @@ public class PredictorResponseXYScatterAction extends PredictorResponseXYScatter
                 plot,
                 false);
         chart.setBackgroundPaint(java.awt.Color.white);
-
-
+        
+        
         LOG.info("Chart created");
-
+        
         return SUCCESS;
     }
 
+    /**
+     * Create a random test dataset of 100 xy points.
+     * @return  A random test dataset.
+     */
     private DefaultXYDataset getTestDataSet() {
         // chart creation logic...
-        //Read excel sheets
-
-        //Get the relevant colomns
-        //Get the column with genotype names
-
-        //Parse the excel column in the data object. Deal with missig data (Omit from object?)
-
-        //x: predictor and y: response
-
         int nrOfDataPoints = 100;
-
+        
         double[][] data = new double[2][nrOfDataPoints];
         String[] genotypeLabels = new String[nrOfDataPoints];
-
+        
         for (int i = 0; i < nrOfDataPoints; i++) {
             data[0][i] = i;//predictor
             data[1][i] = Math.random();//response
@@ -143,45 +147,62 @@ public class PredictorResponseXYScatterAction extends PredictorResponseXYScatter
         return xy;
     }
 
-    private DefaultXYDataset getDataSet(String predictor, String sessionID) {
-        //FIXME: filenames currently hardcoded
-        String responseFile = "/home/finke002/omicsFusion/" + sessionID + "/CE_Flesh.xls";
-        String predictorFile = "/home/finke002/omicsFusion/" + sessionID + "/CE_Met.xls";
-
-        File predFile = new File(predictorFile);
-        File respFile = new File(responseFile);
-        DefaultXYDataset readPredictorAndResponseValue = null;
+    /**
+     * Read two data sheets and parse the right colomns for the XY scatter.
+     * @param predictor Name of the predictor variable.
+     * @param sessionID SessionID of the original analysis run.
+     * @return XYDataset.
+     * @throws InvalidFormatException Not an excel compatible sheet!
+     */
+    private DefaultXYDataset getDataSet(String predictor, String sessionID) throws InvalidFormatException, FileNotFoundException, IOException, Exception {
+        //read the filenames from filenames.txt
+        ReadFile rf = new ReadFile();
+        //The filenames are stored in this string array
+        String fileNames[] = null;
+        
         try {
-            LOG.info("try");
-            readPredictorAndResponseValue = ReadExcelSheet.readPredictorAndResponseValue(respFile, predFile, predictor);//TODO: trim X.?
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(PredictorResponseXYScatterAction.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InvalidFormatException ex) {
-            Logger.getLogger(PredictorResponseXYScatterAction.class.getName()).log(Level.SEVERE, null, ex);
+            fileNames = rf.ReadSheetFileNames(getResultsDir() + sessionID + "/filenames.txt");
+            //currently only valid for excel sheets as input. Otherwise throw error.
         } catch (IOException ex) {
             Logger.getLogger(PredictorResponseXYScatterAction.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+        //Read the names of the predictor and response file
+        String responseFile = getResultsDir() + sessionID + "/" + fileNames[0].trim();
+        String predictorFile = getResultsDir() + sessionID + "/" + fileNames[1].trim();
+        
+        File predFile = new File(predictorFile);
+        File respFile = new File(responseFile);
+        DefaultXYDataset readPredictorAndResponseValue = null;
+        
+        LOG.info("try");
+        readPredictorAndResponseValue = ReadExcelSheet.readPredictorAndResponseValue(respFile, predFile, predictor);
+
 
         //DefaultXYDataset xy = new GenotypeXYDataset("Genotype", data, genotypeLabels, genotypeLabels)
         //return xy;
         return readPredictorAndResponseValue;
     }
-
+    
     public JFreeChart getChart() {
         return chart;
     }
-
-    @Override
-    public void setParameters(Map<String, String[]> parameters) {
-        this.parameters = parameters;
-    }
-
-    public Map<String, String[]> getParameters() {
-        return parameters;
-    }
-
+    
     @Override
     public void setServletRequest(HttpServletRequest request) {
         this.request = request;
+    }
+
+    /**
+     * Get the temp directory from the system.
+     * @return the location of the temp directory (including slash or backslash).
+     */
+    private String getResultsDir() {
+        //String resultsDirectory = System.getProperty("java.io.tmpdir");
+        String resultsDirectory = request.getSession().getServletContext().getInitParameter("resultsDirectory");
+        if (!(resultsDirectory.endsWith("/") || resultsDirectory.endsWith("\\"))) {
+            resultsDirectory += System.getProperty("file.separator");
+        }
+        return resultsDirectory;
     }
 }

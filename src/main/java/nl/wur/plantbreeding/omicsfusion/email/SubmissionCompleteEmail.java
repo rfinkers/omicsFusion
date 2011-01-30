@@ -46,12 +46,16 @@ public class SubmissionCompleteEmail extends Email {
 
         //Email body shoudl consist of:
         emailBody = "Dear " + email.getUser().getUserName() + ", \n"
-                + "Thanks for using our omicsFusion service.\n"
-                + "You can view your results by navigation to the following web address: "
-                + "http://" + ServletActionContext.getRequest().getLocalName() + ":" + ServletActionContext.getRequest().getLocalPort()//TODO: http is now hardcoded
+                + "Your job has been sucsessfully submitted to the omicsFusion analysis pipeline.\n"
+                + "You can view your intermediate results by navigation to the following web address: "
+                + ServletActionContext.getRequest().getScheme() + "://"
+                + ServletActionContext.getRequest().getLocalName() + ":"
+                + ServletActionContext.getRequest().getLocalPort()
                 + ServletActionContext.getServletContext().getContextPath()
                 + "/results/summaryResults?sessionId=" + email.getSessionID() + "\n"
-                + "Alternatively, you can enter the unique identifyer " + email.getSessionID() + " on the omicsFusion website\n\n"
+                + "Alternatively, you can enter your unique identifyer " + email.getSessionID() + " on the omicsFusion website\n"
+                + "Please not that it can take up to several hours before your first results are available and several days before all jobs are finished.\n"
+                + "A notification email will be sended once all methods are completed.\n"
                 + "We are happy to recieve your feedback.\n\n"
                 + "Regards,\n"
                 + "Richard Finkers\n";

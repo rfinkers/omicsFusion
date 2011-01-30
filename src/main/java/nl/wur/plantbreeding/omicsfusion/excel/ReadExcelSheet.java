@@ -42,7 +42,7 @@ public class ReadExcelSheet extends ManipulateExcelSheet {
         //readPredictorAndResponseValue(responseSheet, predictorSheet, predictor);
     }
 
-    public static DefaultXYDataset readPredictorAndResponseValue(File responseSheet, File predictorSheet, String predictor) throws FileNotFoundException, InvalidFormatException, IOException {
+    public static DefaultXYDataset readPredictorAndResponseValue(File responseSheet, File predictorSheet, String predictor) throws FileNotFoundException, InvalidFormatException, IOException, Exception {
 
 
         /** wb for the response variables */
@@ -51,14 +51,13 @@ public class ReadExcelSheet extends ManipulateExcelSheet {
         Sheet predWbSheet;
 
         respWbSheet = loadExcelSheet(responseSheet).getSheetAt(0);//trait
-        predWbSheet = loadExcelSheet(predictorSheet).getSheetAt(0);//matrix
-
+        predWbSheet = loadExcelSheet(predictorSheet).getSheetAt(0);//predictor matrix
 
         //TODO: refractor for sheet instead of row!
         Row predictorRow = predWbSheet.getRow(0);//matrix
 
         int i = 0;
-        try {
+     
             //Find the right column.
             for (i = 1; i < predictorRow.getLastCellNum(); i++) {//ommit the header column for the genotypes
                 //System.out.println("row header:" + predictorRow.getCell(i).getStringCellValue());
@@ -66,10 +65,9 @@ public class ReadExcelSheet extends ManipulateExcelSheet {
                     break;
                 }
             }
-        } catch (Exception e) {
-            //handle null pointer (empty column & int errors
-            System.out.println("ERROR: " + e.getCause());
-        }
+
+
+   
         System.out.println("Predictor: " + predictor);
 
         System.out.println("Need column: " + i);
@@ -83,7 +81,7 @@ public class ReadExcelSheet extends ManipulateExcelSheet {
         try {
             for (int j = 0; j < predWbSheet.getLastRowNum(); j++) {
                 //data matrix is 0 based, however, we have to start reading the excel sheet from row 1 (row0 = header).
-                int z=j+1;
+                int z = j + 1;
                 data[0][j] = respWbSheet.getRow(z).getCell(1).getNumericCellValue();//predictor                
                 data[1][j] = predWbSheet.getRow(z).getCell(i).getNumericCellValue();//response                
                 genotypeLabels[j] = respWbSheet.getRow(z).getCell(0).getStringCellValue();
