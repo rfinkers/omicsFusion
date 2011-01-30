@@ -30,7 +30,7 @@ public class UserDetailsValidationForm extends ActionSupport {
     /** email of the user */
     private String email;
     /** country */
-    private String county;
+    private String country;
     /** affiliation */
     private String affiliation;
 
@@ -58,12 +58,12 @@ public class UserDetailsValidationForm extends ActionSupport {
         this.affiliation = affiliation;
     }
 
-    public String getCounty() {
-        return county;
+    public String getCountry() {
+        return country;
     }
 
-    public void setCounty(String county) {
-        this.county = county;
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     public static Logger getLOG() {

@@ -46,7 +46,7 @@ public class UserDetailsAction extends UserDetailsValidationForm implements Sess
             user.setUserName(getName());
             user.setEmail(getEmail());
             user.setAffiliation(getAffiliation());
-            user.setCountry(getCounty());
+            user.setCountry(getCountry());
 
             LOG.info(user.toString());//TODO: remove debug code
 
