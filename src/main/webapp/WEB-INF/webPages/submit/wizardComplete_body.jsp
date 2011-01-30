@@ -24,7 +24,12 @@
 <s:text name="dataSheetResponseFile"/> : <s:property value="#session.sheets.response"/>
 
 <h4><s:text name="submit.complete.methods"/></h4>
-<s:property value="#session.methods.ridge"/>
+<ul>
+    <s:iterator value="#session.methods">
+        <li><s:property/></li>
+    </s:iterator>
+</ul>
+
 <s:form action="/analysis/pipeline" >
     <s:hidden value="go" name="ready"/>
     <s:submit/>
