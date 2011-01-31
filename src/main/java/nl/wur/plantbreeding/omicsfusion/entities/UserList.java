@@ -19,7 +19,7 @@ import javax.persistence.TemporalType;
 
 /**
  *
- * @author finke002
+ * @author Richard Finkers
  */
 @Entity
 @Table(name = "userList", catalog = "omicsFusion", schema = "")

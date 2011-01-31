@@ -9,7 +9,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author finke002
+ * @author Richard Finkers
  */
 public class ExcelToDatabase {
     private static final Logger LOG = Logger.getLogger(ExcelToDatabase.class.getName());

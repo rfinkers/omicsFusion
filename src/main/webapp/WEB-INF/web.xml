@@ -9,7 +9,7 @@
     <context-param>
         <description>SGE queue to use</description>
         <param-name>SGEQueue</param-name>
-        <param-value>stat</param-value>
+        <param-value>stat.short</param-value>
     </context-param>
     <context-param>
         <param-name>sendEmail</param-name>

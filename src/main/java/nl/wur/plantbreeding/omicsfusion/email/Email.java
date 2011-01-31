@@ -135,13 +135,6 @@ public class Email extends ActionSupport {
         Multipart multipart = new MimeMultipart();
         multipart.addBodyPart(messageBodyPart);
 
-        // Part two is attachment
-        //messageBodyPart = new MimeBodyPart();
-        //DataSource source = new FileDataSource("/home/finke002/sources.list");
-        //messageBodyPart.setDataHandler(new DataHandler(source));
-        //messageBodyPart.setFileName("test");
-        //multipart.addBodyPart(messageBodyPart);
-
         // Put parts in message
         message.setContent(multipart);
 

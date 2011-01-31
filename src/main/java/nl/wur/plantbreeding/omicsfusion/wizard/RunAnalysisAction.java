@@ -176,7 +176,8 @@ public class RunAnalysisAction extends ActionSupport implements ServletRequestAw
         //Submit jobs to the SGE QUEUE
         //FIXME: We should add an parameter if the current job (e.g. the RF job) will use multiple CPU's
         int jobId = 0;
-        jobId = CmdExec.ExecuteQSubCmd(getResultsDir() + getRequest().getSession().getId() + "/", scriptName);
+        String queue = request.getSession().getServletContext().getInitParameter("SGEQueue");
+        jobId = CmdExec.ExecuteQSubCmd(getResultsDir() + getRequest().getSession().getId() + "/", scriptName, queue);
 
         if (jobId == 0) {
             LOG.severe("error during submission");//TODO: implement exception? Also is thrown when a wrong queue name is selected

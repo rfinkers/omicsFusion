@@ -50,7 +50,7 @@ public class CmdExecTest {
         String executionDir = "/home/finke002/NetBeansProjects/omicsFusion/src/main/resources"; //FIXME: refer to a valid test test case.
         String method = "lasso";
         int expResult = 0;
-        int result = CmdExec.ExecuteQSubCmd(executionDir, method);
+        int result = CmdExec.ExecuteQSubCmd(executionDir, method, "stat.short");
         assertNotSame(expResult, result);
     }
 

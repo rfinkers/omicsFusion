@@ -27,19 +27,20 @@ public class CmdExec {
      * Executes a SGE batch script and returns the job id of the submission.
      * @param executionDir Name of the directory where the job scripts / data resides.
      * @param method Method to be executed.
+     * @param queue
      * @return JobID on the SGE grid.
      * @throws IOException Batch job script not found.
      */
-    public static int ExecuteQSubCmd(String executionDir, String method) throws IOException {
+    public static int ExecuteQSubCmd(String executionDir, String method, String queue) throws IOException {
         Process p;
         if (method.equals("rf") || method.equals("spls") || method.equals("ridge")) {
             //TODO: -q queue my_job.pbs
             //TODO: -P omicsFusion -> project name
             //TODO: queue from initParameters
             //TODO: replace email with email user?
-            p = Runtime.getRuntime().exec("qsub -S /bin/bash -p -100 -pe MPI 4 -q stat -m bea -M richard.finkers@wur.nl " + executionDir + method + ".pbs");
+            p = Runtime.getRuntime().exec("qsub -S /bin/bash -p -100 -pe Rmpi " + Constants.MAX_NUMBER_CPU + " -q " + queue + " -m bea -M richard.finkers@wur.nl " + executionDir + method + ".pbs");
         } else {
-            p = Runtime.getRuntime().exec("qsub -S /bin/bash -q stat " + executionDir + method + ".pbs");
+            p = Runtime.getRuntime().exec("qsub -S /bin/bash -q " + queue + " " + executionDir + method + ".pbs");
         }
         BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
         String line = input.readLine();
