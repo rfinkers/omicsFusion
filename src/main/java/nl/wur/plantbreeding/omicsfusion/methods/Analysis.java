@@ -280,14 +280,13 @@ public class Analysis {
                 // tunegrid:
                 // .alpha depens on the method
                 rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"glmnet\", metric = \"RMSE\", tuneLength = 10, tuneGrid = data.frame(.lambda = seq(0, 1, by = 0.1), .alpha = 1), trControl = innerLoop)\n";
-            } else if (analysisMethod.equals("ridge")) {
-                rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"glmnet\", metric = \"RMSE\", tuneLength = 10, tuneGrid = data.frame(.lambda = seq(0, 100, by = 0.1), .alpha = 0), trControl = innerLoop)\n";
             } else if (analysisMethod.equals("svm")) {
                 rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"svmRadial\", metric = \"RMSE\", tuneLength = 10, trControl = innerLoop)\n";
             } else if (analysisMethod.equals("pls")) {
                 rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"pls\", metric = \"RMSE\", tuneLength = 10, trControl = innerLoop)\n";
-            } else if (analysisMethod.equals("rf") || analysisMethod.equals("spls")) {
+            } else if (analysisMethod.equals("rf") || analysisMethod.equals("spls") || analysisMethod.equals("ridge")) {
                 if (Constants.MAX_NUMBER_CPU > 2) {
+                    //TODO: add ridge to
                     int workerCount = Constants.MAX_NUMBER_CPU - 1;
                     //TODO: start in the first itteration only? Then, move if statement to R level
                     //Required additional packages: foreach, iterators, codetools, Rmpi
@@ -300,6 +299,8 @@ public class Analysis {
                     rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"rf\", metric = \"RMSE\", tuneLength = 10, trControl = innerLoop)\n";
                 } else if (analysisMethod.equals("spls")) {
                     rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"spls\", metric = \"RMSE\", tuneLength = 10, trControl = innerLoop)\n";
+                } else if (analysisMethod.equals("ridge")) {
+                    rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"glmnet\", metric = \"RMSE\", tuneLength = 10, tuneGrid = data.frame(.lambda = seq(0, 100, by = 0.1), .alpha = 0), trControl = innerLoop)\n";
                 }
                 if (Constants.MAX_NUMBER_CPU > 2) {
                     //TODO: stop in the last itteration only?
