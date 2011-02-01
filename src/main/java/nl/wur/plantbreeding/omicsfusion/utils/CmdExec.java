@@ -38,7 +38,13 @@ public class CmdExec {
             //TODO: -P omicsFusion -> project name
             //TODO: queue from initParameters
             //TODO: replace email with email user?
-            p = Runtime.getRuntime().exec("qsub -S /bin/bash -p -100 -pe Rmpi " + Constants.MAX_NUMBER_CPU + " -q " + queue + " -m bea -M richard.finkers@wur.nl " + executionDir + method + ".pbs");
+            //FIXME: use mpi only if MAX_NUMBER_CPU > 3. otherwise, default to normal submission
+
+            if (Constants.MAX_NUMBER_CPU > 2) {//TODO: add this to the test above?
+                p = Runtime.getRuntime().exec("qsub -S /bin/bash -p -100 -pe Rmpi " + Constants.MAX_NUMBER_CPU + " -q " + queue + " -m bea -M richard.finkers@wur.nl " + executionDir + method + ".pbs");
+            } else {
+                p = Runtime.getRuntime().exec("qsub -S /bin/bash -q " + queue + " " + executionDir + method + ".pbs");
+            }
         } else {
             p = Runtime.getRuntime().exec("qsub -S /bin/bash -q " + queue + " " + executionDir + method + ".pbs");
         }

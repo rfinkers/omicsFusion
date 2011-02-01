@@ -30,7 +30,7 @@
       menuWidth:400,
       openOnRight:false,
       containment:"window",
-      iconPath:"/images/ico/",
+      iconPath:"images/ico/",
       hasImages:true,
       fadeInTime:100,
       fadeOutTime:200,

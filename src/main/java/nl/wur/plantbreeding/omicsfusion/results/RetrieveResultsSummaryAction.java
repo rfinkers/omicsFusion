@@ -138,13 +138,13 @@ public class RetrieveResultsSummaryAction extends RetrieveResultsSummaryValidati
         }
         if (methResults.get("univariate_p") != null) {
             univariate_p = methResults.get("univariate_p");
-            addTableBackgroundColors(univariate_p, true);//FIXME: add different background colors (on pValues?) to Univariate
+            addTableBackgroundColors(univariate_p, true);
             resultRows[resultRowsCounter] = univariate_p.size();
             resultRowsCounter++;
         }
         if (methResults.get("univariate_bh") != null) {
             univariate_bh = methResults.get("univariate_bh");
-            addTableBackgroundColors(univariate_bh, true);//FIXME: add different background colors (on pValues?) to Univariate
+            addTableBackgroundColors(univariate_bh, true);
             resultRows[resultRowsCounter] = univariate_bh.size();
             resultRowsCounter++;
         }

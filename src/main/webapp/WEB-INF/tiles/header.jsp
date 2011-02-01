@@ -1,7 +1,7 @@
 <%-- 
     Document   : PBR header.jsp
     Created on : Apr 10, 2009, 6:58:31 PM
-    Author     : finke002
+    Author     : Richard Finkers
 --%>
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>

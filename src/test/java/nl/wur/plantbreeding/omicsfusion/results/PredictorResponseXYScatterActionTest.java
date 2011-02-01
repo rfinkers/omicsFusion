@@ -26,7 +26,7 @@ import static org.junit.Assert.*;
 
 /**
  *
- * @author finke002
+ * @author Richard Finkers
  */
 public class PredictorResponseXYScatterActionTest {
 

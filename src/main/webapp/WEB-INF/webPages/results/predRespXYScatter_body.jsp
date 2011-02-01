@@ -1,7 +1,7 @@
 <%--
     Document   : Results index page
     Created on : May 13, 2010, 11:26:43 AM
-    Author     : finke002
+    Author     : Richard Finkers
 --%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 

@@ -1,7 +1,17 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- * TODO: if the datasets contains not recognized NA values, we get an error that RSME is not valid for train method.
+ * Copyright 2011 omicstools.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package nl.wur.plantbreeding.omicsfusion.methods;
 
@@ -9,6 +19,7 @@ import java.util.HashMap;
 import java.util.logging.Logger;
 import nl.wur.plantbreeding.omicsfusion.utils.Constants;
 //FIXME: implement as abstract? Check manuals.
+//TODO: if the datasets contains not recognized NA values, we get an error that RSME is not valid for train method.
 
 /**
  * Generic Analysis class for the omicsFusion pipeline. Each method needs to implement its own specification, but might inherit code from this class.
@@ -77,7 +88,7 @@ public class Analysis {
      */
     protected String preProcessMatrix() {
         String rCode = "# Pre process data matrix\n";
-        //Let's Hack. FIXME: Isn't there another way than overriding the trait name?
+        //Let's Hack. TODO: Isn't there another way than overriding the trait name?
         rCode += "nameVector<-colnames(dataSet)\n";
         rCode += "traitName<-nameVector[1]\n";
         rCode += "write.table(file=\"analysis.txt\", traitName)\n";
@@ -97,7 +108,7 @@ public class Analysis {
     protected String getTrainingSets() {
         //TODO: we might get different training and test sets profided via the dataset upload.
         String rCode = " # Create training sets\n";
-        //FIXME: dataSet[1] coding does not work. currently using unlist(dataset[1]). Does this work, or should we code it now to dataSet$Response?
+        //TODO: dataSet[1] coding does not work. currently using unlist(dataset[1]). Does this work, or should we code it now to dataSet$Response?
         //Can do different procedures. E.G. bootstraps, resampling, leaf-one-out, etc. User selectable?
         rCode += "  inTrainingSet <- createFolds(dataSet$Response, k = " + Constants.NUMBER_FOLDS_OUTER + ", list = TRUE, returnTrain = T)\n";
         for (int i = 0; i < Constants.NUMBER_FOLDS_OUTER; i++) {
@@ -276,7 +287,7 @@ public class Analysis {
             } else if (analysisMethod.equals("pls")) {
                 rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"pls\", metric = \"RMSE\", tuneLength = 10, trControl = innerLoop)\n";
             } else if (analysisMethod.equals("rf") || analysisMethod.equals("spls")) {
-                if (Constants.MAX_NUMBER_CPU > 1) {
+                if (Constants.MAX_NUMBER_CPU > 2) {
                     int workerCount = Constants.MAX_NUMBER_CPU - 1;
                     //TODO: start in the first itteration only? Then, move if statement to R level
                     //Required additional packages: foreach, iterators, codetools, Rmpi
@@ -290,7 +301,7 @@ public class Analysis {
                 } else if (analysisMethod.equals("spls")) {
                     rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"spls\", metric = \"RMSE\", tuneLength = 10, trControl = innerLoop)\n";
                 }
-                if (Constants.MAX_NUMBER_CPU > 1) {
+                if (Constants.MAX_NUMBER_CPU > 2) {
                     //TODO: stop in the last itteration only?
                     rCode += "      closeCluster(cl)\n";
                 }

@@ -22,7 +22,7 @@ import java.util.Scanner;
 
 /**
  *
- * @author finke002
+ * @author Richard Finkers
  */
 public class ReadFile {
 
