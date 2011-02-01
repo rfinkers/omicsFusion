@@ -1,6 +1,17 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright 2011 omicstools.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package nl.wur.plantbreeding.omicsfusion.utils;
 
@@ -34,13 +45,9 @@ public class CmdExec {
     public static int ExecuteQSubCmd(String executionDir, String method, String queue) throws IOException {
         Process p;
         if (method.equals("rf") || method.equals("spls") || method.equals("ridge")) {
-            //TODO: -q queue my_job.pbs
-            //TODO: -P omicsFusion -> project name
-            //TODO: queue from initParameters
+            //-P omicsFusion -> project name : Probably not, as we don't account this in SGE!
             //TODO: replace email with email user?
-            //FIXME: use mpi only if MAX_NUMBER_CPU > 3. otherwise, default to normal submission
-
-            if (Constants.MAX_NUMBER_CPU > 2) {//TODO: add this to the test above?
+            if (Constants.MAX_NUMBER_CPU > 2) {//TODO: add this to the if test above?
                 p = Runtime.getRuntime().exec("qsub -S /bin/bash -p -100 -pe Rmpi " + Constants.MAX_NUMBER_CPU + " -q " + queue + " -m bea -M richard.finkers@wur.nl " + executionDir + method + ".pbs");
             } else {
                 p = Runtime.getRuntime().exec("qsub -S /bin/bash -q " + queue + " " + executionDir + method + ".pbs");

@@ -5,7 +5,7 @@
     <groupId>nl.wur.plantbreeding</groupId>
     <artifactId>omicsFusion</artifactId>
     <packaging>war</packaging>
-    <version>1.0-MILESTONE1</version>
+    <version>1.0-M2</version>
     <name>omicsFusion Java EE 6 Webapp</name>
     <description>omicsFusion</description>
     <url>http://maven.apache.org</url>
