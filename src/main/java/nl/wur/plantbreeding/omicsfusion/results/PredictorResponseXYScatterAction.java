@@ -19,11 +19,13 @@ import java.awt.Color;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import nl.wur.plantbreeding.logic.jfreechart.GenotypeXYToolTipGenerator;
 import nl.wur.plantbreeding.logic.jfreechart.GenotypeXYDataset;
+import nl.wur.plantbreeding.logic.jfreechart.GenotypeXYUrlGenerator;
 import nl.wur.plantbreeding.omicsfusion.excel.ReadExcelSheet;
 import nl.wur.plantbreeding.omicsfusion.utils.ReadFile;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -31,10 +33,12 @@ import org.apache.struts2.interceptor.ServletRequestAware;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.axis.ValueAxis;
+import org.jfree.chart.imagemap.ImageMapUtilities;
 import org.jfree.chart.labels.XYToolTipGenerator;
 import org.jfree.chart.plot.Plot;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.DefaultXYItemRenderer;
+import org.jfree.chart.urls.XYURLGenerator;
 import org.jfree.data.xy.DefaultXYDataset;
 
 /**
@@ -53,7 +57,7 @@ public class PredictorResponseXYScatterAction extends PredictorResponseXYScatter
 
     @Override
     public String execute() throws Exception {
-        
+
         String predictor = null;
         try {
             predictor = request.getHeader("referer");
@@ -86,32 +90,34 @@ public class PredictorResponseXYScatterAction extends PredictorResponseXYScatter
         } catch (Exception e) {
             addActionError("Exception occured.");
             //This one will be catched when no valid input format is available. Due to the forward, the exception message gets lost?
-            LOG.info("Exception: " + e.getMessage());
+            LOG.log(Level.INFO, "Exception: {0}", e.getMessage());
         }
-        
+
         LOG.info("got data");
+
+        //X and Y axis
         ValueAxis xAxis = new NumberAxis("Response: " + response);
         ValueAxis yAxis = new NumberAxis("Predictor: " + predictor);
         xAxis.setAutoRange(true);
 
-        //XYURLGenerator urlGen = new GenotypeXYUrlGenerator();
-        //urlGen.generateURL(xyDataset, 1, 1);
-        XYToolTipGenerator tooltipGen = new GenotypeXYToolTipGenerator();
-        //dtooltipGen.generateToolTip(xyDataset, 25, 25);
-
         //TODO: imagemap
         //TODO: regression line?
 
+        //Renderer
         DefaultXYItemRenderer renderer = new DefaultXYItemRenderer();
-        
-        renderer.setSeriesToolTipGenerator(0, tooltipGen);
         renderer.setSeriesLinesVisible(0, false);
         renderer.setBaseOutlinePaint(Color.WHITE);
-        
-        
+
+        //Tooltip
+        XYToolTipGenerator tooltipGen = new GenotypeXYToolTipGenerator();
+        renderer.setSeriesToolTipGenerator(0, tooltipGen);
+
+        //URL generator
+        XYURLGenerator urlGen = new GenotypeXYUrlGenerator();
+        renderer.setURLGenerator(urlGen);
+
         Plot plot = new XYPlot(xyDataset, xAxis, yAxis, renderer);
         plot.setNoDataMessage("NO DATA");
-
 
         // set my chart variable
         chart = new JFreeChart(
@@ -121,9 +127,10 @@ public class PredictorResponseXYScatterAction extends PredictorResponseXYScatter
                 false);
         chart.setBackgroundPaint(java.awt.Color.white);
         
-        
+        //ImageMapUtilities.writeImageMap(new PrintWriter(request.getresponse.getWriter()), NONE, null);
+
         LOG.info("Chart created");
-        
+
         return SUCCESS;
     }
 
@@ -134,10 +141,10 @@ public class PredictorResponseXYScatterAction extends PredictorResponseXYScatter
     private DefaultXYDataset getTestDataSet() {
         // chart creation logic...
         int nrOfDataPoints = 100;
-        
+
         double[][] data = new double[2][nrOfDataPoints];
         String[] genotypeLabels = new String[nrOfDataPoints];
-        
+
         for (int i = 0; i < nrOfDataPoints; i++) {
             data[0][i] = i;//predictor
             data[1][i] = Math.random();//response
@@ -159,7 +166,7 @@ public class PredictorResponseXYScatterAction extends PredictorResponseXYScatter
         ReadFile rf = new ReadFile();
         //The filenames are stored in this string array
         String fileNames[] = null;
-        
+
         try {
             fileNames = rf.ReadSheetFileNames(getResultsDir() + sessionID + "/filenames.txt");
             //currently only valid for excel sheets as input. Otherwise throw error.
@@ -170,24 +177,21 @@ public class PredictorResponseXYScatterAction extends PredictorResponseXYScatter
         //Read the names of the predictor and response file
         String responseFile = getResultsDir() + sessionID + "/" + fileNames[0].trim();
         String predictorFile = getResultsDir() + sessionID + "/" + fileNames[1].trim();
-        
+
         File predFile = new File(predictorFile);
         File respFile = new File(responseFile);
         DefaultXYDataset readPredictorAndResponseValue = null;
-        
+
         LOG.info("try");
         readPredictorAndResponseValue = ReadExcelSheet.readPredictorAndResponseValue(respFile, predFile, predictor);
 
-
-        //DefaultXYDataset xy = new GenotypeXYDataset("Genotype", data, genotypeLabels, genotypeLabels)
-        //return xy;
         return readPredictorAndResponseValue;
     }
-    
+
     public JFreeChart getChart() {
         return chart;
     }
-    
+
     @Override
     public void setServletRequest(HttpServletRequest request) {
         this.request = request;
