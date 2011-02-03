@@ -32,12 +32,14 @@ public class Constants {
     public final static int MIN_PREDICTOR_COLUMNS = 5;
     /** Minimum number of columns for response sheet. */
     public final static int MIN_RESPONSE_COLUMNS = 1;
+        /** Minimum number of individuals */
+    public final static int MIN_INDIVIDUALS = 20;
     /** The total number of iterations on the dataset. */
     public static final int ITERATIONS = 10;//FIXME: set to 100 for final program.
     /** outer cross validation (to optimize parameters). */
     public static final int NUMBER_FOLDS_OUTER = 10;
     /** inner cross validation (to optimize parameters). */
-    public static final int NUMBER_FOLDS_INNER = 10;
+    public static final int NUMBER_FOLDS_INNER = 10;//Test voor Roeland
     /** How many CPU's can be used for one method. */
     public static final int MAX_NUMBER_CPU = 8;
     /** What is the maximum number of results to show in the summary table. */

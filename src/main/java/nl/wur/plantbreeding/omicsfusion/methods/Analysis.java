@@ -113,7 +113,7 @@ public class Analysis {
         rCode += "  inTrainingSet <- createFolds(dataSet$Response, k = " + Constants.NUMBER_FOLDS_OUTER + ", list = TRUE, returnTrain = T)\n";
         for (int i = 0; i < Constants.NUMBER_FOLDS_OUTER; i++) {
             int j = i + 1;//R object contains 1-10 instead of 0-9!
-            if (j < 10) {
+            if (j < 10 && Constants.NUMBER_FOLDS_OUTER > 9) {
                 rCode += "  trainingSet" + i + " <- inTrainingSet$Fold0" + j + "\n";
             } else {
                 rCode += "  trainingSet" + i + " <- inTrainingSet$Fold" + j + "\n";

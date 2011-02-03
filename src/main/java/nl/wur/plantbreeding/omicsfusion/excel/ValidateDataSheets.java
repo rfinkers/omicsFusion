@@ -86,7 +86,9 @@ public class ValidateDataSheets extends ManipulateExcelSheet {
         int cols = wb.getSheetAt(0).getRow(0).getLastCellNum();
         LOG.log(Level.INFO, "wb:{0} MinCol {1}", new Object[]{wb.getSheetName(0), minColumns});
         LOG.log(Level.INFO, "Rows: {0} Columns: {1}", new Object[]{rows, cols});
-        if (rows < 5 || cols < minColumns) {
+        if (rows < Constants.MIN_INDIVIDUALS) {
+            throw new DataSheetValidationException("At least " + Constants.MIN_INDIVIDUALS + " individuals required, while " + rows + " are present in the excel sheet.");
+        } else if (cols < minColumns) {
             //return false. TODO: better handeling of this error and report message to the user
             throw new DataSheetValidationException("Expected dimensions of the sheet: " + fileName + " are not correct");
         }
