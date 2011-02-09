@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import nl.wur.plantbreeding.logic.jfreechart.GenotypeXYDataset;
+import org.apache.commons.math.stat.regression.SimpleRegression;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -86,6 +87,8 @@ public class ReadExcelSheet extends ManipulateExcelSheet {
                 data[1][j] = predWbSheet.getRow(z).getCell(i).getNumericCellValue();//response                
                 genotypeLabels[j] = respWbSheet.getRow(z).getCell(0).getStringCellValue();
                 //System.out.println("counter: " + z + " label:" + genotypeLabels[j] + " pred: " + data[0][j] + " resp: " + data[1][j]);
+                
+                //TODO: also determine the min(x,y) and max(x,y) positions so that we can add a regression line later on.
             }
         } catch (Exception e) {
             //TODO: throw exception
@@ -94,6 +97,15 @@ public class ReadExcelSheet extends ManipulateExcelSheet {
 
         /** The dataset */
         DefaultXYDataset dataSet = new GenotypeXYDataset("Genotype", data, genotypeLabels, genotypeLabels);
+        
+        //Determine the regression line on bases of the same dataset
+        SimpleRegression slr = new SimpleRegression();
+        slr.addData(data);
+        
+        //Predict a new y values for the extreme X?
+        //slr.predict(i);
+                
+        //add the regression series to the dataSet.
 
         //return dataset
         return dataSet;

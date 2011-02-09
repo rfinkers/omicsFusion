@@ -47,7 +47,7 @@ public class CmdExec {
         if (method.equals("rf") || method.equals("spls") || method.equals("ridge")) {
             //-P omicsFusion -> project name : Probably not, as we don't account this in SGE!
             //TODO: replace email with email user?
-            if (Constants.MAX_NUMBER_CPU > 2) {//TODO: add this to the if test above?
+            if (Constants.MAX_NUMBER_CPU > 2) {//TODO: add this to the if test above? Alternatively, modify the submission script
                 p = Runtime.getRuntime().exec("qsub -S /bin/bash -p -100 -pe Rmpi " + Constants.MAX_NUMBER_CPU + " -q " + queue + " -m be -M richard.finkers@wur.nl " + executionDir + method + ".pbs");
             } else {
                 p = Runtime.getRuntime().exec("qsub -S /bin/bash -q " + queue + " " + executionDir + method + ".pbs");
