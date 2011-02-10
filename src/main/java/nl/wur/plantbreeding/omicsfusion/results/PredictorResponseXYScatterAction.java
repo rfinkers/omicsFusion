@@ -19,7 +19,6 @@ import java.awt.Color;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
@@ -33,7 +32,6 @@ import org.apache.struts2.interceptor.ServletRequestAware;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.axis.ValueAxis;
-import org.jfree.chart.imagemap.ImageMapUtilities;
 import org.jfree.chart.labels.XYToolTipGenerator;
 import org.jfree.chart.plot.Plot;
 import org.jfree.chart.plot.XYPlot;
@@ -105,7 +103,12 @@ public class PredictorResponseXYScatterAction extends PredictorResponseXYScatter
 
         //Renderer
         DefaultXYItemRenderer renderer = new DefaultXYItemRenderer();
+        //Options for the XY scatter (line 0)
         renderer.setSeriesLinesVisible(0, false);
+        renderer.setSeriesPaint(1, Color.BLUE);
+        //Otions for the regression line (line 1)
+        renderer.setSeriesShapesVisible(1, Boolean.FALSE);
+        renderer.setSeriesPaint(1, Color.BLACK);
         renderer.setBaseOutlinePaint(Color.WHITE);
 
         //Tooltip
@@ -126,7 +129,7 @@ public class PredictorResponseXYScatterAction extends PredictorResponseXYScatter
                 plot,
                 false);
         chart.setBackgroundPaint(java.awt.Color.white);
-        
+
         //ImageMapUtilities.writeImageMap(new PrintWriter(request.getresponse.getWriter()), NONE, null);
 
         LOG.info("Chart created");
