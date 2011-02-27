@@ -14,6 +14,7 @@ Author     : Richard Finkers
         <tr><td class="rootVoice {menu: 'empty'}" onclick="window.open('<s:url value='/userRegistration/startSubmitWizard'/>','_self')"><s:text name="menu.submit"/></td></tr>
         <tr><td class="rootVoice {menu: 'empty'}" onclick="window.open('<s:url value='/results/showResultsSummary.jsp'/>','_self')"><s:text name="menu.retrieve"/></td></tr>
         <tr><td class="rootVoice {menu: 'menu_1'}" onclick="window.open('<s:url value='/methods/index.jsp'/>','_self')"><s:text name="menu.methods"/></td></tr>
+        <tr><td class="rootVoice {menu: 'menu_1'}" onclick="window.open('<s:url value='/help/index.jsp'/>','_self')"><s:text name="menu.help"/></td></tr>
         <tr><td class="rootVoice {menu: 'empty'}" onclick="window.open('<s:url value='/about.jsp'/>','_self')"><s:text name="menu.about"/></td></tr>
 
     </table>

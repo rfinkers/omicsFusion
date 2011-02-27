@@ -129,4 +129,9 @@
         <put-attribute name="title" value="omicsFusion" />
         <put-attribute name="body" value="/WEB-INF/webPages/methods/index_body.jsp" />
     </definition>
+        <!-- Help -->
+    <definition name="helpIndex" extends="baseLayout">
+        <put-attribute name="title" value="omicsFusion help" />
+        <put-attribute name="body" value="/WEB-INF/webPages/help/index_body.jsp" />
+    </definition>
 </tiles-definitions>

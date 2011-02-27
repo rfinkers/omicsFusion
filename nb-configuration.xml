@@ -18,6 +18,7 @@ Any value defined here will override the pom.xml file value but is only applicab
         <org-netbeans-modules-html-editor-lib.default-public-id>-//W3C//DTD XHTML 1.0 Transitional//EN</org-netbeans-modules-html-editor-lib.default-public-id>
     </properties>
     <spellchecker-wordlist xmlns="http://www.netbeans.org/ns/spellchecker-wordlist/1">
+        <word>anlysis</word>
         <word>omics</word>
         <word>omicsFusion</word>
         <word>requried</word>
