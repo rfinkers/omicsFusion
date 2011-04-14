@@ -9,18 +9,20 @@ import javax.mail.Authenticator;
 import javax.mail.PasswordAuthentication;
 
 /**
- * 
+ *
  * @author Richard Finkers
  */
 public class SMTPAuthenticator extends Authenticator {
 
     /** The logger */
-    private static final Logger LOG = Logger.getLogger(SMTPAuthenticator.class.getName());
+    private static final Logger LOG = Logger.getLogger(
+            SMTPAuthenticator.class.getName());
     private String username;
     private String password;
     private boolean needAuth;
 
-    public SMTPAuthenticator(String username, String password, boolean needAuth) {
+    public SMTPAuthenticator(String username, String password,
+            boolean needAuth) {
         this.username = username;
         this.password = password;
         this.needAuth = needAuth;

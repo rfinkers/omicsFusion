@@ -11,7 +11,8 @@ import java.util.regex.Pattern;
 public class Validation {
 
     /** The logger */
-    private static final Logger LOG = Logger.getLogger(Validation.class.getName());
+    private static final Logger LOG = Logger.getLogger(
+            Validation.class.getName());
 
     private Validation() {
     }

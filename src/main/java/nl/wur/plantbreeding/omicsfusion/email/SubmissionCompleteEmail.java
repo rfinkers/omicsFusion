@@ -34,10 +34,9 @@ public class SubmissionCompleteEmail extends Email {
     /**
      * Prepares the exception email which will be sended to the administrator.
      */
-    //public static void SubmissionCompleteEmail(ServletContext context, HttpServletRequest req) {
+    //public static void SubmissionCompleteEmail(ServletContext context,
+    //HttpServletRequest req) {
     public static void SubmissionCompleteEmail() {
-
-
 
         LOG.info("start email");
 
@@ -47,16 +46,23 @@ public class SubmissionCompleteEmail extends Email {
 
         //Email body shoudl consist of:
         emailBody = "Dear " + email.getUser().getUserName() + ", \n"
-                + "Your job has been successfully submitted to the omicsFusion analysis pipeline.\n"
-                + "You can view your intermediate results by navigation to the following web address: "
+                + "Your job has been successfully submitted to the omicsFusion "
+                + "analysis pipeline.\n"
+                + "You can view your intermediate results by navigation to the "
+                + "following web address: "
                 + ServletActionContext.getRequest().getScheme() + "://"
                 + ServletActionContext.getRequest().getLocalName() + ":"
                 + ServletActionContext.getRequest().getLocalPort()
                 + ServletActionContext.getServletContext().getContextPath()
-                + "/results/summaryResults?sessionId=" + email.getSessionID() + "\n"
-                + "Alternatively, you can enter your unique identifyer " + email.getSessionID() + " on the omicsFusion website.\n"
-                + "Please note that it can take up to several hours before your first results are available and several days before all jobs are finished.\n"
-                + "A notification email will be sent once all methods are completed.\n"
+                + "/results/summaryResults?sessionId=" + email.getSessionID()
+                + "\n"
+                + "Alternatively, you can enter your unique identifyer "
+                + email.getSessionID() + " on the omicsFusion website.\n"
+                + "Please note that it can take up to several hours before "
+                + "your first results are available and several days before "
+                + "all jobs are finished.\n"
+                + "A notification email will be sent once all methods are "
+                + "completed.\n"
                 + "We are happy to receive your feedback.\n\n"
                 + "Regards,\n"
                 + "Richard Finkers\n";
@@ -78,10 +84,12 @@ public class SubmissionCompleteEmail extends Email {
                     + now.get(Calendar.SECOND), emailBody);
             LOG.info("email send");
         } catch (AddressException ex) {
-            Logger.getLogger(SubmissionCompleteEmail.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SubmissionCompleteEmail.class.getName()).log(
+                    Level.SEVERE, null, ex);
             ex.printStackTrace();
         } catch (MessagingException ex) {
-            Logger.getLogger(SubmissionCompleteEmail.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SubmissionCompleteEmail.class.getName()).log(
+                    Level.SEVERE, null, ex);
             ex.printStackTrace();
         }
     }

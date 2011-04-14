@@ -40,17 +40,20 @@ public class ManipulateExcelSheet {
      * and use this method to validate the sheet?
      * @param wb An excel workbook
      */
-    public void extractCellContents(Workbook wb) {//Should not be void?? Write to new style of sheet?
+    public void extractCellContents(Workbook wb) {
+        //Should not be void?? Write to new style of sheet?
         Sheet sheet1 = wb.getSheetAt(0);
         for (Row row : sheet1) {
             for (Cell cell : row) {
-                CellReference cellRef = new CellReference(row.getRowNum(), cell.getColumnIndex());
+                CellReference cellRef = new CellReference(row.getRowNum(),
+                        cell.getColumnIndex());
                 System.out.print(cellRef.formatAsString());
                 System.out.print(" - ");
 
                 switch (cell.getCellType()) {
                     case Cell.CELL_TYPE_STRING:
-                        System.out.println(cell.getRichStringCellValue().getString());
+                        System.out.println(cell.getRichStringCellValue().
+                                getString());
                         break;
                     case Cell.CELL_TYPE_NUMERIC:
                         if (DateUtil.isCellDateFormatted(cell)) {
@@ -72,7 +75,7 @@ public class ManipulateExcelSheet {
         }
     }
 
-        /**
+    /**
      * Load an excel sheet from the file system.
      * @param excelSheet
      * @return
@@ -80,7 +83,9 @@ public class ManipulateExcelSheet {
      * @throws IOException
      * @throws InvalidFormatException
      */
-    protected static Workbook loadExcelSheet(File excelSheet) throws FileNotFoundException, IOException, InvalidFormatException {
-        return WorkbookFactory.create(new FileInputStream(excelSheet)); //Is also check for valid workbook
+    protected static Workbook loadExcelSheet(File excelSheet)
+            throws FileNotFoundException, IOException, InvalidFormatException {
+        return WorkbookFactory.create(new FileInputStream(excelSheet));
+        //Is also check for valid workbook
     }
 }

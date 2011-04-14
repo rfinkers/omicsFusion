@@ -44,7 +44,8 @@ public class Email extends ActionSupport {
     private UserList user;
 
     public UserList getUser() {
-        return (UserList) ServletActionContext.getContext().getSession().get(Constants.USER);
+        return (UserList) ServletActionContext.getContext().getSession().
+                get(Constants.USER);
     }
 
     public static Logger getLOG() {
@@ -56,7 +57,8 @@ public class Email extends ActionSupport {
      * @return
      */
     public String getAdminEmailAdress() {
-        return ServletActionContext.getServletContext().getInitParameter("adminEmail");
+        return ServletActionContext.getServletContext().
+                getInitParameter("adminEmail");
     }
 
     /**
@@ -64,9 +66,10 @@ public class Email extends ActionSupport {
      * @return
      */
     public String getSmtpServer() {
-        return ServletActionContext.getServletContext().getInitParameter("smtpServer");
+        return ServletActionContext.getServletContext().
+                getInitParameter("smtpServer");
     }
-    
+
     public String getSessionID() {
         return ServletActionContext.getRequest().getSession().getId();
     }
@@ -79,7 +82,8 @@ public class Email extends ActionSupport {
      * @throws AddressException
      * @throws MessagingException
      */
-    protected void sendEmailToUsers(String subject, String emailBody) throws AddressException, MessagingException {
+    protected void sendEmailToUsers(String subject, String emailBody)
+            throws AddressException, MessagingException {
         Properties props = new Properties();
 
         props.put(getSmtpServer(), getSmtpServer());
@@ -87,8 +91,10 @@ public class Email extends ActionSupport {
         Session session1 = Session.getDefaultInstance(props, null);
         Message message = new MimeMessage(session1);
         message.setFrom(new InternetAddress(getAdminEmailAdress()));
-        message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(getUser().getEmail().trim(), false));
-        message.setRecipients(Message.RecipientType.BCC, InternetAddress.parse(getAdminEmailAdress().trim(), false));
+        message.setRecipients(Message.RecipientType.TO,
+                InternetAddress.parse(getUser().getEmail().trim(), false));
+        message.setRecipients(Message.RecipientType.BCC,
+                InternetAddress.parse(getAdminEmailAdress().trim(), false));
         message.setSubject(subject);
 
         // Create the message part
@@ -113,7 +119,8 @@ public class Email extends ActionSupport {
      * @param emailBody
      * @throws MessagingException Error creating or sending the email.
      */
-    public void sendEmail(String subject, String emailBody) throws MessagingException {
+    public void sendEmail(String subject, String emailBody)
+            throws MessagingException {
 
         Properties props = new Properties();
 
@@ -123,7 +130,8 @@ public class Email extends ActionSupport {
 
         Message message = new MimeMessage(session1);
         message.setFrom(new InternetAddress(getAdminEmailAdress()));
-        message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(getAdminEmailAdress(), false));
+        message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(
+                getAdminEmailAdress(), false));
         message.setSubject(subject);
 
         // Create the message part

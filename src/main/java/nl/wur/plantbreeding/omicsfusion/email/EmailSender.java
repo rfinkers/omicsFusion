@@ -1,3 +1,18 @@
+/*
+ * Copyright 2011 omicstools.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package nl.wur.plantbreeding.omicsfusion.email;
 
 import java.util.Properties;
@@ -18,7 +33,8 @@ import javax.mail.internet.MimeMessage;
 public class EmailSender {
 
     /** The logger */
-    private static final Logger LOG = Logger.getLogger(EmailSender.class.getName());
+    private static final Logger LOG = Logger.getLogger(
+            EmailSender.class.getName());
     private String smtpServer;
     private String port;
     private String user;
@@ -35,7 +51,8 @@ public class EmailSender {
      * @param auth
      * @param from
      */
-    protected EmailSender(String smtpServer, String port, String user, String password, String auth, String from) {
+    protected EmailSender(String smtpServer, String port, String user,
+            String password, String auth, String from) {
         this.smtpServer = smtpServer;
         this.port = port;
         this.user = user;
@@ -46,7 +63,7 @@ public class EmailSender {
 
     /**
      * Set the properties.
-     * @return An object wiht relevant system properties.
+     * @return An object with relevant system properties.
      */
     private Properties prepareProperties() {
         Properties props = new Properties();
@@ -78,11 +95,14 @@ public class EmailSender {
             message.setFrom(new InternetAddress(from));
             message.setSubject(subject);
             for (int i = 0; i < recipient.length; i++) {
-                message.addRecipient(Message.RecipientType.TO, new InternetAddress(recipient[i]));
+                message.addRecipient(Message.RecipientType.TO,
+                        new InternetAddress(recipient[i]));
             }
-            message.setContent(HtmlMessage, "text/html; charset=\"" + charset + "\"");
+            message.setContent(HtmlMessage, "text/html; charset=\""
+                    + charset + "\"");
         } catch (Exception ex) {
-            Logger.getLogger(EmailSender.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EmailSender.class.getName()).
+                    log(Level.SEVERE, null, ex);
         }
         return message;
     }

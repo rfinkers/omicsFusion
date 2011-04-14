@@ -9,10 +9,11 @@
 
 <h1><s:text name="help.heading" /></h1>
 
-<s:text name="help.introduction" />
+<p><s:text name="help.introduction" /></p>
 
-<h2><s:text name="help.upload" /></h2>
+<h2><s:text name="help.submit" /></h2>
 <h3><s:text name="help.excel" /></h3>
-<s:text name="help.excel.instructions" />
+<p><s:text name="help.excel.instructions" /></p>
 
 <h2><s:text name="help.retrieve" /></h2>
+<p><s:text name="help.retrieve.data" /></p>

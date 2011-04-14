@@ -35,7 +35,9 @@ public class ReadExcelSheet extends ManipulateExcelSheet {
     public ReadExcelSheet() {
     }
 
-    public static void readPredictorAndResponseValue(String predictor, String sessionID) throws FileNotFoundException, InvalidFormatException, IOException {
+    public static void readPredictorAndResponseValue(String predictor,
+            String sessionID)
+            throws FileNotFoundException, InvalidFormatException, IOException {
 
         File responseSheet = new File(sessionID + "/response.xls");
         File predictorSheet = new File(sessionID + "/predictor.xls");
@@ -43,7 +45,9 @@ public class ReadExcelSheet extends ManipulateExcelSheet {
         //readPredictorAndResponseValue(responseSheet, predictorSheet, predictor);
     }
 
-    public static DefaultXYDataset readPredictorAndResponseValue(File responseSheet, File predictorSheet, String predictor) throws FileNotFoundException, InvalidFormatException, IOException, Exception {
+    public static DefaultXYDataset readPredictorAndResponseValue(
+            File responseSheet, File predictorSheet, String predictor)
+            throws FileNotFoundException, InvalidFormatException, IOException, Exception {
 
 
         /** wb for the response variables */
@@ -60,9 +64,12 @@ public class ReadExcelSheet extends ManipulateExcelSheet {
         int i = 0;
 
         //Find the right column.
-        for (i = 1; i < predictorRow.getLastCellNum(); i++) {//ommit the header column for the genotypes
-            //System.out.println("row header:" + predictorRow.getCell(i).getStringCellValue());
-            if (predictorRow.getCell(i).getStringCellValue().trim().equals(predictor)) {
+        for (i = 1; i < predictorRow.getLastCellNum(); i++) {
+            //ommit the header column for the genotypes
+            //System.out.println("row header:"
+            //+ predictorRow.getCell(i).getStringCellValue());
+            if (predictorRow.getCell(i).getStringCellValue().trim().
+                    equals(predictor)) {
                 break;
             }
         }
@@ -73,7 +80,8 @@ public class ReadExcelSheet extends ManipulateExcelSheet {
 
         System.out.println("Need column: " + i);
 
-        System.out.println("predictor: " + predWbSheet.getLastRowNum() + " Cell: " + predictorRow.getLastCellNum());
+        System.out.println("predictor: " + predWbSheet.getLastRowNum()
+                + " Cell: " + predictorRow.getLastCellNum());
 
         double[][] data = new double[2][predWbSheet.getLastRowNum()];
         String[] genotypeLabels = new String[predWbSheet.getLastRowNum()];
@@ -86,12 +94,18 @@ public class ReadExcelSheet extends ManipulateExcelSheet {
 
         try {
             for (int j = 0; j < predWbSheet.getLastRowNum(); j++) {
-                //data matrix is 0 based, however, we have to start reading the excel sheet from row 1 (row0 = header).
+                //data matrix is 0 based, however, we have to start reading the
+                //excel sheet from row 1 (row0 = header).
                 int z = j + 1;
-                data[0][j] = respWbSheet.getRow(z).getCell(1).getNumericCellValue();//response                
-                data[1][j] = predWbSheet.getRow(z).getCell(i).getNumericCellValue();//predictor
-                genotypeLabels[j] = respWbSheet.getRow(z).getCell(0).getStringCellValue();
-                //System.out.println("counter: " + z + " label:" + genotypeLabels[j] + " pred: " + data[0][j] + " resp: " + data[1][j]);
+                data[0][j] = respWbSheet.getRow(z).getCell(1).
+                        getNumericCellValue();//response
+                data[1][j] = predWbSheet.getRow(z).getCell(i).
+                        getNumericCellValue();//predictor
+                genotypeLabels[j] = respWbSheet.getRow(z).getCell(0).
+                        getStringCellValue();
+                //System.out.println("counter: " + z + " label:" +
+                //genotypeLabels[j] + " pred: " + data[0][j] + " resp: " +
+                //data[1][j]);
 
                 //Get the min and max response variable for regression.
                 if (data[0][j] > maxX) {
@@ -108,17 +122,19 @@ public class ReadExcelSheet extends ManipulateExcelSheet {
             System.out.println("Error in data");
         }
 
-        
+
         //Predict a new y values for the extreme X?
         double[][] regLine = new double[2][2];
-        System.out.println("preY: " + slr.predict(minX) + " predY: " + slr.predict(maxX));
+        System.out.println("preY: " + slr.predict(minX) + " predY: "
+                + slr.predict(maxX));
         regLine[0][0] = minX;
         regLine[1][0] = slr.predict(minX);
         regLine[0][1] = maxX;
         regLine[1][1] = slr.predict(maxX);
-        
+
         /** The dataset */
-        DefaultXYDataset dataSet = new GenotypeXYDataset("Genotype", data, genotypeLabels, genotypeLabels);
+        DefaultXYDataset dataSet = new GenotypeXYDataset("Genotype",
+                data, genotypeLabels, genotypeLabels);
         //add the regression series to the dataSet.
         dataSet.addSeries("regression", regLine);
 

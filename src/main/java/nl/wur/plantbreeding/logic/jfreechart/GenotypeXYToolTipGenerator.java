@@ -22,7 +22,8 @@ import org.jfree.chart.labels.XYToolTipGenerator;
 import org.jfree.data.xy.XYDataset;
 
 /**
- * A standard series label generator for plots that use data from an {@link nl.wur.plantbreeding.logic.jFreeChart.GenotypeXYDataset}.
+ * A standard series label generator for plots that use data from an
+ * {@link nl.wur.plantbreeding.logic.jFreeChart.GenotypeXYDataset}.
  *
  * @author Richard Finkers
  * @version 0.1
@@ -31,10 +32,11 @@ import org.jfree.data.xy.XYDataset;
 public class GenotypeXYToolTipGenerator implements XYToolTipGenerator {
 
     /** The logger */
-    private static final Logger LOG = Logger.getLogger(GenotypeXYToolTipGenerator.class.getName());
+    private static final Logger LOG = Logger.getLogger(
+            GenotypeXYToolTipGenerator.class.getName());
 
     /**
-     * Returns a Genotype XY values Tooltip
+     * Returns a Genotype XY values Tooltip.
      * @param dataset the dataset (<code>null</code> not permitted).
      * @param series  the series index (zero-based).
      * @param item the item index (zero-based).
@@ -43,7 +45,7 @@ public class GenotypeXYToolTipGenerator implements XYToolTipGenerator {
     @Override
     public String generateToolTip(XYDataset dataset, int series, int item) {
         NumberFormat formatter = new DecimalFormat("#.###");
-        return ( (GenotypeXYDataset) dataset ).getGenotypeLabel(series, item)
+        return ((GenotypeXYDataset) dataset).getGenotypeLabel(series, item)
                 + " - (" + formatter.format(dataset.getX(series, item))
                 + ", " + formatter.format(dataset.getY(series, item)) + ")";
     }

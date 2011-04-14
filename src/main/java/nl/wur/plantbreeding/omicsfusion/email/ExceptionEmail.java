@@ -39,10 +39,12 @@ public class ExceptionEmail extends Email {
             email.sendEmail("omicsFusion exception", emailBody);
             LOG.info("email send");
         } catch (AddressException ex) {
-            Logger.getLogger(SubmissionCompleteEmail.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SubmissionCompleteEmail.class.getName()).
+                    log(Level.SEVERE, null, ex);
             ex.printStackTrace();
         } catch (MessagingException ex) {
-            Logger.getLogger(SubmissionCompleteEmail.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SubmissionCompleteEmail.class.getName()).
+                    log(Level.SEVERE, null, ex);
             ex.printStackTrace();
         }
     }

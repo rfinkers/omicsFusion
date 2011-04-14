@@ -28,7 +28,8 @@ import org.jfree.data.xy.XYDataset;
 public class GenotypeXYUrlGenerator implements XYURLGenerator {
 
     /** The logger */
-    private static final Logger LOG = Logger.getLogger(GenotypeXYUrlGenerator.class.getName());
+    private static final Logger LOG = Logger.getLogger(
+            GenotypeXYUrlGenerator.class.getName());
 
     /**
      * Generates a URL for a particular item within a series. As a guideline,
@@ -43,6 +44,7 @@ public class GenotypeXYUrlGenerator implements XYURLGenerator {
      */
     @Override
     public String generateURL(XYDataset dataset, int series, int item) {
-        return "genotypeDetails.do?genoID=" + ( (GenotypeXYDataset) dataset ).getAccessionLabel(series, item);
+        return "genotypeDetails.do?genoID="
+                + ((GenotypeXYDataset) dataset).getAccessionLabel(series, item);
     }
 }

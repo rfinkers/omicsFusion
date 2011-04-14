@@ -12,7 +12,8 @@ import java.util.logging.Logger;
 public class FileOrDirectoryExists {
 
     /** The logger */
-    private static final Logger LOG = Logger.getLogger(FileOrDirectoryExists.class.getName());
+    private static final Logger LOG = Logger.getLogger(
+            FileOrDirectoryExists.class.getName());
 
     private FileOrDirectoryExists() {
     }

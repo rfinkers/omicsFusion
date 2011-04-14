@@ -22,7 +22,7 @@ import org.jfree.data.xy.DefaultXYDataset;
  * using the DefaultXYDataset interface. The standard constructor accepts data
  * in a two dimensional array where the first dimension is the series, and the
  * second dimension is the category ({@link org.jfree.data.xy.XYDataset}).
- * Two additional arrays are used to provide the genotype names and the 
+ * Two additional arrays are used to provide the genotype names and the
  * accession ID.
  *
  * @author Richard Finkers
@@ -47,17 +47,18 @@ public class GenotypeXYDataset extends DefaultXYDataset {
      * sorted so that the x-values are ascending. The genotype name and
      * accessionID arrays should be in the same order than the data array.
      *
-    
+
      * @param seriesKey the series key (null not permitted).
-     * @param data the data (must be an array with length 2, containing two 
-     * arrays of equal length, the first containing the x-values and the second 
+     * @param data the data (must be an array with length 2, containing two
+     * arrays of equal length, the first containing the x-values and the second
      * containing the y-values).
-     * @param genotypeNames an array containing the genotype names. This array 
+     * @param genotypeNames an array containing the genotype names. This array
      * must be in the same order as the data.
-     * @param accessionIDs an array containing the accession IDs. This array 
+     * @param accessionIDs an array containing the accession IDs. This array
      * must be in the same order as the data.
      */
-    public GenotypeXYDataset(Comparable seriesKey, double[][] data, String[] genotypeNames, String[] accessionIDs) {
+    public GenotypeXYDataset(Comparable seriesKey, double[][] data,
+            String[] genotypeNames, String[] accessionIDs) {
         super.addSeries(seriesKey, data);
         this.genotypeNames = genotypeNames;
         this.accessionIDs = accessionIDs;
