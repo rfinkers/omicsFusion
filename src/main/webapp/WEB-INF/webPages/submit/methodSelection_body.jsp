@@ -15,7 +15,7 @@
     <s:checkbox key="analysis.method.spls" name="spls" selectAllLabel="Select All"/>
     <s:checkbox key="analysis.method.ridge" name="ridge" checked="checked"/>
     <s:checkbox key="analysis.method.pcr" name="pcr" checked="checked"/>
-    <s:checkbox key="analysis.method.pls" name="pls"checked="checked" />    
+    <s:checkbox key="analysis.method.pls" name="pls"checked="checked" />
     <s:checkbox key="analysis.method.univariate" name="univariate" checked="checked"/>
     <!--TODO: select all / deselect all buttons-->
     <!--TODO: is there a way to add categories to the different type of methods in the form?

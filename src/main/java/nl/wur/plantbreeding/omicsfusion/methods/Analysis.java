@@ -44,21 +44,28 @@ public class Analysis {
         rCode += "# Load the excel sheets\n";
         //TODO: test how generic the CSV import works. Can we test for decimal point, etc?
         if (excelSheets.get("predictor").contains("csv")) {
-            rCode += "predictorSheet <- read.csv2(\"" + excelSheets.get("predictor") + "\", header=TRUE,sep=\";\",dec=\".\")\n";
+            rCode += "predictorSheet <- read.csv2(\""
+                    + excelSheets.get("predictor")
+                    + "\", header=TRUE,sep=\";\",dec=\".\")\n";
         } else {
-            rCode += "predictorSheet <- read.xls(\"" + excelSheets.get("predictor") + "\")\n";
+            rCode += "predictorSheet <- read.xls(\""
+                    + excelSheets.get("predictor") + "\")\n";
         }
         if (excelSheets.get("response").contains("csv")) {
-            rCode += "responseSheet  <- read.csv2(\"" + excelSheets.get("response") + "\", header=TRUE,sep=\";\",dec=\".\")\n";
+            rCode += "responseSheet  <- read.csv2(\""
+                    + excelSheets.get("response")
+                    + "\", header=TRUE,sep=\";\",dec=\".\")\n";
         } else {
-            rCode += "responseSheet  <- read.xls(\"" + excelSheets.get("response") + "\")\n";
+            rCode += "responseSheet  <- read.xls(\""
+                    + excelSheets.get("response") + "\")\n";
         }
-        //Concatenate the final dataSet, containing 1 response and a predictor matrix
-        //The rownames are set acoording to the sample names
+        //Concatenate the final dataSet, containing 1 response and a predictor
+        //matrix. The rownames are set acoording to the sample names
         rCode += "dataSet=cbind(responseSheet[2],predictorSheet[-1])\n";
         //FIXME: set rownames
         //rCode += "rownames(dataSet) <- responseSheet[1]\n";
-        //TODO: better na.omit strategies. Imputation? Added in addition to the script of Animesh.
+        //TODO: better na.omit strategies. Imputation? Added in addition to the
+        //script of Animesh.
         //option: replace NA with row mean.
         rCode += "dataSet=na.omit(dataSet)\n\n";
         return rCode;
@@ -66,12 +73,16 @@ public class Analysis {
 
     protected String loadPredictResponseDataSheet(HashMap<String, String> excelSheets) {
         String rCode = "# Load the PredictResponse data sheet.\n";
-        //TODO: test how generic the CSV import works. Can we test for decimal point, etc?
+        //TODO: test how generic the CSV import works.
+        //Can we test for decimal point, etc?
         if (excelSheets.get("predictResponse") != null) {
             if (excelSheets.get("predictor").contains("csv")) {
-                rCode += "predictResponse <- read.csv2(\"" + excelSheets.get("predictResponse") + "\", header=TRUE,sep=\";\",dec=\".\")\n";
+                rCode += "predictResponse <- read.csv2(\""
+                        + excelSheets.get("predictResponse")
+                        + "\", header=TRUE,sep=\";\",dec=\".\")\n";
             } else {
-                rCode += "predictResponse <- read.xls(\"" + excelSheets.get("predictResponse") + "\")\n";
+                rCode += "predictResponse <- read.xls(\""
+                        + excelSheets.get("predictResponse") + "\")\n";
             }
         } else {
             //TODO: error handling
@@ -88,7 +99,7 @@ public class Analysis {
      */
     protected String preProcessMatrix() {
         String rCode = "# Pre process data matrix\n";
-        //Let's Hack. TODO: Isn't there another way than overriding the trait name?
+        //Hack. TODO: Isn't there another way than overriding the trait name?
         rCode += "nameVector<-colnames(dataSet)\n";
         rCode += "traitName<-nameVector[1]\n";
         rCode += "write.table(file=\"analysis.txt\", traitName)\n";
@@ -110,7 +121,9 @@ public class Analysis {
         String rCode = " # Create training sets\n";
         //TODO: dataSet[1] coding does not work. currently using unlist(dataset[1]). Does this work, or should we code it now to dataSet$Response?
         //Can do different procedures. E.G. bootstraps, resampling, leaf-one-out, etc. User selectable?
-        rCode += "  inTrainingSet <- createFolds(dataSet$Response, k = " + Constants.NUMBER_FOLDS_OUTER + ", list = TRUE, returnTrain = T)\n";
+        rCode += "  inTrainingSet <- createFolds(dataSet$Response, k = "
+                + Constants.NUMBER_FOLDS_OUTER
+                + ", list = TRUE, returnTrain = T)\n";
         for (int i = 0; i < Constants.NUMBER_FOLDS_OUTER; i++) {
             int j = i + 1;//R object contains 1-10 instead of 0-9!
             if (j < 10 && Constants.NUMBER_FOLDS_OUTER > 9) {

@@ -78,7 +78,7 @@ public class ManipulateExcelSheet {
     /**
      * Load an excel sheet from the file system.
      * @param excelSheet
-     * @return
+     * @return The excel sheet which was loaded from the file system.
      * @throws FileNotFoundException
      * @throws IOException
      * @throws InvalidFormatException

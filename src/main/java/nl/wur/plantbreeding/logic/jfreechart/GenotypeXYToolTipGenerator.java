@@ -23,7 +23,7 @@ import org.jfree.data.xy.XYDataset;
 
 /**
  * A standard series label generator for plots that use data from an
- * {@link nl.wur.plantbreeding.logic.jFreeChart.GenotypeXYDataset}.
+ * {@link GenotypeXYDataset}.
  *
  * @author Richard Finkers
  * @version 0.1
@@ -40,7 +40,7 @@ public class GenotypeXYToolTipGenerator implements XYToolTipGenerator {
      * @param dataset the dataset (<code>null</code> not permitted).
      * @param series  the series index (zero-based).
      * @param item the item index (zero-based).
-     * @return A tooltip containing the genotype name and the x,y values
+     * @return A tooltip containing the genotype name and the x,y values.
      */
     @Override
     public String generateToolTip(XYDataset dataset, int series, int item) {

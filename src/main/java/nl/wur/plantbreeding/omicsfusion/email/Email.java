@@ -54,7 +54,7 @@ public class Email extends ActionSupport {
 
     /**
      * Obtain the administrators email address from the context parameters.
-     * @return
+     * @return The configured administrator email.
      */
     public String getAdminEmailAdress() {
         return ServletActionContext.getServletContext().
@@ -63,7 +63,7 @@ public class Email extends ActionSupport {
 
     /**
      * Obtain the smtp server from the context parameters.
-     * @return
+     * @return The configured smtp server.
      */
     public String getSmtpServer() {
         return ServletActionContext.getServletContext().
