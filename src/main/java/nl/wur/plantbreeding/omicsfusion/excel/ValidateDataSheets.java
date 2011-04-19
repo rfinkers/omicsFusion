@@ -31,7 +31,8 @@ import org.apache.poi.ss.usermodel.Workbook;
 public class ValidateDataSheets extends ManipulateExcelSheet {
 
     /** The logger */
-    private static final Logger LOG = Logger.getLogger(ValidateDataSheets.class.getName());
+    private static final Logger LOG = Logger.getLogger(
+            ValidateDataSheets.class.getName());
 
     private ValidateDataSheets() {
     }
@@ -45,7 +46,9 @@ public class ValidateDataSheets extends ManipulateExcelSheet {
      * @throws FileNotFoundException
      * @throws IOException
      */
-    public static void validateExcelSheets(File responseSheet, File predictorSheet) throws DataSheetValidationException, InvalidFormatException, FileNotFoundException, IOException {
+    public static void validateExcelSheets(File responseSheet,
+            File predictorSheet) throws DataSheetValidationException,
+            InvalidFormatException, FileNotFoundException, IOException {
 
         /** nr of rows in response sheet */
         int responseRows;
@@ -58,15 +61,21 @@ public class ValidateDataSheets extends ManipulateExcelSheet {
         Workbook predictorWorkbook;
 
         responseWorkbook = loadExcelSheet(responseSheet);
-        responseRows = checkWorkbookDimensions(responseWorkbook, responseSheet.getName(), Constants.MIN_RESPONSE_COLUMNS + 1);// +1 because of column containing the labels.
+        // +1 because of column containing the labels.
+        responseRows = checkWorkbookDimensions(responseWorkbook,
+                responseSheet.getName(), Constants.MIN_RESPONSE_COLUMNS + 1);
         predictorWorkbook = loadExcelSheet(predictorSheet);
-        predictorRows = checkWorkbookDimensions(predictorWorkbook, predictorSheet.getName(), Constants.MIN_PREDICTOR_COLUMNS + 1);// +1 because of columns containing the labels.
+        // +1 because of columns containing the labels.
+        predictorRows = checkWorkbookDimensions(predictorWorkbook,
+                predictorSheet.getName(), Constants.MIN_PREDICTOR_COLUMNS + 1);
 
         if (predictorRows == responseRows) {
-            //FIXME: temporarily disabled due to numeric / text column validation problem
+            //FIXME: temporarily disabled due to numeric /
+            // text column validation problem
             //compareIndividualNames(responseWorkbook, predictorWorkbook);
         } else {
-            throw new DataSheetValidationException("Number of individuals on the predictor and response variable sheets differ");
+            throw new DataSheetValidationException("Number of individuals on "
+                    + "the predictor and response variable sheets differ");
         }
     }
 
@@ -77,33 +86,49 @@ public class ValidateDataSheets extends ManipulateExcelSheet {
     /**
      * Check the dimension of an excel sheet
      * @param wb Name of the workbook
-     * @param minColumns Minimal number of variables (columns) required for this type of workbook.
+     * @param minColumns Minimal number of variables (columns) required for
+     * this type of workbook.
      * @return The number of rows (= number of individuals)
-     * @throws DataSheetValidationException Dimensions of the workbook are not correct.
+     * @throws DataSheetValidationException Dimensions of the workbook are
+     * not correct.
      */
-    private static int checkWorkbookDimensions(Workbook wb, String fileName, int minColumns) throws DataSheetValidationException {
+    private static int checkWorkbookDimensions(Workbook wb, String fileName,
+            int minColumns) throws DataSheetValidationException {
         int rows = wb.getSheetAt(0).getLastRowNum();
         int cols = wb.getSheetAt(0).getRow(0).getLastCellNum();
-        LOG.log(Level.INFO, "wb:{0} MinCol {1}", new Object[]{wb.getSheetName(0), minColumns});
+        LOG.log(Level.INFO, "wb:{0} MinCol {1}",
+                new Object[]{wb.getSheetName(0), minColumns});
         LOG.log(Level.INFO, "Rows: {0} Columns: {1}", new Object[]{rows, cols});
         if (rows < Constants.MIN_INDIVIDUALS) {
-            throw new DataSheetValidationException("At least " + Constants.MIN_INDIVIDUALS + " individuals required, while " + rows + " are present in the excel sheet.");
+            throw new DataSheetValidationException("At least "
+                    + Constants.MIN_INDIVIDUALS
+                    + " individuals required, while " + rows
+                    + " are present in the excel sheet.");
         } else if (cols < minColumns) {
-            //return false. TODO: better handeling of this error and report message to the user
-            throw new DataSheetValidationException("Expected dimensions of the sheet: " + fileName + " are not correct");
+            //return false.
+            //TODO: better handeling of this error and report to the user
+            throw new DataSheetValidationException("Expected dimensions of the"
+                    + " sheet: " + fileName + " are not correct");
         }
         return rows;
     }
 
-    private static void compareIndividualNames(Workbook responseWorkbook, Workbook predictorWorkbook) throws DataSheetValidationException {
-        for (int i = 0; i < responseWorkbook.getSheetAt(0).getLastRowNum(); i++) {
+    private static void compareIndividualNames(Workbook responseWorkbook,
+            Workbook predictorWorkbook) throws DataSheetValidationException {
+        for (int i = 0; i < responseWorkbook.getSheetAt(0).getLastRowNum();
+                i++) {
             //Do not check the header row.
             if (i != 0) {
                 //field content can be text of numeric
-                if (!responseWorkbook.getSheetAt(0).getRow(i).getCell(0).equals(predictorWorkbook.getSheetAt(0).getRow(i).getCell(0))) {
+                if (!responseWorkbook.getSheetAt(0).getRow(i).getCell(0).equals(
+                        predictorWorkbook.getSheetAt(0).getRow(i).getCell(0))) {
                     int rowNumber = i + 1;
-                    throw new DataSheetValidationException("The individual name in row:"
-                            + rowNumber + " does not match for both sheets (" + responseWorkbook.getSheetAt(0).getRow(i).getCell(0).getStringCellValue() + "/" + predictorWorkbook.getSheetAt(0).getRow(i).getCell(0).getStringCellValue() + ")");
+                    throw new DataSheetValidationException("The individual "
+                            + "name in row:" + rowNumber + " does not match "
+                            + "for both sheets (" + responseWorkbook.getSheetAt(
+                            0).getRow(i).getCell(0).getStringCellValue() + "/"
+                            + predictorWorkbook.getSheetAt(0).getRow(i).getCell(
+                            0).getStringCellValue() + ")");
                 }
             }
         }

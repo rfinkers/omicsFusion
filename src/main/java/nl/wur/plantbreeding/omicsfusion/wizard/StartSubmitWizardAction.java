@@ -24,12 +24,14 @@ import org.apache.struts2.interceptor.ServletRequestAware;
  * Reset the session before starting the upload wizard.
  * @author Richard Finkers
  */
-public class StartSubmitWizardAction extends ActionSupport implements ServletRequestAware {
+public class StartSubmitWizardAction extends ActionSupport
+        implements ServletRequestAware {
 
     /** SUID */
     private static final long serialVersionUID = 050111L;
     /** The logger */
-    private static final Logger LOG = Logger.getLogger(StartSubmitWizardAction.class.getName());
+    private static final Logger LOG =
+            Logger.getLogger(StartSubmitWizardAction.class.getName());
     /** the request */
     private HttpServletRequest request;
 

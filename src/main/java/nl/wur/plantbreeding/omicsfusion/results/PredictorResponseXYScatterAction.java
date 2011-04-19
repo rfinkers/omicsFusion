@@ -44,7 +44,8 @@ import org.jfree.data.xy.DefaultXYDataset;
  * @author Richard Finkers
  * @version 1.0.
  */
-public class PredictorResponseXYScatterAction extends PredictorResponseXYScatterForm implements ServletRequestAware {
+public class PredictorResponseXYScatterAction
+        extends PredictorResponseXYScatterForm implements ServletRequestAware {
 
     /** Serial Version UID */
     private static final long serialVersionUID = 100906L;
@@ -66,13 +67,16 @@ public class PredictorResponseXYScatterAction extends PredictorResponseXYScatter
             } else if (predictor.startsWith("X")) {//TODO: not a perfect solution!!
                 predictor = predictor.substring(1);
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             //TODO: Check
             System.out.println("Error in parsing header: referer");
             e.printStackTrace();
         }
-        String sessionName = (String) request.getSession().getAttribute("resultSession");
-        String response = (String) request.getSession().getAttribute("responseName");
+        String sessionName =
+                (String) request.getSession().getAttribute("resultSession");
+        String response =
+                (String) request.getSession().getAttribute("responseName");
         //response vs continues or response vs discrete.
 
         //Should also include model summaries?
@@ -80,14 +84,21 @@ public class PredictorResponseXYScatterAction extends PredictorResponseXYScatter
         DefaultXYDataset xyDataset = null;
         try {
             xyDataset = getDataSet(predictor, sessionName);
-        } catch (InvalidFormatException invalidFormatException) {
-            addActionError("You have used an undocumented input format for your omicsFusion run (likely a cvs file). We currently do not support viewing the XY scatter for this format!");
-            LOG.log(Level.INFO, "XYScatter, invalid format: {0}", invalidFormatException.getMessage());
-        } catch (FileNotFoundException e) {
+        }
+        catch (InvalidFormatException invalidFormatException) {
+            addActionError("You have used an undocumented input format for "
+                    + "your omicsFusion run (likely a cvs file). We currently "
+                    + "do not support viewing the XY scatter for this format!");
+            LOG.log(Level.INFO, "XYScatter, invalid format: {0}",
+                    invalidFormatException.getMessage());
+        }
+        catch (FileNotFoundException e) {
             addActionError("File not found");
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             addActionError("Exception occured.");
-            //This one will be catched when no valid input format is available. Due to the forward, the exception message gets lost?
+            //This one will be catched when no valid input format is available.
+            //Due to the forward, the exception message gets lost?
             LOG.log(Level.INFO, "Exception: {0}", e.getMessage());
         }
 
@@ -153,7 +164,8 @@ public class PredictorResponseXYScatterAction extends PredictorResponseXYScatter
             data[1][i] = Math.random();//response
             genotypeLabels[i] = "test";
         }
-        DefaultXYDataset xy = new GenotypeXYDataset("Genotype", data, genotypeLabels, genotypeLabels);
+        DefaultXYDataset xy = new GenotypeXYDataset("Genotype", data,
+                genotypeLabels, genotypeLabels);
         return xy;
     }
 
@@ -164,29 +176,39 @@ public class PredictorResponseXYScatterAction extends PredictorResponseXYScatter
      * @return XYDataset.
      * @throws InvalidFormatException Not an excel compatible sheet!
      */
-    private DefaultXYDataset getDataSet(String predictor, String sessionID) throws InvalidFormatException, FileNotFoundException, IOException, Exception {
+    private DefaultXYDataset getDataSet(String predictor, String sessionID)
+            throws InvalidFormatException, FileNotFoundException, IOException,
+            Exception {
         //read the filenames from filenames.txt
         ReadFile rf = new ReadFile();
         //The filenames are stored in this string array
         String fileNames[] = null;
 
         try {
-            fileNames = rf.ReadSheetFileNames(getResultsDir() + sessionID + "/filenames.txt");
+            fileNames = rf.ReadSheetFileNames(getResultsDir() + sessionID
+                    + "/filenames.txt");
             //currently only valid for excel sheets as input. Otherwise throw error.
-        } catch (IOException ex) {
-            Logger.getLogger(PredictorResponseXYScatterAction.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        catch (IOException ex) {
+            Logger.getLogger(
+                    PredictorResponseXYScatterAction.class.getName()).
+                    log(Level.SEVERE, null, ex);
         }
 
         //Read the names of the predictor and response file
-        String responseFile = getResultsDir() + sessionID + "/" + fileNames[0].trim();
-        String predictorFile = getResultsDir() + sessionID + "/" + fileNames[1].trim();
+        String responseFile = getResultsDir() + sessionID + "/"
+                + fileNames[0].trim();
+        String predictorFile = getResultsDir() + sessionID + "/"
+                + fileNames[1].trim();
 
         File predFile = new File(predictorFile);
         File respFile = new File(responseFile);
         DefaultXYDataset readPredictorAndResponseValue = null;
 
         LOG.info("try");
-        readPredictorAndResponseValue = ReadExcelSheet.readPredictorAndResponseValue(respFile, predFile, predictor);
+        readPredictorAndResponseValue =
+                ReadExcelSheet.readPredictorAndResponseValue(respFile,
+                predFile, predictor);
 
         return readPredictorAndResponseValue;
     }
@@ -206,8 +228,11 @@ public class PredictorResponseXYScatterAction extends PredictorResponseXYScatter
      */
     private String getResultsDir() {
         //String resultsDirectory = System.getProperty("java.io.tmpdir");
-        String resultsDirectory = request.getSession().getServletContext().getInitParameter("resultsDirectory");
-        if (!(resultsDirectory.endsWith("/") || resultsDirectory.endsWith("\\"))) {
+        String resultsDirectory =
+                request.getSession().getServletContext().
+                getInitParameter("resultsDirectory");
+        if (!( resultsDirectory.endsWith("/")
+                || resultsDirectory.endsWith("\\") )) {
             resultsDirectory += System.getProperty("file.separator");
         }
         return resultsDirectory;

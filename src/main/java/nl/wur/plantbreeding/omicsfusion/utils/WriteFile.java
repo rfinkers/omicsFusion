@@ -17,7 +17,8 @@ import java.util.logging.Logger;
 public class WriteFile {
 
     /** The logger */
-    private static final Logger LOG = Logger.getLogger(WriteFile.class.getName());
+    private static final Logger LOG =
+            Logger.getLogger(WriteFile.class.getName());
 
     /**
      * Writes data to a textfile.
@@ -27,7 +28,8 @@ public class WriteFile {
      */
     public void WriteFile(String fileName, String content) throws IOException {
 
-        File f = new File(fileName);//FIXME: be sure to write to the current /tmp directory for this session
+        File f = new File(fileName);
+        //FIXME: be sure to write to the current /tmp directory for this session
         FileOutputStream fop = new FileOutputStream(f);
 
         if (f.exists()) {

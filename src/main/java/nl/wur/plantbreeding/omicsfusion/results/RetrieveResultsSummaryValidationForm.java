@@ -26,7 +26,8 @@ import nl.wur.plantbreeding.logic.util.Validation;
 public class RetrieveResultsSummaryValidationForm extends ActionSupport {
 
     /** The logger */
-    private static final Logger LOG = Logger.getLogger(RetrieveResultsSummaryValidationForm.class.getName());
+    private static final Logger LOG = Logger.getLogger(
+            RetrieveResultsSummaryValidationForm.class.getName());
     /** Serial Version UID */
     private static final long serialVersionUID = 1L;
     /** session token */

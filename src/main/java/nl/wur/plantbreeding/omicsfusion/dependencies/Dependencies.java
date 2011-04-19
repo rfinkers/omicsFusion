@@ -24,7 +24,8 @@ import java.util.logging.Logger;
  */
 public class Dependencies {
 
-    private static final Logger LOG = Logger.getLogger(Dependencies.class.getName());
+    private static final Logger LOG = Logger.getLogger(
+            Dependencies.class.getName());
 //library(xlsReadWrite)
 //library(randomForest)
 //library(spls)

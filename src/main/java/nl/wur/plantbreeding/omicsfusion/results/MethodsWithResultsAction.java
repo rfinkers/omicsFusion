@@ -14,12 +14,14 @@ import org.apache.struts2.interceptor.ServletRequestAware;
  * @author Richard Finkers
  * @version 1.0
  */
-public class MethodsWithResultsAction extends MethodsWithResultsForm implements ServletRequestAware {
+public class MethodsWithResultsAction extends MethodsWithResultsForm
+        implements ServletRequestAware {
 
     /** the request */
     private HttpServletRequest request;
     /** The logger */
-    private static final Logger LOG = Logger.getLogger(MethodsWithResultsAction.class.getName());
+    private static final Logger LOG = Logger.getLogger(
+            MethodsWithResultsAction.class.getName());
 
     //TODO: Shares method with retrieveSummaryAction. Refractor to have one results utility class?
     @Override

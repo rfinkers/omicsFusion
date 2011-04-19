@@ -26,11 +26,13 @@ import org.apache.struts2.interceptor.ServletRequestAware;
  * @author Richard Finkers
  * @version 1.0
  */
-public class MethodSelectionAction extends MethodSelectionValidationForm implements ServletRequestAware {
+public class MethodSelectionAction extends MethodSelectionValidationForm
+        implements ServletRequestAware {
 
     private static final long serialVersionUID = 180610L;
     /** The logger */
-    private static final Logger LOG = Logger.getLogger(MethodSelectionAction.class.getName());
+    private static final Logger LOG =
+            Logger.getLogger(MethodSelectionAction.class.getName());
     /** the request */
     private HttpServletRequest request;
 

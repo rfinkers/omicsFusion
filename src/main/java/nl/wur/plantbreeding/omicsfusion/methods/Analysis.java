@@ -19,10 +19,12 @@ import java.util.HashMap;
 import java.util.logging.Logger;
 import nl.wur.plantbreeding.omicsfusion.utils.Constants;
 //FIXME: implement as abstract? Check manuals.
-//TODO: if the datasets contains not recognized NA values, we get an error that RSME is not valid for train method.
+//TODO: if the datasets contains not recognized NA values, we get an error that
+//      RSME is not valid for train method.
 
 /**
- * Generic Analysis class for the omicsFusion pipeline. Each method needs to implement its own specification, but might inherit code from this class.
+ * Generic Analysis class for the omicsFusion pipeline. Each method needs to
+ * implement its own specification, but might inherit code from this class.
  * @author Richard Finkers
  * @version 1.0
  */
@@ -39,10 +41,11 @@ public class Analysis {
      * @param excelSheets The names of the predictor and response excel sheets.
      * @return R program code.
      */
-    protected String loadPredictorAndResponseDataSheets(HashMap<String, String> excelSheets) {
+    protected String loadPredictorAndResponseDataSheets(
+            HashMap<String, String> excelSheets) {
         String rCode = "# Load the generic R libraries \n";
         rCode += "# Load the excel sheets\n";
-        //TODO: test how generic the CSV import works. Can we test for decimal point, etc?
+        //TODO: test how generic CSV import works. test for decimal point, etc?
         if (excelSheets.get("predictor").contains("csv")) {
             rCode += "predictorSheet <- read.csv2(\""
                     + excelSheets.get("predictor")
@@ -71,7 +74,8 @@ public class Analysis {
         return rCode;
     }
 
-    protected String loadPredictResponseDataSheet(HashMap<String, String> excelSheets) {
+    protected String loadPredictResponseDataSheet(
+            HashMap<String, String> excelSheets) {
         String rCode = "# Load the PredictResponse data sheet.\n";
         //TODO: test how generic the CSV import works.
         //Can we test for decimal point, etc?

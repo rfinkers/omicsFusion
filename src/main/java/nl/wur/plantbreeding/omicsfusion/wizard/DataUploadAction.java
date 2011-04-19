@@ -38,11 +38,13 @@ import org.apache.struts2.interceptor.ServletRequestAware;
  * @author Richard Finkers
  * @version 1.0
  */
-public class DataUploadAction extends DataUploadValidationForm implements ServletRequestAware {
+public class DataUploadAction extends DataUploadValidationForm
+        implements ServletRequestAware {
 
     private static final long serialVersionUID = 170610L;
     /** The logger */
-    private static final Logger LOG = Logger.getLogger(DataUploadAction.class.getName());
+    private static final Logger LOG =
+            Logger.getLogger(DataUploadAction.class.getName());
     /** the request */
     private HttpServletRequest request;
 
@@ -51,40 +53,51 @@ public class DataUploadAction extends DataUploadValidationForm implements Servle
         try {
 
             LOG.info("Execute upload");
-            String resultsDirectory = request.getSession().getServletContext().getInitParameter("resultsDirectory");
-            if (!(resultsDirectory.endsWith("/") || resultsDirectory.endsWith("\\"))) {
+            String resultsDirectory = request.getSession().getServletContext().
+                    getInitParameter("resultsDirectory");
+            if (!( resultsDirectory.endsWith("/")
+                    || resultsDirectory.endsWith("\\") )) {
                 resultsDirectory += System.getProperty("file.separator");
             }
 
             //Check if the sheet is excel or csv. Set the name accordingly
-            File responseSheet = new File(resultsDirectory + request.getSession().getId()
+            File responseSheet = new File(resultsDirectory
+                    + request.getSession().getId()
                     + "/" + getDataSheetResponseFileFileName());
-            File predictorSheet = new File(resultsDirectory + request.getSession().getId()
+            File predictorSheet = new File(resultsDirectory
+                    + request.getSession().getId()
                     + "/" + getDataSheetPredictorFileFileName());
             //Copy the uploaded excel sheets to a temporary directory
             FileUtils.copyFile(getDataSheetPredictorFile(), predictorSheet);
             FileUtils.copyFile(getDataSheetResponseFile(), responseSheet);
             File predictResponseSheet = null;
             if (getDataSheetPredictResponseFile() != null) {
-                predictResponseSheet = new File(resultsDirectory + request.getSession().getId()
+                predictResponseSheet = new File(resultsDirectory
+                        + request.getSession().getId()
                         + "/" + getDataSheetPredictResponseFileFileName());
-                FileUtils.copyFile(getDataSheetPredictResponseFile(), predictResponseSheet);
+                FileUtils.copyFile(getDataSheetPredictResponseFile(),
+                        predictResponseSheet);
             }
 
             //prepare a file with the names of the input sheets. This will be used to read the names during the results wizard.
             writeNamesToDisk();
 
-            LOG.log(Level.INFO, "Predictor: {0}", getDataSheetPredictorFileFileName());
+            LOG.log(Level.INFO, "Predictor: {0}",
+                    getDataSheetPredictorFileFileName());
             LOG.log(Level.INFO, "Type: {0}", getPredictorType());
-            LOG.log(Level.INFO, "Response: {0}", getDataSheetResponseFileFileName());
+            LOG.log(Level.INFO, "Response: {0}",
+                    getDataSheetResponseFileFileName());
             LOG.log(Level.INFO, "Type: {0}", getResponseType());
             //File to predict the response for
-            LOG.log(Level.INFO, "Test: {0}", getDataSheetPredictResponseFileFileName());
+            LOG.log(Level.INFO, "Test: {0}",
+                    getDataSheetPredictResponseFileFileName());
 
             //validate the correctness of the format of the excelsheet.
-            if (!responseSheet.getName().contains("csv") && !predictorSheet.getName().contains("csv")) {
+            if (!responseSheet.getName().contains("csv")
+                    && !predictorSheet.getName().contains("csv")) {
                 //FIXME: one of the files is csv. No validation possible
-                ValidateDataSheets.validateExcelSheets(responseSheet, predictorSheet);
+                ValidateDataSheets.validateExcelSheets(responseSheet,
+                        predictorSheet);
             }
 
             if (predictResponseSheet != null) {
@@ -92,21 +105,26 @@ public class DataUploadAction extends DataUploadValidationForm implements Servle
             }
 
             //TODO: should we prepare the list with selectionboxes here depending of the type of sheets?
-        } catch (InvalidFormatException e) {
+        }
+        catch (InvalidFormatException e) {
             e.printStackTrace();
             addActionError(e.getMessage());
             return INPUT;
-        } catch (DataSheetValidationException e) {
+        }
+        catch (DataSheetValidationException e) {
             addActionError(e.getMessage());
             e.printStackTrace();
             return INPUT;
-        } catch (FileNotFoundException e) {
+        }
+        catch (FileNotFoundException e) {
             addActionError(e.getMessage());
             return INPUT;
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             addActionError(e.getMessage());
             return INPUT;
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             addActionError(e.getMessage());
             LOG.severe("Exception caught");
             ExceptionEmail.SendExceptionEmail(e);
@@ -118,7 +136,8 @@ public class DataUploadAction extends DataUploadValidationForm implements Servle
         sheets.put("predictor", getDataSheetPredictorFileFileName());
         sheets.put("response", getDataSheetResponseFileFileName());
         if (getDataSheetPredictResponseFileFileName() != null) {
-            sheets.put("predictResponse", getDataSheetPredictResponseFileFileName());
+            sheets.put("predictResponse",
+                    getDataSheetPredictResponseFileFileName());
         }
 
         request.getSession().setAttribute(Constants.DataUpload, sheets);
@@ -142,7 +161,8 @@ public class DataUploadAction extends DataUploadValidationForm implements Servle
         if (getDataSheetPredictResponseFileFileName() != null) {
             content += getDataSheetPredictResponseFileFileName() + "\n";
         }
-        wf.WriteFile(getResultsDir() + request.getSession().getId() + "/filenames.txt", content);
+        wf.WriteFile(getResultsDir() + request.getSession().getId()
+                + "/filenames.txt", content);
     }
 
     /**
@@ -151,8 +171,10 @@ public class DataUploadAction extends DataUploadValidationForm implements Servle
      */
     private String getResultsDir() {
         //String resultsDirectory = System.getProperty("java.io.tmpdir");
-        String resultsDirectory = request.getSession().getServletContext().getInitParameter("resultsDirectory");
-        if (!(resultsDirectory.endsWith("/") || resultsDirectory.endsWith("\\"))) {
+        String resultsDirectory = request.getSession().getServletContext().
+                getInitParameter("resultsDirectory");
+        if (!( resultsDirectory.endsWith("/")
+                || resultsDirectory.endsWith("\\") )) {
             resultsDirectory += System.getProperty("file.separator");
         }
         return resultsDirectory;

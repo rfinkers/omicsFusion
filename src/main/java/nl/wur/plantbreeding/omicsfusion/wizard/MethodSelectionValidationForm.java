@@ -129,8 +129,10 @@ public class MethodSelectionValidationForm extends ActionSupport {
         /* atleast one method should be selected */
         if (isLasso() == false && isElasticNet() == false && isPcr() == false
                 && isPls() == false && isRf() == false && isSpls() == false
-                && isRidge() == false && isSvm() == false && isUnivariate() == false) {
-            addActionError("The current selection is invalid. Select at least one method!");
+                && isRidge() == false && isSvm() == false
+                && isUnivariate() == false) {
+            addActionError("The current selection is invalid. "
+                    + "Select at least one method!");
         }
     }
 }

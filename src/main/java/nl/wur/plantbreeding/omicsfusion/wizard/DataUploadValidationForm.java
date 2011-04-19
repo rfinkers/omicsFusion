@@ -28,7 +28,8 @@ public class DataUploadValidationForm extends ActionSupport {
 
     private static final long serialVersionUID = 170610L;
     /** The logger */
-    private static final Logger LOG = Logger.getLogger(DataUploadValidationForm.class.getName());
+    private static final Logger LOG =
+            Logger.getLogger(DataUploadValidationForm.class.getName());
     /** File containing the response variables */
     private File dataSheetResponseFile;
     /** content type of the data sheet */
@@ -64,15 +65,18 @@ public class DataUploadValidationForm extends ActionSupport {
         return dataSheetPredictorFileContentType;
     }
 
-    public void setDataSheetPredictorFileContentType(String dataSheetPredictorFileContentType) {
-        this.dataSheetPredictorFileContentType = dataSheetPredictorFileContentType;
+    public void setDataSheetPredictorFileContentType(
+            String dataSheetPredictorFileContentType) {
+        this.dataSheetPredictorFileContentType =
+                dataSheetPredictorFileContentType;
     }
 
     public String getDataSheetPredictorFileFileName() {
         return dataSheetPredictorFileFileName;
     }
 
-    public void setDataSheetPredictorFileFileName(String dataSheetPredictorFileFileName) {
+    public void setDataSheetPredictorFileFileName(
+            String dataSheetPredictorFileFileName) {
         this.dataSheetPredictorFileFileName = dataSheetPredictorFileFileName;
     }
 
@@ -88,7 +92,8 @@ public class DataUploadValidationForm extends ActionSupport {
         return dataSheetResponseFileContentType;
     }
 
-    public void setDataSheetResponseFileContentType(String dataSheetResponseFileContentType) {
+    public void setDataSheetResponseFileContentType(
+            String dataSheetResponseFileContentType) {
         this.dataSheetResponseFileContentType = dataSheetResponseFileContentType;
     }
 
@@ -96,7 +101,8 @@ public class DataUploadValidationForm extends ActionSupport {
         return dataSheetResponseFileFileName;
     }
 
-    public void setDataSheetResponseFileFileName(String dataSheetResponseFileFileName) {
+    public void setDataSheetResponseFileFileName(
+            String dataSheetResponseFileFileName) {
         this.dataSheetResponseFileFileName = dataSheetResponseFileFileName;
     }
 
@@ -120,7 +126,8 @@ public class DataUploadValidationForm extends ActionSupport {
         return dataSheetPredictResponseFile;
     }
 
-    public void setDataSheetPredictResponseFile(File dataSheetPredictResponseFile) {
+    public void setDataSheetPredictResponseFile(
+            File dataSheetPredictResponseFile) {
         this.dataSheetPredictResponseFile = dataSheetPredictResponseFile;
     }
 
@@ -128,16 +135,20 @@ public class DataUploadValidationForm extends ActionSupport {
         return dataSheetPredictResponseFileContentType;
     }
 
-    public void setDataSheetPredictResponseFileContentType(String dataSheetPredictResponseFileContentType) {
-        this.dataSheetPredictResponseFileContentType = dataSheetPredictResponseFileContentType;
+    public void setDataSheetPredictResponseFileContentType(
+            String dataSheetPredictResponseFileContentType) {
+        this.dataSheetPredictResponseFileContentType =
+                dataSheetPredictResponseFileContentType;
     }
 
     public String getDataSheetPredictResponseFileFileName() {
         return dataSheetPredictResponseFileFileName;
     }
 
-    public void setDataSheetPredictResponseFileFileName(String dataSheetPredictResponseFileFileName) {
-        this.dataSheetPredictResponseFileFileName = dataSheetPredictResponseFileFileName;
+    public void setDataSheetPredictResponseFileFileName(
+            String dataSheetPredictResponseFileFileName) {
+        this.dataSheetPredictResponseFileFileName =
+                dataSheetPredictResponseFileFileName;
     }
 
     @Override

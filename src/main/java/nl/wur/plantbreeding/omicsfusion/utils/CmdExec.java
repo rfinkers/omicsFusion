@@ -42,20 +42,29 @@ public class CmdExec {
      * @return JobID on the SGE grid.
      * @throws IOException Batch job script not found.
      */
-    public static int ExecuteQSubCmd(String executionDir, String method, String queue) throws IOException {
+    public static int ExecuteQSubCmd(String executionDir, String method,
+            String queue) throws IOException {
         Process p;
-        if (method.equals("rf") || method.equals("spls") || method.equals("ridge")) {
+        if (method.equals("rf") || method.equals("spls")
+                || method.equals("ridge")) {
             //-P omicsFusion -> project name : Probably not, as we don't account this in SGE!
             //TODO: replace email with email user?
             if (Constants.MAX_NUMBER_CPU > 2) {//TODO: add this to the if test above? Alternatively, modify the submission script
-                p = Runtime.getRuntime().exec("qsub -S /bin/bash -p -100 -pe Rmpi " + Constants.MAX_NUMBER_CPU + " -q " + queue + " -m be -M richard.finkers@wur.nl " + executionDir + method + ".pbs");
+                p = Runtime.getRuntime().exec(
+                        "qsub -S /bin/bash -p -100 -pe Rmpi "
+                        + Constants.MAX_NUMBER_CPU + " -q " + queue
+                        + " -m be -M richard.finkers@wur.nl " + executionDir
+                        + method + ".pbs");
             } else {
-                p = Runtime.getRuntime().exec("qsub -S /bin/bash -q " + queue + " " + executionDir + method + ".pbs");
+                p = Runtime.getRuntime().exec("qsub -S /bin/bash -q " + queue
+                        + " " + executionDir + method + ".pbs");
             }
         } else {
-            p = Runtime.getRuntime().exec("qsub -S /bin/bash -q " + queue + " " + executionDir + method + ".pbs");
+            p = Runtime.getRuntime().exec("qsub -S /bin/bash -q " + queue
+                    + " " + executionDir + method + ".pbs");
         }
-        BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
+        BufferedReader input =
+                new BufferedReader(new InputStreamReader(p.getInputStream()));
         String line = input.readLine();
         input.close();
 
@@ -69,7 +78,8 @@ public class CmdExec {
                     if (jobId != 0) {
                         break;
                     }
-                } catch (NumberFormatException numberFormatException) {
+                }
+                catch (NumberFormatException numberFormatException) {
                     //do nothing
                 }
             }
@@ -84,13 +94,16 @@ public class CmdExec {
      * @throws IOException
      * @throws InterruptedException
      */
-    public static boolean CheckJobStatus(int jobId) throws IOException, InterruptedException {
+    public static boolean CheckJobStatus(int jobId)
+            throws IOException, InterruptedException {
         //TODO: boolean or String? Probably String as this can contain more information about currently runnign jobs (e.g. start time etc.).
         boolean finished = false;
         //String line;
         Process p = Runtime.getRuntime().exec("qstat -j " + jobId);
-        BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
-        BufferedReader error = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+        BufferedReader input =
+                new BufferedReader(new InputStreamReader(p.getInputStream()));
+        BufferedReader error =
+                new BufferedReader(new InputStreamReader(p.getErrorStream()));
         p.waitFor();
 
         String line = input.readLine();
@@ -104,7 +117,7 @@ public class CmdExec {
             System.out.println("input check");
             //submission_time:
 
-            while ((line = input.readLine()) != null) {
+            while (( line = input.readLine() ) != null) {
                 System.out.println("result: " + line);
             }
         }

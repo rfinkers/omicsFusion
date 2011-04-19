@@ -44,7 +44,8 @@ import org.apache.struts2.interceptor.ServletRequestAware;
  * @author Richard Finkers
  * @version 1.0
  */
-public class RunAnalysisAction extends ActionSupport implements ServletRequestAware {
+public class RunAnalysisAction extends ActionSupport
+        implements ServletRequestAware {
 
     /** Serial Version UID */
     private static final long serialVersionUID = 20100815L;
@@ -57,9 +58,13 @@ public class RunAnalysisAction extends ActionSupport implements ServletRequestAw
     public String execute() throws Exception {
         //Read the relevant data from the session
         @SuppressWarnings("unchecked")
-        HashMap<String, String> sheets = (HashMap<String, String>) getRequest().getSession().getAttribute("sheets");
+        HashMap<String, String> sheets =
+                (HashMap<String, String>) getRequest().getSession().
+                getAttribute("sheets");
         @SuppressWarnings("unchecked")
-        ArrayList<String> methods = (ArrayList<String>) getRequest().getSession().getAttribute("methods");
+        ArrayList<String> methods =
+                (ArrayList<String>) getRequest().getSession().
+                getAttribute("methods");
 
         //we want to write text files.
 
@@ -129,7 +134,8 @@ public class RunAnalysisAction extends ActionSupport implements ServletRequestAw
             writeScriptFile("sessionInfo.R", mthString);
             jobIds.add(submitToSGE("sessionInfo"));
 
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             addActionError("qsub not found, please check your SGE configuration");//TODO: check
             return ERROR;//TODO: configure
         }
@@ -141,7 +147,8 @@ public class RunAnalysisAction extends ActionSupport implements ServletRequestAw
         try {
             // TODO: add user details and sessionID to constructor
             SubmissionCompleteEmail();
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             LOG.log(Level.INFO, "exception on email initialization");
             e.printStackTrace();
             ExceptionEmail.SendExceptionEmail(e);
@@ -158,9 +165,11 @@ public class RunAnalysisAction extends ActionSupport implements ServletRequestAw
      * @param script Contents of the script.
      * @throws IOException When writing to disk fails.
      */
-    public void writeScriptFile(String scriptName, String script) throws IOException {
+    public void writeScriptFile(String scriptName, String script)
+            throws IOException {
         WriteFile wf = new WriteFile();
-        wf.WriteFile(getResultsDir() + getRequest().getSession().getId() + "/" + scriptName, script);
+        wf.WriteFile(getResultsDir() + getRequest().getSession().getId()
+                + "/" + scriptName, script);
     }
 
     /**
@@ -171,13 +180,18 @@ public class RunAnalysisAction extends ActionSupport implements ServletRequestAw
      */
     public int submitToSGE(String scriptName) throws IOException {
         WriteFile wf = new WriteFile();
-        wf.WriteFile(getResultsDir() + getRequest().getSession().getId() + "/" + scriptName + ".pbs",
-                "#!/bin/sh\ncd " + getResultsDir() + getRequest().getSession().getId() + "\nR --no-save < " + scriptName + ".R\n");
+        wf.WriteFile(getResultsDir() + getRequest().getSession().getId()
+                + "/" + scriptName + ".pbs",
+                "#!/bin/sh\ncd " + getResultsDir()
+                + getRequest().getSession().getId() + "\nR --no-save < "
+                + scriptName + ".R\n");
         //Submit jobs to the SGE QUEUE
         //FIXME: We should add an parameter if the current job (e.g. the RF job) will use multiple CPU's
         int jobId = 0;
-        String queue = request.getSession().getServletContext().getInitParameter("SGEQueue");
-        jobId = CmdExec.ExecuteQSubCmd(getResultsDir() + getRequest().getSession().getId() + "/", scriptName, queue);
+        String queue =
+                request.getSession().getServletContext().getInitParameter("SGEQueue");
+        jobId = CmdExec.ExecuteQSubCmd(getResultsDir()
+                + getRequest().getSession().getId() + "/", scriptName, queue);
 
         if (jobId == 0) {
             LOG.severe("error during submission");//TODO: implement exception? Also is thrown when a wrong queue name is selected
@@ -193,8 +207,9 @@ public class RunAnalysisAction extends ActionSupport implements ServletRequestAw
      */
     private String getResultsDir() {
         //String resultsDirectory = System.getProperty("java.io.tmpdir");
-        String resultsDirectory = request.getSession().getServletContext().getInitParameter("resultsDirectory");
-        if (!(resultsDirectory.endsWith("/") || resultsDirectory.endsWith("\\"))) {
+        String resultsDirectory =
+                request.getSession().getServletContext().getInitParameter("resultsDirectory");
+        if (!( resultsDirectory.endsWith("/") || resultsDirectory.endsWith("\\") )) {
             resultsDirectory += System.getProperty("file.separator");
         }
         return resultsDirectory;

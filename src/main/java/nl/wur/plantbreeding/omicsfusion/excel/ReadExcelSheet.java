@@ -47,7 +47,8 @@ public class ReadExcelSheet extends ManipulateExcelSheet {
 
     public static DefaultXYDataset readPredictorAndResponseValue(
             File responseSheet, File predictorSheet, String predictor)
-            throws FileNotFoundException, InvalidFormatException, IOException, Exception {
+            throws FileNotFoundException, InvalidFormatException, IOException,
+            Exception {
 
 
         /** wb for the response variables */
@@ -55,8 +56,10 @@ public class ReadExcelSheet extends ManipulateExcelSheet {
         /** wb for the predictor variables */
         Sheet predWbSheet;
 
-        respWbSheet = loadExcelSheet(responseSheet).getSheetAt(0);//trait
-        predWbSheet = loadExcelSheet(predictorSheet).getSheetAt(0);//predictor matrix
+        //trait
+        respWbSheet = loadExcelSheet(responseSheet).getSheetAt(0);
+        //predictor matrix
+        predWbSheet = loadExcelSheet(predictorSheet).getSheetAt(0);
 
         //TODO: refractor for sheet instead of row!
         Row predictorRow = predWbSheet.getRow(0);//matrix

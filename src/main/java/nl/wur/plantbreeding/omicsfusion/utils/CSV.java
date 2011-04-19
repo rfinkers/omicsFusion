@@ -30,9 +30,11 @@ public class CSV {
      * @throws FileNotFoundException
      * @throws IOException
      */
-    public static ArrayList<CsvSummaryDataType> readSummaryCsv(String fileName) throws FileNotFoundException, IOException {
+    public static ArrayList<CsvSummaryDataType> readSummaryCsv(String fileName)
+            throws FileNotFoundException, IOException {
         //FIXME: add check for file?
-        ArrayList<CsvSummaryDataType> csvSum = new ArrayList<CsvSummaryDataType>();
+        ArrayList<CsvSummaryDataType> csvSum =
+                new ArrayList<CsvSummaryDataType>();
 
         CsvReader reader = new CsvReader(fileName);
 

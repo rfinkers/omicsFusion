@@ -19,14 +19,16 @@ import nl.wur.plantbreeding.omicsfusion.utils.ServletUtils;
 public class RunStatusAction extends RunStatusValidationForm {
 
     /** The Logger */
-    private static final Logger LOG = Logger.getLogger(RunStatusAction.class.getName());
+    private static final Logger LOG = Logger.getLogger(
+            RunStatusAction.class.getName());
     /** Serial Version UID */
     private static final long serialVersionUID = 26082010L;
 
     @Override
     public String execute() throws Exception {
 
-        ArrayList<Integer> jobIdsFromDatabase = getJobIdsFromDatabase(getSessionId());
+        ArrayList<Integer> jobIdsFromDatabase =
+                getJobIdsFromDatabase(getSessionId());
 
         System.out.println("Jobs: " + jobIdsFromDatabase.size());
 
@@ -47,7 +49,8 @@ public class RunStatusAction extends RunStatusValidationForm {
         return SUCCESS;
     }
 
-    private ArrayList<Integer> getJobIdsFromDatabase(String sessionId) throws NumberFormatException {
+    private ArrayList<Integer> getJobIdsFromDatabase(String sessionId)
+            throws NumberFormatException {
         System.out.println("SessionID" + sessionId);
         //take the sessionID token from the form and get the jobs for this session.
         //TODO: read from database? Now dummy placeholder to get the data

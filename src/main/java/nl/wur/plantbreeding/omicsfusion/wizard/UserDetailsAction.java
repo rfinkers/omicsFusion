@@ -28,13 +28,15 @@ import org.apache.struts2.interceptor.SessionAware;
  * @author Richard Finkers
  * @version 1.0
  */
-public class UserDetailsAction extends UserDetailsValidationForm implements SessionAware {
+public class UserDetailsAction extends UserDetailsValidationForm
+        implements SessionAware {
 
     private static final long serialVersionUID = 170610L;
     /** the session */
     private Map<String, Object> session;
     /** The logger */
-    private static final Logger LOG = Logger.getLogger(UserDetailsAction.class.getName());
+    private static final Logger LOG =
+            Logger.getLogger(UserDetailsAction.class.getName());
 
     @Override
     public String execute() throws Exception {
@@ -52,7 +54,8 @@ public class UserDetailsAction extends UserDetailsValidationForm implements Sess
 
             session.put(Constants.USER, user);
 
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
             LOG.log(Level.SEVERE, "Exception: {0}", ex.getMessage());
             addActionError("An exceoption occured");
             ex.printStackTrace();

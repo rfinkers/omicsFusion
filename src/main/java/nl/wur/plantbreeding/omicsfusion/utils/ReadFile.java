@@ -28,13 +28,15 @@ public class ReadFile {
 
     /**
      * Read the filenames fo the opriginal input excel sheets.
-     * @param fileName Name of the file with the names of the response and predictor sheets.
+     * @param fileName Name of the file with the names of the response
+     * and predictor sheets.
      * @return Names of the sheets.
      * @throws IOException if something witn wring with file IO.
      */
     public String[] ReadSheetFileNames(String fileName) throws IOException {
 
-        File f = new File(fileName);//FIXME: be sure to write to the current /tmp directory for this session
+        File f = new File(fileName);
+        //FIXME: be sure to write to the current /tmp directory for this session
         FileInputStream fip = new FileInputStream(f);
 
         String[] content = null;
@@ -47,14 +49,17 @@ public class ReadFile {
                 while (scanner.hasNextLine()) {
                     text.append(scanner.nextLine()).append(NL);
                 }
-            } finally {
+            }
+            finally {
                 scanner.close();
             }
             content = text.toString().split(NL);
-            System.out.println("response: " + content[0] + " Predictor: " + content[1]);
+            System.out.println("response: " + content[0] + " Predictor: "
+                    + content[1]);
 
         } else {
-            System.out.println("This file does not exist");//TODO throw exception?
+            System.out.println("This file does not exist");
+            //TODO throw exception?
         }
 
         return content;
@@ -81,7 +86,8 @@ public class ReadFile {
                 while (scanner.hasNextLine()) {
                     text.append(scanner.nextLine()).append(NL);
                 }
-            } finally {
+            }
+            finally {
                 scanner.close();
             }
             String[] lines = text.toString().split(NL);
@@ -89,7 +95,8 @@ public class ReadFile {
 
             responseName = content[3];
         } else {
-            System.out.println("This file" + filename + " does not exist");//TODO throw exception?
+            System.out.println("This file" + filename + " does not exist");
+            //TODO throw exception?
         }
         return responseName;
     }

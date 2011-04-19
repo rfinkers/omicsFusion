@@ -32,7 +32,7 @@ public class Constants {
     public final static int MIN_PREDICTOR_COLUMNS = 5;
     /** Minimum number of columns for response sheet. */
     public final static int MIN_RESPONSE_COLUMNS = 1;
-        /** Minimum number of individuals */
+    /** Minimum number of individuals */
     public final static int MIN_INDIVIDUALS = 20;
     /** The total number of iterations on the dataset. */
     public static final int ITERATIONS = 10;//FIXME: set to 100 for final program.
@@ -44,7 +44,7 @@ public class Constants {
     public static final int MAX_NUMBER_CPU = 8;
     /** What is the maximum number of results to show in the summary table. */
     public static final int MAX_SUMMARY_RESULTS = 2500;
-    
+
     private Constants() {
     }
 }

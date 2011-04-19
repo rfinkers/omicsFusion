@@ -35,13 +35,20 @@ import javax.persistence.TemporalType;
 @Table(name = "userList", catalog = "omicsFusion", schema = "")
 @NamedQueries({
     @NamedQuery(name = "UserList.findAll", query = "SELECT u FROM UserList u"),
-    @NamedQuery(name = "UserList.findById", query = "SELECT u FROM UserList u WHERE u.id = :id"),
-    @NamedQuery(name = "UserList.findByUserName", query = "SELECT u FROM UserList u WHERE u.userName = :userName"),
-    @NamedQuery(name = "UserList.findByEmail", query = "SELECT u FROM UserList u WHERE u.email = :email"),
-    @NamedQuery(name = "UserList.findByAffiliation", query = "SELECT u FROM UserList u WHERE u.affiliation = :affiliation"),
-    @NamedQuery(name = "UserList.findByCountry", query = "SELECT u FROM UserList u WHERE u.country = :country"),
-    @NamedQuery(name = "UserList.findByDateCreated", query = "SELECT u FROM UserList u WHERE u.dateCreated = :dateCreated"),
-    @NamedQuery(name = "UserList.findByLastUpdate", query = "SELECT u FROM UserList u WHERE u.lastUpdate = :lastUpdate")})
+    @NamedQuery(name = "UserList.findById",
+    query = "SELECT u FROM UserList u WHERE u.id = :id"),
+    @NamedQuery(name = "UserList.findByUserName",
+    query = "SELECT u FROM UserList u WHERE u.userName = :userName"),
+    @NamedQuery(name = "UserList.findByEmail",
+    query = "SELECT u FROM UserList u WHERE u.email = :email"),
+    @NamedQuery(name = "UserList.findByAffiliation",
+    query = "SELECT u FROM UserList u WHERE u.affiliation = :affiliation"),
+    @NamedQuery(name = "UserList.findByCountry",
+    query = "SELECT u FROM UserList u WHERE u.country = :country"),
+    @NamedQuery(name = "UserList.findByDateCreated",
+    query = "SELECT u FROM UserList u WHERE u.dateCreated = :dateCreated"),
+    @NamedQuery(name = "UserList.findByLastUpdate",
+    query = "SELECT u FROM UserList u WHERE u.lastUpdate = :lastUpdate")})
 public class UserList implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -75,7 +82,8 @@ public class UserList implements Serializable {
         this.id = id;
     }
 
-    public UserList(Integer id, String userName, String email, Date dateCreated, Date lastUpdate) {
+    public UserList(Integer id, String userName, String email,
+            Date dateCreated, Date lastUpdate) {
         this.id = id;
         this.userName = userName;
         this.email = email;
@@ -142,18 +150,20 @@ public class UserList implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += ( id != null ? id.hashCode() : 0 );
         return hash;
     }
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof UserList)) {
+        // TODO: Warning - this method won't work in the case the id
+        // fields are not set
+        if (!( object instanceof UserList )) {
             return false;
         }
         UserList other = (UserList) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if (( this.id == null && other.id != null )
+                || ( this.id != null && !this.id.equals(other.id) )) {
             return false;
         }
         return true;

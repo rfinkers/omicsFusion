@@ -19,7 +19,8 @@ import com.opensymphony.xwork2.ActionSupport;
 import java.util.logging.Logger;
 
 /**
- * Show a XY scatterplot for a predictor / response variable. This form contains the variables.
+ * Show a XY scatterplot for a predictor / response variable.
+ * This form contains the variables.
  * @author Richard Finkers
  * @version 1.0
  */
@@ -27,7 +28,8 @@ public class PredictorResponseXYScatterForm extends ActionSupport {
     //TODO: can we use this form while using request parameters? See BreeDB code.
 
     /** The logger */
-    protected static final Logger LOG = Logger.getLogger(PredictorResponseXYScatterForm.class.getName());
+    protected static final Logger LOG = Logger.getLogger(
+            PredictorResponseXYScatterForm.class.getName());
     /** Serial Version UID */
     private static final long serialVersionUID = 100906L;
 
