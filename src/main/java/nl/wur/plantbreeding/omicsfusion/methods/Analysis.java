@@ -143,34 +143,44 @@ public class Analysis {
     protected String getRequiredLibraries() {
         String rCode = "# Load requried generic libraries\n";
         rCode += "library(gdata)\n";//Used to load excel sheets
+        rCode += "library(XLconnect)\n";//Used to load excel sheets
         rCode += "library(lattice)\n";//dependencies of caret
         rCode += "library(reshape)\n";//dependencies of caret
         rCode += "library(plyr)\n";//dependencies of caret
         rCode += "library(caret)\n";//Used for createfolds in training set
-        //rCode += "library(doMPI)\n\n";//train() from caret can use mpi. We use this for RF and SPSL
         return rCode;
     }
 
     /**
-     * Initialization of the most commonly used empty variables to store the results. Most methods do, however, require their own initialization.
+     * Initialization of the most commonly used empty variables to store the
+     * results. Most methods do, however, require their own initialization.
      * @return R compatible code.
      */
     protected String initializeResultObjects() {
         //TODO: how is this method used?
         String rCode = "# Initialize results and add column names\n";
         for (int i = 0; i < Constants.NUMBER_FOLDS_OUTER; i++) {
-            rCode += "coln <-  paste(" + i + ",seq(1:" + Constants.ITERATIONS + "),sep=\"_\")\n";
-            rCode += "coefs_" + i + " <- matrix(data = NA,nrow = dim(DesignMatrix)[2], ncol =" + Constants.ITERATIONS + ")\n";
+            rCode += "coln <-  paste(" + i + ",seq(1:" + Constants.ITERATIONS
+                    + "),sep=\"_\")\n";
+            rCode += "coefs_" + i
+                    + " <- matrix(data = NA,nrow = dim(DesignMatrix)[2], ncol ="
+                    + Constants.ITERATIONS + ")\n";
             rCode += "colnames(coefs_" + i + ") <- coln\n";
-            rCode += "y_fit" + i + " <- matrix(data = NA, nrow = dim(DesignMatrix)[2], ncol =" + Constants.ITERATIONS + ")\n";
+            rCode += "y_fit"
+                    + i + " <- matrix(data = NA, nrow = dim(DesignMatrix)[2], ncol ="
+                    + Constants.ITERATIONS + ")\n";
             rCode += "colnames(y_fit" + i + ") <- coln\n";
-            rCode += "R2_" + i + " <- matrix(data=NA,nrow=1,ncol=" + Constants.ITERATIONS + ")\n";
+            rCode += "R2_" + i + " <- matrix(data=NA,nrow=1,ncol="
+                    + Constants.ITERATIONS + ")\n";
             rCode += "colnames(R2_" + i + ") <- coln\n";
-            rCode += "frac_" + i + " <- matrix(data=NA,nrow=1,ncol=" + Constants.ITERATIONS + ")\n";
+            rCode += "frac_" + i + " <- matrix(data=NA,nrow=1,ncol="
+                    + Constants.ITERATIONS + ")\n";
             rCode += "colnames(frac_" + i + ") <- coln\n";
-            rCode += "lambda_" + i + " <- matrix(data=NA,nrow=1,ncol=" + Constants.ITERATIONS + ")\n";
+            rCode += "lambda_" + i + " <- matrix(data=NA,nrow=1,ncol="
+                    + Constants.ITERATIONS + ")\n";
             rCode += "colnames(lambda_" + i + ") <- coln\n";
-            rCode += "test_" + i + " <- matrix(data=NA,nrow=" + Constants.ITERATIONS + ",ncol=2)\n\n";
+            rCode += "test_" + i + " <- matrix(data=NA,nrow="
+                    + Constants.ITERATIONS + ",ncol=2)\n\n";
             rCode += "colnames(test_" + i + ") <- c(\"RMSE\",\"R2\")\n";
         }
         return rCode;
@@ -184,45 +194,68 @@ public class Analysis {
     protected String initializeResultObjects(String analysisMethod) {
         String rCode = "# Initialize results\n";
         for (int i = 0; i < Constants.NUMBER_FOLDS_OUTER; i++) {
-            rCode += "coln <-  paste(" + i + ",seq(1:" + Constants.ITERATIONS + "),sep=\"_\")\n";
-            rCode += "test_" + i + " <- matrix(data=NA,nrow=" + Constants.ITERATIONS + ",ncol=2)\n";
-            rCode += "RMSE <- paste(\"RMSE_" + i + "\",seq(1:" + Constants.ITERATIONS + "),sep=\"_\")\n";
-            rCode += "R2 <- paste(\"R2_" + i + "\",seq(1:" + Constants.ITERATIONS + "),sep=\"_\")\n";
+            rCode += "coln <-  paste(" + i + ",seq(1:"
+                    + Constants.ITERATIONS + "),sep=\"_\")\n";
+            rCode += "test_" + i + " <- matrix(data=NA,nrow="
+                    + Constants.ITERATIONS + ",ncol=2)\n";
+            rCode += "RMSE <- paste(\"RMSE_" + i + "\",seq(1:"
+                    + Constants.ITERATIONS + "),sep=\"_\")\n";
+            rCode += "R2 <- paste(\"R2_" + i + "\",seq(1:"
+                    + Constants.ITERATIONS + "),sep=\"_\")\n";
             rCode += "colnames(test_" + i + ") <- c(\"RMSE\",\"R2\")\n";
-            rCode += "y_fit" + i + " <- matrix(data = NA, nrow = dim(DesignMatrix)[2], ncol =" + Constants.ITERATIONS + ")\n";
+            rCode += "y_fit"
+                    + i + " <- matrix(data = NA, nrow = dim(DesignMatrix)[2], ncol ="
+                    + Constants.ITERATIONS + ")\n";
             rCode += "colnames(y_fit" + i + ") <- coln\n";
-            rCode += "R2_" + i + " <- matrix(data=NA,nrow=1,ncol=" + Constants.ITERATIONS + ")\n";
+            rCode += "R2_" + i + " <- matrix(data=NA,nrow=1,ncol="
+                    + Constants.ITERATIONS + ")\n";
             rCode += "colnames(R2_" + i + ") <- coln\n";
-            if (analysisMethod.equals("en") || analysisMethod.equals("ridge") || analysisMethod.equals("lasso")) {
-                rCode += "lambda_" + i + " <- matrix(data = NA, nrow = 1, ncol = " + Constants.ITERATIONS + ")\n";
+            if (analysisMethod.equals("en") || analysisMethod.equals("ridge")
+                    || analysisMethod.equals("lasso")) {
+                rCode += "lambda_"
+                        + i + " <- matrix(data = NA, nrow = 1, ncol = "
+                        + Constants.ITERATIONS + ")\n";
                 rCode += "colnames(lambda_" + i + ") <- coln\n";
                 //row 1 is always the intercept. This is always the first row.
-                rCode += "coefs_" + i + " <- matrix(data = NA,nrow = dim(DesignMatrix)[2]+1,ncol=" + Constants.ITERATIONS + ")\n";
+                rCode += "coefs_"
+                        + i + " <- matrix(data = NA,nrow = dim(DesignMatrix)[2]+1,ncol="
+                        + Constants.ITERATIONS + ")\n";
                 rCode += "colnames(coefs_" + i + ") <- coln\n";
-                rCode += "rownames(coefs_" + i + ") <- c(\"intercept\",colnames(DesignMatrix))\n";
-            } else if (analysisMethod.equals("pcr") || analysisMethod.equals("spls") || analysisMethod.equals("pls")) {
-                rCode += "coefs_" + i + " <- matrix(data = NA,nrow = dim(DesignMatrix)[2],ncol=" + Constants.ITERATIONS + ")\n";
+                rCode += "rownames(coefs_" + i
+                        + ") <- c(\"intercept\",colnames(DesignMatrix))\n";
+            } else if (analysisMethod.equals("pcr")
+                    || analysisMethod.equals("spls")
+                    || analysisMethod.equals("pls")) {
+                rCode += "coefs_"
+                        + i + " <- matrix(data = NA,nrow = dim(DesignMatrix)[2],ncol="
+                        + Constants.ITERATIONS + ")\n";
                 rCode += "colnames(coefs_" + i + ") <- coln\n";
                 rCode += "rownames(coefs_" + i + ") <- colnames(DesignMatrix)\n";
             }
             if (analysisMethod.equals("spls")) {
-                rCode += "eta_" + i + " <- matrix(data = NA, nrow = 1, ncol =" + Constants.ITERATIONS + ")\n";
+                rCode += "eta_" + i + " <- matrix(data = NA, nrow = 1, ncol ="
+                        + Constants.ITERATIONS + ")\n";
                 rCode += "colnames(eta_" + i + ") <- coln\n";
-                rCode += "K_" + i + " <- matrix(data = NA, nrow = 1, ncol =" + Constants.ITERATIONS + ")\n";
+                rCode += "K_" + i + " <- matrix(data = NA, nrow = 1, ncol ="
+                        + Constants.ITERATIONS + ")\n";
                 rCode += "colnames(K_" + i + ") <- coln\n";
             }
             if (analysisMethod.equals("en")) {
-                rCode += "frac_" + i + " <- matrix(data=NA,nrow=1,ncol=" + Constants.ITERATIONS + ")\n";
+                rCode += "frac_" + i + " <- matrix(data=NA,nrow=1,ncol="
+                        + Constants.ITERATIONS + ")\n";
                 rCode += "colnames(frac_" + i + ") <- coln\n";
             }
             if (analysisMethod.equals("pcr") || analysisMethod.equals("pls")) {
-                rCode += "opt_comp_" + i + " <- matrix(data = NA, nrow = 1, ncol =" + Constants.ITERATIONS + ")\n";
+                rCode += "opt_comp_" + i + " <- matrix(data = NA, nrow = 1, ncol ="
+                        + Constants.ITERATIONS + ")\n";
                 rCode += "colnames(opt_comp_" + i + ") <- coln\n";
             }
             if (analysisMethod.equals("rf")) {
-                rCode += "mtry_" + i + " <- matrix(data = NA, nrow = 1, ncol = " + Constants.ITERATIONS + ")\n";
+                rCode += "mtry_" + i + " <- matrix(data = NA, nrow = 1, ncol = "
+                        + Constants.ITERATIONS + ")\n";
                 rCode += "colnames(mtry_" + i + ") <- coln\n";
-                rCode += "imp_" + i + " <- matrix(data = NA, nrow = dim(DesignMatrix)[2], ncol = " + Constants.ITERATIONS + ")\n";
+                rCode += "imp_" + i + " <- matrix(data = NA, nrow = dim(DesignMatrix)[2], ncol = "
+                        + Constants.ITERATIONS + ")\n";
                 rCode += "rownames(imp_" + i + ") <- colnames(DesignMatrix)\n";
                 rCode += "colnames(imp_" + i + ") <- coln\n";
             }

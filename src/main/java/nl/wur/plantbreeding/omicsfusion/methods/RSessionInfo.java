@@ -44,6 +44,9 @@ public class RSessionInfo extends Analysis {
         //Parralelization specific libraries.
         rCode += "library(doMPI)\n";
         rCode += "library(snow)\n";
+        //Load excel sheets
+        rCode += "library(gdata)\n";
+        rCode += "library(XLConnect)\n";
         return rCode;
     }
 

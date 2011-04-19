@@ -47,6 +47,7 @@ public class Lasso extends Analysis {
         return super.getAnalysis("lasso");
     }
 
+    @Override
     protected String combineResults() {
         String rCode = "# Combine results\n";
         String trainCoeff = "Train_Coeff <- cbind(";
