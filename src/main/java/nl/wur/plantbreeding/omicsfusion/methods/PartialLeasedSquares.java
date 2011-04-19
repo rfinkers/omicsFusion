@@ -19,20 +19,23 @@ import java.util.logging.Logger;
 import nl.wur.plantbreeding.omicsfusion.utils.Constants;
 
 /**
- * Application of Partial least squares
+ * Application of Partial least squares.
  * @author Richard Finkers
  * @version 1.0
  */
 public class PartialLeasedSquares extends Analysis {
 
-    /** The logger */
-    private static final Logger LOG = Logger.getLogger(PartialLeasedSquares.class.getName());
+    /** The logger. */
+    private static final Logger LOG =
+            Logger.getLogger(PartialLeasedSquares.class.getName());
 
+    /** {@inheritDoc} */
     @Override
     protected String initializeResultObjects() {
         return super.initializeResultObjects("pls");
     }
 
+    /** {@inheritDoc} */
     @Override
     protected String getRequiredLibraries() {
         String rCode = super.getRequiredLibraries();
@@ -41,11 +44,13 @@ public class PartialLeasedSquares extends Analysis {
         return rCode;
     }
 
+    /** {@inheritDoc} */
     @Override
     public String getAnalysis() {
         return super.getAnalysis("pls");
     }
 
+    /** {@inheritDoc} */
     @Override
     protected String combineResults() {
         String rCode = super.combineResults();
@@ -60,14 +65,19 @@ public class PartialLeasedSquares extends Analysis {
         return rCode + trainNcomp + ")\n\n";
     }
 
+    /** {@inheritDoc} */
     @Override
     public String writeResults() {
         String rCode = "# Write results to disk\n";
-        rCode += "write.csv(Train_Coeff, paste(\"PLS_coef\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
+        rCode += "write.csv(Train_Coeff, paste(\"PLS_coef\", \"_\", "
+                + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
         rCode += "write.csv(Train_Coeff_Summary, paste(\"PLS_coef_Sum\", \".csv\" , sep = \"\"))\n";
-        rCode += "write.csv(Train_R2, paste(\"PLS_R2\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
-        rCode += "write.csv(Train_Ncomp, paste(\"PLS_comp\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
-        rCode += "write.csv(methodResults, paste(\"PLS_Frac\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
+        rCode += "write.csv(Train_R2, paste(\"PLS_R2\", \"_\", "
+                + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
+        rCode += "write.csv(Train_Ncomp, paste(\"PLS_comp\", \"_\", "
+                + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
+        rCode += "write.csv(methodResults, paste(\"PLS_Frac\", \"_\", "
+                + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
         //rCode += "write.xls(methodResults, \"PLSnew.xls\")";
         return rCode;
     }

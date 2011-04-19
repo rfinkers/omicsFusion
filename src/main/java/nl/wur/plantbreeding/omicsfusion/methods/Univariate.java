@@ -26,6 +26,7 @@ public class Univariate extends Analysis {
     /** The logger */
     private static final Logger LOG = Logger.getLogger(Univariate.class.getName());
 
+    /** {@inheritDoc} */
     @Override
     protected String getRequiredLibraries() {
         String rCode = super.getRequiredLibraries();
@@ -35,6 +36,7 @@ public class Univariate extends Analysis {
         return rCode;
     }
 
+    /** {@inheritDoc} */
     @Override
     protected String getAnalysis() {
         String rCode = "#Univariate Analysis\n";
@@ -54,6 +56,7 @@ public class Univariate extends Analysis {
         return rCode;
     }
 
+    /** {@inheritDoc} */
     @Override
     protected String writeResults() {
         String rCode = "#Write Univariate and FDR correction results details\n";
@@ -63,6 +66,7 @@ public class Univariate extends Analysis {
         return rCode;
     }
 
+    /** {@inheritDoc} */
     @Override
     protected String combineResults() {
         //Write results to XLS files
@@ -92,16 +96,19 @@ public class Univariate extends Analysis {
         return rCode;
     }
 
+    /** {@inheritDoc} */
     @Override
     protected String getTrainingSets() {
         return "";
     }
 
+    /** {@inheritDoc} */
     @Override
     protected String getRowMeansAndSD() {
         return "";
     }
 
+    /** {@inheritDoc} */
     @Override
     protected String initializeResultObjects() {
         //initialize the variables

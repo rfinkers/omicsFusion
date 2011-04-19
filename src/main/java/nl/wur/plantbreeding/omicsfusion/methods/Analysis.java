@@ -30,7 +30,7 @@ import nl.wur.plantbreeding.omicsfusion.utils.Constants;
  */
 public class Analysis {
 
-    /** A logger */
+    /** A logger. */
     private static final Logger LOG = Logger.getLogger(Analysis.class.getName());
 
     Analysis() {
@@ -74,6 +74,11 @@ public class Analysis {
         return rCode;
     }
 
+    /**
+     * Load the predictor and response sheets.
+     * @param excelSheets Name of the excel sheets
+     * @return R program code.
+     */
     protected String loadPredictResponseDataSheet(
             HashMap<String, String> excelSheets) {
         String rCode = "# Load the PredictResponse data sheet.\n";
@@ -192,7 +197,8 @@ public class Analysis {
 
     /**
      * Initialization of empty variables to store the results.
-     * @param analysisMethod Name of the analysis method. Allowed names are: rf, en, ridge, lasso, pls, spls, pcr, univariate, & svm.
+     * @param analysisMethod Name of the analysis method. Allowed names are:
+     * rf, en, ridge, lasso, pls, spls, pcr, univariate, & svm.
      * @return R compatible code.
      */
     protected String initializeResultObjects(String analysisMethod) {
@@ -294,7 +300,8 @@ public class Analysis {
         rCode += getTrainingSets();
         // innerLoop = how many times to do the inner loop cross validation.
         // The NUMBER_FOLDS_INNER reflects how the test / predictor subsets are made! 10 means automatically 10 % / 90 % while 20 means 5% / 95%.
-        rCode += "  innerLoop <- trainControl(method = \"cv\", number = " + Constants.NUMBER_FOLDS_INNER + ")\n";
+        rCode += "  innerLoop <- trainControl(method = \"cv\", number = "
+                + Constants.NUMBER_FOLDS_INNER + ")\n";
         for (int i = 0; i < Constants.NUMBER_FOLDS_OUTER; i++) {
             int j = i + 1;
             if (analysisMethod.equals("en")) {

@@ -19,20 +19,22 @@ import java.util.logging.Logger;
 import nl.wur.plantbreeding.omicsfusion.utils.Constants;
 
 /**
- * Application of Principal Component Regression
+ * Application of Principal Component Regression.
  * @author Richard Finkers
  * @version 1.0
  */
 public class PCR extends Analysis {
 
-    /** The logger */
+    /** The logger. */
     private static final Logger LOG = Logger.getLogger(PCR.class.getName());
 
+    /** {@inheritDoc} */
     @Override
     protected String initializeResultObjects() {
         return super.initializeResultObjects("pcr");
     }
 
+    /** {@inheritDoc} */
     @Override
     protected String getRequiredLibraries() {
         String rCode = super.getRequiredLibraries();
@@ -41,11 +43,13 @@ public class PCR extends Analysis {
         return rCode;
     }
 
+    /** {@inheritDoc} */
     @Override
     public String getAnalysis() {
         return super.getAnalysis("pcr");
     }
 
+    /** {@inheritDoc} */
     @Override
     protected String combineResults() {
         String rCode = super.combineResults();
@@ -60,14 +64,19 @@ public class PCR extends Analysis {
         return rCode + trainNcomp + ")\n\n";
     }
 
+    /** {@inheritDoc} */
     @Override
     public String writeResults() {
         String rCode = "# Write results to disk\n";
-        rCode += "write.csv(Train_Coeff, paste(\"PCR_coef\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
+        rCode += "write.csv(Train_Coeff, paste(\"PCR_coef\", \"_\", "
+                + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
         rCode += "write.csv(Train_Coeff_Summary, paste(\"PCR_coef_Sum\", \".csv\" , sep = \"\"))\n";
-        rCode += "write.csv(Train_R2, paste(\"PCR_R2\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
-        rCode += "write.csv(Train_Ncomp, paste(\"PCR_Ncomp\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
-        rCode += "write.csv(methodResults, paste(\"PCR\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
+        rCode += "write.csv(Train_R2, paste(\"PCR_R2\", \"_\", "
+                + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
+        rCode += "write.csv(Train_Ncomp, paste(\"PCR_Ncomp\", \"_\", "
+                + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
+        rCode += "write.csv(methodResults, paste(\"PCR\", \"_\", "
+                + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
         //rCode += "write.xls(methodResults, \"PCRnew.xls\")";
 
         return rCode;

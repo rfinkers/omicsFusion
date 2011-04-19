@@ -19,20 +19,23 @@ import java.util.logging.Logger;
 import nl.wur.plantbreeding.omicsfusion.utils.Constants;
 
 /**
- * Random forests analysis
+ * Random forests analysis.
  * @author Richard Finkers
  * @version 1.0
  */
 public class RandomForest extends Analysis {
 
-    /** The logger */
-    private static final Logger LOG = Logger.getLogger(RandomForest.class.getName());
+    /** The logger. */
+    private static final Logger LOG =
+            Logger.getLogger(RandomForest.class.getName());
 
+    /** {@inheritDoc} */
     @Override
     protected String initializeResultObjects() {
         return super.initializeResultObjects("rf");
     }
 
+    /** {@inheritDoc} */
     @Override
     protected String getRequiredLibraries() {
         String rCode = super.getRequiredLibraries();
@@ -41,11 +44,13 @@ public class RandomForest extends Analysis {
         return rCode;
     }
 
+    /** {@inheritDoc} */
     @Override
     public String getAnalysis() {
         return super.getAnalysis("rf");
     }
 
+    /** {@inheritDoc} */
     @Override
     protected String combineResults() {
         String rCode = "# Combine results\n";
@@ -69,6 +74,7 @@ public class RandomForest extends Analysis {
         return rCode + trainMtry + ")\n" + trainVarImp + ")\n" + trainR2 + ")\n" + test + ")\n\n";
     }
 
+    /** {@inheritDoc} */
     @Override
     protected String getRowMeansAndSD() {
         String rCode = "# Get row means, SD and (absolute) rank\n";
@@ -80,14 +86,19 @@ public class RandomForest extends Analysis {
         return rCode;
     }
 
+    /** {@inheritDoc} */
     @Override
     public String writeResults() {
         String rCode = "# Write results to disk\n";
-        rCode += "write.csv(Train_R2, paste(\"RF_R2\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
-        rCode += "write.csv(Train_varImp, paste(\"RF_varImp\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
+        rCode += "write.csv(Train_R2, paste(\"RF_R2\", \"_\", "
+                + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
+        rCode += "write.csv(Train_varImp, paste(\"RF_varImp\", \"_\", "
+                + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
         rCode += "write.csv(Train_varImp_Summary, paste(\"RF_varImp_Summary\", \".csv\" , sep = \"\"))\n";
-        rCode += "write.csv(Train_mtry, paste(\"RF_mtry\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
-        rCode += "write.csv(methodResults, paste(\"RF\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
+        rCode += "write.csv(Train_mtry, paste(\"RF_mtry\", \"_\", "
+                + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
+        rCode += "write.csv(methodResults, paste(\"RF\", \"_\", "
+                + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
         //rCode += "write.xls(methodResults, \"RFnew.xls\")";
         return rCode;
     }

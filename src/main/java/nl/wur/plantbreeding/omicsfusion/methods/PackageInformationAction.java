@@ -25,8 +25,9 @@ import java.util.logging.Logger;
  */
 public class PackageInformationAction extends ActionSupport {
 
-    /** Serial version UID */
+    /** Serial version UID. */
     private static final long serialVersionUID = 240910L;
-    /** The logger */
-    private static final Logger LOG = Logger.getLogger(PackageInformationAction.class.getName());
+    /** The logger. */
+    private static final Logger LOG =
+            Logger.getLogger(PackageInformationAction.class.getName());
 }

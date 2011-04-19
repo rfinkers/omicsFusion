@@ -23,17 +23,17 @@ import java.util.logging.Logger;
  */
 public class CsvSummaryDataType {
 
-    /** response variable */
+    /** response variable. */
     private String responsVariable;
-    /** Mean observation */
+    /** Mean observation. */
     private Double mean;
-    /** background color in table */
+    /** background color in table. */
     private String htmlColor;
-    /** Standard deviation */
+    /** Standard deviation. */
     private Double sd;
-    /** rank */
+    /** rank. */
     private Double rank;
-    /** The logger */
+    /** The logger. */
     private static final Logger LOG = Logger.getLogger(
             CsvSummaryDataType.class.getName());
 

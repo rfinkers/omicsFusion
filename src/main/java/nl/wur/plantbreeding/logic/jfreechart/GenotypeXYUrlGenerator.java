@@ -27,7 +27,7 @@ import org.jfree.data.xy.XYDataset;
  */
 public class GenotypeXYUrlGenerator implements XYURLGenerator {
 
-    /** The logger */
+    /** The logger. */
     private static final Logger LOG = Logger.getLogger(
             GenotypeXYUrlGenerator.class.getName());
 

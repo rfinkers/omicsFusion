@@ -19,20 +19,23 @@ import java.util.logging.Logger;
 import nl.wur.plantbreeding.omicsfusion.utils.Constants;
 
 /**
- * LASSO Analysis
+ * LASSO Analysis.
  * @author Richard Finkers
  * @version 1.0
  */
 public class Lasso extends Analysis {
 
-    /** The logger */
-    private static final Logger LOG = Logger.getLogger(Lasso.class.getName());
+    /** The logger. */
+    private static final Logger LOG =
+            Logger.getLogger(Lasso.class.getName());
 
+    /** {@inheritDoc} */
     @Override
     protected String initializeResultObjects() {
         return super.initializeResultObjects("lasso");
     }
 
+    /** {@inheritDoc} */
     @Override
     protected String getRequiredLibraries() {
         String rCode = super.getRequiredLibraries();
@@ -42,11 +45,13 @@ public class Lasso extends Analysis {
         return rCode;
     }
 
+    /** {@inheritDoc} */
     @Override
     public String getAnalysis() {
         return super.getAnalysis("lasso");
     }
 
+    /** {@inheritDoc} */
     @Override
     protected String combineResults() {
         String rCode = "# Combine results\n";
@@ -67,17 +72,23 @@ public class Lasso extends Analysis {
                 test += ", ";
             }
         }
-        return rCode + trainCoeff + ")\n" + trainLambda + ")\n" + trainR2 + ")\n" + test + ")\n\n";
+        return rCode + trainCoeff + ")\n" + trainLambda + ")\n"
+                + trainR2 + ")\n" + test + ")\n\n";
     }
 
+    /** {@inheritDoc} */
     @Override
     public String writeResults() {
         String rCode = "# Write results to disk\n";
-        rCode += "write.csv(Train_Coeff, paste(\"LASSO_coef\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
+        rCode += "write.csv(Train_Coeff, paste(\"LASSO_coef\", \"_\", "
+                + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
         rCode += "write.csv(Train_Coeff_Summary, paste(\"LASSO_coef_Sum\", \".csv\" , sep = \"\"))\n";
-        rCode += "write.csv(Train_R2, paste(\"LASSO_R2\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
-        rCode += "write.csv(Train_Lambda, paste(\"LASSO_Lambda\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
-        rCode += "write.csv(methodResults, paste(\"LASSO\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
+        rCode += "write.csv(Train_R2, paste(\"LASSO_R2\", \"_\", "
+                + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
+        rCode += "write.csv(Train_Lambda, paste(\"LASSO_Lambda\", \"_\", "
+                + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
+        rCode += "write.csv(methodResults, paste(\"LASSO\", \"_\", "
+                + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
         //rCode += "write.xls(lasso, \"LASSOnew.xls\")";
         return rCode;
     }

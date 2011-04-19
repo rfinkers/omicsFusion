@@ -31,7 +31,7 @@ import org.jfree.data.xy.XYDataset;
  */
 public class GenotypeXYToolTipGenerator implements XYToolTipGenerator {
 
-    /** The logger */
+    /** The logger. */
     private static final Logger LOG = Logger.getLogger(
             GenotypeXYToolTipGenerator.class.getName());
 

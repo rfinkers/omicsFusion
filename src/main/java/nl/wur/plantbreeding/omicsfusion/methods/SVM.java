@@ -24,14 +24,16 @@ import nl.wur.plantbreeding.omicsfusion.utils.Constants;
  */
 public class SVM extends Analysis {
 
-    /** The logger */
+    /** The logger. */
     private static final Logger LOG = Logger.getLogger(SVM.class.getName());
 
+    /** {@inheritDoc} */
     @Override
     protected String initializeResultObjects() {
         return super.initializeResultObjects("svm");
     }
 
+    /** {@inheritDoc} */
     @Override
     protected String getRequiredLibraries() {
         String rCode = super.getRequiredLibraries();
@@ -40,11 +42,13 @@ public class SVM extends Analysis {
         return rCode;
     }
 
+    /** {@inheritDoc} */
     @Override
     public String getAnalysis() {
         return super.getAnalysis("svm");
     }
 
+    /** {@inheritDoc} */
     @Override
     protected String combineResults() {
         String rCode = "# Combine results\n";
@@ -68,6 +72,7 @@ public class SVM extends Analysis {
         return rCode + trainR2 + ")\n" + sigma + ")\n" + cost + ")\n" + test + ")\n\n";
     }
 
+    /** {@inheritDoc} */
     @Override
     protected String getRowMeansAndSD() {
         String rCode = "# Get row means, SD and (absolute) rank\n";
@@ -75,14 +80,19 @@ public class SVM extends Analysis {
         return rCode;
     }
 
+    /** {@inheritDoc} */
     @Override
     public String writeResults() {
         String rCode = "# Write results to disk\n";
         //TODO: implement summary method
-        rCode += "write.csv(Train_R2, paste(\"SVM_R2\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
-        rCode += "write.csv(Train_sigma, paste(\"SVM_Sigma\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
-        rCode += "write.csv(Train_cost, paste(\"SVM_Cost\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
-        rCode += "write.csv(methodResults, paste(\"SVM\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
+        rCode += "write.csv(Train_R2, paste(\"SVM_R2\", \"_\", "
+                + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
+        rCode += "write.csv(Train_sigma, paste(\"SVM_Sigma\", \"_\", "
+                + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
+        rCode += "write.csv(Train_cost, paste(\"SVM_Cost\", \"_\", "
+                + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
+        rCode += "write.csv(methodResults, paste(\"SVM\", \"_\", "
+                + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
         //rCode += "write.xls(methodResults, \"PLSnew.xls\")";
         return rCode;
     }

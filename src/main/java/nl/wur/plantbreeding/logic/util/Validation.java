@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
  */
 public class Validation {
 
-    /** The logger */
+    /** The logger. */
     private static final Logger LOG = Logger.getLogger(
             Validation.class.getName());
 
@@ -54,9 +54,9 @@ public class Validation {
     }
 
     /**
-     * See if string contains information
+     * See if string contains information.
      * @param nullString
-     * @return string (null or given string)
+     * @return string (null or given string).
      */
     public static String nullString(String nullString) {
         Pattern characters = Pattern.compile("[\\S\\W\\D]+");
@@ -69,7 +69,7 @@ public class Validation {
     }
 
     /**
-     * See if float contains letters
+     * See if float contains letters.
      * @param floatValidation
      * @return TRUE if string contains special characters.
      */

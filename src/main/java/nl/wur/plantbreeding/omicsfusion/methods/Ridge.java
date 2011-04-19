@@ -19,12 +19,12 @@ import java.util.logging.Logger;
 import nl.wur.plantbreeding.omicsfusion.utils.Constants;
 
 /**
- * Ridge analysis
+ * Ridge analysis.
  * @author Richard Finkers
  */
 public class Ridge extends Analysis {
 
-    /** The Logger */
+    /** The Logger. */
     private static final Logger LOG = Logger.getLogger(Ridge.class.getName());
 
     @Override
@@ -32,6 +32,7 @@ public class Ridge extends Analysis {
         return super.initializeResultObjects("ridge");
     }
 
+    /** {@inheritDoc} */
     @Override
     protected String getRequiredLibraries() {
         String rCode = super.getRequiredLibraries();
@@ -41,11 +42,13 @@ public class Ridge extends Analysis {
         return rCode;
     }
 
+    /** {@inheritDoc} */
     @Override
     public String getAnalysis() {
         return super.getAnalysis("ridge");
     }
 
+    /** {@inheritDoc} */
     @Override
     protected String combineResults() {
         String rCode = "# Combine results\n";
@@ -66,17 +69,23 @@ public class Ridge extends Analysis {
                 test += ", ";
             }
         }
-        return rCode + trainCoeff + ")\n" + trainLambda + ")\n" + trainR2 + ")\n" + test + ")\n\n";
+        return rCode + trainCoeff + ")\n" + trainLambda + ")\n"
+                + trainR2 + ")\n" + test + ")\n\n";
     }
 
+    /** {@inheritDoc} */
     @Override
     public String writeResults() {
         String rCode = "# Write results to disk\n";
-        rCode += "write.csv(Train_Coeff, paste(\"RIDGE_coef\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
+        rCode += "write.csv(Train_Coeff, paste(\"RIDGE_coef\", \"_\", "
+                + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
         rCode += "write.csv(Train_Coeff_Summary, paste(\"RIDGE_coef_Sum\", \".csv\" , sep = \"\"))\n";
-        rCode += "write.csv(Train_R2, paste(\"RIDGE_R2\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
-        rCode += "write.csv(Train_Lambda, paste(\"RIDGE_Lambda\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
-        rCode += "write.csv(methodResults, paste(\"RIDGE\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
+        rCode += "write.csv(Train_R2, paste(\"RIDGE_R2\", \"_\", "
+                + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
+        rCode += "write.csv(Train_Lambda, paste(\"RIDGE_Lambda\", \"_\", "
+                + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
+        rCode += "write.csv(methodResults, paste(\"RIDGE\", \"_\", "
+                + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
         //rCode += "write.xls(methodResults, \"RIDGEnew.xls\")";
         return rCode;
     }

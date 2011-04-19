@@ -24,9 +24,11 @@ import java.util.logging.Logger;
  */
 public class RSessionInfo extends Analysis {
 
-    /** The logger */
-    private static final Logger LOG = Logger.getLogger(RSessionInfo.class.getName());
+    /** The logger. */
+    private static final Logger LOG =
+            Logger.getLogger(RSessionInfo.class.getName());
 
+    /** {@inheritDoc} */
     @Override
     protected String getRequiredLibraries() {
         String rCode = super.getRequiredLibraries();
@@ -50,6 +52,7 @@ public class RSessionInfo extends Analysis {
         return rCode;
     }
 
+    /** {@inheritDoc} */
     @Override
     protected String getAnalysis() {
         String rCode = "#Analysis methods\n";
@@ -58,6 +61,7 @@ public class RSessionInfo extends Analysis {
         return rCode;
     }
 
+    /** {@inheritDoc} */
     @Override
     protected String writeResults() {
         String rCode = "#Write R sesion info details\n";
@@ -68,31 +72,37 @@ public class RSessionInfo extends Analysis {
 
     //Next section contains overrided methods that are not relevant to this
     //script and should therfere return nothing.
+    /** {@inheritDoc} */
     @Override
     protected String preProcessMatrix() {
         return "";
     }
 
+    /** {@inheritDoc} */
     @Override
     protected String combineResults() {
         return "";
     }
 
+    /** {@inheritDoc} */
     @Override
     protected String getTrainingSets() {
         return "";
     }
 
+    /** {@inheritDoc} */
     @Override
     protected String getRowMeansAndSD() {
         return "";
     }
 
+    /** {@inheritDoc} */
     @Override
     protected String initializeResultObjects() {
         return "";
     }
 
+    /** {@inheritDoc} */
     @Override
     protected String loadPredictorAndResponseDataSheets(HashMap<String, String> excelSheets) {
         return "";

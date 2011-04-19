@@ -23,11 +23,13 @@ import nl.wur.plantbreeding.omicsfusion.utils.Constants;
  */
 public class SparsePLS extends Analysis {
 
+    /** {@inheritDoc} */
     @Override
     protected String initializeResultObjects() {
         return super.initializeResultObjects("spls");
     }
 
+    /** {@inheritDoc} */
     @Override
     protected String getRequiredLibraries() {
         String rCode = super.getRequiredLibraries();
@@ -39,11 +41,13 @@ public class SparsePLS extends Analysis {
         return rCode;
     }
 
+    /** {@inheritDoc} */
     @Override
     public String getAnalysis() {
         return super.getAnalysis("spls");
     }
 
+    /** {@inheritDoc} */
     @Override
     protected String combineResults() {
         String rCode = super.combineResults();
@@ -61,15 +65,22 @@ public class SparsePLS extends Analysis {
         return rCode + Train_eta + ")\n" + Train_K + ")\n\n";
     }
 
+    /** {@inheritDoc} */
     @Override
     public String writeResults() {
         String rCode = "# Write results to disk\n";
-        rCode += "write.csv(Train_Coeff, paste(\"SPLS_coef\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
-        rCode += "write.csv(Train_Coeff_Summary, paste(\"SPLS_coef_Sum\", \".csv\" , sep = \"\"))\n";
-        rCode += "write.csv(Train_R2, paste(\"SPLS_R2\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
-        rCode += "write.csv(Train_eta, paste(\"SPLS_Eta\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
-        rCode += "write.csv(Train_K, paste(\"SPLS_K\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
-        rCode += "write.csv(methodResults, paste(\"SPLS\", \"_\", " + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
+        rCode += "write.csv(Train_Coeff, paste(\"SPLS_coef\", \"_\", "
+                + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
+        rCode += "write.csv(Train_Coeff_Summary, paste(\"SPLS_coef_Sum\", "
+                + "\".csv\" , sep = \"\"))\n";
+        rCode += "write.csv(Train_R2, paste(\"SPLS_R2\", \"_\", "
+                + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
+        rCode += "write.csv(Train_eta, paste(\"SPLS_Eta\", \"_\", "
+                + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
+        rCode += "write.csv(Train_K, paste(\"SPLS_K\", \"_\", "
+                + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
+        rCode += "write.csv(methodResults, paste(\"SPLS\", \"_\", "
+                + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
         //rCode += "write.xls(methodResults, \"SPLSnew.xls\")";
         return rCode;
     }

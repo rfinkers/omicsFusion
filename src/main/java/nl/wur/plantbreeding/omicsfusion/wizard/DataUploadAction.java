@@ -42,10 +42,10 @@ public class DataUploadAction extends DataUploadValidationForm
         implements ServletRequestAware {
 
     private static final long serialVersionUID = 170610L;
-    /** The logger */
+    /** The logger. */
     private static final Logger LOG =
             Logger.getLogger(DataUploadAction.class.getName());
-    /** the request */
+    /** the request. */
     private HttpServletRequest request;
 
     @Override
@@ -79,7 +79,8 @@ public class DataUploadAction extends DataUploadValidationForm
                         predictResponseSheet);
             }
 
-            //prepare a file with the names of the input sheets. This will be used to read the names during the results wizard.
+            //prepare a file with the names of the input sheets.
+            //This will be used to read the names during the results wizard.
             writeNamesToDisk();
 
             LOG.log(Level.INFO, "Predictor: {0}",
@@ -151,7 +152,7 @@ public class DataUploadAction extends DataUploadValidationForm
     }
 
     /**
-     * Write the names of the input data sheets to the filesystem.
+     * Write the names of the input data sheets to the file system.
      * @throws IOException
      */
     private void writeNamesToDisk() throws IOException {
@@ -166,8 +167,9 @@ public class DataUploadAction extends DataUploadValidationForm
     }
 
     /**
-     * Get the temp directory from the system.
-     * @return the location of the temp directory (including slash or backslash).
+     * Get the results directory configured in the context.
+     * @return the location of the result directory
+     * (including slash or backslash).
      */
     private String getResultsDir() {
         //String resultsDirectory = System.getProperty("java.io.tmpdir");
