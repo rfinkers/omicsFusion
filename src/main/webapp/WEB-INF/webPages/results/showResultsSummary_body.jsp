@@ -12,5 +12,5 @@
 <br/><br/>
 <s:form action="/results/summaryResults" >
     <s:textfield name="sessionId" size="26"/>
-    <s:submit/>
+    <s:submit styleId="submitMoment" />
 </s:form>

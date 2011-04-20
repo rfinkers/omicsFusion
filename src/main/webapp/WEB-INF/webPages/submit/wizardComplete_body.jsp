@@ -1,4 +1,4 @@
-<%-- 
+<%--
     Document   : index_body
     Created on : Apr 10, 2009, 7:09:46 PM
     Author     : Richard Finkers
@@ -32,5 +32,5 @@
 
 <s:form action="/analysis/pipeline" >
     <s:hidden value="go" name="ready"/>
-    <s:submit/>
+    <s:submit styleId="submitMoment" />
 </s:form>
