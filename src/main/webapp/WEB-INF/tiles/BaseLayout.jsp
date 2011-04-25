@@ -37,7 +37,6 @@
         <script type="text/javascript">
             var _gaq = _gaq || [];
             _gaq.push(['_setAccount', 'UA-18743767-2']);
-            _gaq.push(['_trackEvent', 'application','omicsFusion']);
             _gaq.push(['_trackPageview']);
 
             (function() {

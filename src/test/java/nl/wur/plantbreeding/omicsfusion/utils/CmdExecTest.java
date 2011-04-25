@@ -69,7 +69,8 @@ public class CmdExecTest {
         } catch (IOException e) {
             //NO qstat installed on the system!
             result = true;
-            LOG.warning("No qstat installed on this system. Test will report OK");
+            LOG.warning("No qstat installed on this system. "
+                    + "Test will report OK");
         }
         assertEquals(expResult, result);
     }

@@ -51,6 +51,7 @@ public class ReadFileTest {
 
     /**
      * Test of ReadSheetFileNames method, of class ReadFile.
+     * @throws Exception 
      */
     @Test
     @Ignore
@@ -60,13 +61,12 @@ public class ReadFileTest {
         ReadFile instance = new ReadFile();
         String[] expResult = null;
         String[] result = instance.ReadSheetFileNames(fileName);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertNull(result);
     }
 
     /**
      * Test of ReadResponseName method, of class ReadFile.
+     * @throws Exception
      */
     @Test
     @Ignore

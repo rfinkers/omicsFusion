@@ -63,6 +63,7 @@ public class CmdExec {
             p = Runtime.getRuntime().exec("qsub -S /bin/bash -q " + queue
                     + " " + executionDir + method + ".pbs");
         }
+        //TODO: if qsub not present, this will result in an error. Finally this will lead to an nullpointer exception because of problems with 404 page.
         BufferedReader input =
                 new BufferedReader(new InputStreamReader(p.getInputStream()));
         String line = input.readLine();

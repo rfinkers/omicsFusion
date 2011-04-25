@@ -51,16 +51,20 @@ public class Analysis {
                     + excelSheets.get("predictor")
                     + "\", header=TRUE,sep=\";\",dec=\".\")\n";
         } else {
-            rCode += "predictorSheet <- read.xls(\""
-                    + excelSheets.get("predictor") + "\")\n";
+            rCode += "predictorSheet <- readWorksheetFromFile(\""
+                    + excelSheets.get("predictor") + "\",sheet=1)\n";
+//            rCode += "predictorSheet <- read.xls(\""
+//                    + excelSheets.get("predictor") + "\")\n";
         }
         if (excelSheets.get("response").contains("csv")) {
             rCode += "responseSheet  <- read.csv2(\""
                     + excelSheets.get("response")
                     + "\", header=TRUE,sep=\";\",dec=\".\")\n";
         } else {
-            rCode += "responseSheet  <- read.xls(\""
-                    + excelSheets.get("response") + "\")\n";
+            rCode += "responseSheet <- readWorksheetFromFile(\""
+                    + excelSheets.get("response") + "\",sheet=1)\n";
+//            rCode += "responseSheet  <- read.xls(\""
+//                    + excelSheets.get("response") + "\")\n";
         }
         //Concatenate the final dataSet, containing 1 response and a predictor
         //matrix. The rownames are set acoording to the sample names
@@ -152,7 +156,7 @@ public class Analysis {
     protected String getRequiredLibraries() {
         String rCode = "# Load requried generic libraries\n";
         rCode += "library(gdata)\n";//Used to load excel sheets
-        rCode += "library(XLconnect)\n";//Used to load excel sheets
+        rCode += "library(XLConnect)\n";//Used to load excel 2010 sheets
         rCode += "library(lattice)\n";//dependencies of caret
         rCode += "library(reshape)\n";//dependencies of caret
         rCode += "library(plyr)\n";//dependencies of caret
