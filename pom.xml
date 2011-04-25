@@ -13,17 +13,17 @@
         <system>hudson</system>
         <url>http://dev2.plantbreeding.nl/hudson/job/omicsFusion/</url>
     </ciManagement>
-        <scm>
+    <scm>
 <!--        <connection>scm:svn:http://dev2.plantbreeding.nl/svn/BreeDB/BreeDBweb/trunk</connection>-->
         <developerConnection>scm:svn:http://dev2.plantbreeding.nl/svn/dbprivate-repos/omicsFusion2/</developerConnection>
         <tag>trunk</tag>
 <!--        <url>http://dev2.plantbreeding.nl/svn/BreeDB/BreeDBweb</url>-->
     </scm>
 
-  <issueManagement>
-    <system>TRAC</system>
-    <url>https://dev2.plantbreeding.nl/projects/omicsFusion</url>
-  </issueManagement>
+    <issueManagement>
+        <system>TRAC</system>
+        <url>https://dev2.plantbreeding.nl/projects/omicsFusion</url>
+    </issueManagement>
     <licenses>
         <license>
             <name>Apache 2</name>
@@ -51,6 +51,13 @@
             </roles>
         </developer>
     </developers>
+    <contributors>
+        <contributor>
+            <name>Animesh Acharjee</name>
+            <organization>Wageningen UR</organization>
+            <organizationUrl>http://www.plantbreeding.wur.nl</organizationUrl>
+        </contributor>
+    </contributors>
     <repositories>
         <repository>
             <id>java.net2</id>
