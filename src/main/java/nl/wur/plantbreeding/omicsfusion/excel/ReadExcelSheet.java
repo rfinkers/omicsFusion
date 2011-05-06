@@ -21,6 +21,8 @@ import java.io.IOException;
 import nl.wur.plantbreeding.logic.jfreechart.GenotypeXYDataset;
 import org.apache.commons.math.stat.regression.SimpleRegression;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.jfree.data.xy.DefaultXYDataset;
@@ -35,25 +37,27 @@ public class ReadExcelSheet extends ManipulateExcelSheet {
     public ReadExcelSheet() {
     }
 
-    public static void readPredictorAndResponseValue(String predictor,
-            String sessionID)
-            throws FileNotFoundException, InvalidFormatException, IOException {
-
-        File responseSheet = new File(sessionID + "/response.xls");
-        File predictorSheet = new File(sessionID + "/predictor.xls");
-
-        //readPredictorAndResponseValue(responseSheet, predictorSheet, predictor);
-    }
-
+    /**
+     * Read the values of the predictor and response sheets and store these in
+     * an DefaultXYDataset object.
+     * @param responseSheet Name and location of the response sheet.
+     * @param predictorSheet Name and location of the predictor sheet.
+     * @param predictor Name of the selected predictor.
+     * @return A XY chart object.
+     * @throws FileNotFoundException File not found.
+     * @throws InvalidFormatException Not a compatible Excel format.
+     * @throws IOException
+     * @throws Exception
+     */
     public static DefaultXYDataset readPredictorAndResponseValue(
             File responseSheet, File predictorSheet, String predictor)
             throws FileNotFoundException, InvalidFormatException, IOException,
             Exception {
 
 
-        /** wb for the response variables */
+        /** wb for the response variables. */
         Sheet respWbSheet;
-        /** wb for the predictor variables */
+        /** wb for the predictor variables. */
         Sheet predWbSheet;
 
         //trait
@@ -77,14 +81,12 @@ public class ReadExcelSheet extends ManipulateExcelSheet {
             }
         }
 
-
-
         System.out.println("Predictor: " + predictor);
 
         System.out.println("Need column: " + i);
 
-        System.out.println("predictor: " + predWbSheet.getLastRowNum()
-                + " Cell: " + predictorRow.getLastCellNum());
+        System.out.println("Last row: " + predWbSheet.getLastRowNum()
+                + " Last Cell: " + predictorRow.getLastCellNum());
 
         double[][] data = new double[2][predWbSheet.getLastRowNum()];
         String[] genotypeLabels = new String[predWbSheet.getLastRowNum()];
@@ -95,17 +97,38 @@ public class ReadExcelSheet extends ManipulateExcelSheet {
         //add the object for regression
         SimpleRegression slr = new SimpleRegression();
 
+        //initialize z which holds the correct row number.
+        int z = 0;
+
         try {
             for (int j = 0; j < predWbSheet.getLastRowNum(); j++) {
                 //data matrix is 0 based, however, we have to start reading the
                 //excel sheet from row 1 (row0 = header).
-                int z = j + 1;
+                z = j + 1;
                 data[0][j] = respWbSheet.getRow(z).getCell(1).
                         getNumericCellValue();//response
                 data[1][j] = predWbSheet.getRow(z).getCell(i).
                         getNumericCellValue();//predictor
-                genotypeLabels[j] = respWbSheet.getRow(z).getCell(0).
-                        getStringCellValue();
+                //Genotype labels can contain numeric or string values.
+                //TODO: generic switch?
+                Cell cell = respWbSheet.getRow(z).getCell(0);
+
+                switch (cell.getCellType()) {
+                    case Cell.CELL_TYPE_STRING:
+                        genotypeLabels[j] = respWbSheet.getRow(z).getCell(0).
+                                getStringCellValue();
+                        break;
+                    case Cell.CELL_TYPE_NUMERIC:
+                        if (DateUtil.isCellDateFormatted(cell)) {
+                            genotypeLabels[j] =
+                                    cell.getDateCellValue().toString();
+                        } else {
+                            genotypeLabels[j] =
+                                    Double.toString(cell.getNumericCellValue());
+                        }
+                        break;
+                }
+
                 //System.out.println("counter: " + z + " label:" +
                 //genotypeLabels[j] + " pred: " + data[0][j] + " resp: " +
                 //data[1][j]);
@@ -120,9 +143,11 @@ public class ReadExcelSheet extends ManipulateExcelSheet {
                 //Add data to regression dataset
                 slr.addData(data[0][j], data[1][j]);
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             //TODO: throw exception
-            System.out.println("Error in data");
+            System.out.println("Error in data at row: " + z);
+            e.printStackTrace();
         }
 
 
