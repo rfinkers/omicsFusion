@@ -22,6 +22,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import nl.wur.plantbreeding.omicsfusion.utils.Constants;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Workbook;
 
 /**
@@ -38,7 +39,7 @@ public class ValidateDataSheets extends ManipulateExcelSheet {
     }
 
     /**
-     * Checks if a file is a valid excel (2003/2007?) workbook.
+     * Checks if a file is a valid excel (2003/2007/2010) workbook.
      * @param responseSheet
      * @param predictorSheet
      * @throws DataSheetValidationException
@@ -50,14 +51,14 @@ public class ValidateDataSheets extends ManipulateExcelSheet {
             File predictorSheet) throws DataSheetValidationException,
             InvalidFormatException, FileNotFoundException, IOException {
 
-        /** nr of rows in response sheet */
+        /** nr of rows in response sheet. */
         int responseRows;
-        /** nr of rows in predictor sheet */
+        /** nr of rows in predictor sheet. */
         int predictorRows;
 
-        /** wb for the response variables */
+        /** wb for the response variables. */
         Workbook responseWorkbook;
-        /** wb for the predictor variables */
+        /** wb for the predictor variables. */
         Workbook predictorWorkbook;
 
         responseWorkbook = loadExcelSheet(responseSheet);
@@ -69,14 +70,12 @@ public class ValidateDataSheets extends ManipulateExcelSheet {
         predictorRows = checkWorkbookDimensions(predictorWorkbook,
                 predictorSheet.getName(), Constants.MIN_PREDICTOR_COLUMNS + 1);
 
-        if (predictorRows == responseRows) {
-            //FIXME: temporarily disabled due to numeric /
-            // text column validation problem
-            //compareIndividualNames(responseWorkbook, predictorWorkbook);
-        } else {
+        if (predictorRows != responseRows) {
             throw new DataSheetValidationException("Number of individuals on "
                     + "the predictor and response variable sheets differ");
         }
+
+        compareIndividualNames(responseWorkbook, predictorWorkbook);
     }
 
     public static void validatePredictResponseSheet() {
@@ -84,11 +83,11 @@ public class ValidateDataSheets extends ManipulateExcelSheet {
     }
 
     /**
-     * Check the dimension of an excel sheet
-     * @param wb Name of the workbook
+     * Check the dimension of an excel sheet.
+     * @param wb Name of the workbook.
      * @param minColumns Minimal number of variables (columns) required for
      * this type of workbook.
-     * @return The number of rows (= number of individuals)
+     * @return The number of rows (= number of individuals).
      * @throws DataSheetValidationException Dimensions of the workbook are
      * not correct.
      */
@@ -113,22 +112,68 @@ public class ValidateDataSheets extends ManipulateExcelSheet {
         return rows;
     }
 
+    /**
+     * Check if the individual name column has an header and if the names within
+     * the excel sheets has the same order.
+     * @param responseWorkbook The response workbook.
+     * @param predictorWorkbook The predictor workbook.
+     * @throws DataSheetValidationException
+     */
     private static void compareIndividualNames(Workbook responseWorkbook,
             Workbook predictorWorkbook) throws DataSheetValidationException {
         for (int i = 0; i < responseWorkbook.getSheetAt(0).getLastRowNum();
                 i++) {
-            //Do not check the header row.
+            //Check the header row.
+            Cell resp = responseWorkbook.getSheetAt(0).getRow(i).getCell(0);
+            Cell pred = predictorWorkbook.getSheetAt(0).getRow(i).getCell(0);
+            if (resp == null || pred == null) {
+                LOG.log(Level.WARNING, "Header row cannot be empty");
+                if (resp == null && pred == null) {
+                    throw new DataSheetValidationException("Cell A1 in the "
+                            + "predictor and response sheet is empty."
+                            + "expect \"sample\" as a valid header.");
+                } else if (resp == null) {
+                    throw new DataSheetValidationException("Cell A1 in the "
+                            + "response sheet is empty. We "
+                            + "expect \"sample\" as a valid header.");
+                } else {
+                    throw new DataSheetValidationException("Cell A1 in the "
+                            + "predictor sheet is empty. We "
+                            + "expect \"sample\" as a valid header.");
+                }
+            }
+            //Check the individual names.
             if (i != 0) {
                 //field content can be text of numeric
-                if (!responseWorkbook.getSheetAt(0).getRow(i).getCell(0).equals(
-                        predictorWorkbook.getSheetAt(0).getRow(i).getCell(0))) {
-                    int rowNumber = i + 1;
-                    throw new DataSheetValidationException("The individual "
-                            + "name in row:" + rowNumber + " does not match "
-                            + "for both sheets (" + responseWorkbook.getSheetAt(
-                            0).getRow(i).getCell(0).getStringCellValue() + "/"
-                            + predictorWorkbook.getSheetAt(0).getRow(i).getCell(
-                            0).getStringCellValue() + ")");
+                String cellType = null;
+                switch (resp.getCellType()) {
+                    case Cell.CELL_TYPE_STRING:
+                        cellType = "string";
+                        break;
+                    case Cell.CELL_TYPE_NUMERIC:
+                        cellType = "double";
+                        break;
+                }
+                if (cellType.equals("string")) {
+                    if (!resp.getStringCellValue().trim().equals(
+                            pred.getStringCellValue().trim())) {
+                        int rowNumber = i + 1;
+                        throw new DataSheetValidationException("The individual "
+                                + "names in row: " + rowNumber + " does not "
+                                + "match for both sheets ("
+                                + resp.getStringCellValue() + "/"
+                                + pred.getStringCellValue() + ")");
+                    }
+                } else {
+                    if (resp.getNumericCellValue()
+                            != pred.getNumericCellValue()) {
+                        int rowNumber = i + 1;
+                        throw new DataSheetValidationException("The individual "
+                                + "names in row: " + rowNumber + " does not "
+                                + "match for both sheets ("
+                                + resp.getNumericCellValue() + "/"
+                                + pred.getNumericCellValue() + ")");
+                    }
                 }
             }
         }
