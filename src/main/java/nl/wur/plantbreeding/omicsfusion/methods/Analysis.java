@@ -73,7 +73,7 @@ public class Analysis {
         //rCode += "rownames(dataSet) <- responseSheet[1]\n";
         //TODO: better na.omit strategies. Imputation? Added in addition to the
         //script of Animesh.
-        //option: replace NA with row mean.
+        //option: replace NA with column mean.
         rCode += "dataSet=na.omit(dataSet)\n\n";
         return rCode;
     }
@@ -155,7 +155,7 @@ public class Analysis {
      */
     protected String getRequiredLibraries() {
         String rCode = "# Load requried generic libraries\n";
-        rCode += "library(gdata)\n";//Used to load excel sheets
+//        rCode += "library(gdata)\n";//Used to load excel sheets
         rCode += "library(XLConnect)\n";//Used to load excel 2010 sheets
         rCode += "library(lattice)\n";//dependencies of caret
         rCode += "library(reshape)\n";//dependencies of caret
