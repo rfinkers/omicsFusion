@@ -18,6 +18,8 @@ package nl.wur.plantbreeding.omicsfusion.excel;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import nl.wur.plantbreeding.logic.jfreechart.GenotypeXYDataset;
 import org.apache.commons.math.stat.regression.SimpleRegression;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -34,6 +36,10 @@ import org.jfree.data.xy.DefaultXYDataset;
  */
 public class ReadExcelSheet extends ManipulateExcelSheet {
 
+    /** The logger. */
+    private static final Logger LOG = Logger.getLogger(
+            ReadExcelSheet.class.getName());
+
     public ReadExcelSheet() {
     }
 
@@ -44,14 +50,17 @@ public class ReadExcelSheet extends ManipulateExcelSheet {
      * @param predictorSheet Name and location of the predictor sheet.
      * @param predictor Name of the selected predictor.
      * @return A XY chart object.
+     * @throws DataSheetValidationException Response variable not found in the 
+     * excel sheet.
      * @throws FileNotFoundException File not found.
      * @throws InvalidFormatException Not a compatible Excel format.
-     * @throws IOException
-     * @throws Exception
+     * @throws IOException Error reading the file.
+     * @throws Exception Not handled exception.
      */
     public static DefaultXYDataset readPredictorAndResponseValue(
             File responseSheet, File predictorSheet, String predictor)
-            throws FileNotFoundException, InvalidFormatException, IOException,
+            throws DataSheetValidationException, FileNotFoundException,
+            InvalidFormatException, IOException,
             Exception {
 
 
@@ -69,6 +78,7 @@ public class ReadExcelSheet extends ManipulateExcelSheet {
         Row predictorRow = predWbSheet.getRow(0);//matrix
 
         int i = 0;
+        boolean found = false;
 
         //Find the right column.
         for (i = 1; i < predictorRow.getLastCellNum(); i++) {
@@ -77,16 +87,24 @@ public class ReadExcelSheet extends ManipulateExcelSheet {
             //+ predictorRow.getCell(i).getStringCellValue());
             if (predictorRow.getCell(i).getStringCellValue().trim().
                     equals(predictor)) {
+                found = true;
                 break;
             }
         }
 
-        System.out.println("Predictor: " + predictor);
+        if (found == false) {
+            LOG.warning("Response variable not found in the excel sheet.");
+            throw new DataSheetValidationException("Response variable not "
+                    + "found in the excel sheet");
+        }
 
-        System.out.println("Need column: " + i);
+        LOG.log(Level.INFO, "Predictor: {0}", predictor);
 
-        System.out.println("Last row: " + predWbSheet.getLastRowNum()
-                + " Last Cell: " + predictorRow.getLastCellNum());
+        LOG.log(Level.INFO, "Need column: {0}", i);
+
+        LOG.log(Level.INFO, "Last row: {0} Last Column: {1}",
+                new Object[]{predWbSheet.getLastRowNum(),
+                    predictorRow.getLastCellNum()});
 
         double[][] data = new double[2][predWbSheet.getLastRowNum()];
         String[] genotypeLabels = new String[predWbSheet.getLastRowNum()];
@@ -146,15 +164,14 @@ public class ReadExcelSheet extends ManipulateExcelSheet {
         }
         catch (Exception e) {
             //TODO: throw exception
-            System.out.println("Error in data at row: " + z);
+            LOG.warning("Error in data at row: " + z);
             e.printStackTrace();
         }
 
-
         //Predict a new y values for the extreme X?
         double[][] regLine = new double[2][2];
-        System.out.println("preY: " + slr.predict(minX) + " predY: "
-                + slr.predict(maxX));
+        LOG.log(Level.INFO, "preY: {0} predY: {1}",
+                new Object[]{slr.predict(minX), slr.predict(maxX)});
         regLine[0][0] = minX;
         regLine[1][0] = slr.predict(minX);
         regLine[0][1] = maxX;

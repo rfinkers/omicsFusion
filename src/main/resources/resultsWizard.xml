@@ -13,7 +13,8 @@
     </package>
     <package name="charts" namespace="/results" extends="jfreechart-default">
         <action name="predRespXYScatter">
-            <result>/results/predRespXYScatter.jsp</result>
+            <result name="success">/results/predRespXYScatter.jsp</result>
+            <result name="error">/results/showResultsSummary.jsp</result>
         </action>
         <action name="chart" class="nl.wur.plantbreeding.omicsfusion.results.PredictorResponseXYScatterAction">
             <result name="success" type="chart">

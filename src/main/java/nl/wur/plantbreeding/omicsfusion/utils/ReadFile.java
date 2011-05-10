@@ -19,12 +19,17 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author Richard Finkers
  */
 public class ReadFile {
+
+    /** The logger. */
+    private static final Logger LOG = Logger.getLogger(ReadFile.class.getName());
 
     /**
      * Read the filenames fo the opriginal input excel sheets.
@@ -54,11 +59,11 @@ public class ReadFile {
                 scanner.close();
             }
             content = text.toString().split(NL);
-            System.out.println("response: " + content[0] + " Predictor: "
+            LOG.info("response: " + content[0] + " Predictor: "
                     + content[1]);
 
         } else {
-            System.out.println("This file does not exist");
+            LOG.warning("This file does not exist");
             //TODO throw exception?
         }
 
@@ -95,7 +100,7 @@ public class ReadFile {
 
             responseName = content[3];
         } else {
-            System.out.println("This file" + filename + " does not exist");
+            LOG.log(Level.WARNING, "This file{0} does not exist", filename);
             //TODO throw exception?
         }
         return responseName;

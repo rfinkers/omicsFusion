@@ -36,7 +36,8 @@ public class CmdExec {
 
     /**
      * Executes a SGE batch script and returns the job id of the submission.
-     * @param executionDir Name of the directory where the job scripts / data resides.
+     * @param executionDir Name of the directory where the job scripts / data 
+     * resides.
      * @param method Method to be executed.
      * @param queue
      * @return JobID on the SGE grid.
@@ -47,13 +48,15 @@ public class CmdExec {
         Process p;
         if (method.equals("rf") || method.equals("spls")
                 || method.equals("ridge")) {
-            //-P omicsFusion -> project name : Probably not, as we don't account this in SGE!
+
             //TODO: replace email with email user?
-            if (Constants.MAX_NUMBER_CPU > 2) {//TODO: add this to the if test above? Alternatively, modify the submission script
+            //TODO: add this to the if test above? 
+            //Alternatively, modify the submission script
+            if (Constants.MAX_NUMBER_CPU > 2) {
                 p = Runtime.getRuntime().exec(
-                        "qsub -S /bin/bash -p -100 -pe Rmpi "
+                        "qsub -S /bin/bash -p -1023 -pe Rmpi "
                         + Constants.MAX_NUMBER_CPU + " -q " + queue
-                        + " -m be -M richard.finkers@wur.nl " + executionDir
+                        + " -M richard.finkers@wur.nl -m be " + executionDir
                         + method + ".pbs");
             } else {
                 p = Runtime.getRuntime().exec("qsub -S /bin/bash -q " + queue
@@ -63,7 +66,9 @@ public class CmdExec {
             p = Runtime.getRuntime().exec("qsub -S /bin/bash -q " + queue
                     + " " + executionDir + method + ".pbs");
         }
-        //TODO: if qsub not present, this will result in an error. Finally this will lead to an nullpointer exception because of problems with 404 page.
+        //TODO: if qsub not present, this will result in an error. Finally this 
+        //will lead to an nullpointer exception because of problems with 
+        //404 page.
         BufferedReader input =
                 new BufferedReader(new InputStreamReader(p.getInputStream()));
         String line = input.readLine();
@@ -111,7 +116,7 @@ public class CmdExec {
         String errors = error.readLine();
 
         if (errors != null && errors.contains("do not exist")) {
-            System.out.println("Errors check");
+            LOG.info("Errors check");
             System.out.println("errors:" + errors);
             finished = true;
         } else if (line != null) {

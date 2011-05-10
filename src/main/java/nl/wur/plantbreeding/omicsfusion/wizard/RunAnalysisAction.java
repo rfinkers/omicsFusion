@@ -47,11 +47,12 @@ import org.apache.struts2.interceptor.ServletRequestAware;
 public class RunAnalysisAction extends ActionSupport
         implements ServletRequestAware {
 
-    /** Serial Version UID */
+    /** Serial Version UID. */
     private static final long serialVersionUID = 20100815L;
-    /** The logger */
-    private static final Logger LOG = Logger.getLogger(RunAnalysisAction.class.getName());
-    /** the request */
+    /** The logger. */
+    private static final Logger LOG = Logger.getLogger(
+            RunAnalysisAction.class.getName());
+    /** the request. */
     private HttpServletRequest request;
 
     @Override
@@ -72,7 +73,9 @@ public class RunAnalysisAction extends ActionSupport
         ArrayList<Integer> jobIds = new ArrayList<Integer>();
 
         //which methods to run?
-        //Order here is equal to the order on the SGE submission queue? Schedule slow jobs first! Or can should this be controlled via order in submission screen / orther ordening options / queue weight?
+        //Order here is equal to the order on the SGE submission queue? 
+        //Schedule slow jobs first! Or can should this be controlled via order 
+        //in submission screen / orther ordening options / queue weight?
         //Relative timings on the CxE Flesh color /Metabolite dataset.
 
         try {
@@ -149,7 +152,7 @@ public class RunAnalysisAction extends ActionSupport
             SubmissionCompleteEmail();
         }
         catch (Exception e) {
-            LOG.log(Level.INFO, "exception on email initialization");
+            LOG.log(Level.WARNING, "exception on sending confirmation email");
             e.printStackTrace();
             ExceptionEmail.SendExceptionEmail(e);
             return ERROR;
@@ -186,7 +189,6 @@ public class RunAnalysisAction extends ActionSupport
                 + getRequest().getSession().getId() + "\nR --no-save < "
                 + scriptName + ".R\n");
         //Submit jobs to the SGE QUEUE
-        //FIXME: We should add an parameter if the current job (e.g. the RF job) will use multiple CPU's
         int jobId = 0;
         String queue =
                 request.getSession().getServletContext().getInitParameter("SGEQueue");

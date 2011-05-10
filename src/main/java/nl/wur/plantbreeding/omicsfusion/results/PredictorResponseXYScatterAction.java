@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import nl.wur.plantbreeding.logic.jfreechart.GenotypeXYToolTipGenerator;
 import nl.wur.plantbreeding.logic.jfreechart.GenotypeXYDataset;
 import nl.wur.plantbreeding.logic.jfreechart.GenotypeXYUrlGenerator;
+import nl.wur.plantbreeding.omicsfusion.excel.DataSheetValidationException;
 import nl.wur.plantbreeding.omicsfusion.excel.ReadExcelSheet;
 import nl.wur.plantbreeding.omicsfusion.utils.ReadFile;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -47,11 +48,11 @@ import org.jfree.data.xy.DefaultXYDataset;
 public class PredictorResponseXYScatterAction
         extends PredictorResponseXYScatterForm implements ServletRequestAware {
 
-    /** Serial Version UID */
+    /** Serial Version UID. */
     private static final long serialVersionUID = 100906L;
-    /** Chart object */
+    /** Chart object. */
     private JFreeChart chart;
-    /** the request */
+    /** the request. */
     private HttpServletRequest request;//TODO: use RequestAware (map version) instead!
 
     @Override
@@ -70,7 +71,7 @@ public class PredictorResponseXYScatterAction
         }
         catch (Exception e) {
             //TODO: Check
-            System.out.println("Error in parsing header: referer");
+            LOG.warning("Error in parsing header: referer");
             e.printStackTrace();
         }
         String sessionName =
@@ -78,6 +79,22 @@ public class PredictorResponseXYScatterAction
         String response =
                 (String) request.getSession().getAttribute("responseName");
         //response vs continues or response vs discrete.
+
+        if (sessionName == null || response == null) {
+
+            if (sessionName == null) {
+                addActionError("Your session has been expired. Please re-enter "
+                        + "your analysis ID");
+                LOG.warning("PredictorResponseXYScatterAction: SessionName was "
+                        + "null!");
+            } else {
+                addActionError("An error was detected in your input data. "
+                        + "Please re-enter your analysis ID");
+                LOG.warning("PredictorResponseXYScatterAction: resposne "
+                        + "variable was null!");
+            }
+            return ERROR;
+        }
 
         //Should also include model summaries?
         LOG.info("get data");
@@ -94,6 +111,10 @@ public class PredictorResponseXYScatterAction
         }
         catch (FileNotFoundException e) {
             addActionError("File not found");
+        }
+        catch (DataSheetValidationException e) {
+            addActionError("response variable not found in the "
+                    + "orgiginal sheet");
         }
         catch (Exception e) {
             addActionError("Exception occured.");
@@ -141,7 +162,7 @@ public class PredictorResponseXYScatterAction
                 false);
         chart.setBackgroundPaint(java.awt.Color.white);
 
-        //ImageMapUtilities.writeImageMap(new PrintWriter(request.getresponse.getWriter()), NONE, null);
+        //ImageMapUtilities.writeImageMap(new PrintWriter(request.get  .response.getWriter()), NONE, null);
 
         LOG.info("Chart created");
 
@@ -170,7 +191,7 @@ public class PredictorResponseXYScatterAction
     }
 
     /**
-     * Read two data sheets and parse the right colomns for the XY scatter.
+     * Read two data sheets and parse the right columns for the XY scatter.
      * @param predictor Name of the predictor variable.
      * @param sessionID SessionID of the original analysis run.
      * @return XYDataset.
@@ -178,7 +199,7 @@ public class PredictorResponseXYScatterAction
      */
     private DefaultXYDataset getDataSet(String predictor, String sessionID)
             throws InvalidFormatException, FileNotFoundException, IOException,
-            Exception {
+            DataSheetValidationException, Exception {
         //read the filenames from filenames.txt
         ReadFile rf = new ReadFile();
         //The filenames are stored in this string array
