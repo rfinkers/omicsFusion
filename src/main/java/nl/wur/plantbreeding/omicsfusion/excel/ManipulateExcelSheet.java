@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.logging.Logger;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DateUtil;
@@ -34,6 +35,10 @@ import org.apache.poi.ss.util.CellReference;
  */
 public class ManipulateExcelSheet {
 
+    /** the logger. */
+    private static final Logger LOG = Logger.getLogger(
+            ManipulateExcelSheet.class.getName());
+
     /**
      * Extracts the contents of the matrix formatted excel sheets and writes the
      * contents to an list type of excel sheet? Alternatively: leave this to R
@@ -47,26 +52,27 @@ public class ManipulateExcelSheet {
             for (Cell cell : row) {
                 CellReference cellRef = new CellReference(row.getRowNum(),
                         cell.getColumnIndex());
-                System.out.print(cellRef.formatAsString());
-                System.out.print(" - ");
+                LOG.info(cellRef.formatAsString());
+                LOG.info(" - ");
 
                 switch (cell.getCellType()) {
                     case Cell.CELL_TYPE_STRING:
-                        System.out.println(cell.getRichStringCellValue().
+                        LOG.info(cell.getRichStringCellValue().
                                 getString());
                         break;
                     case Cell.CELL_TYPE_NUMERIC:
                         if (DateUtil.isCellDateFormatted(cell)) {
-                            System.out.println(cell.getDateCellValue());
+                            LOG.info(cell.getDateCellValue().toString());
                         } else {
-                            System.out.println(cell.getNumericCellValue());
+                            LOG.info(Double.toString(
+                                    cell.getNumericCellValue()));
                         }
                         break;
                     case Cell.CELL_TYPE_BOOLEAN:
-                        System.out.println(cell.getBooleanCellValue());
+                        LOG.info(Boolean.toString(cell.getBooleanCellValue()));
                         break;
                     case Cell.CELL_TYPE_FORMULA:
-                        System.out.println(cell.getCellFormula());
+                        LOG.info(cell.getCellFormula());
                         break;
                     default:
                         System.out.println();

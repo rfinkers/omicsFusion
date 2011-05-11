@@ -93,6 +93,25 @@ public class ReadExcelSheet extends ManipulateExcelSheet {
         }
 
         if (found == false) {
+            int partialResultCounter = 0;
+            int lastPartialResultRow = 0;
+            //spaces get converted to dot in R. Try if we can find an unique
+            //partial mach on the filename in case found == false?
+            for (i = 1; i < predictorRow.getLastCellNum(); i++) {
+                if (predictorRow.getCell(i).getStringCellValue().trim().
+                        contains(predictor.split("\\.")[0])) {
+                    partialResultCounter++;
+                    lastPartialResultRow = i;
+                    
+                }
+            }
+            if (partialResultCounter == 1) {
+                found = true;
+                i = lastPartialResultRow;
+            }
+        }
+
+        if (found == false) {
             LOG.warning("Response variable not found in the excel sheet.");
             throw new DataSheetValidationException("Response variable not "
                     + "found in the excel sheet");
@@ -123,10 +142,10 @@ public class ReadExcelSheet extends ManipulateExcelSheet {
                 //data matrix is 0 based, however, we have to start reading the
                 //excel sheet from row 1 (row0 = header).
                 z = j + 1;
-                data[0][j] = respWbSheet.getRow(z).getCell(1).
-                        getNumericCellValue();//response
-                data[1][j] = predWbSheet.getRow(z).getCell(i).
-                        getNumericCellValue();//predictor
+                data[1][j] = respWbSheet.getRow(z).getCell(1).
+                        getNumericCellValue();//response -> Y
+                data[0][j] = predWbSheet.getRow(z).getCell(i).
+                        getNumericCellValue();//predictor -> X
                 //Genotype labels can contain numeric or string values.
                 //TODO: generic switch?
                 Cell cell = respWbSheet.getRow(z).getCell(0);
@@ -158,13 +177,14 @@ public class ReadExcelSheet extends ManipulateExcelSheet {
                 if (data[0][j] < minX) {
                     minX = data[0][j];
                 }
-                //Add data to regression dataset
+                //Add data to regression dataset (x,y) = pred, resp
                 slr.addData(data[0][j], data[1][j]);
             }
         }
         catch (Exception e) {
             //TODO: throw exception
-            LOG.warning("Error in data at row: " + z);
+            LOG.log(Level.WARNING, "Error in data at row: {0}", z);
+            LOG.severe(e.toString());
             e.printStackTrace();
         }
 

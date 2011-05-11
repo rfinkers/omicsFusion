@@ -120,14 +120,20 @@ public class PredictorResponseXYScatterAction
             addActionError("Exception occured.");
             //This one will be catched when no valid input format is available.
             //Due to the forward, the exception message gets lost?
-            LOG.log(Level.INFO, "Exception: {0}", e.getMessage());
+            if (e.getMessage() != null) {
+                LOG.log(Level.WARNING, "Exception: {0}", e.toString());
+                e.printStackTrace();
+            }else{
+                LOG.warning("Exception occured.");
+                e.printStackTrace();
+            }
         }
 
         LOG.info("got data");
 
-        //X and Y axis
-        ValueAxis xAxis = new NumberAxis("Response: " + response);
-        ValueAxis yAxis = new NumberAxis("Predictor: " + predictor);
+        //X (predictor) and Y axis (response)
+        ValueAxis yAxis = new NumberAxis("Response: " + response);
+        ValueAxis xAxis = new NumberAxis("Predictor: " + predictor);
         xAxis.setAutoRange(true);
 
         //TODO: imagemap
