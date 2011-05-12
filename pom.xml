@@ -178,13 +178,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
-                <version>@project.version@</version>
+                <version>3.0-beta-3</version>
                 <configuration>
                     <reportPlugins>
                         <plugin>
                             <groupId>org.apache.maven.plugins</groupId>
                             <artifactId>maven-project-info-reports-plugin</artifactId>
-                            <version>@projectInfoReportsPluginVersion@</version>
                             <configuration>
                                 <dependencyDetailsEnabled>false</dependencyDetailsEnabled>
                                 <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
@@ -197,7 +196,6 @@
                         <plugin>
                             <groupId>org.apache.maven.plugins</groupId>
                             <artifactId>maven-javadoc-plugin</artifactId>
-                            <version>${javadocPluginVersion}</version>
                         </plugin>
                     </reportPlugins>
                 </configuration>
