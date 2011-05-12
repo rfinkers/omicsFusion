@@ -32,10 +32,11 @@ import org.jfree.data.xy.DefaultXYDataset;
  */
 public class GenotypeXYDataset extends DefaultXYDataset {
 
+    /** serialVersionUID. */
     private static final long serialVersionUID = 070110L;
-    /* A String array of genotype names */
+    /* A String array of genotype names. */
     private String[] genotypeNames;
-    /* A String array of accession IDs */
+    /* A String array of accession IDs. */
     private String[] accessionIDs;
 
     /**

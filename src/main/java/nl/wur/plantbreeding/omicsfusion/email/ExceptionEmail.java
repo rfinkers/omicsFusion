@@ -26,8 +26,13 @@ import javax.mail.internet.AddressException;
  */
 public class ExceptionEmail extends Email {
 
+    /** SerialVersionUID. */
     private static final long serialVersionUID = 90111L;
 
+    /**
+     * Send an exception mail to the administrator.
+     * @param e The exception
+     */
     public static void SendExceptionEmail(Exception e) {
 
         Email email = new Email();
@@ -38,11 +43,13 @@ public class ExceptionEmail extends Email {
         try {
             email.sendEmail("omicsFusion exception", emailBody);
             LOG.info("email send");
-        } catch (AddressException ex) {
+        }
+        catch (AddressException ex) {
             Logger.getLogger(SubmissionCompleteEmail.class.getName()).
                     log(Level.SEVERE, null, ex);
             ex.printStackTrace();
-        } catch (MessagingException ex) {
+        }
+        catch (MessagingException ex) {
             Logger.getLogger(SubmissionCompleteEmail.class.getName()).
                     log(Level.SEVERE, null, ex);
             ex.printStackTrace();

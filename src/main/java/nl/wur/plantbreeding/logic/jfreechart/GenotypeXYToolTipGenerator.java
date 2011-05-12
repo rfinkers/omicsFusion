@@ -43,7 +43,7 @@ public class GenotypeXYToolTipGenerator implements XYToolTipGenerator {
      * @return A tooltip containing the genotype name and the x,y values.
      */
     @Override
-    public String generateToolTip(XYDataset dataset, int series, int item) {
+    public final String generateToolTip(XYDataset dataset, int series, int item) {
         NumberFormat formatter = new DecimalFormat("#.###");
         return ((GenotypeXYDataset) dataset).getGenotypeLabel(series, item)
                 + " - (" + formatter.format(dataset.getX(series, item))

@@ -37,45 +37,84 @@ public class CsvSummaryDataType {
     private static final Logger LOG = Logger.getLogger(
             CsvSummaryDataType.class.getName());
 
+    /** default constructor. */
     public CsvSummaryDataType() {
     }
 
+    /** get the mean value.
+     * @return Mean value.
+     */
     public Double getMean() {
         return mean;
     }
 
+    /** set the mean value.
+     * @param mean Mean value.
+     */
     public void setMean(Double mean) {
         this.mean = mean;
     }
 
+    /**
+     * Get the rank.
+     * @return the rank.
+     */
     public Double getRank() {
         return rank;
     }
 
+    /** 
+     * set the rank.
+     * @param rank the rank.
+     */
     public void setRank(Double rank) {
         this.rank = rank;
     }
 
+    /**
+     * Get the response variable.
+     * @return response variable.
+     */
     public String getResponsVariable() {
         return responsVariable;
     }
 
+    /**
+     * Set the response variable.
+     * @param responsVariable the response variable.
+     */
     public void setResponsVariable(String responsVariable) {
         this.responsVariable = responsVariable;
     }
 
+    /**
+     * Get the standard deviation.
+     * @return standard deviation.
+     */
     public Double getSd() {
         return sd;
     }
 
+    /**
+     * Set the standard deviation.
+     * @param sd standard deviation.
+     */
     public void setSd(Double sd) {
         this.sd = sd;
     }
 
+    /**
+     * Get the HTML color code.
+     * @return HTML color code.
+     */
     public String getHtmlColor() {
         return htmlColor;
     }
 
+    /**
+     * Set the HTML color code.
+     * @param htmlColor HTML color code.
+     */
     public void setHtmlColor(String htmlColor) {
         this.htmlColor = htmlColor;
     }
@@ -88,11 +127,11 @@ public class CsvSummaryDataType {
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 79 * hash + (this.responsVariable != null
-                ? this.responsVariable.hashCode() : 0);
-        hash = 79 * hash + (this.mean != null ? this.mean.hashCode() : 0);
-        hash = 79 * hash + (this.sd != null ? this.sd.hashCode() : 0);
-        hash = 79 * hash + (this.rank != null ? this.rank.hashCode() : 0);
+        hash = 79 * hash + ( this.responsVariable != null
+                ? this.responsVariable.hashCode() : 0 );
+        hash = 79 * hash + ( this.mean != null ? this.mean.hashCode() : 0 );
+        hash = 79 * hash + ( this.sd != null ? this.sd.hashCode() : 0 );
+        hash = 79 * hash + ( this.rank != null ? this.rank.hashCode() : 0 );
         return hash;
     }
 

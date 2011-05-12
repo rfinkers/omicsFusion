@@ -40,6 +40,7 @@ public class ReadExcelSheet extends ManipulateExcelSheet {
     private static final Logger LOG = Logger.getLogger(
             ReadExcelSheet.class.getName());
 
+    /** Default constructor. */
     public ReadExcelSheet() {
     }
 
@@ -55,14 +56,11 @@ public class ReadExcelSheet extends ManipulateExcelSheet {
      * @throws FileNotFoundException File not found.
      * @throws InvalidFormatException Not a compatible Excel format.
      * @throws IOException Error reading the file.
-     * @throws Exception Not handled exception.
      */
     public static DefaultXYDataset readPredictorAndResponseValue(
             File responseSheet, File predictorSheet, String predictor)
             throws DataSheetValidationException, FileNotFoundException,
-            InvalidFormatException, IOException,
-            Exception {
-
+            InvalidFormatException, IOException {
 
         /** wb for the response variables. */
         Sheet respWbSheet;
@@ -102,7 +100,7 @@ public class ReadExcelSheet extends ManipulateExcelSheet {
                         contains(predictor.split("\\.")[0])) {
                     partialResultCounter++;
                     lastPartialResultRow = i;
-                    
+
                 }
             }
             if (partialResultCounter == 1) {
@@ -164,6 +162,8 @@ public class ReadExcelSheet extends ManipulateExcelSheet {
                                     Double.toString(cell.getNumericCellValue());
                         }
                         break;
+                    default:
+                        genotypeLabels[j] = "No label";
                 }
 
                 //System.out.println("counter: " + z + " label:" +

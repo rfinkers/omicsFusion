@@ -26,26 +26,34 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Workbook;
 
 /**
- *
+ * Validation if the excel sheets are valid, have the correct dimensions and 
+ * that the names of the individuals are identical in the different excel 
+ * sheets.
  * @author Richard Finkers
+ * @version 1.0
+ * @since 1.0
  */
 public class ValidateDataSheets extends ManipulateExcelSheet {
 
-    /** The logger */
+    /** The logger. */
     private static final Logger LOG = Logger.getLogger(
             ValidateDataSheets.class.getName());
 
+    /** Default constructor.
     private ValidateDataSheets() {
     }
-
+    
     /**
      * Checks if a file is a valid excel (2003/2007/2010) workbook.
-     * @param responseSheet
-     * @param predictorSheet
-     * @throws DataSheetValidationException
-     * @throws InvalidFormatException
-     * @throws FileNotFoundException
-     * @throws IOException
+     * @param responseSheet The response sheet object.
+     * @param predictorSheet The predictor sheet object.
+     * @throws DataSheetValidationException Excel sheet validation failed.
+     * @throws InvalidFormatException Not a valid excel workbook.
+     * @throws FileNotFoundException Signals that an attempt to open the file 
+     * denoted by a specified pathname has failed.
+     * @throws IOException Signals that an I/O exception of some sort has 
+     * occurred. This class is the general class of exceptions produced by 
+     * failed or interrupted I/O operations.
      */
     public static void validateExcelSheets(File responseSheet,
             File predictorSheet) throws DataSheetValidationException,
@@ -78,6 +86,9 @@ public class ValidateDataSheets extends ManipulateExcelSheet {
         compareIndividualNames(responseWorkbook, predictorWorkbook);
     }
 
+    /**
+     * Check the validate predict response excel sheet.
+     */
     public static void validatePredictResponseSheet() {
         //TODO: implement validatePredictResponseSheet
     }
@@ -85,6 +96,7 @@ public class ValidateDataSheets extends ManipulateExcelSheet {
     /**
      * Check the dimension of an excel sheet.
      * @param wb Name of the workbook.
+     * @param fileName The name of the excel sheet.
      * @param minColumns Minimal number of variables (columns) required for
      * this type of workbook.
      * @return The number of rows (= number of individuals).
@@ -117,7 +129,7 @@ public class ValidateDataSheets extends ManipulateExcelSheet {
      * the excel sheets has the same order.
      * @param responseWorkbook The response workbook.
      * @param predictorWorkbook The predictor workbook.
-     * @throws DataSheetValidationException
+     * @throws DataSheetValidationException Error validating the excel sheet.
      */
     private static void compareIndividualNames(Workbook responseWorkbook,
             Workbook predictorWorkbook) throws DataSheetValidationException {

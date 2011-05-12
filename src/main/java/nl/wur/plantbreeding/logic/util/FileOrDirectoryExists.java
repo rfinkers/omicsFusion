@@ -15,13 +15,14 @@ public class FileOrDirectoryExists {
     private static final Logger LOG = Logger.getLogger(
             FileOrDirectoryExists.class.getName());
 
+    /** default constructor. */
     private FileOrDirectoryExists() {
     }
 
     /**
      * Check if a file or directory exists in the file system.
-     * @param name Name of the file or directory to check
-     * @return Boolean if file/directory exists
+     * @param name Name of the file or directory to check.
+     * @return Boolean if file/directory exists.
      */
     public static boolean FileOrDirectoryExists(String name) {
         File file = new File(name);
