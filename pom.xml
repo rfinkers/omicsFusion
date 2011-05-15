@@ -7,10 +7,10 @@
     <packaging>war</packaging>
     <version>1.0-M3</version>
     <name>omicsFusion Java EE 6 Webapp</name>
-    <description>omicsFusion is a tool in which different regression methods can be used to analyze typical ~omics situations with large 
-    numbers of variables and smaller numbers of samples. omicsFusion apply univariate regression and different regularized multivariate 
-    regression methods like ridge regression (RR), LASSO, elastic net (EN), principal component regression (PCR), partial least squares 
-    regression (PLS), sparse partial least squares regression (SPLS) and random forest regression (RF) to analyze datasets. The generated 
+    <description>omicsFusion is a tool in which different regression methods can be used to analyze typical ~omics situations with large
+    numbers of variables and smaller numbers of samples. omicsFusion apply univariate regression and different regularized multivariate
+    regression methods like ridge regression (RR), LASSO, elastic net (EN), principal component regression (PCR), partial least squares
+    regression (PLS), sparse partial least squares regression (SPLS) and random forest regression (RF) to analyze datasets. The generated
     output contains the mean square error of prediction, goodness of fit, variable selection and the ranking of the variables.
     </description>
     <url>http://maven.apache.org</url>
@@ -62,7 +62,7 @@
             <organization>Wageningen UR</organization>
             <organizationUrl>http://www.plantbreeding.wur.nl</organizationUrl>
             <roles>
-                <role>provider R scripts</role>    
+                <role>provider R scripts</role>
             </roles>
         </contributor>
     </contributors>
@@ -77,18 +77,18 @@
         <dependency>
             <groupId>com.jgeppert.struts2.jquery</groupId>
             <artifactId>struts2-jquery-plugin</artifactId>
-            <version>3.0.0</version>
+            <version>3.0.1</version>
             <type>pom</type>
         </dependency>
         <dependency>
             <groupId>com.jgeppert.struts2.jquery</groupId>
             <artifactId>struts2-jquery-grid-plugin</artifactId>
-            <version>3.0.0</version>
+            <version>3.0.1</version>
         </dependency>
         <dependency>
             <groupId>com.jgeppert.struts2.jquery</groupId>
             <artifactId>struts2-jquery-richtext-plugin</artifactId>
-            <version>3.0.0</version>
+            <version>3.0.1</version>
         </dependency>
         <dependency>
             <groupId>displaytag</groupId>
@@ -234,5 +234,5 @@
     <properties>
         <netbeans.hint.deploy.server>gfv3ee6</netbeans.hint.deploy.server>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>    
+    </properties>
 </project>
