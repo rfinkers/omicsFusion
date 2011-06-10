@@ -78,34 +78,67 @@ public class ReadExcelSheet extends ManipulateExcelSheet {
         int i = 0;
         boolean found = false;
 
-        //Find the right column.
-        for (i = 1; i < predictorRow.getLastCellNum(); i++) {
-            //ommit the header column for the genotypes
-            //System.out.println("row header:"
-            //+ predictorRow.getCell(i).getStringCellValue());
-            if (predictorRow.getCell(i).getStringCellValue().trim().
-                    equals(predictor)) {
-                found = true;
-                break;
-            }
-        }
-
-        if (found == false) {
-            int partialResultCounter = 0;
-            int lastPartialResultRow = 0;
-            //spaces get converted to dot in R. Try if we can find an unique
-            //partial mach on the filename in case found == false?
+        // For some sheets, R transforms the (numeric) names to a column
+        // assignment. This is indicated with Col at the beginning of the name.
+        // Obtain the right column and set the values of the predictor to
+        // unknown.
+        if (predictor.startsWith("Col")) {
+            i = Integer.parseInt(predictor.substring(3)) - 1;
+            found = true;
+            predictor = "unknown";
+        } else {
+            //Find the right column.
             for (i = 1; i < predictorRow.getLastCellNum(); i++) {
-                if (predictorRow.getCell(i).getStringCellValue().trim().
-                        contains(predictor.split("\\.")[0])) {
-                    partialResultCounter++;
-                    lastPartialResultRow = i;
+                //ommit the header column for the genotypes
 
+                //Row can contain String or Numeric values.
+                //If numeric values, R add's Col to the beginning of the number.
+                Cell cell = predictorRow.getCell(i);
+
+                if (cell.getCellType() == Cell.CELL_TYPE_STRING) {
+                    if (cell.getStringCellValue().trim().equals(predictor)) {
+                        found = true;
+                        break;
+                    }
+                    //Not sure that this is required as this issue is handled
+                    //in the Col code.
+                } else if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+                    if (DateUtil.isCellDateFormatted(cell)) {
+                        LOG.severe("Invalid Type in heading of predictor sheet.");
+                    } else {
+                        if (Double.toString(cell.getNumericCellValue()).
+                                split("\\.")[0].trim().equals(
+                                predictor.substring(3))) {
+                            found = true;
+                            break;
+                        }
+                    }
+                } else {
+                    LOG.severe("Invalid Type in heading of predictor sheet.");
                 }
+
             }
-            if (partialResultCounter == 1) {
-                found = true;
-                i = lastPartialResultRow;
+            //predictor row contains long names. Do a match on the first part of the
+            //name as an alternative method. An result is valid if there is only one
+            //match with the beginning of the text.
+
+            if (found == false) {
+                int partialResultCounter = 0;
+                int lastPartialResultRow = 0;
+                //spaces get converted to dot in R. Try if we can find an unique
+                //partial mach on the filename in case found == false?
+                for (i = 1; i < predictorRow.getLastCellNum(); i++) {
+                    if (predictorRow.getCell(i).getStringCellValue().trim().
+                            contains(predictor.split("\\.")[0])) {
+                        partialResultCounter++;
+                        lastPartialResultRow = i;
+
+                    }
+                }
+                if (partialResultCounter == 1) {
+                    found = true;
+                    i = lastPartialResultRow;
+                }
             }
         }
 
@@ -115,25 +148,29 @@ public class ReadExcelSheet extends ManipulateExcelSheet {
                     + "found in the excel sheet");
         }
 
-        LOG.log(Level.INFO, "Predictor: {0}", predictor);
+        LOG.log(Level.INFO,
+                "Predictor: {0}", predictor);
 
-        LOG.log(Level.INFO, "Need column: {0}", i);
+        LOG.log(Level.INFO,
+                "Need column: {0}", i);
 
-        LOG.log(Level.INFO, "Last row: {0} Last Column: {1}",
+        LOG.log(Level.INFO,
+                "Last row: {0} Last Column: {1}",
                 new Object[]{predWbSheet.getLastRowNum(),
-                    predictorRow.getLastCellNum()});
+                    predictorRow.getLastCellNum()
+                });
 
         double[][] data = new double[2][predWbSheet.getLastRowNum()];
         String[] genotypeLabels = new String[predWbSheet.getLastRowNum()];
         //skip header row!
-
         double minX = Double.POSITIVE_INFINITY;
         double maxX = Double.NEGATIVE_INFINITY;
         //add the object for regression
         SimpleRegression slr = new SimpleRegression();
-
         //initialize z which holds the correct row number.
         int z = 0;
+
+
 
         try {
             for (int j = 0; j < predWbSheet.getLastRowNum(); j++) {
@@ -187,23 +224,28 @@ public class ReadExcelSheet extends ManipulateExcelSheet {
             LOG.severe(e.toString());
             e.printStackTrace();
         }
-
         //Predict a new y values for the extreme X?
         double[][] regLine = new double[2][2];
-        LOG.log(Level.INFO, "preY: {0} predY: {1}",
-                new Object[]{slr.predict(minX), slr.predict(maxX)});
+
+        LOG.log(Level.INFO,
+                "preY: {0} predY: {1}",
+                new Object[]{slr.predict(minX), slr.predict(maxX)
+                });
         regLine[0][0] = minX;
         regLine[1][0] = slr.predict(minX);
         regLine[0][1] = maxX;
         regLine[1][1] = slr.predict(maxX);
-
         /** The dataset */
         DefaultXYDataset dataSet = new GenotypeXYDataset("Genotype",
                 data, genotypeLabels, genotypeLabels);
         //add the regression series to the dataSet.
-        dataSet.addSeries("regression", regLine);
+
+        dataSet.addSeries(
+                "regression", regLine);
 
         //return dataset
+
+
         return dataSet;
     }
 }
