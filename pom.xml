@@ -77,18 +77,18 @@
         <dependency>
             <groupId>com.jgeppert.struts2.jquery</groupId>
             <artifactId>struts2-jquery-plugin</artifactId>
-            <version>3.0.1</version>
+            <version>3.0.2</version>
             <type>pom</type>
         </dependency>
         <dependency>
             <groupId>com.jgeppert.struts2.jquery</groupId>
             <artifactId>struts2-jquery-grid-plugin</artifactId>
-            <version>3.0.1</version>
+            <version>3.0.2</version>
         </dependency>
         <dependency>
             <groupId>com.jgeppert.struts2.jquery</groupId>
             <artifactId>struts2-jquery-richtext-plugin</artifactId>
-            <version>3.0.1</version>
+            <version>3.0.2</version>
         </dependency>
         <dependency>
             <groupId>displaytag</groupId>
