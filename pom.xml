@@ -5,7 +5,7 @@
     <groupId>nl.wur.plantbreeding</groupId>
     <artifactId>omicsFusion</artifactId>
     <packaging>war</packaging>
-    <version>1.0-M3</version>
+    <version>1.0-M4</version>
     <name>omicsFusion Java EE 6 Webapp</name>
     <description>omicsFusion is a tool in which different regression methods can be used to analyze typical ~omics situations with large
     numbers of variables and smaller numbers of samples. omicsFusion apply univariate regression and different regularized multivariate
@@ -146,7 +146,7 @@
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
-            <version>3.8-beta2</version>
+            <version>3.8-beta3</version>
             <type>jar</type>
         </dependency>
         <dependency>
