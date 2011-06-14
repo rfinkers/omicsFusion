@@ -85,7 +85,8 @@ public class ReadExcelSheet extends ManipulateExcelSheet {
         if (predictor.startsWith("Col")) {
             i = Integer.parseInt(predictor.substring(3)) - 1;
             found = true;
-            predictor = "unknown";
+            predictor = Double.toString(
+                    predictorRow.getCell(i).getNumericCellValue());
         } else {
             //Find the right column.
             for (i = 1; i < predictorRow.getLastCellNum(); i++) {
