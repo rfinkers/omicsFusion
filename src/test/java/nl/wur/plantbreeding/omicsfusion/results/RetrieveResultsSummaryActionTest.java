@@ -61,7 +61,7 @@ public class RetrieveResultsSummaryActionTest {
         Double min = 0.0;
         Double max = 20.0;
         RetrieveResultsSummaryAction instance = new RetrieveResultsSummaryAction();
-        String expResult = "#c2cada";
+        String expResult = "highlight5";
         String result = instance.getBackgroundColor(result_2, min, max, false);
         assertEquals(expResult, result);
     }

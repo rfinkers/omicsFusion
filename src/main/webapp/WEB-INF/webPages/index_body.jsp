@@ -5,13 +5,14 @@
 --%>
 
 <%@ taglib prefix="s" uri="/struts-tags"%>
+<%@ taglib prefix="sj" uri="/struts-jquery-tags"%>
 
 <h1><s:text name="omicsFusion.heading" /></h1>
 
 <s:text name="omicsFusion.home.text" />
 
-<s:form validate="false" action="/userRegistration/startSubmitWizard">
-    <s:submit value="Start submission" cssClass="testSubject" />
-</s:form>
+<s:form validate="false" action="/userRegistration/startSubmitWizard" id="form" />
+
+<sj:submit formIds="form" value="Start submission" button="true"/>
 <br/>
 <s:text name="omicsFusion.lastUpdate"/>

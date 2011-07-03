@@ -7,8 +7,8 @@
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <s:text name="submit.complete.progress"/>
 <h2><s:text name="submit.complete.heading" /></h2>
-<s:actionerror/>
-<s:actionmessage/>
+<s:actionerror theme="jquery" />
+<s:actionmessage theme="jquery" />
 <s:text name="submit.complete.salutation"/> <s:property value="#session.omicsFusionUser.userName"/>,
 <s:text name="submit.complete.explanation"/>
 

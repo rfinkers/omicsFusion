@@ -9,18 +9,25 @@ Form
 <%@ taglib prefix="sj" uri="/struts-jquery-tags"%>
 
 <s:text name="userDetails.progress"/>
-
+<sj:dialog id="myclickdialog"    autoOpen="false"    modal="true"    title="help"    >
+    <s:text name="userDetails.explanation"/>
+</sj:dialog>
+<sj:a openDialog="myclickdialog"    button="true"    buttonIcon="ui-icon-newwin" cssStyle="allign:right"   >
+    	help
+</sj:a>
 <h2><s:text name="userDetails.heading" /></h2>
-<s:actionerror/>
-<s:actionmessage/>
+<s:actionerror theme="jquery"/>
+<s:actionmessage theme="jquery"/>
 
 <s:text name="userDetails.explanation"/>
-<s:form action="/userRegistration/userDetails" >
+<s:form action="/userRegistration/userDetails" name="userDetails" >
     <%--<s:textfield name="user.username" label="Username"/>--%>
     <sj:textfield key="name" />
     <sj:textfield key="email" />
     <sj:textfield key="affiliation" />
     <sj:textfield key="country" />
-    <s:reset cssClass="testSubject"/>
-    <s:submit />
+    <s:reset cssClass="testSubject" />
+
 </s:form>
+
+<sj:submit formIds="userDetails" button="true"/>

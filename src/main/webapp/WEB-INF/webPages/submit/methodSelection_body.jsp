@@ -2,9 +2,8 @@
 
 <s:text name="analysis.methods.progress"/>
 <h2><s:text name="analysis.methods.heading" /></h2>
-<s:actionerror/>
-<%--<s:fielderror />--%>
-<s:actionmessage/>
+<s:actionerror theme="jquery" />
+<s:actionmessage theme="jquery" />
 <s:text name="analisis.methods.explanation"/>
 
 <s:form action="/userRegistration/methodSelection" cssClass="methods">

@@ -10,9 +10,10 @@ Form
 <s:text name="uploadExcel.progress" />
 
 <h2><s:text name="uploadExcel.heading" /></h2>
-<s:actionerror/>
-<s:actionmessage/>
-<s:fielderror/>
+<s:actionerror theme="jquery"/>
+<s:actionmessage theme="jquery"/>
+<s:fielderror theme="jquery"/>
+
 <s:text name="uploadExcel.explanation"/>
 
 <!--    TODO: separate this from the lines above? Add instructions-->
