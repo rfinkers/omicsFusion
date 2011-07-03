@@ -7,7 +7,7 @@
 <s:actionmessage/>
 <s:text name="analisis.methods.explanation"/>
 
-<s:form action="/userRegistration/methodSelection">
+<s:form action="/userRegistration/methodSelection" cssClass="methods">
     <s:checkbox key="analysis.method.rf" name="rf" />
     <s:checkbox key="analysis.method.svm" name="svm" disabled="true"/>
     <s:checkbox key="analysis.method.lasso" name="lasso" checked="checked"/>
@@ -20,5 +20,5 @@
     <!--TODO: select all / deselect all buttons-->
     <!--TODO: is there a way to add categories to the different type of methods in the form?
     <s:text name="analysis.methods.variable.selection"/>-->
-    <s:submit key="method.submit"/> <s:reset key="button.reset"/>
+    <s:submit key="method.submit"/> <s:reset key="button.reset" cssClass="resetButon"/>
 </s:form>

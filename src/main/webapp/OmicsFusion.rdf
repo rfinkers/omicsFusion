@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:foaf="http://xmlns.com/foaf/0.1/"
+    xmlns:doap="http://usefulinc.com/ns/doap#"
+    xmlns:sioc="http://rdfs.org/sioc/ns#"
+    xmlns:sioct="http://rdfs.org/sioc/types#"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:dct="http://purl.org/dc/terms/"
+    xmlns:mvcb="http://webns.net/mvcb/"
+    xmlns:rss="http://purl.org/rss/1.0/"
+    xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
+    xmlns:contact="http://www.w3.org/2000/10/swap/pim/contact#"
+    xmlns:air="http://www.daml.org/2001/10/html/airport-ont#"
+    xmlns:wn="http://xmlns.com/wordnet/1.6/"
+    xmlns:uranai="http://kota.s12.xrea.com/vocab/uranai#"
+    xmlns:rel="http://purl.org/vocab/relationship/"
+    xmlns:openid="http://xmlns.openid.net/auth#"
+    xmlns:session="http://redfoot.net/2005/session#"
+    xml:base="http://www.plantbreeding.wur.nl/UK/software_breedb.html"
+    xml:lang="en"
+    xmlns:vcard="http://www.w3.org/2001/vcard-rdf/3.0#"
+    xmlns:pbr="http://www.plantbreeding.wur.nl/ns/PBR#"
+>
+
+    <!-- Define the document -->
+  <foaf:Document rdf:about="http://www.plantbreeding.wur.nl/BreeDB.rdf"><!-- Change to BreeDB page -->
+    <rdfs:label>BreeDB FOAF document</rdfs:label>
+    <rdfs:comment>Description of BreeDB</rdfs:comment><!-- TODO -->
+    <foaf:maker>http://nl.linkedin.com/in/richardfinkers</foaf:maker>
+    <dct:license rdf:resource="http://creativecommons.org/licenses/by-nc-sa/3.0/" />
+    <foaf:primaryTopic rdf:resource="http://www.plantbreeding.wur.nl/BreeDB#BreeDB"/>
+    <foaf:Organization rdf:resource="http://www.plantbreeding.wur.nl/PBR#PBR"/>
+    <dct:created>2010-07-28</dct:created>
+    <dct:modified>2010-07-28</dct:modified>
+    <mvcb:errorReportsTo rdf:resource="mailto:webmaster.plantbreeding@wur.nl" />
+    <owl:sameAs rdf:resource="http://www.plantbreeding.wur.nl/UK/software_breedb.html" />
+  </foaf:Document>
+
+  <foaf:Document rdf:about="http://www.plantbreeding.wur.nl/BreeDB">
+    <foaf:primaryTopic rdf:resource="http://www.plantbreeding.wur.nl/BreeDB#BreeDB"/>
+    <owl:sameAs rdf:resource="http://www.plantbreeding.wur.nl/BreeDB.rdf" />
+  </foaf:Document>
+
+  <!-- Define the project -->
+  <doap:Project rdf:about="http://www.plantbreeding.wur.nl/BreeDB#BreeDB">
+    <doap:shortname>BreeDB</doap:shortname>
+    <doap:name>BreeDB</doap:name>
+    <!-- Plain text description of a project, of 2-4 sentences in length. -->
+    <doap:description>
+        omicsFusion analysis tool
+    </doap:description>
+    <doap:category></doap:category>
+    <doap:developer>http://nl.linkedin.com/in/richardfinkers</doap:developer>
+    <doap:maintainer>http://nl.linkedin.com/in/richardfinkers</doap:maintainer>
+    <doap:homepage>http://www.plantbreeding.wur.nl/UK/software_breedb.html</doap:homepage>
+    <doap:os>platform independent</doap:os>
+    <doap:programming-language>Java</doap:programming-language>
+    <vcard:locality rdf:resource="http://ws.geonames.org/rdf?geonameId=2745088" />
+    <vcard:country rdf:resource="http://ws.geonames.org/rdf?geonameId=2750405" />
+    <foaf:Organization rdf:resource="http://www.plantbreeding.wur.nl/PBR#PBR"/>
+  </doap:Project>
+
+  <pbr:DeployedInstance rdf:about="http://www.plantbreeding.wur.nl/OmicsFusion#OmicsFusion">
+    <doap:description>
+        OmicsFusion
+    </doap:description>
+    <pbr:isDeployedInstanceOf rdf:resource="http://www.plantbreeding.wur.nl/OmicsFusion#OmicsFusion" />
+    <doap:developer>http://nl.linkedin.com/in/richardfinkers</doap:developer>
+    <doap:homepage>http://www.plantbreeding.wur.nl/omicsFusion/</doap:homepage>
+    <doap:shortname>EU-SOL</doap:shortname>
+    <foaf:Organization rdf:resource="http://www.plantbreeding.wur.nl/PBR#PBR"/>
+  </pbr:DeployedInstance>
+</rdf:RDF>
+

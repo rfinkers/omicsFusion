@@ -23,8 +23,8 @@ import java.util.logging.Logger;
  */
 public class CsvSummaryDataType {
 
-    /** response variable. */
-    private String responsVariable;
+    /** predictor variable. */
+    private String predictorVariable;
     /** Mean observation. */
     private Double mean;
     /** background color in table. */
@@ -63,7 +63,7 @@ public class CsvSummaryDataType {
         return rank;
     }
 
-    /** 
+    /**
      * set the rank.
      * @param rank the rank.
      */
@@ -72,19 +72,24 @@ public class CsvSummaryDataType {
     }
 
     /**
-     * Get the response variable.
-     * @return response variable.
+     * Get the predictor variable.
+     * @return predictor variable.
      */
-    public String getResponsVariable() {
-        return responsVariable;
+    public String getPredictorVariable() {
+        return predictorVariable;
     }
 
     /**
-     * Set the response variable.
-     * @param responsVariable the response variable.
+     * Set the predictor variable.
+     * @param predictorVariable the predictor variable.
      */
-    public void setResponsVariable(String responsVariable) {
-        this.responsVariable = responsVariable;
+    public void setPredictorVariable(String predictorVariable) {
+        if (predictorVariable.startsWith("X.")) {
+            this.predictorVariable = predictorVariable.substring(2);
+            //TODO: not a perfect solution!!
+        } else if (predictorVariable.startsWith("X")) {
+            this.predictorVariable = predictorVariable.substring(1);
+        }
     }
 
     /**
@@ -127,8 +132,8 @@ public class CsvSummaryDataType {
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 79 * hash + ( this.responsVariable != null
-                ? this.responsVariable.hashCode() : 0 );
+        hash = 79 * hash + ( this.predictorVariable != null
+                ? this.predictorVariable.hashCode() : 0 );
         hash = 79 * hash + ( this.mean != null ? this.mean.hashCode() : 0 );
         hash = 79 * hash + ( this.sd != null ? this.sd.hashCode() : 0 );
         hash = 79 * hash + ( this.rank != null ? this.rank.hashCode() : 0 );
@@ -137,7 +142,7 @@ public class CsvSummaryDataType {
 
     @Override
     public String toString() {
-        return "CsvSummaryDataType{" + "responsVariable= " + responsVariable
+        return "CsvSummaryDataType{" + "responsVariable= " + predictorVariable
                 + " mean= " + mean + " htmlColor= " + htmlColor + " sd= " + sd
                 + " rank= " + rank + '}';
     }

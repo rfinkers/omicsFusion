@@ -155,18 +155,18 @@ public class DataUploadValidationForm extends ActionSupport {
     public void validate() {
         LOG.info("Start Excel form validation");
 
-        //Order of test is important for the order in which the messages are shown.
+        //Order of test is important for the order in which the errors are shown.
         if (dataSheetResponseFile == null) {//TODO: via validation.xml?
-            addActionError(getText("select.response"));//"Please select a response file");//TODO: resource bundle
+            addActionError(getText("select.response"));
         }
         if (responseType.equals("select")) {//TODO: via validation.xml?
-            addActionError("Please select the type of data for the response file");//TODO: resource bundle
+            addActionError(getText("select.response.type"));
         }
         if (dataSheetPredictorFile == null) {
-            addActionError("Please select a predictor file");//TODO: resource bundle
+            addActionError(getText("select.predictor"));
         }
         if (predictorType.equals("select")) {
-            addActionError("Please select the type of data for the predictor file");//TODO: resource bundle
+            addActionError(getText("select.predictor.type"));
         }
 
         //TODO: filenames are not kept after validation error. Type, however, is kept.

@@ -51,7 +51,7 @@ public class ReadExcelSheet extends ManipulateExcelSheet {
      * @param predictorSheet Name and location of the predictor sheet.
      * @param predictor Name of the selected predictor.
      * @return A XY chart object.
-     * @throws DataSheetValidationException Response variable not found in the 
+     * @throws DataSheetValidationException Response variable not found in the
      * excel sheet.
      * @throws FileNotFoundException File not found.
      * @throws InvalidFormatException Not a compatible Excel format.
@@ -241,12 +241,9 @@ public class ReadExcelSheet extends ManipulateExcelSheet {
                 data, genotypeLabels, genotypeLabels);
         //add the regression series to the dataSet.
 
-        dataSet.addSeries(
-                "regression", regLine);
+        dataSet.addSeries(slr.getR(), regLine);
 
         //return dataset
-
-
         return dataSet;
     }
 }

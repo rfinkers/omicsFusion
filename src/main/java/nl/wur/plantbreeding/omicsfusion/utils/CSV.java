@@ -46,7 +46,7 @@ public class CSV {
                 dataPoint = new CsvSummaryDataType();
                 //TODO: add null / other error checking (NotANumberexception etc).
                 //TODO: add formating of the numbers
-                dataPoint.setResponsVariable(reader.get(""));
+                dataPoint.setPredictorVariable(reader.get(""));
                 dataPoint.setMean(Double.valueOf(reader.get("means")));
                 dataPoint.setSd(Double.valueOf(reader.get("sd")));
                 dataPoint.setRank(Double.valueOf(reader.get("ra")));

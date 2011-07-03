@@ -22,8 +22,8 @@ Form
     <s:select key="dataset.type" name="responseType" headerValue="-- Please select --" headerKey="select" list="#{'ph':'Phenomics','me':'Metabolomics','tr':'Transcriptomics','ma':'Markers'}"/>
     <s:file name="dataSheetPredictorFile" key="dataSheetPredictorFile"/>
     <s:select key="dataset.type" name="predictorType" headerValue="-- Please select --" headerKey="select" list="#{'ph':'Phenomics','me':'Metabolomics','tr':'Transcriptomics','ma':'Markers'}"/>
-<%-- <s:file name="dataSheetPredictResponseFile" key="dataSheetPredictResponseFile"/> --%>
-    <s:reset/><s:submit/>
+    <%-- <s:file name="dataSheetPredictResponseFile" key="dataSheetPredictResponseFile"/> --%>
+    <s:reset/><s:submit id="validateSheet"/>
 </s:form>
 
 

@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
+@import "layout.css";     /* Define the layout of the page */
 @import "styleguide.css"; /* Define the basic style of the different elements */
-@import "layout.css"; /* Define the layout of the page */
-@import "menu_red.css";/* Laout of the menu */
-@import "displaytag.css";/*  Layout of the tables */
+@import "menu_red.css";   /* Layout of the mbMenu */
+@import "table_blue.css"; /* Layout of the summary table*/

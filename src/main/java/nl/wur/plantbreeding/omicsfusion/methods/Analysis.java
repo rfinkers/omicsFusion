@@ -18,7 +18,7 @@ package nl.wur.plantbreeding.omicsfusion.methods;
 import java.util.HashMap;
 import java.util.logging.Logger;
 import nl.wur.plantbreeding.omicsfusion.utils.Constants;
-//FIXME: implement as abstract? Check manuals.
+
 //TODO: if the datasets contains not recognized NA values, we get an error that
 //      RSME is not valid for train method.
 
@@ -49,7 +49,7 @@ public class Analysis {
         if (excelSheets.get("predictor").contains("csv")) {
             rCode += "predictorSheet <- read.csv2(\""
                     + excelSheets.get("predictor")
-                    + "\", header=TRUE,sep=\";\",dec=\".\")\n";
+                    + "\", header=TRUE,sep=\",\",dec=\".\")\n";
         } else {
             rCode += "predictorSheet <- readWorksheetFromFile(\""
                     + excelSheets.get("predictor") + "\",sheet=1)\n";
@@ -59,7 +59,7 @@ public class Analysis {
         if (excelSheets.get("response").contains("csv")) {
             rCode += "responseSheet  <- read.csv2(\""
                     + excelSheets.get("response")
-                    + "\", header=TRUE,sep=\";\",dec=\".\")\n";
+                    + "\", header=TRUE,sep=\",\",dec=\".\")\n";
         } else {
             rCode += "responseSheet <- readWorksheetFromFile(\""
                     + excelSheets.get("response") + "\",sheet=1)\n";
@@ -92,7 +92,7 @@ public class Analysis {
             if (excelSheets.get("predictor").contains("csv")) {
                 rCode += "predictResponse <- read.csv2(\""
                         + excelSheets.get("predictResponse")
-                        + "\", header=TRUE,sep=\";\",dec=\".\")\n";
+                        + "\", header=TRUE,sep=\",\",dec=\".\")\n";
             } else {
                 rCode += "predictResponse <- read.xls(\""
                         + excelSheets.get("predictResponse") + "\")\n";
@@ -347,7 +347,6 @@ public class Analysis {
                 rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"pls\", metric = \"RMSE\", tuneLength = 10, trControl = innerLoop)\n";
             } else if (analysisMethod.equals("rf") || analysisMethod.equals("spls") || analysisMethod.equals("ridge")) {
                 if (Constants.MAX_NUMBER_CPU > 2) {
-                    //TODO: add ridge to
                     int workerCount = Constants.MAX_NUMBER_CPU - 1;
                     //TODO: start in the first itteration only? Then, move if statement to R level
                     //Required additional packages: foreach, iterators, codetools, Rmpi

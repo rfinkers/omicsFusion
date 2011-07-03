@@ -1,0 +1,112 @@
+/*
+    Document   : table_blue
+    Created on : Jun 23, 2011, 8:45:29 PM
+    Author     : Richard Finkers
+    Description:
+        Blue color scheme for the summary tables of omicsFusion.
+*/
+
+/*
+   Syntax recommendation http://www.w3.org/TR/REC-CSS2/
+*/
+
+.summaryTable {
+    border-right: #ccd6e0 1px solid;
+    border-top: #ccd6e0 1px solid;
+    border-left: #ccd6e0 1px solid;
+    border-bottom: #ccd6e0 1px solid;
+    font-size: small;
+}
+
+/* not significant at all (highlight 1) till significant (highlight 20) */
+.summaryTable .highlight1 {
+    background: #f3f4f8;
+}
+.summaryTable .highlight2 {
+    background: #e7eaf0;
+}
+.summaryTable .highlight3 {
+    background: #dbdfe9;
+}
+.summaryTable .highlight4 {
+    background: #ced4e1;
+}
+.summaryTable .highlight5 {
+    background: #c2cada;
+}
+.summaryTable .highlight6 {
+    background: #b6bfd2;
+}
+.summaryTable .highlight7 {
+    background: #aab4cb;
+}
+.summaryTable .highlight8 {
+    background: #9ea9c3;
+}
+.summaryTable .highlight9 {
+    background: #929fbc;
+}
+.summaryTable .highlight10 {
+    background: #8694b4;
+}
+.summaryTable .highlight11 {
+    background: #7989ad;
+}
+.summaryTable .highlight12 {
+    background: #6d7fa5;
+}
+.summaryTable .highlight13 {
+    background: #61749e;
+}
+.summaryTable .highlight14 {
+    background: #556996;
+}
+.summaryTable .highlight15 {
+    background: #495f8f;
+}
+.summaryTable .highlight16 {
+    background: #3d5487;
+}
+.summaryTable .highlight17 {
+    background: #304980;
+}
+.summaryTable .highlight18 {
+    background: #243e78;
+}
+.summaryTable .highlight19 {
+    background: #183471;
+}
+.summaryTable .highlight20 {
+    background: #183471;
+    color: white;
+}
+.summaryTable .highlight21 {
+    background: #183471;
+}
+.summaryTable .highlight {
+    background: #ffffff;
+}
+.summaryTable .tr .even {
+    background-color: #e7eaf0;
+}
+
+/* Table headers */
+.summaryTable .univariate {
+    background: #BB99FF;
+}
+
+.summaryTable .machine {
+    background: #FF0000;
+}
+
+.summaryTable .variableSelection {
+    background: #FFCC00;
+}
+
+.summaryTable .regression {
+    background: #00CC66;
+}
+
+.summaryTable .thead {
+    border: 1px;
+}

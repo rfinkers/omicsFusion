@@ -63,16 +63,19 @@ public class PredictorResponseXYScatterAction
             predictor = request.getHeader("referer");
             String[] split = predictor.split("=");
             predictor = split[1].trim();
-            if (predictor.startsWith("X.")) {
-                predictor = predictor.substring(2);
-            } else if (predictor.startsWith("X")) {//TODO: not a perfect solution!!
-                predictor = predictor.substring(1);
-            }
+//            if (predictor.startsWith("X.")) {
+//                predictor = predictor.substring(2);
+//            } else if (predictor.startsWith("X")) {//TODO: not a perfect solution!!
+//                predictor = predictor.substring(1);
+//            }
+// Logic moved to the CvsSummaryDataType.
         }
         catch (Exception e) {
             //TODO: Check
             LOG.warning("Error in parsing header: referer");
             e.printStackTrace();
+            addActionError(getText("errors.reading.predictor"));
+            return ERROR;
         }
         String sessionName =
                 (String) request.getSession().getAttribute("resultSession");
@@ -83,13 +86,11 @@ public class PredictorResponseXYScatterAction
         if (sessionName == null || response == null) {
 
             if (sessionName == null) {
-                addActionError("Your session has been expired. Please re-enter "
-                        + "your analysis ID");
+                addActionError(getText("errors.session.expired"));
                 LOG.warning("PredictorResponseXYScatterAction: SessionName was "
                         + "null!");
             } else {
-                addActionError("An error was detected in your input data. "
-                        + "Please re-enter your analysis ID");
+                addActionError(getText("errors.response.variable"));
                 LOG.warning("PredictorResponseXYScatterAction: resposne "
                         + "variable was null!");
             }
@@ -103,28 +104,25 @@ public class PredictorResponseXYScatterAction
             xyDataset = getDataSet(predictor, sessionName);
         }
         catch (InvalidFormatException invalidFormatException) {
-            addActionError("You have used an undocumented input format for "
-                    + "your omicsFusion run (likely a cvs file). We currently "
-                    + "do not support viewing the XY scatter for this format!");
+            addActionError(getText("errors.xyscatter.data"));
             LOG.log(Level.INFO, "XYScatter, invalid format: {0}",
                     invalidFormatException.getMessage());
         }
         catch (FileNotFoundException e) {
-            addActionError("File not found");
+            addActionError(getText("errors.file.not.found"));
         }
         catch (DataSheetValidationException e) {
-            addActionError("response variable not found in the "
-                    + "orgiginal sheet");
+            addActionError(getText("errors.resonse.not.found"));
         }
         catch (Exception e) {
-            addActionError("Exception occured.");
+            addActionError(getText("errors.general.exception"));
             //This one will be catched when no valid input format is available.
             //Due to the forward, the exception message gets lost?
             if (e.getMessage() != null) {
                 LOG.log(Level.WARNING, "Exception: {0}", e.toString());
                 e.printStackTrace();
-            }else{
-                LOG.warning("Exception occured.");
+            } else {
+                LOG.warning("Exception occurred.");
                 e.printStackTrace();
             }
         }
@@ -132,12 +130,14 @@ public class PredictorResponseXYScatterAction
         LOG.info("got data");
 
         //X (predictor) and Y axis (response)
-        ValueAxis yAxis = new NumberAxis("Response: " + response);
-        ValueAxis xAxis = new NumberAxis("Predictor: " + predictor);
+        ValueAxis yAxis = new NumberAxis(getText("response.text") + ": "
+                + response);
+        ValueAxis xAxis = new NumberAxis(getText("predictor.text") + ": "
+                + predictor);
         xAxis.setAutoRange(true);
 
         //TODO: imagemap
-        //TODO: regression line?
+
 
         //Renderer
         DefaultXYItemRenderer renderer = new DefaultXYItemRenderer();

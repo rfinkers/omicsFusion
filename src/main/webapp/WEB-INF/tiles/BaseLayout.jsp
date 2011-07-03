@@ -13,9 +13,12 @@
         <link rel="icon" type="image/x-icon" href="<s:url value="/favicon.ico"/>" />
         <link rel="shortcut icon" type="image/x-icon" href="<s:url value="/favicon.ico"/>" />
 
+        <!-- RDF description -->
+        <link rel="meta" type="application/rdf+xml" title="FOAF" href="<s:url value="/OmicsFusion.rdf" />"/>
+
         <!-- meta information -->
-        <meta name="keywords" content="EU-SOL, CBSG, Wageningen UR Plantbreeding, tomato, potato" />
-        <meta name="description" content="Research &amp; education for the EU-SOL project of the expertise group Wageningen UR Plant Breeding." />
+        <meta name="keywords" content="omicsFusion, Wageningen UR Plantbreeding, tomato, potato, lasso, ridge, pls, spls, univariate, anova, random forrest" />
+        <meta name="description" content="Research &amp; education tools from Wageningen UR Plant Breeding." />
         <meta name="reply-to" content="webmaster.plantbreeding@wur.nl" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
@@ -24,9 +27,8 @@
 
         <!-- taglib auto generated -->
         <s:head/>
-        <sj:head jqueryui="true"/>
-
-        <!-- javascript. jQuery/ jQueryUI libraries are loaded via an alternative tag instead of script element. -->
+        <!-- javascript. jQuery/ jQueryUI libraries are loaded this tag instead of the script element. -->
+        <sj:head jqueryui="true" loadAtOnce="true" jquerytheme="cupertino" />
         <!-- other -->
         <script type="text/javascript" src="<s:url value="/js/jquery.blockUI.2.31.js"/>"></script>
         <script type="text/javascript" src="<s:url value="/js/jquery.breeDB.0.1.js"/>"></script>
@@ -45,39 +47,41 @@
                 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
             })();
         </script>
+        <!-- custom scripts for individual pages -->
+        <tiles:insertAttribute name="scripts" />
     </head>
     <body>
-        <s:div id="canvas">
+        <sj:div id="canvas">
             <!-- start of the header-->
-            <s:div id="header">
+            <sj:div id="header">
                 <tiles:insertAttribute name="header" />
-            </s:div>
+            </sj:div>
             <!-- end of the header-->
-            <s:div id="contentcontainer" cssClass="homepage">
-                <s:div id="maincontent">
-                    <s:div id="pagecontainer">
+            <sj:div id="contentcontainer" cssClass="homepage">
+                <sj:div id="maincontent">
+                    <sj:div id="pagecontainer">
                         <!-- start of the navigation menu -->
-                        <s:div id="context">
+                        <sj:div id="context">
                             <tiles:insertAttribute name="menu" />
-                        </s:div>
+                        </sj:div>
                         <!-- end of the navigation menu -->
                         <!-- start of the page bdy -->
-                        <s:div id="content">
+                        <sj:div id="content">
                             <tiles:insertAttribute name="body" />
-                        </s:div>
+                        </sj:div>
                         <!-- end of the body -->
-                    </s:div>
+                    </sj:div>
                     <!--  end pagecontainer -->
-                </s:div>
+                </sj:div>
                 <!--  end maincontent -->
-            </s:div>
+            </sj:div>
             <!--  end contentcontainer -->
             <!-- start of the footer -->
-            <s:div id ="footer">
+            <sj:div id ="footer">
                 <tiles:insertAttribute name="footer" />
-            </s:div>
+            </sj:div>
             <!-- end of the footer -->
-        </s:div>
+        </sj:div>
         <!-- End canvas -->
     </body>
 </html>

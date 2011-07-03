@@ -1,8 +1,8 @@
-body{
+/*body{
   font-family:"Lucida Sans Unicode","Lucida Grande",Helvetica,Arial,sans-serif;
   font-size:14px;
   color:gray;
-}
+}*/
 .mbmenu{
   display:none;
 }
@@ -25,7 +25,7 @@ body{
 }
 
 .rootVoices td.rootVoice.selected{
-	background: orangered url("../images/bgnd_sel_4.png");
+	background: orangered url("../images/menu/bgnd_sel_4.png");
 	padding:8px;
 	color:#ffffff;
 	cursor: pointer;
@@ -96,7 +96,7 @@ body{
 	background-color:#B23305;
 	font-family:Arial,Helvetica,sans-serif;
 	font-size:14px;
-/*border-bottom:1px solid black;*/
+border-bottom:1px solid black;
 }
 .menuContainer.disabled .line.title {
   background-color: #f9f9f9;
@@ -147,24 +147,24 @@ body{
 }
 .menuContainer .selected td{
 	background-color:#f3f3f3;
-	background-image:url("../images/bgnd_sel_2.jpg")
+	background-image:url("../images/menu/bgnd_sel_2.jpg")
 }
 .menuContainer .selected td a{
 	color:#000;
   text-shadow:#fff 2px 2px 1px;
-  display:block;  
+  display:block;
 }
 .menuContainer .disabled td, .menuContainer .disabled td a {
   color:#bbb;
   text-shadow:#fff 1px 1px 4px;
 }
 .menuContainer .subMenuOpener{
-	background-image:url("../images/menuArrow.gif");
+	background-image:url("../images/menu/menuArrow.gif");
 	background-repeat:no-repeat;
 	background-position:right;
 }
 .menuContainer .selected .subMenuOpener{
-	background-image:url("../images/menuArrow.gif");
+	background-image:url("../images/menu/menuArrow.gif");
 	background-repeat:no-repeat;
 	background-position:right;
 }
@@ -174,7 +174,7 @@ body{
 .boxMenu{
   color:#f3f3f3;
   border-top:8px solid #B23305;
-  background:url("../images/box_top.png") repeat-x;
+  background:url("../images/menu/box_top.png") repeat-x;
 }
 .boxMenu h4{
   white-space:nowrap;
@@ -224,7 +224,7 @@ body{
 .boxMenu a:hover{
   color:#000;
   text-shadow:#fff 2px 2px 1px;
-  background-image:url("../images/bgnd_sel_2.jpg");
+  background-image:url("../images/menu/bgnd_sel_2.jpg");
   -moz-box-shadow:#666 2px 2px 4px;
   -webkit-box-shadow:#666 2px 2px 4px;
 }
@@ -232,4 +232,3 @@ body{
 .boxMenu a img{
   border:0;
 }
- 
