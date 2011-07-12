@@ -526,16 +526,17 @@ public class RetrieveResultsSummaryAction
                     count++;
                 }
             }
-            //We do not want to use the univariate for the overal rank.
-            //The BH corrected rank is sufficient.
-//            if (methResults.get("univariate_p") != null) {
-//                sumRank += univariate_p.get(i).getRank();
-//                count++;
-//            }
-            if (methResults.get("univariate_bh") != null) {
-                sumRank += univariate_bh.get(i).getRank();
+            //We only want to use the univariate for the overal rank.
+            //The BH corrected rank looses part of the ranking as gives the same
+            //rank to variables which have different ranks within univariate.
+            if (methResults.get("univariate_p") != null) {
+                sumRank += univariate_p.get(i).getRank();
                 count++;
             }
+//            if (methResults.get("univariate_bh") != null) {
+//                sumRank += univariate_bh.get(i).getRank();
+//                count++;
+//            }
             rank[i][0] = i;
             rank[i][1] = sumRank / count;
         }
