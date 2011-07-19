@@ -52,14 +52,16 @@ public class CmdExec {
             //TODO: replace email with email user?
             //TODO: add this to the if test above? 
             //Alternatively, modify the submission script
+            //submission script would allow -cwd option?
             if (Constants.MAX_NUMBER_CPU > 2) {
                 p = Runtime.getRuntime().exec(
                         "qsub -S /bin/bash -p -1023 -pe Rmpi "
                         + Constants.MAX_NUMBER_CPU + " -q " + queue
-                        + " -M richard.finkers@wur.nl -m be " + executionDir
+                        + " -M richard.finkers@wur.nl -m e " + executionDir
                         + method + ".pbs");
             } else {
-                p = Runtime.getRuntime().exec("qsub -S /bin/bash -q " + queue
+                p = Runtime.getRuntime().exec("qsub -S /bin/bash "
+                        + "-q " + queue
                         + " " + executionDir + method + ".pbs");
             }
         } else {

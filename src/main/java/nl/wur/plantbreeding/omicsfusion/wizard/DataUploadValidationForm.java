@@ -154,6 +154,8 @@ public class DataUploadValidationForm extends ActionSupport {
     @Override
     public void validate() {
         LOG.info("Start Excel form validation");
+        
+        //TODO: file size check??
 
         //Order of test is important for the order in which the errors are shown.
         if (dataSheetResponseFile == null) {//TODO: via validation.xml?

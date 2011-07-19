@@ -89,6 +89,10 @@ public class CsvSummaryDataType {
             //TODO: not a perfect solution!!
         } else if (predictorVariable.startsWith("X")) {
             this.predictorVariable = predictorVariable.substring(1);
+            //handle Col replacement here as well?
+            //or not, as Col is used later to directly access the column.
+        } else {
+            this.predictorVariable = predictorVariable;
         }
     }
 

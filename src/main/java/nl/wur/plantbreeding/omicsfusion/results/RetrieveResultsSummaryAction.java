@@ -286,7 +286,6 @@ public class RetrieveResultsSummaryAction
         row += "<td>";
         String predictorVariable = "";
         //Only add the rowname once (from the first available result set).
-        //FIXME: rename responseVariable to predictor variable?
         if (methResults.get("univariate_p") != null) {
             predictorVariable = univariate_p.get(element).getPredictorVariable();
         } else if (methResults.get("univariate_bh") != null) {
