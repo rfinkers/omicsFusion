@@ -231,23 +231,6 @@
                     </systemProperties>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>appassembler-maven-plugin</artifactId>
-                <version>1.0-alpha-2</version>
-                <executions>
-                    <execution>
-                        <id>assemble</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>assemble</goal>
-                        </goals>
-                        <configuration>
-                            <extraJvmArguments>-Dsqlite4java.library.path=lib</extraJvmArguments>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>        
         <finalName>omicsFusion</finalName>
     </build>

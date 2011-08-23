@@ -59,6 +59,7 @@ public class testExampleTest {
             instance.testCode();
         }
         catch(SQLiteException e)  {
+            e.printStackTrace();
             System.out.println("expected");
         }
 
