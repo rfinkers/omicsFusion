@@ -32,23 +32,66 @@ public class sqLiteQueries extends sqLiteHelper {
      * @throws SQLiteException
      */
     public void initializeDatabase(String directory) throws SQLiteException {
-        SQLiteConnection db = openDatbase(directory);
+        SQLiteConnection db = openDatabase(directory);
 
-        SQLiteStatement st = db.prepare("CREATE TABLE user ()");
+        //table user
+        SQLiteStatement st = db.prepare("CREATE TABLE user ("
+                + "user_name VARCHAR(75) PRIMARY KEY ASC, "
+                + "email VARCHAR(75), affiliation VARCHAR(75), "
+                + "country VARCHAR(75), "
+                + "run_complete BOOLEAN, "
+                + "date_created DATE, "
+                + "last_update TIMESTAMP)");
         st.step();
         st.dispose();
-        //table user
+
+        SQLiteStatement cf = db.prepare("CREATE TABLE file_names ("
+                + "predictor_name VARCHAR(75), "
+                + "response_name VARCHAR(75), "
+                + "predict_response_name VARCHAR(75), "
+                + "response_type VARCHAR(75), "
+                + "predict_type VARCHAR(75))");
+        cf.step();
+        cf.dispose();
+
         //table data
+        SQLiteStatement cp = db.prepare("CREATE TABLE predictor ("
+                + "variable_name VARCHAR(75), "
+                + "genotype_name VARCHAR(75), "
+                + "observation FLOAT(10,5))");
+        cp.step();
+        cp.dispose();
+
+        SQLiteStatement cr = db.prepare("CREATE TABLE response  ("
+                + "variable_name VARCHAR(75), "
+                + "genotype_name VARCHAR(75), "
+                + "observation FLOAT(10,5))");
+        cr.step();
+        cr.dispose();
+
         //table methods
+        SQLiteStatement cm = db.prepare("CREATE TABLE methods ("
+                + "method_name VARCHAR(75), "
+                + "completed BOOLEAN)");
+        cm.step();
+        cm.dispose();
+
         //table results
+        SQLiteStatement cs = db.prepare("CREATE TABLE results ("
+                + "method_name VARCHAR(75), "
+                + "value FLOAT(10,5))");
+        cs.step();
+        cs.dispose();
 
         closeDatabase();
     }
 
     public void addUser(String directory, UserList userList) throws SQLiteException {
-        SQLiteConnection db = openDatbase(directory);
-        SQLiteStatement st = db.prepare("INSERT INTO user ()");
+        SQLiteConnection db = openDatabase(directory);
+        SQLiteStatement st = db.prepare("INSERT INTO user "
+                + "(user_name, email) values (?,?)");
         st.bind(1, userList.getUserName());
+        st.bind(2, userList.getEmail());
         st.step();
         st.dispose();
         closeDatabase();
@@ -68,11 +111,7 @@ public class sqLiteQueries extends sqLiteHelper {
         //update methdods with SGE run ID.
     }
 
-    public void readSgeJobStatus(String directory){
+    public void readSgeJobStatus(String directory) {
         //if not all completed, check status from SGE.
     }
-
-    
-
-
 }

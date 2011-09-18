@@ -28,13 +28,29 @@ public class sqLiteHelper {
     /** SQLite db */
     private SQLiteConnection db;
 
-    public SQLiteConnection openDatbase(String directory) throws SQLiteException {
-        db = new SQLiteConnection(new File("/tmp/database"));
+    /**
+     * Open an sqlite database. The database will be created if it does not 
+     * exist.
+     * @param directory directory and name of the database to be opened.
+     * @return Connection tot the database.
+     * @throws SQLiteException 
+     */
+    protected SQLiteConnection openDatabase(String directory)
+            throws SQLiteException {
+        if (directory == null) {
+            directory = "/tmp/database";
+        }
+        db = new SQLiteConnection(new File(directory));
         db.open(true);
         return db;
     }
 
-    public void closeDatabase(){
-        db.dispose();
+    /**
+     * Close the current database connection.
+     */
+    protected void closeDatabase() {
+        if (db.isOpen()) {
+            db.dispose();
+        }
     }
 }

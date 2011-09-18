@@ -1,0 +1,137 @@
+/*
+ * Copyright 2011 omicstools.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package nl.wur.plantbreeding.logic.sqlite4java;
+
+import java.io.File;
+import java.util.Date;
+import nl.wur.plantbreeding.omicsfusion.entities.UserList;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
+import org.junit.Test;
+import static org.junit.Assert.*;
+
+/**
+ *
+ * @author finke002
+ */
+public class sqLiteQueriesTest {
+    String directory;
+    
+    public sqLiteQueriesTest() {
+    }
+
+    @BeforeClass
+    public static void setUpClass() throws Exception {
+        File tempFile = new File("/tmp/database");
+        tempFile.delete();        
+    }
+
+    @AfterClass
+    public static void tearDownClass() throws Exception {
+    }
+    
+    @Before
+    public void setUp() {
+        directory = "/tmp/database";
+    }
+    
+    @After
+    public void tearDown() {
+    }
+
+    /**
+     * Test of initializeDatabase method, of class sqLiteQueries.
+     */
+    @Test
+    public void testInitializeDatabase() throws Exception {
+        System.out.println("initializeDatabase");
+        
+        sqLiteQueries instance = new sqLiteQueries();
+        instance.initializeDatabase(directory);
+
+    }
+
+    /**
+     * Test of addUser method, of class sqLiteQueries.
+     */
+    @Test
+    public void testAddUser() throws Exception {
+        System.out.println("addUser");
+        UserList userList = new UserList(1, "finke002", "test@test.nl", 
+                new Date(), new Date());
+        sqLiteQueries instance = new sqLiteQueries();
+        instance.addUser(directory, userList);
+    }
+
+    /**
+     * Test of uploadData method, of class sqLiteQueries.
+     */
+    @Test
+    @Ignore
+    public void testUploadData() {
+        System.out.println("uploadData");
+        String directory = "";
+        sqLiteQueries instance = new sqLiteQueries();
+        instance.uploadData(directory);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of addMethods method, of class sqLiteQueries.
+     */
+    @Test
+    @Ignore
+    public void testAddMethods() {
+        System.out.println("addMethods");
+        String directory = "";
+        sqLiteQueries instance = new sqLiteQueries();
+        instance.addMethods(directory);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of addSgeId method, of class sqLiteQueries.
+     */
+    @Test
+    @Ignore
+    public void testAddSgeId() {
+        System.out.println("addSgeId");
+        String directory = "";
+        sqLiteQueries instance = new sqLiteQueries();
+        instance.addSgeId(directory);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of readSgeJobStatus method, of class sqLiteQueries.
+     */
+    @Test
+    @Ignore
+    public void testReadSgeJobStatus() {
+        System.out.println("readSgeJobStatus");
+        String directory = "";
+        sqLiteQueries instance = new sqLiteQueries();
+        instance.readSgeJobStatus(directory);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+}
