@@ -24,7 +24,7 @@ import nl.wur.plantbreeding.omicsfusion.entities.UserList;
  *
  * @author Richard Finkers
  */
-public class sqLiteQueries extends sqLiteHelper {
+public class SqLiteQueries extends SqLiteHelper {
 
     /**
      * Initialize a new SQLite database in the specified directory.

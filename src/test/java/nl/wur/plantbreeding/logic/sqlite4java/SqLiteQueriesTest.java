@@ -30,27 +30,27 @@ import static org.junit.Assert.*;
  *
  * @author finke002
  */
-public class sqLiteQueriesTest {
+public class SqLiteQueriesTest {
     String directory;
-    
-    public sqLiteQueriesTest() {
+
+    public SqLiteQueriesTest() {
     }
 
     @BeforeClass
     public static void setUpClass() throws Exception {
         File tempFile = new File("/tmp/database");
-        tempFile.delete();        
+        tempFile.delete();
     }
 
     @AfterClass
     public static void tearDownClass() throws Exception {
     }
-    
+
     @Before
     public void setUp() {
         directory = "/tmp/database";
     }
-    
+
     @After
     public void tearDown() {
     }
@@ -61,8 +61,8 @@ public class sqLiteQueriesTest {
     @Test
     public void testInitializeDatabase() throws Exception {
         System.out.println("initializeDatabase");
-        
-        sqLiteQueries instance = new sqLiteQueries();
+
+        SqLiteQueries instance = new SqLiteQueries();
         instance.initializeDatabase(directory);
 
     }
@@ -73,9 +73,9 @@ public class sqLiteQueriesTest {
     @Test
     public void testAddUser() throws Exception {
         System.out.println("addUser");
-        UserList userList = new UserList(1, "finke002", "test@test.nl", 
+        UserList userList = new UserList(1, "finke002", "test@test.nl",
                 new Date(), new Date());
-        sqLiteQueries instance = new sqLiteQueries();
+        SqLiteQueries instance = new SqLiteQueries();
         instance.addUser(directory, userList);
     }
 
@@ -87,7 +87,7 @@ public class sqLiteQueriesTest {
     public void testUploadData() {
         System.out.println("uploadData");
         String directory = "";
-        sqLiteQueries instance = new sqLiteQueries();
+        SqLiteQueries instance = new SqLiteQueries();
         instance.uploadData(directory);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
@@ -101,7 +101,7 @@ public class sqLiteQueriesTest {
     public void testAddMethods() {
         System.out.println("addMethods");
         String directory = "";
-        sqLiteQueries instance = new sqLiteQueries();
+        SqLiteQueries instance = new SqLiteQueries();
         instance.addMethods(directory);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
@@ -115,7 +115,7 @@ public class sqLiteQueriesTest {
     public void testAddSgeId() {
         System.out.println("addSgeId");
         String directory = "";
-        sqLiteQueries instance = new sqLiteQueries();
+        SqLiteQueries instance = new SqLiteQueries();
         instance.addSgeId(directory);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
@@ -129,7 +129,7 @@ public class sqLiteQueriesTest {
     public void testReadSgeJobStatus() {
         System.out.println("readSgeJobStatus");
         String directory = "";
-        sqLiteQueries instance = new sqLiteQueries();
+        SqLiteQueries instance = new SqLiteQueries();
         instance.readSgeJobStatus(directory);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
