@@ -38,7 +38,7 @@ public class SqLiteQueriesTest {
 
     @BeforeClass
     public static void setUpClass() throws Exception {
-        File tempFile = new File("/tmp/database");
+        File tempFile = new File("/tmp/omicsFusion.db");
         tempFile.delete();
     }
 
@@ -48,7 +48,7 @@ public class SqLiteQueriesTest {
 
     @Before
     public void setUp() {
-        directory = "/tmp/database";
+        directory = "/tmp/";
     }
 
     @After
