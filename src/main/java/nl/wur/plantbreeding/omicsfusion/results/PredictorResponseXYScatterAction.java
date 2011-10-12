@@ -28,6 +28,7 @@ import nl.wur.plantbreeding.logic.jfreechart.GenotypeXYUrlGenerator;
 import nl.wur.plantbreeding.omicsfusion.excel.DataSheetValidationException;
 import nl.wur.plantbreeding.omicsfusion.excel.ReadExcelSheet;
 import nl.wur.plantbreeding.omicsfusion.utils.ReadFile;
+import nl.wur.plantbreeding.omicsfusion.utils.ServletUtils;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.struts2.interceptor.ServletRequestAware;
 import org.jfree.chart.JFreeChart;
@@ -212,7 +213,7 @@ public class PredictorResponseXYScatterAction
         String fileNames[] = null;
 
         try {
-            fileNames = rf.ReadSheetFileNames(getResultsDir() + sessionID
+            fileNames = rf.ReadSheetFileNames(ServletUtils.getResultsDir(request)
                     + "/filenames.txt");
             //currently only valid for excel sheets as input. Otherwise throw error.
         }
@@ -223,9 +224,9 @@ public class PredictorResponseXYScatterAction
         }
 
         //Read the names of the predictor and response file
-        String responseFile = getResultsDir() + sessionID + "/"
+        String responseFile = ServletUtils.getResultsDir(request) + "/"
                 + fileNames[0].trim();
-        String predictorFile = getResultsDir() + sessionID + "/"
+        String predictorFile = ServletUtils.getResultsDir(request) + "/"
                 + fileNames[1].trim();
 
         File predFile = new File(predictorFile);
@@ -247,21 +248,5 @@ public class PredictorResponseXYScatterAction
     @Override
     public void setServletRequest(HttpServletRequest request) {
         this.request = request;
-    }
-
-    /**
-     * Get the temp directory from the system.
-     * @return the location of the temp directory (including slash or backslash).
-     */
-    private String getResultsDir() {
-        //String resultsDirectory = System.getProperty("java.io.tmpdir");
-        String resultsDirectory =
-                request.getSession().getServletContext().
-                getInitParameter("resultsDirectory");
-        if (!( resultsDirectory.endsWith("/")
-                || resultsDirectory.endsWith("\\") )) {
-            resultsDirectory += System.getProperty("file.separator");
-        }
-        return resultsDirectory;
     }
 }

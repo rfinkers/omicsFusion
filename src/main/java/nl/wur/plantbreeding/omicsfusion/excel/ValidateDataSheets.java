@@ -26,8 +26,8 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Workbook;
 
 /**
- * Validation if the excel sheets are valid, have the correct dimensions and 
- * that the names of the individuals are identical in the different excel 
+ * Validation if the excel sheets are valid, have the correct dimensions and
+ * that the names of the individuals are identical in the different excel
  * sheets.
  * @author Richard Finkers
  * @version 1.0
@@ -42,17 +42,17 @@ public class ValidateDataSheets extends ManipulateExcelSheet {
     /** Default constructor.
     private ValidateDataSheets() {
     }
-    
+
     /**
      * Checks if a file is a valid excel (2003/2007/2010) workbook.
      * @param responseSheet The response sheet object.
      * @param predictorSheet The predictor sheet object.
      * @throws DataSheetValidationException Excel sheet validation failed.
      * @throws InvalidFormatException Not a valid excel workbook.
-     * @throws FileNotFoundException Signals that an attempt to open the file 
+     * @throws FileNotFoundException Signals that an attempt to open the file
      * denoted by a specified pathname has failed.
-     * @throws IOException Signals that an I/O exception of some sort has 
-     * occurred. This class is the general class of exceptions produced by 
+     * @throws IOException Signals that an I/O exception of some sort has
+     * occurred. This class is the general class of exceptions produced by
      * failed or interrupted I/O operations.
      */
     public static void validateExcelSheets(File responseSheet,
@@ -90,6 +90,7 @@ public class ValidateDataSheets extends ManipulateExcelSheet {
      * Check the validate predict response excel sheet.
      */
     public static void validatePredictResponseSheet() {
+        throw new UnsupportedOperationException("Not yet implemented");
         //TODO: implement validatePredictResponseSheet
     }
 

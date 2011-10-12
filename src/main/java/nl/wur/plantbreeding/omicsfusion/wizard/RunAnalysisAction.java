@@ -35,6 +35,7 @@ import nl.wur.plantbreeding.omicsfusion.methods.SVM;
 import nl.wur.plantbreeding.omicsfusion.methods.SparsePLS;
 import nl.wur.plantbreeding.omicsfusion.methods.Univariate;
 import nl.wur.plantbreeding.omicsfusion.utils.CmdExec;
+import nl.wur.plantbreeding.omicsfusion.utils.ServletUtils;
 import nl.wur.plantbreeding.omicsfusion.utils.WriteFile;
 import org.apache.struts2.interceptor.ServletRequestAware;
 
@@ -73,8 +74,8 @@ public class RunAnalysisAction extends ActionSupport
         ArrayList<Integer> jobIds = new ArrayList<Integer>();
 
         //which methods to run?
-        //Order here is equal to the order on the SGE submission queue? 
-        //Schedule slow jobs first! Or can should this be controlled via order 
+        //Order here is equal to the order on the SGE submission queue?
+        //Schedule slow jobs first! Or can should this be controlled via order
         //in submission screen / orther ordening options / queue weight?
         //Relative timings on the CxE Flesh color /Metabolite dataset.
 
@@ -171,7 +172,7 @@ public class RunAnalysisAction extends ActionSupport
     public void writeScriptFile(String scriptName, String script)
             throws IOException {
         WriteFile wf = new WriteFile();
-        wf.WriteFile(getResultsDir() + getRequest().getSession().getId()
+        wf.WriteFile(ServletUtils.getResultsDir(request)
                 + "/" + scriptName, script);
     }
 
@@ -183,17 +184,17 @@ public class RunAnalysisAction extends ActionSupport
      */
     public int submitToSGE(String scriptName) throws IOException {
         WriteFile wf = new WriteFile();
-        wf.WriteFile(getResultsDir() + getRequest().getSession().getId()
+        wf.WriteFile(ServletUtils.getResultsDir(request)
                 + "/" + scriptName + ".pbs",
-                "#!/bin/sh\ncd " + getResultsDir()
-                + getRequest().getSession().getId() + "\nR --no-save < "
+                "#!/bin/sh\ncd " + ServletUtils.getResultsDir(request)
+                + "\nR --no-save < "
                 + scriptName + ".R\n");
         //Submit jobs to the SGE QUEUE
         int jobId = 0;
         String queue =
                 request.getSession().getServletContext().getInitParameter("SGEQueue");
-        jobId = CmdExec.ExecuteQSubCmd(getResultsDir()
-                + getRequest().getSession().getId() + "/", scriptName, queue);
+        jobId = CmdExec.ExecuteQSubCmd(ServletUtils.getResultsDir(request)
+                + "/", scriptName, queue);
 
         if (jobId == 0) {
             LOG.severe("error during submission");//TODO: implement exception? Also is thrown when a wrong queue name is selected
@@ -201,20 +202,6 @@ public class RunAnalysisAction extends ActionSupport
             LOG.log(Level.INFO, "Subitted to que with jobId: {0}", jobId);
         }
         return jobId;
-    }
-
-    /**
-     * Get the temp directory from the system.
-     * @return the location of the temp directory (including slash or backslash).
-     */
-    private String getResultsDir() {
-        //String resultsDirectory = System.getProperty("java.io.tmpdir");
-        String resultsDirectory =
-                request.getSession().getServletContext().getInitParameter("resultsDirectory");
-        if (!( resultsDirectory.endsWith("/") || resultsDirectory.endsWith("\\") )) {
-            resultsDirectory += System.getProperty("file.separator");
-        }
-        return resultsDirectory;
     }
 
     @Override

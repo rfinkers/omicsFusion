@@ -1,15 +1,18 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * To change this template, choose Tools | Templates and open the template in
+ * the editor.
  */
 package nl.wur.plantbreeding.omicsfusion.utils;
 
+import java.io.File;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import org.apache.struts2.ServletActionContext;
 
 /**
  * Generic methods to use the request / context.
+ *
  * @author Richard Finkers.
  * @version 1.0
  */
@@ -32,4 +35,35 @@ public class ServletUtils {
         return ServletActionContext.getServletContext();
     }
 
+
+    /**
+     * Get the results directory, including the current session directory, as
+     * configured in the context.
+     * @param request The current HTTP request.
+     * @return the location of the result directory
+     * (including slash or backslash).
+     */
+    public static String getResultsDir(HttpServletRequest request) {
+        return getResultsDir(request.getSession());
+    }
+
+    /**
+     * Get the results directory, including the current session directory, as
+     * configured in the context.
+     * @param session The current HTTP session.
+     * @return the location of the result directory
+     * (including slash or backslash).
+     */
+    public static String getResultsDir(HttpSession session) {
+        //String resultsDirectory = System.getProperty("java.io.tmpdir");
+        String resultsDirectory = session.getServletContext().
+                getInitParameter("resultsDirectory");
+        if (!( resultsDirectory.endsWith("/")
+                || resultsDirectory.endsWith("\\") )) {
+            resultsDirectory += System.getProperty("file.separator");
+        }
+        resultsDirectory += session.getId();
+
+        return resultsDirectory;
+    }
 }

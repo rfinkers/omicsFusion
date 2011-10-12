@@ -40,6 +40,7 @@ public class SqLiteHelper {
         if (directory == null) {
             directory = "/tmp/omicsFusion.db";
         }
+        System.out.println("Directory: " + directory);
         db = new SQLiteConnection(new File(directory + "/omicsFusion.db"));
         db.open(true);
         return db;

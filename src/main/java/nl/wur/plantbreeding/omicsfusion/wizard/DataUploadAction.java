@@ -15,17 +15,19 @@
  */
 package nl.wur.plantbreeding.omicsfusion.wizard;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.servlet.http.HttpServletRequest;
-import nl.wur.plantbreeding.omicsfusion.excel.ValidateDataSheets;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.servlet.http.HttpServletRequest;
 import nl.wur.plantbreeding.omicsfusion.email.ExceptionEmail;
 import nl.wur.plantbreeding.omicsfusion.excel.DataSheetValidationException;
+import nl.wur.plantbreeding.omicsfusion.excel.UploadDataSheets;
+import nl.wur.plantbreeding.omicsfusion.excel.ValidateDataSheets;
 import nl.wur.plantbreeding.omicsfusion.utils.Constants;
+import nl.wur.plantbreeding.omicsfusion.utils.ServletUtils;
 import nl.wur.plantbreeding.omicsfusion.utils.WriteFile;
 import org.apache.commons.io.FileUtils;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -53,27 +55,18 @@ public class DataUploadAction extends DataUploadValidationForm
         try {
 
             LOG.info("Execute upload");
-            String resultsDirectory = request.getSession().getServletContext().
-                    getInitParameter("resultsDirectory");
-            if (!( resultsDirectory.endsWith("/")
-                    || resultsDirectory.endsWith("\\") )) {
-                resultsDirectory += System.getProperty("file.separator");
-            }
 
             //Check if the sheet is excel or csv. Set the name accordingly
-            File responseSheet = new File(resultsDirectory
-                    + request.getSession().getId()
+            File responseSheet = new File(ServletUtils.getResultsDir(request)
                     + "/" + getDataSheetResponseFileFileName());
-            File predictorSheet = new File(resultsDirectory
-                    + request.getSession().getId()
+            File predictorSheet = new File(ServletUtils.getResultsDir(request)
                     + "/" + getDataSheetPredictorFileFileName());
             //Copy the uploaded excel sheets to a temporary directory
             FileUtils.copyFile(getDataSheetPredictorFile(), predictorSheet);
             FileUtils.copyFile(getDataSheetResponseFile(), responseSheet);
             File predictResponseSheet = null;
             if (getDataSheetPredictResponseFile() != null) {
-                predictResponseSheet = new File(resultsDirectory
-                        + request.getSession().getId()
+                predictResponseSheet = new File(ServletUtils.getResultsDir(request)
                         + "/" + getDataSheetPredictResponseFileFileName());
                 FileUtils.copyFile(getDataSheetPredictResponseFile(),
                         predictResponseSheet);
@@ -99,7 +92,11 @@ public class DataUploadAction extends DataUploadValidationForm
                 //FIXME: one of the files is csv. No validation possible
                 ValidateDataSheets.validateExcelSheets(responseSheet,
                         predictorSheet);
+
+                UploadDataSheets.uploadExcelSheets(responseSheet,
+                        getResponseType(), predictorSheet, getPredictorType());
             }
+
 
             if (predictResponseSheet != null) {
                 ValidateDataSheets.validatePredictResponseSheet();
@@ -162,23 +159,7 @@ public class DataUploadAction extends DataUploadValidationForm
         if (getDataSheetPredictResponseFileFileName() != null) {
             content += getDataSheetPredictResponseFileFileName() + "\n";
         }
-        wf.WriteFile(getResultsDir() + request.getSession().getId()
+        wf.WriteFile(ServletUtils.getResultsDir(request)
                 + "/filenames.txt", content);
-    }
-
-    /**
-     * Get the results directory configured in the context.
-     * @return the location of the result directory
-     * (including slash or backslash).
-     */
-    private String getResultsDir() {
-        //String resultsDirectory = System.getProperty("java.io.tmpdir");
-        String resultsDirectory = request.getSession().getServletContext().
-                getInitParameter("resultsDirectory");
-        if (!( resultsDirectory.endsWith("/")
-                || resultsDirectory.endsWith("\\") )) {
-            resultsDirectory += System.getProperty("file.separator");
-        }
-        return resultsDirectory;
     }
 }
