@@ -20,6 +20,10 @@ import com.almworks.sqlite4java.SQLiteException;
 import com.almworks.sqlite4java.SQLiteStatement;
 import java.io.File;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import nl.wur.plantbreeding.omicsfusion.datatypes.DataPointDataType;
 import nl.wur.plantbreeding.omicsfusion.entities.UserList;
 
 /**
@@ -43,46 +47,82 @@ public class SqLiteQueries extends SqLiteHelper {
         SQLiteConnection db = openDatabase(directory);
 
         //table user
-        SQLiteStatement st = db.prepare("CREATE TABLE user ("
-                + "user_name VARCHAR(75) PRIMARY KEY ASC, "
-                + "email VARCHAR(75), affiliation VARCHAR(75), "
-                + "country VARCHAR(75), "
-                + "run_complete BOOLEAN, "
-                + "date_created DATE, "
-                + "last_update TIMESTAMP)");
-        st.step();
-        st.dispose();
+        SQLiteStatement st = null;
+        try {
+            st = db.prepare("CREATE TABLE user ("
+                    + "user_name VARCHAR(75) PRIMARY KEY ASC, "
+                    + "email VARCHAR(75), affiliation VARCHAR(75), "
+                    + "country VARCHAR(75), "
+                    + "run_complete BOOLEAN, "
+                    + "date_created DATE, "
+                    + "last_update TIMESTAMP)");
+            st.step();
+        }
+        finally {
+            st.dispose();
+        }
 
-        SQLiteStatement cf = db.prepare("CREATE TABLE file_names ("
-                + "predictor_name VARCHAR(75), "
-                + "response_name VARCHAR(75), "
-                + "predict_response_name VARCHAR(75), "
-                + "predictor_type VARCHAR(75), "
-                + "response_type VARCHARll(75))");
-        cf.step();
-        cf.dispose();
+        SQLiteStatement cf = null;
+        try {
+            cf = db.prepare("CREATE TABLE file_names ("
+                    + "predictor_name VARCHAR(75), "
+                    + "response_name VARCHAR(75), "
+                    + "predict_response_name VARCHAR(75), "
+                    + "predictor_type VARCHAR(75), "
+                    + "response_type VARCHAR(75))");
+            cf.step();
+        }
+        finally {
+            st.dispose();
+        }
 
         //table data
+
         SQLiteStatement cp = db.prepare("CREATE TABLE predictor ("
                 + "variable_name VARCHAR(75), "
                 + "genotype_name VARCHAR(75), "
                 + "observation FLOAT(10,5))");
-        cp.step();
-        cp.dispose();
+        try {
+            cp.step();
+        }
+        finally {
+            cp.dispose();
+        }
 
         SQLiteStatement cr = db.prepare("CREATE TABLE response  ("
                 + "variable_name VARCHAR(75), "
                 + "genotype_name VARCHAR(75), "
                 + "observation FLOAT(10,5))");
-        cr.step();
-        cr.dispose();
+        try {
+            cr.step();
+        }
+        finally {
+            cr.dispose();
+        }
 
         //table methods
         SQLiteStatement cm = db.prepare("CREATE TABLE methods ("
                 + "method_name VARCHAR(75), "
-                + "completed BOOLEAN)");
-        cm.step();
-        cm.dispose();
+                + "sge_id INTEGER(7),"
+                + "completed BOOLEAN,"
+                + "completed_time TIMESTAMP)");
+        try {
+            cm.step();
+        }
+        finally {
+            cm.dispose();
+        }
+
+        //table ontologies
+        SQLiteStatement cn = db.prepare("CREATE TABLE ontology ("
+                + "variable_name VARCHAR(75), "
+                + "ontology_id VARCHAR(75))");
+        try {
+            cn.step();
+        }
+        finally {
+            cn.dispose();
+        }
 
         //table results
         SQLiteStatement cs = db.prepare("CREATE TABLE results ("
@@ -149,15 +189,115 @@ public class SqLiteQueries extends SqLiteHelper {
         closeDatabase();
     }
 
-    public void addMethods(String directory) {
+    public void addFileInfo(String directory, HashMap<String, String> file)
+            throws SQLiteException {
         //add list of methods to the database
+        SQLiteConnection db = openDatabase(directory);
+        SQLiteStatement stm = db.prepare("INSERT INTO file_names "
+                + "(predictor_name, response_name, predict_response_name, "
+                + "predictor_type, response_type) "
+                + "values (?,?,?,?,?)");
+
+        stm.step();
+        stm.dispose();
+        closeDatabase();
     }
 
-    public void addSgeId(String directory) {
+    public void loadExcelData(List<DataPointDataType> rdp,
+            List<DataPointDataType> pdp, String directory)
+            throws SQLiteException {
+        SQLiteConnection db = openDatabase(directory);
+
+        db.exec("BEGIN");
+        for (DataPointDataType dataPointDataType : pdp) {
+            SQLiteStatement pred = db.prepare("INSERT INTO predictor "
+                    + "(genotype_name, variable_name, observation) "
+                    + "values (?,?,?)");
+            try {
+                pred.bind(1, dataPointDataType.getGenotypeName());
+                pred.bind(2, dataPointDataType.getTraitName());
+                pred.bind(3, dataPointDataType.getObservation());
+                pred.step();
+            }
+            finally {
+                pred.dispose();
+            }
+        }
+
+        db.exec("COMMIT");
+        db.exec("BEGIN");
+        for (DataPointDataType dataPointDataType : rdp) {
+            SQLiteStatement resp = db.prepare("INSERT INTO response "
+                    + "(genotype_name, variable_name, observation) "
+                    + "values (?,?,?)");
+            try {
+                resp.bind(1, dataPointDataType.getGenotypeName());
+                resp.bind(2, dataPointDataType.getTraitName());
+                resp.bind(3, dataPointDataType.getObservation());
+                resp.step();
+            }
+            finally {
+                resp.dispose();
+            }
+
+        }
+        db.exec("COMMIT");
+        closeDatabase();
+
+    }
+
+    public void addMethods(String directory, List<String> methods)
+            throws SQLiteException {
+        //add list of methods to the database
+        SQLiteConnection db = openDatabase(directory);
+
+        for (String method : methods) {
+            SQLiteStatement stm = db.prepare("INSERT INTO methods "
+                    + "(method_name) values (?)");
+            try {
+                stm.bind(1, method);
+                stm.step();
+            }
+            finally {
+                stm.dispose();
+            }
+        }
+        closeDatabase();
+    }
+
+    public void addSgeId(String directory,
+            HashMap<String, Integer> jobIds) throws SQLiteException {
         //update methdods with SGE run ID.
+        SQLiteConnection db = openDatabase(directory);
+
+        Iterator<String> iterator = jobIds.keySet().iterator();
+        while (iterator.hasNext()) {
+            SQLiteStatement stm = db.prepare("UPDATE methods "
+                    + "SET sge_id = ? "
+                    + "WHERE method_name = ? ");
+            try {
+                String method = iterator.next();
+                if (!"sessionInfo".equals(method)) {
+                    stm.bind(1, jobIds.get(method));
+                    stm.bind(2, method);
+                    stm.step();
+                }
+            }
+            finally {
+                stm.dispose();
+            }
+        }
+        closeDatabase();
     }
 
-    public void readSgeJobStatus(String directory) {
+    public void readSgeJobStatus(String directory) throws SQLiteException {
         //if not all completed, check status from SGE.
+        SQLiteConnection db = openDatabase(directory);
+        SQLiteStatement stm = db.prepare("INSERT INTO predictor "
+                + "(genotype_name, variable_name, observation) "
+                + "values (?,?,?)");
+        stm.step();
+        stm.dispose();
+        closeDatabase();
     }
 }

@@ -213,6 +213,13 @@
                                     <overWrite>true</overWrite>
 <!--                                    WebApp -->
                                     <outputDirectory>${project.build.directory}/omicsFusion/WEB-INF/lib</outputDirectory>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>com.almworks.sqlite4java</groupId>
+                                    <artifactId>libsqlite4java-linux-amd64</artifactId>
+                                    <version>${sqlite4java.version}</version>
+                                    <type>so</type>
+                                    <overWrite>true</overWrite>
 <!--                                    JUnit tests -->
                                     <outputDirectory>${project.build.directory}/lib</outputDirectory>
                                 </artifactItem>

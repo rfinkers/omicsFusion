@@ -102,7 +102,7 @@ public class SqLiteQueriesTest {
         System.out.println("addMethods");
         String directory = "";
         SqLiteQueries instance = new SqLiteQueries();
-        instance.addMethods(directory);
+        //instance.addMethods(directory);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
@@ -116,7 +116,7 @@ public class SqLiteQueriesTest {
         System.out.println("addSgeId");
         String directory = "";
         SqLiteQueries instance = new SqLiteQueries();
-        instance.addSgeId(directory);
+        //instance.addSgeId(directory);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
@@ -130,7 +130,7 @@ public class SqLiteQueriesTest {
         System.out.println("readSgeJobStatus");
         String directory = "";
         SqLiteQueries instance = new SqLiteQueries();
-        instance.readSgeJobStatus(directory);
+        //instance.readSgeJobStatus(directory);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }

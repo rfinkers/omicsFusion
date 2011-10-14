@@ -1,17 +1,17 @@
 /*
  * Copyright 2011 omicstools.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package nl.wur.plantbreeding.omicsfusion.wizard;
 
@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import nl.wur.plantbreeding.omicsfusion.email.ExceptionEmail;
 import nl.wur.plantbreeding.omicsfusion.excel.DataSheetValidationException;
-import nl.wur.plantbreeding.omicsfusion.excel.UploadDataSheets;
+import static nl.wur.plantbreeding.omicsfusion.excel.UploadDataSheets.uploadExcelSheets;
 import nl.wur.plantbreeding.omicsfusion.excel.ValidateDataSheets;
 import nl.wur.plantbreeding.omicsfusion.utils.Constants;
 import nl.wur.plantbreeding.omicsfusion.utils.ServletUtils;
@@ -44,10 +44,14 @@ public class DataUploadAction extends DataUploadValidationForm
         implements ServletRequestAware {
 
     private static final long serialVersionUID = 170610L;
-    /** The logger. */
+    /**
+     * The logger.
+     */
     private static final Logger LOG =
             Logger.getLogger(DataUploadAction.class.getName());
-    /** the request. */
+    /**
+     * the request.
+     */
     private HttpServletRequest request;
 
     @Override
@@ -93,8 +97,16 @@ public class DataUploadAction extends DataUploadValidationForm
                 ValidateDataSheets.validateExcelSheets(responseSheet,
                         predictorSheet);
 
-                UploadDataSheets.uploadExcelSheets(responseSheet,
-                        getResponseType(), predictorSheet, getPredictorType());
+                try {
+                    uploadExcelSheets(responseSheet,
+                            getResponseType(), predictorSheet, getPredictorType(), ServletUtils.getResultsDir(request));
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                    addActionError(e.getMessage());
+                    LOG.info("Excel to Database");
+                    return INPUT;
+                }
             }
 
 

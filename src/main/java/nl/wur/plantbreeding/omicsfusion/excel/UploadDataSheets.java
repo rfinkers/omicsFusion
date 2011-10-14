@@ -15,11 +15,15 @@
  */
 package nl.wur.plantbreeding.omicsfusion.excel;
 
+import com.almworks.sqlite4java.SQLiteException;
 import java.io.File;
 import java.io.IOException;
-import java.sql.Time;
-import java.util.Timer;
+import java.util.ArrayList;
+import java.util.List;
+import nl.wur.plantbreeding.logic.sqlite4java.SqLiteQueries;
+import nl.wur.plantbreeding.omicsfusion.datatypes.DataPointDataType;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -35,7 +39,9 @@ import org.apache.poi.ss.usermodel.Workbook;
 public class UploadDataSheets extends ManipulateExcelSheet {
 
     public static void uploadExcelSheets(File responseExcelFile,
-            String responseType, File predictorExcelFile, String predictorType) {
+            String responseType, File predictorExcelFile, String predictorType,
+            String directory) throws SQLiteException {
+        //TODO: refractor to methods!
 
         /**
          * wb for the response variables.
@@ -52,39 +58,90 @@ public class UploadDataSheets extends ManipulateExcelSheet {
             predictorWorkbook = loadExcelSheet(predictorExcelFile);
         }
         catch (IOException iOException) {
+            System.out.println("IO");
         }
         catch (InvalidFormatException invalidFormatException) {
+            System.out.println("Format");
         }
+
+        List<DataPointDataType> rdp = null;
+        int predictorRowCounter = 0;
+        Sheet predictorSheet = null;
 
         //First row contains the variable
         Sheet responseSheet = responseWorkbook.getSheetAt(0);
-        Sheet predictorSheet = predictorWorkbook.getSheetAt(0);
+        predictorSheet = predictorWorkbook.getSheetAt(0);
         Row responseHeaderRow = responseSheet.getRow(0);
+        int responseRowLenght = responseHeaderRow.getLastCellNum();
         Row predictorHeaderRow = predictorSheet.getRow(0);
+        int predictorRowLength = predictorHeaderRow.getLastCellNum();
         //Second row can contain the ontology ID (idetified with column name)
         String ontologyID = "ontology";
         int responseRowCounter = 1;
-        int predictorRowCounter = 1;
+        predictorRowCounter = 1;
         if (responseSheet.getRow(responseRowCounter).getCell(0).
                 getRichStringCellValue().getString().equals(ontologyID)) {
             responseRowCounter++;
             //parse row to db
+
+            //variable, ontologyID
         }
         if (predictorSheet.getRow(predictorRowCounter).getCell(0).
                 getRichStringCellValue().getString().equals(ontologyID)) {
             predictorRowCounter++;
             //parse row to DB
+
+            //variable, ontologyID
         }
         //Data (first column genotype, other columns data).
         //parse the rest of the data.
+        rdp = new ArrayList<DataPointDataType>();
         for (int i = responseRowCounter;
                 i < responseSheet.getLastRowNum(); i++) {
+
+            String header;
+            Double value;
+            String genotype = responseSheet.getRow(i).getCell(0).getStringCellValue();
+            for (int j = 1; j < responseRowLenght; j++) {
+                header = responseHeaderRow.getCell(j).getStringCellValue();
+                if (responseSheet.getRow(i).getCell(j).getCellType()
+                        == Cell.CELL_TYPE_NUMERIC) {
+                    try {
+                        value = responseSheet.getRow(i).getCell(j).getNumericCellValue();
+                    }
+                    catch (Exception e) {
+                        value = Double.NaN;
+                    }
+                } else {
+                    value = Double.NaN;
+                }
+                rdp.add(new DataPointDataType(genotype, header, value));
+            }
         }
 
+        List<DataPointDataType> pdp = new ArrayList<DataPointDataType>();
         for (int i = predictorRowCounter;
                 i < predictorSheet.getLastRowNum(); i++) {
+            String header;
+            Double value;
+            String genotype = predictorSheet.getRow(i).getCell(0).getStringCellValue();
+            for (int j = 1; j < predictorRowLength; j++) {
+                header = predictorHeaderRow.getCell(j).getStringCellValue();
+                if (predictorSheet.getRow(i).getCell(j).getCellType() == Cell.CELL_TYPE_NUMERIC) {
+                    try {
+                        value = predictorSheet.getRow(i).getCell(j).getNumericCellValue();
+                    }
+                    catch (Exception e) {
+                        value = Double.NaN;
+                    }
+                } else {
+                    value = Double.NaN;
+                }
+                pdp.add(new DataPointDataType(genotype, header, value));
+            }
         }
 
-        throw new UnsupportedOperationException("Not yet implemented");
+        SqLiteQueries sql = new SqLiteQueries();
+        sql.loadExcelData(rdp, pdp, directory);
     }
 }
