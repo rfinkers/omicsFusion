@@ -18,13 +18,8 @@ package nl.wur.plantbreeding.logic.sqlite4java;
 import java.io.File;
 import java.util.Date;
 import nl.wur.plantbreeding.omicsfusion.entities.UserList;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
+import org.junit.*;
 
 /**
  *
@@ -86,7 +81,6 @@ public class SqLiteQueriesTest {
     @Ignore
     public void testUploadData() {
         System.out.println("uploadData");
-        String directory = "";
         SqLiteQueries instance = new SqLiteQueries();
         //instance.uploadData(directory);
         // TODO review the generated test code and remove the default call to fail.

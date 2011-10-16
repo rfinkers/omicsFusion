@@ -85,7 +85,11 @@ public class UserDetailsAction extends UserDetailsValidationForm
                     request.getSession()), user);
         }
         catch (SQLiteException sQLiteException) {
-            System.out.println("SQLite Exception");
+            LOG.log(Level.SEVERE, "Exception: {0}",
+                    sQLiteException.getMessage());
+            addActionError("SQLite exception: " + sQLiteException.getMessage());
+            /**FIXME: this error gets thrown when the "omicsFusion" data dir 
+            does not exists. We have tho handle that differently.*/
             sQLiteException.printStackTrace();
             return ERROR;
         }

@@ -1,17 +1,17 @@
 /*
  * Copyright 2011 omicstools.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package nl.wur.plantbreeding.omicsfusion.methods;
 
@@ -21,17 +21,20 @@ import nl.wur.plantbreeding.omicsfusion.utils.Constants;
 
 //TODO: if the datasets contains not recognized NA values, we get an error that
 //      RSME is not valid for train method.
-
 /**
  * Generic Analysis class for the omicsFusion pipeline. Each method needs to
  * implement its own specification, but might inherit code from this class.
+ *
  * @author Richard Finkers
  * @version 1.0
  */
 public class Analysis {
 
-    /** A logger. */
-    private static final Logger LOG = Logger.getLogger(Analysis.class.getName());
+    /**
+     * A logger.
+     */
+    private static final Logger LOG =
+            Logger.getLogger(Analysis.class.getName());
 
     Analysis() {
     }
@@ -68,14 +71,58 @@ public class Analysis {
         }
         //Concatenate the final dataSet, containing 1 response and a predictor
         //matrix. The rownames are set acoording to the sample names
-        rCode += "dataSet=cbind(responseSheet[2],predictorSheet[-1])\n";
+        rCode += "dataSet=cbind(responseSheet[2],predictorSheet[-1])\n\n";
         //FIXME: set rownames
         //rCode += "rownames(dataSet) <- responseSheet[1]\n";
+        return rCode;
+    }
+
+    /**
+    * Read data from the SQLite database.
+    * @return R program code.
+    */
+    protected String loadPredictorAndResponseDataSheets() {
+        String rCode = "# Load the PredictResponse data sheet from the "
+                + "SQLite database.\n";
+        rCode += "con <- dbConnect(\"SQLite\", dbname = \"omicsFusion.db\")\n";
+        rCode += "predQuery <- dbSendQuery(con, \"SELECT genotype_name, "
+                + "variable_name, observation FROM predictor\")\n";
+        rCode += "predData <- fetch(predQuery, n = -1)\n";
+        rCode += "dbClearResult(predQuery)\n";
+        rCode += "respQuery <- dbSendQuery(con, \"SELECT genotype_name, "
+                + "variable_name, observation FROM response\")\n";
+        rCode += "respData <- fetch(respQuery, n = -1)\n";
+        rCode += "dbClearResult(respQuery)\n";
+        //Convert to matrix
+        rCode += "respMatrix <- tapply(respData[,3],respData[,c(1,2)],c)\n";
+        rCode += "predMatrix <- tapply(predData[,3],predData[,c(1,2)],c)\n";
+        //Prepare the dataset object (is same object as reading from excel).
+        //We need a data frame instead of an matrix. Why?
+        rCode += "dataSet=as.data.frame(cbind(respMartix,predMatrix))\n\n";
+        return rCode;
+    }
+
+    /**
+    * Handle missing data via omit or imputation. This method should correct for
+    * each analysis. Missing data in the response matrix might differ for each 
+    * run.
+    * @return R program code.
+    */
+    protected String handleMissingData() {
+        String rCode = "# Missing data\n";
         //TODO: better na.omit strategies. Imputation? Added in addition to the
         //script of Animesh.
         //option: replace NA with column mean.
         rCode += "dataSet=na.omit(dataSet)\n\n";
         return rCode;
+    }
+
+    /**
+     * Write the current R session to disk.
+     * @return R program code.
+     */
+    protected String writeRImage() {
+        return "save.image(file=\"test.RData\")\n\n";
     }
 
     /**
@@ -140,9 +187,11 @@ public class Analysis {
         for (int i = 0; i < Constants.NUMBER_FOLDS_OUTER; i++) {
             int j = i + 1;//R object contains 1-10 instead of 0-9!
             if (j < 10 && Constants.NUMBER_FOLDS_OUTER > 9) {
-                rCode += "  trainingSet" + i + " <- inTrainingSet$Fold0" + j + "\n";
+                rCode += "  trainingSet" + i
+                        + " <- inTrainingSet$Fold0" + j + "\n";
             } else {
-                rCode += "  trainingSet" + i + " <- inTrainingSet$Fold" + j + "\n";
+                rCode += "  trainingSet" + i
+                        + " <- inTrainingSet$Fold" + j + "\n";
             }
         }
         rCode += "\n";
@@ -162,6 +211,7 @@ public class Analysis {
         rCode += "library(plyr)\n";//dependencies of caret.
         rCode += "library(caret)\n";//Used for createfolds in training set.
         rCode += "library(RSQLite)\n";//Used to connect to the SQLite database.
+        rCode += "\n";
         return rCode;
     }
 
@@ -177,12 +227,12 @@ public class Analysis {
             rCode += "coln <-  paste(" + i + ",seq(1:" + Constants.ITERATIONS
                     + "),sep=\"_\")\n";
             rCode += "coefs_" + i
-                    + " <- matrix(data = NA,nrow = dim(DesignMatrix)[2], ncol ="
-                    + Constants.ITERATIONS + ")\n";
+                    + " <- matrix(data = NA,nrow = dim(DesignMatrix)[2], "
+                    + "ncol =" + Constants.ITERATIONS + ")\n";
             rCode += "colnames(coefs_" + i + ") <- coln\n";
             rCode += "y_fit"
-                    + i + " <- matrix(data = NA, nrow = dim(DesignMatrix)[2], ncol ="
-                    + Constants.ITERATIONS + ")\n";
+                    + i + " <- matrix(data = NA, nrow = dim(DesignMatrix)[2], "
+                    + "ncol =" + Constants.ITERATIONS + ")\n";
             rCode += "colnames(y_fit" + i + ") <- coln\n";
             rCode += "R2_" + i + " <- matrix(data=NA,nrow=1,ncol="
                     + Constants.ITERATIONS + ")\n";
@@ -218,36 +268,38 @@ public class Analysis {
             rCode += "R2 <- paste(\"R2_" + i + "\",seq(1:"
                     + Constants.ITERATIONS + "),sep=\"_\")\n";
             rCode += "colnames(test_" + i + ") <- c(\"RMSE\",\"R2\")\n";
-            rCode += "y_fit"
-                    + i + " <- matrix(data = NA, nrow = dim(DesignMatrix)[2], ncol ="
-                    + Constants.ITERATIONS + ")\n";
+            rCode += "y_fit" + i + " <- matrix(data = NA, "
+                    + "nrow = dim(DesignMatrix)[2], "
+                    + "ncol =" + Constants.ITERATIONS + ")\n";
             rCode += "colnames(y_fit" + i + ") <- coln\n";
-            rCode += "R2_" + i + " <- matrix(data=NA,nrow=1,ncol="
-                    + Constants.ITERATIONS + ")\n";
+            rCode += "R2_" + i + " <- matrix(data=NA,nrow=1,"
+                    + "ncol=" + Constants.ITERATIONS + ")\n";
             rCode += "colnames(R2_" + i + ") <- coln\n";
-            if (analysisMethod.equals("en") || analysisMethod.equals("ridge")
-                    || analysisMethod.equals("lasso")) {
+            if (analysisMethod.equals(Constants.EN)
+                    || analysisMethod.equals(Constants.RIDGE)
+                    || analysisMethod.equals(Constants.LASSO)) {
                 rCode += "lambda_"
                         + i + " <- matrix(data = NA, nrow = 1, ncol = "
                         + Constants.ITERATIONS + ")\n";
                 rCode += "colnames(lambda_" + i + ") <- coln\n";
                 //row 1 is always the intercept. This is always the first row.
                 rCode += "coefs_"
-                        + i + " <- matrix(data = NA,nrow = dim(DesignMatrix)[2]+1,ncol="
-                        + Constants.ITERATIONS + ")\n";
+                        + i + " <- matrix(data = NA,"
+                        + "nrow = dim(DesignMatrix)[2]+1,"
+                        + "ncol=" + Constants.ITERATIONS + ")\n";
                 rCode += "colnames(coefs_" + i + ") <- coln\n";
                 rCode += "rownames(coefs_" + i
                         + ") <- c(\"intercept\",colnames(DesignMatrix))\n";
-            } else if (analysisMethod.equals("pcr")
-                    || analysisMethod.equals("spls")
-                    || analysisMethod.equals("pls")) {
-                rCode += "coefs_"
-                        + i + " <- matrix(data = NA,nrow = dim(DesignMatrix)[2],ncol="
-                        + Constants.ITERATIONS + ")\n";
+            } else if (analysisMethod.equals(Constants.PCR)
+                    || analysisMethod.equals(Constants.SPLS)
+                    || analysisMethod.equals(Constants.PLS)) {
+                rCode += "coefs_" + i + " <- matrix(data = NA,"
+                        + "nrow = dim(DesignMatrix)[2],"
+                        + "ncol=" + Constants.ITERATIONS + ")\n";
                 rCode += "colnames(coefs_" + i + ") <- coln\n";
                 rCode += "rownames(coefs_" + i + ") <- colnames(DesignMatrix)\n";
             }
-            if (analysisMethod.equals("spls")) {
+            if (analysisMethod.equals(Constants.SPLS)) {
                 rCode += "eta_" + i + " <- matrix(data = NA, nrow = 1, ncol ="
                         + Constants.ITERATIONS + ")\n";
                 rCode += "colnames(eta_" + i + ") <- coln\n";
@@ -255,17 +307,18 @@ public class Analysis {
                         + Constants.ITERATIONS + ")\n";
                 rCode += "colnames(K_" + i + ") <- coln\n";
             }
-            if (analysisMethod.equals("en")) {
+            if (analysisMethod.equals(Constants.EN)) {
                 rCode += "frac_" + i + " <- matrix(data=NA,nrow=1,ncol="
                         + Constants.ITERATIONS + ")\n";
                 rCode += "colnames(frac_" + i + ") <- coln\n";
             }
-            if (analysisMethod.equals("pcr") || analysisMethod.equals("pls")) {
-                rCode += "opt_comp_" + i + " <- matrix(data = NA, nrow = 1, ncol ="
-                        + Constants.ITERATIONS + ")\n";
+            if (analysisMethod.equals(Constants.PCR)
+                    || analysisMethod.equals(Constants.PLS)) {
+                rCode += "opt_comp_" + i + " <- matrix(data = NA, nrow = 1, "
+                        + "ncol =" + Constants.ITERATIONS + ")\n";
                 rCode += "colnames(opt_comp_" + i + ") <- coln\n";
             }
-            if (analysisMethod.equals("rf")) {
+            if (analysisMethod.equals(Constants.RF)) {
                 rCode += "mtry_" + i + " <- matrix(data = NA, nrow = 1, ncol = "
                         + Constants.ITERATIONS + ")\n";
                 rCode += "colnames(mtry_" + i + ") <- coln\n";
@@ -274,10 +327,14 @@ public class Analysis {
                 rCode += "rownames(imp_" + i + ") <- colnames(DesignMatrix)\n";
                 rCode += "colnames(imp_" + i + ") <- coln\n";
             }
-            if (analysisMethod.equals("svm")) {
-                rCode += "tune_cost_" + i + " <- matrix(data = NA, nrow = dim(DesignMatrix)[2], ncol = " + Constants.ITERATIONS + ")\n";
+            if (analysisMethod.equals(Constants.SVM)) {
+                rCode += "tune_cost_" + i + " <- matrix(data = NA, "
+                        + "nrow = dim(DesignMatrix)[2], "
+                        + "ncol = " + Constants.ITERATIONS + ")\n";
                 rCode += "colnames(tune_cost_" + i + ") <- coln\n";
-                rCode += "tune_sigma_" + i + " <- matrix(data = NA, nrow = dim(DesignMatrix)[2], ncol = " + Constants.ITERATIONS + ")\n";
+                rCode += "tune_sigma_" + i + " <- matrix(data = NA, "
+                        + "nrow = dim(DesignMatrix)[2], "
+                        + "ncol = " + Constants.ITERATIONS + ")\n";
                 rCode += "colnames(tune_sigma_" + i + ") <- coln\n";
             }
             rCode += "\n";
@@ -304,26 +361,27 @@ public class Analysis {
         rCode += "for (index in 1:" + Constants.ITERATIONS + ") {\n";
         rCode += getTrainingSets();
         // innerLoop = how many times to do the inner loop cross validation.
-        // The NUMBER_FOLDS_INNER reflects how the test / predictor subsets are made! 10 means automatically 10 % / 90 % while 20 means 5% / 95%.
+        // The NUMBER_FOLDS_INNER reflects how the test / predictor subsets 
+        // are made! 10 means automatically 10 % / 90 % while 20 means 5% / 95%.
         rCode += "  innerLoop <- trainControl(method = \"cv\", number = "
                 + Constants.NUMBER_FOLDS_INNER + ")\n";
         for (int i = 0; i < Constants.NUMBER_FOLDS_OUTER; i++) {
             int j = i + 1;
-            if (analysisMethod.equals("en")) {
+            if (analysisMethod.equals(Constants.EN)) {
                 rCode += "      ## Elastic Net Round: " + j + "\n";
-            } else if (analysisMethod.equals("lasso")) {
+            } else if (analysisMethod.equals(Constants.LASSO)) {
                 rCode += "      ## Lasso Net Round: " + j + "\n";
-            } else if (analysisMethod.equals("ridge")) {
+            } else if (analysisMethod.equals(Constants.RIDGE)) {
                 rCode += "      ## Ridge Round: " + j + "\n";
-            } else if (analysisMethod.equals("svm")) {
+            } else if (analysisMethod.equals(Constants.SVM)) {
                 rCode += "      ## SVN Round: " + j + "\n";
-            } else if (analysisMethod.equals("spls")) {
+            } else if (analysisMethod.equals(Constants.SPLS)) {
                 rCode += "      ## SPLS Round: " + j + "\n";
-            } else if (analysisMethod.equals("pcr")) {
+            } else if (analysisMethod.equals(Constants.PCR)) {
                 rCode += "      ## PCR Round: " + j + "\n";
-            } else if (analysisMethod.equals("pls")) {
+            } else if (analysisMethod.equals(Constants.PCR)) {
                 rCode += "      ## PLS Round: " + j + "\n";
-            } else if (analysisMethod.equals("rf")) {
+            } else if (analysisMethod.equals(Constants.RF)) {
                 rCode += "      ## RF Round: " + j + "\n";
             }
             rCode += "      ## Create predictor and response test and training sets\n";
@@ -530,13 +588,16 @@ public class Analysis {
     public String getAnalysisScript(HashMap<String, String> excelSheets) {
         String rScript = "# Concatenating analisis script\n";
         rScript += getRequiredLibraries();
-        rScript += loadPredictorAndResponseDataSheets(excelSheets);
+        rScript += loadPredictorAndResponseDataSheets();
+        rScript += writeRImage();
+        rScript += handleMissingData();
         rScript += preProcessMatrix();
         rScript += initializeResultObjects();
         rScript += getAnalysis();
         rScript += combineResults();
         rScript += getRowMeansAndSD();
         rScript += writeResults();
+        rScript += writeRImage();
         return rScript;
     }
 }

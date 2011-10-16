@@ -22,6 +22,8 @@ package nl.wur.plantbreeding.omicsfusion.utils;
  */
 public class Constants {
 
+    /** Name of the omicsFusion SQLite database. */
+    public static final String omicsFusionDB = "omicsFusion.db";
     /** user details object name. */
     public static final String USER = "omicsFusionUser";
     /** user data upload object name. */
@@ -44,6 +46,26 @@ public class Constants {
     public static final int MAX_NUMBER_CPU = 8;
     /** What is the maximum number of results to show in the summary table. */
     public static final int MAX_SUMMARY_RESULTS = 2500;
+    /** RandomForest identifier. */
+    public static final String RF ="rf";
+        /** Support Vector Machine identifier. */
+    public static final String SVM ="svm";
+        /** Ridge regression identifier. */
+    public static final String RIDGE ="ridge";
+        /** PLS identifier. */
+    public static final String PLS ="pls";
+        /** SPLS identifier. */
+    public static final String SPLS ="spls";
+        /** Univariate identifier. */
+    public static final String UNIVARIATE ="univariate";
+        /** Univariate Benjamini-Hochberg FDR identifier. */
+    public static final String BH ="bh";
+        /** Lasso identifier. */
+    public static final String LASSO ="lasso";
+        /** PCR identifier. */
+    public static final String PCR ="pcr";
+            /** Elastic Net identifier. */
+    public static final String EN ="en";
 
     private Constants() {
     }

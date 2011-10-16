@@ -79,7 +79,8 @@ public class RunAnalysisAction extends ActionSupport
         //Relative timings on the CxE Flesh color /Metabolite dataset.
 
         try {
-            //RF - 50 /SPLS - 34 /Ridge - 32 /EN - 8 /SVM - 5 /PCR - 2 /PLS - 1 /LASSO - 1
+            //Relative time: RF - 50 /SPLS - 34 /Ridge - 32 /EN - 8 
+            //SVM - 5 /PCR - 2 /PLS - 1 /LASSO - 1
             for (String method : methods) {
                 if (method.equals("rf")) {
                     RandomForest mth = new RandomForest();
@@ -146,11 +147,16 @@ public class RunAnalysisAction extends ActionSupport
             addActionError("qsub not found, please check your SGE configuration");//TODO: check
             return ERROR;//TODO: configure
         }
+        catch (Exception e) {
+            addActionError("Error during SGE submission");
+            LOG.log(Level.SEVERE, "Exception: {0}", e.getMessage());
+            return ERROR;
+        }
         // TODO: log userId or sessionID as primary key? / method / jobId / startTime / sessionId / (finishTime <- status update daemon).
 
         LOG.log(Level.INFO, "Submitted {0} jobs to SGE.", jobIds.size());
 
-        //Send out the email with details
+        //Send out the email with details;
         try {
             // TODO: add user details and sessionID to constructor
             SubmissionCompleteEmail();
@@ -184,8 +190,10 @@ public class RunAnalysisAction extends ActionSupport
      * @param scriptName Name of the scripts.
      * @return The jobID.
      * @throws IOException When writing to disk fails.
+     * @throws NullPointerException SGE qsub is not available.
      */
-    public int submitToSGE(String scriptName) throws IOException {
+    public int submitToSGE(String scriptName) throws IOException,
+            NullPointerException {
         WriteFile wf = new WriteFile();
         wf.WriteFile(ServletUtils.getResultsDir(request)
                 + "/" + scriptName + ".pbs",
@@ -200,7 +208,9 @@ public class RunAnalysisAction extends ActionSupport
                 + "/", scriptName, queue);
 
         if (jobId == 0) {
-            LOG.severe("error during submission");//TODO: implement exception? Also is thrown when a wrong queue name is selected
+            LOG.severe("error during submission");
+            //TODO: implement exception?
+            //Also is thrown when a wrong queue name is selected
         } else {
             LOG.log(Level.INFO, "Subitted to que with jobId: {0}", jobId);
         }
