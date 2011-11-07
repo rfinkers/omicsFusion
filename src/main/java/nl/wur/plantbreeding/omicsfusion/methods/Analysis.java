@@ -94,17 +94,17 @@ public class Analysis {
         rCode += "respData <- fetch(respQuery, n = -1)\n";
         rCode += "dbClearResult(respQuery)\n";
         //Convert to matrix
-        rCode += "respMatrix <- tapply(respData[,3],respData[,c(1,2)],c)\n";
-        rCode += "predMatrix <- tapply(predData[,3],predData[,c(1,2)],c)\n";
-        //Prepare the dataset object (is same object as reading from excel).
         //We need a data frame instead of an matrix. Why?
-        rCode += "dataSet=as.data.frame(cbind(respMartix,predMatrix))\n\n";
+        rCode += "respMatrix <- as.data.frame(tapply(respData[,3],respData[,c(1,2)],c))\n";
+        rCode += "predMatrix <- as.data.frame(tapply(predData[,3],predData[,c(1,2)],c))\n";
+        //Prepare the dataset object (is same object as reading from excel).
+        rCode += "dataSet=cbind(respMatrix,predMatrix)\n\n";
         return rCode;
     }
 
     /**
     * Handle missing data via omit or imputation. This method should correct for
-    * each analysis. Missing data in the response matrix might differ for each 
+    * each analysis. Missing data in the response matrix might differ for each
     * run.
     * @return R program code.
     */
@@ -361,7 +361,7 @@ public class Analysis {
         rCode += "for (index in 1:" + Constants.ITERATIONS + ") {\n";
         rCode += getTrainingSets();
         // innerLoop = how many times to do the inner loop cross validation.
-        // The NUMBER_FOLDS_INNER reflects how the test / predictor subsets 
+        // The NUMBER_FOLDS_INNER reflects how the test / predictor subsets
         // are made! 10 means automatically 10 % / 90 % while 20 means 5% / 95%.
         rCode += "  innerLoop <- trainControl(method = \"cv\", number = "
                 + Constants.NUMBER_FOLDS_INNER + ")\n";

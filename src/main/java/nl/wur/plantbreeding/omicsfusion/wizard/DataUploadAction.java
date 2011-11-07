@@ -98,8 +98,9 @@ public class DataUploadAction extends DataUploadValidationForm
                         predictorSheet);
 
                 try {
-                    uploadExcelSheets(responseSheet,
-                            getResponseType(), predictorSheet, getPredictorType(), ServletUtils.getResultsDir(request));
+                    uploadExcelSheets(responseSheet, getResponseType(),
+                            predictorSheet, getPredictorType(),
+                            ServletUtils.getResultsDir(request));
                 }
                 catch (Exception e) {
                     e.printStackTrace();

@@ -76,7 +76,7 @@ public class UploadDataSheets extends ManipulateExcelSheet {
         Row predictorHeaderRow = predictorSheet.getRow(0);
         int predictorRowLength = predictorHeaderRow.getLastCellNum();
         //Second row can contain the ontology ID (idetified with column name)
-        String ontologyID = "ontology";
+        final String ontologyID = "ontology";
         int responseRowCounter = 1;
         predictorRowCounter = 1;
         if (responseSheet.getRow(responseRowCounter).getCell(0).
@@ -99,45 +99,52 @@ public class UploadDataSheets extends ManipulateExcelSheet {
         for (int i = responseRowCounter;
                 i < responseSheet.getLastRowNum(); i++) {
 
-            String header;
-            Double value;
-            String genotype = responseSheet.getRow(i).getCell(0).getStringCellValue();
+            String trait;
+            Double observation;
+            String genotype =
+                    responseSheet.getRow(i).getCell(0).getStringCellValue();
             for (int j = 1; j < responseRowLenght; j++) {
-                header = responseHeaderRow.getCell(j).getStringCellValue();
-                if (responseSheet.getRow(i).getCell(j).getCellType()
-                        == Cell.CELL_TYPE_NUMERIC) {
-                    try {
-                        value = responseSheet.getRow(i).getCell(j).getNumericCellValue();
+                if (!responseHeaderRow.getCell(j).getStringCellValue().equals("")) {
+                    trait = responseHeaderRow.getCell(j).getStringCellValue();
+                    if (responseSheet.getRow(i).getCell(j).getCellType()
+                            == Cell.CELL_TYPE_NUMERIC) {
+                        try {
+                            observation = responseSheet.getRow(i).getCell(j).getNumericCellValue();
+                        }
+                        catch (Exception e) {
+                            observation = Double.NaN;
+                        }
+                    } else {
+                        observation = Double.NaN;
                     }
-                    catch (Exception e) {
-                        value = Double.NaN;
-                    }
-                } else {
-                    value = Double.NaN;
+                    rdp.add(new DataPointDataType(genotype, trait, observation));
                 }
-                rdp.add(new DataPointDataType(genotype, header, value));
             }
         }
 
         List<DataPointDataType> pdp = new ArrayList<DataPointDataType>();
         for (int i = predictorRowCounter;
                 i < predictorSheet.getLastRowNum(); i++) {
+
             String header;
             Double value;
             String genotype = predictorSheet.getRow(i).getCell(0).getStringCellValue();
             for (int j = 1; j < predictorRowLength; j++) {
-                header = predictorHeaderRow.getCell(j).getStringCellValue();
-                if (predictorSheet.getRow(i).getCell(j).getCellType() == Cell.CELL_TYPE_NUMERIC) {
-                    try {
-                        value = predictorSheet.getRow(i).getCell(j).getNumericCellValue();
-                    }
-                    catch (Exception e) {
+                if (!predictorHeaderRow.getCell(j).getStringCellValue().equals("")) {
+                    header = predictorHeaderRow.getCell(j).getStringCellValue();
+                    if (predictorSheet.getRow(i).getCell(j).getCellType()
+                            == Cell.CELL_TYPE_NUMERIC) {
+                        try {
+                            value = predictorSheet.getRow(i).getCell(j).getNumericCellValue();
+                        }
+                        catch (Exception e) {
+                            value = Double.NaN;
+                        }
+                    } else {
                         value = Double.NaN;
                     }
-                } else {
-                    value = Double.NaN;
+                    pdp.add(new DataPointDataType(genotype, header, value));
                 }
-                pdp.add(new DataPointDataType(genotype, header, value));
             }
         }
 
