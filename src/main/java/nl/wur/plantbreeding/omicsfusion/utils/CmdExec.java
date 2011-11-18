@@ -1,17 +1,17 @@
 /*
  * Copyright 2011 omicstools.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package nl.wur.plantbreeding.omicsfusion.utils;
 
@@ -23,12 +23,15 @@ import java.util.logging.Logger;
 
 /**
  * Methods for interaction with the Sun Grid Engine.
+ *
  * @author Richard Finkers
  * @version 1.0
  */
 public class CmdExec {
 
-    /** The logger */
+    /**
+     * The logger
+     */
     private static final Logger LOG = Logger.getLogger(CmdExec.class.getName());
 
     private CmdExec() {
@@ -36,40 +39,36 @@ public class CmdExec {
 
     /**
      * Executes a SGE batch script and returns the job id of the submission.
-     * @param executionDir Name of the directory where the job scripts / data 
+     * @param executionDir Name of the directory where the job scripts / data
      * resides.
      * @param method Method to be executed.
-     * @param queue
      * @return JobID on the SGE grid.
      * @throws IOException Batch job script not found.
      */
-    public static int ExecuteQSubCmd(String executionDir, String method,
-            String queue) throws IOException {
+    public static int ExecuteQSubCmd(String executionDir, String method)
+            throws IOException {
         Process p;
         if (method.equals("rf") || method.equals("spls")
                 || method.equals("ridge")) {
 
             //TODO: replace email with email user?
-            //TODO: add this to the if test above? 
-            //Alternatively, modify the submission script
-            //submission script would allow -cwd option?
+            //TODO: add this to the if test above?
             if (Constants.MAX_NUMBER_CPU > 2) {
                 p = Runtime.getRuntime().exec(
-                        "qsub -S /bin/bash -p -1023 -pe Rmpi "
-                        + Constants.MAX_NUMBER_CPU + " -q " + queue
-                        + " -M richard.finkers@wur.nl -m e " + executionDir
+                        "qsub -p -1023 -pe Rmpi "
+                        + Constants.MAX_NUMBER_CPU
+                        + " " + executionDir
                         + method + ".pbs");
             } else {
-                p = Runtime.getRuntime().exec("qsub -S /bin/bash "
-                        + "-q " + queue
-                        + " " + executionDir + method + ".pbs");
+                p = Runtime.getRuntime().exec("qsub "
+                        + executionDir + method + ".pbs");
             }
         } else {
-            p = Runtime.getRuntime().exec("qsub -S /bin/bash -q " + queue
-                    + " " + executionDir + method + ".pbs");
+            p = Runtime.getRuntime().exec("qsub "
+                    + executionDir + method + ".pbs");
         }
-        //TODO: if qsub not present, this will result in an error. Finally this 
-        //will lead to an nullpointer exception because of problems with 
+        //TODO: if qsub not present, this will result in an error. Finally this
+        //will lead to an nullpointer exception because of problems with
         //404 page.
         BufferedReader input =
                 new BufferedReader(new InputStreamReader(p.getInputStream()));

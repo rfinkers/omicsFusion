@@ -79,7 +79,7 @@ public class RunAnalysisAction extends ActionSupport
         //Relative timings on the CxE Flesh color /Metabolite dataset.
 
         try {
-            //Relative time: RF - 50 /SPLS - 34 /Ridge - 32 /EN - 8 
+            //Relative time: RF - 50 /SPLS - 34 /Ridge - 32 /EN - 8
             //SVM - 5 /PCR - 2 /PLS - 1 /LASSO - 1
             for (String method : methods) {
                 if (method.equals("rf")) {
@@ -194,18 +194,29 @@ public class RunAnalysisAction extends ActionSupport
      */
     public int submitToSGE(String scriptName) throws IOException,
             NullPointerException {
+
+        //SGE submission queue.
+        String queue =
+                request.getSession().getServletContext().getInitParameter("SGEQueue");
+
         WriteFile wf = new WriteFile();
         wf.WriteFile(ServletUtils.getResultsDir(request)
                 + "/" + scriptName + ".pbs",
-                "#!/bin/sh\ncd " + ServletUtils.getResultsDir(request)
+                "#!/bin/sh\n\n"
+                + "#$ -cwd\n"
+                + "#$ -N " + scriptName + "\n"
+                + "#$ -m e\n"
+                + "#$ -M richard.finkers@wur.nl\n"
+                + "#$ -S /bin/bash\n"
+                + "#$ -q " + queue + "\n"
+                + "cd " + ServletUtils.getResultsDir(request)
                 + "\nR --no-save < "
                 + scriptName + ".R\n");
         //Submit jobs to the SGE QUEUE
         int jobId = 0;
-        String queue =
-                request.getSession().getServletContext().getInitParameter("SGEQueue");
+
         jobId = CmdExec.ExecuteQSubCmd(ServletUtils.getResultsDir(request)
-                + "/", scriptName, queue);
+                + "/", scriptName);
 
         if (jobId == 0) {
             LOG.severe("error during submission");
