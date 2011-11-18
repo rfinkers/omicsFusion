@@ -13,7 +13,7 @@ Form
     <s:text name="userDetails.explanation"/>
 </sj:dialog>
 <sj:a openDialog="myclickdialog"    button="true"    buttonIcon="ui-icon-newwin" cssStyle="allign:right"   >
-    	help
+    help
 </sj:a>
 <h2><s:text name="userDetails.heading" /></h2>
 <s:actionerror theme="jquery"/>

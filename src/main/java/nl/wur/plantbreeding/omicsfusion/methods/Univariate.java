@@ -60,6 +60,7 @@ public class Univariate extends Analysis {
     @Override
     protected String writeResults() {
         String rCode = "#Write Univariate and FDR correction results details\n";
+        rCode += "save.image(file=\"univaridate.RData\")\n";
         rCode += "write.csv(outp,\"univariate_all_coef.csv\")\n";
         rCode += "write.csv(bh, \"univariate_bh_coef.csv\")\n";
         rCode += "write.csv(pvalue, \"univariate_p_coef.csv\")\n";

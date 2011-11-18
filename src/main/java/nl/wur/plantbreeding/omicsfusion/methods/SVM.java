@@ -1,17 +1,17 @@
 /*
  * Copyright 2011 omicstools.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package nl.wur.plantbreeding.omicsfusion.methods;
 
@@ -20,11 +20,14 @@ import nl.wur.plantbreeding.omicsfusion.utils.Constants;
 
 /**
  * SVM regression.
+ *
  * @author Richard Finkers
  */
 public class SVM extends Analysis {
 
-    /** The logger. */
+    /**
+     * The logger.
+     */
     private static final Logger LOG = Logger.getLogger(SVM.class.getName());
 
     /** {@inheritDoc} */
@@ -85,6 +88,7 @@ public class SVM extends Analysis {
     public String writeResults() {
         String rCode = "# Write results to disk\n";
         //TODO: implement summary method
+        rCode += "save.image(file=\"svm.RData\")\n";
         rCode += "write.csv(Train_R2, paste(\"SVM_R2\", \"_\", "
                 + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
         rCode += "write.csv(Train_sigma, paste(\"SVM_Sigma\", \"_\", "

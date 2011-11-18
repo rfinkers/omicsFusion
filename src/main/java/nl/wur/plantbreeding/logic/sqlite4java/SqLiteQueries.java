@@ -150,7 +150,7 @@ public class SqLiteQueries extends SqLiteHelper {
         st.bind(2, userList.getEmail());
         st.bind(3, userList.getAffiliation());
         st.bind(4, userList.getCountry());
-        st.bind(5, Calendar.DATE);
+        st.bind(5, Calendar.DAY_OF_MONTH + "-" + Calendar.MONTH);
         st.step();
         st.dispose();
         closeDatabase();

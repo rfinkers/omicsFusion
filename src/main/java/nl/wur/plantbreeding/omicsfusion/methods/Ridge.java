@@ -1,17 +1,17 @@
 /*
  * Copyright 2011 omicstools.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package nl.wur.plantbreeding.omicsfusion.methods;
 
@@ -20,11 +20,14 @@ import nl.wur.plantbreeding.omicsfusion.utils.Constants;
 
 /**
  * Ridge analysis.
+ *
  * @author Richard Finkers
  */
 public class Ridge extends Analysis {
 
-    /** The Logger. */
+    /**
+     * The Logger.
+     */
     private static final Logger LOG = Logger.getLogger(Ridge.class.getName());
 
     @Override
@@ -77,6 +80,7 @@ public class Ridge extends Analysis {
     @Override
     public String writeResults() {
         String rCode = "# Write results to disk\n";
+        rCode += "save.image(file=\"ridge.RData\")\n";
         rCode += "write.csv(Train_Coeff, paste(\"RIDGE_coef\", \"_\", "
                 + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
         rCode += "write.csv(Train_Coeff_Summary, paste(\"RIDGE_coef_Sum\", \".csv\" , sep = \"\"))\n";

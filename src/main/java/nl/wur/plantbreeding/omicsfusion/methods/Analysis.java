@@ -538,7 +538,8 @@ public class Analysis {
      */
     protected String getRowMeansAndSD() {
         String rCode = "# Get row means, SD and (absolute) rank\n";
-        //dataSet contains predictor column. So, function == trye when the Train_Coef also contains the intercept.
+        //dataSet contains predictor column. So, function == trye when the
+        //Train_Coef also contains the intercept.
         rCode += "if (dim(dataSet)[2] == dim(Train_Coeff)[1])\n";
         rCode += "{\n";
         //if true: remove the column with the response value only
@@ -546,7 +547,8 @@ public class Analysis {
         rCode += "  sd<-apply(Train_Coeff[-1,],1,sd)\n";
         rCode += "  ra<-rank(abs(apply(Train_Coeff[-1,],1,mean)))\n";
         rCode += "} else {\n";
-        //if false: do nothing TODO: this is not an really safe approach. The difference should be 1. Test for this?
+        //if false: do nothing TODO: this is not an really safe approach.
+        //The difference should be 1. Test for this?
         rCode += "  means<-apply(Train_Coeff,1,mean)\n";
         rCode += "  sd<-apply(Train_Coeff,1,sd)\n";
         rCode += "  ra<-rank(abs(apply(Train_Coeff,1,mean)))\n";

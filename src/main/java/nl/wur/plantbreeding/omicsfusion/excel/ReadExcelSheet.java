@@ -1,17 +1,17 @@
 /*
  * Copyright 2011 omicstools.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package nl.wur.plantbreeding.omicsfusion.excel;
 
@@ -31,12 +31,15 @@ import org.jfree.data.xy.DefaultXYDataset;
 
 /**
  * Read excel sheets.
+ *
  * @author Richard Finkers
  * @version 1.0
  */
 public class ReadExcelSheet extends ManipulateExcelSheet {
 
-    /** The logger. */
+    /**
+     * The logger.
+     */
     private static final Logger LOG = Logger.getLogger(
             ReadExcelSheet.class.getName());
 
@@ -62,9 +65,13 @@ public class ReadExcelSheet extends ManipulateExcelSheet {
             throws DataSheetValidationException, FileNotFoundException,
             InvalidFormatException, IOException {
 
-        /** wb for the response variables. */
+        /**
+         * wb for the response variables.
+         */
         Sheet respWbSheet;
-        /** wb for the predictor variables. */
+        /**
+         * wb for the predictor variables.
+         */
         Sheet predWbSheet;
 
         //trait
@@ -236,7 +243,9 @@ public class ReadExcelSheet extends ManipulateExcelSheet {
         regLine[1][0] = slr.predict(minX);
         regLine[0][1] = maxX;
         regLine[1][1] = slr.predict(maxX);
-        /** The dataset */
+        /**
+         * The dataset
+         */
         DefaultXYDataset dataSet = new GenotypeXYDataset("Genotype",
                 data, genotypeLabels, genotypeLabels);
         //add the regression series to the dataSet.
