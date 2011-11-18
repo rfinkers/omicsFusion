@@ -3,13 +3,9 @@ package nl.wur.plantbreeding.omicsfusion.utils;
 import java.io.IOException;
 import java.util.logging.Logger;
 import static nl.wur.plantbreeding.omicsfusion.utils.CmdExec.CheckJobStatus;
-import org.junit.Ignore;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotSame;
+import org.junit.*;
 
 /**
  * Tests the submissions to SGE.
@@ -47,10 +43,10 @@ public class CmdExecTest {
     @Ignore
     public void testExecuteQSubCmd() throws Exception {
         System.out.println("ExecuteQSubCmd");
-        String executionDir = "/home/finke002/NetBeansProjects/omicsFusion/src/main/resources"; //FIXME: refer to a valid test test case.
+        String executionDir = "/home/finke002/NetBeansProjects/omicsFusion/src/main/resources"; //FIXME: refer to a valid test test case. It should contain a complete .pbs file!
         String method = "lasso";
         int expResult = 0;
-        int result = CmdExec.ExecuteQSubCmd(executionDir, method, "stat.short");
+        int result = CmdExec.ExecuteQSubCmd(executionDir, method);
         assertNotSame(expResult, result);
     }
 
