@@ -15,10 +15,12 @@
  */
 package nl.wur.plantbreeding.logic.sqlite4java;
 
+import nl.wur.plantbreeding.omicsfusion.datatypes.SummaryResults;
 import com.almworks.sqlite4java.SQLiteConnection;
 import com.almworks.sqlite4java.SQLiteException;
 import com.almworks.sqlite4java.SQLiteStatement;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -126,8 +128,11 @@ public class SqLiteQueries extends SqLiteHelper {
 
         //table results
         SQLiteStatement cs = db.prepare("CREATE TABLE results ("
-                + "method_name VARCHAR(75), "
-                + "value FLOAT(10,5))");
+                + "predictor TEXT, "
+                + "method_name TEXT, "
+                + "value REAL, "
+                + "sd REAL, "
+                + "rank REAL)");
         cs.step();
         cs.dispose();
 
@@ -136,6 +141,7 @@ public class SqLiteQueries extends SqLiteHelper {
 
     /**
      * Add user details to the database.
+     *
      * @param directory Name of the directory.
      * @param userList User data.
      * @throws SQLiteException Error.
@@ -158,6 +164,7 @@ public class SqLiteQueries extends SqLiteHelper {
 
     /**
      * Meta information concerning the data upload.
+     *
      * @param directory Name of the directory.
      * @param predictorName Name of the predictor.
      * @param predictorType Type of the predictor.
@@ -172,7 +179,7 @@ public class SqLiteQueries extends SqLiteHelper {
         SQLiteConnection db = openDatabase(directory);
         //add names and types to the database
         //TODO: take from reading the excel sheet.
-        SQLiteStatement st = db.prepare("INSERT INTO file_namers "
+        SQLiteStatement st = db.prepare("INSERT INTO file_names "
                 + "(predictor_name, response_name, Predict_response_name, "
                 + "predictor_type, response_type) values (?,?,?,?,?)");
         st.bind(1, predictorName);
@@ -189,20 +196,22 @@ public class SqLiteQueries extends SqLiteHelper {
         closeDatabase();
     }
 
-    public void addFileInfo(String directory, HashMap<String, String> file)
-            throws SQLiteException {
-        //add list of methods to the database
-        SQLiteConnection db = openDatabase(directory);
-        SQLiteStatement stm = db.prepare("INSERT INTO file_names "
-                + "(predictor_name, response_name, predict_response_name, "
-                + "predictor_type, response_type) "
-                + "values (?,?,?,?,?)");
-
-        stm.step();
-        stm.dispose();
-        closeDatabase();
-    }
-
+//    /*
+//     * Add information about the files to the db.
+//     */
+//    public void addFileInfo(String directory, HashMap<String, String> file)
+//            throws SQLiteException {
+//        //add list of methods to the database
+//        SQLiteConnection db = openDatabase(directory);
+//        SQLiteStatement stm = db.prepare("INSERT INTO file_names "
+//                + "(predictor_name, response_name, predict_response_name, "
+//                + "predictor_type, response_type) "
+//                + "values (?,?,?,?,?)");
+//
+//        stm.step();
+//        stm.dispose();
+//        closeDatabase();
+//    }
     public void loadExcelData(List<DataPointDataType> rdp,
             List<DataPointDataType> pdp, String directory)
             throws SQLiteException {
@@ -299,5 +308,31 @@ public class SqLiteQueries extends SqLiteHelper {
         stm.step();
         stm.dispose();
         closeDatabase();
+    }
+
+    /**
+     * Reads the results summaries from the database.
+     *
+     * @param directory
+     * @return A list containing the stored results.
+     * @throws SQLiteException
+     */
+    public ArrayList<SummaryResults> readSummaryResults(String directory)
+            throws SQLiteException {
+        ArrayList<SummaryResults> results = new ArrayList<SummaryResults>();
+        SummaryResults summaryResults = null;
+        SQLiteConnection db = openDatabase(directory);
+        SQLiteStatement stm = db.prepare("SELECT * FROM results "
+                + "ORDER BY predictor, method_name");
+        while (stm.step()) {
+            stm.columnDouble(3);
+            summaryResults = new SummaryResults(stm.columnString(0),
+                    stm.columnString(1), stm.columnDouble(2),
+                    stm.columnDouble(3), stm.columnDouble(4));
+            results.add(summaryResults);
+        }
+        stm.dispose();
+        closeDatabase();
+        return results;
     }
 }

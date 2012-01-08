@@ -115,7 +115,7 @@ public class SVMTest {
         System.out.println("writeResults");
         SVM instance = new SVM();
         String expResult = "";
-        String result = instance.writeResults();
+        String result = instance.writeResultsToDisk();
         assertNotNull(result);
     }
 }

@@ -103,7 +103,7 @@ public class LassoTest {
         System.out.println("writeResults");
         Lasso instance = new Lasso();
         String expResult = "";
-        String result = instance.writeResults();
+        String result = instance.writeResultsToDisk();
         assertNotNull(result);
     }
 }

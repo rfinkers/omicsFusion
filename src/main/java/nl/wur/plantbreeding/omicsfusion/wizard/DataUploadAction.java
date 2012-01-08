@@ -15,13 +15,14 @@
  */
 package nl.wur.plantbreeding.omicsfusion.wizard;
 
+import com.almworks.sqlite4java.SQLiteException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
+import nl.wur.plantbreeding.logic.sqlite4java.SqLiteQueries;
 import nl.wur.plantbreeding.omicsfusion.email.ExceptionEmail;
 import nl.wur.plantbreeding.omicsfusion.excel.DataSheetValidationException;
 import static nl.wur.plantbreeding.omicsfusion.excel.UploadDataSheets.uploadExcelSheets;
@@ -79,16 +80,8 @@ public class DataUploadAction extends DataUploadValidationForm
             //prepare a file with the names of the input sheets.
             //This will be used to read the names during the results wizard.
             writeNamesToDisk();
-
-            LOG.log(Level.INFO, "Predictor: {0}",
-                    getDataSheetPredictorFileFileName());
-            LOG.log(Level.INFO, "Type: {0}", getPredictorType());
-            LOG.log(Level.INFO, "Response: {0}",
-                    getDataSheetResponseFileFileName());
-            LOG.log(Level.INFO, "Type: {0}", getResponseType());
-            //File to predict the response for
-            LOG.log(Level.INFO, "Test: {0}",
-                    getDataSheetPredictResponseFileFileName());
+            //Write the names to the database.
+            writeNamesToDB();
 
             //validate the correctness of the format of the excelsheet.
             if (!responseSheet.getName().contains("csv")
@@ -163,6 +156,7 @@ public class DataUploadAction extends DataUploadValidationForm
 
     /**
      * Write the names of the input data sheets to the file system.
+     *
      * @throws IOException
      */
     private void writeNamesToDisk() throws IOException {
@@ -174,5 +168,20 @@ public class DataUploadAction extends DataUploadValidationForm
         }
         wf.WriteFile(ServletUtils.getResultsDir(request)
                 + "/filenames.txt", content);
+    }
+
+    /**
+     * Write file names to the database.
+     *
+     * @throws SQLiteException
+     */
+    private void writeNamesToDB() throws SQLiteException {
+        SqLiteQueries sql = new SqLiteQueries();
+        sql.uploadDataNameAndType(ServletUtils.getResultsDir(request),
+                getDataSheetPredictorFileFileName(),
+                getResponseType(),
+                getDataSheetResponseFileFileName(),
+                getPredictorType(),
+                getDataSheetPredictResponseFileFileName());
     }
 }

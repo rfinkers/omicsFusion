@@ -66,7 +66,7 @@ public class RSessionInfo extends Analysis {
 
     /** {@inheritDoc} */
     @Override
-    protected String writeResults() {
+    protected String writeResultsToDisk() {
         String rCode = "#Write R sesion info details\n";
         //TODO: how to write the relevant info to a file
         rCode += "write(latex, file=\"sessionInfo.tex\")";

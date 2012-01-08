@@ -80,7 +80,7 @@ public class RSessionInfoTest {
         System.out.println("writeResults");
         RSessionInfo instance = new RSessionInfo();
         String expResult = "";
-        String result = instance.writeResults();
+        String result = instance.writeResultsToDisk();
         assertNotNull(result);
     }
 

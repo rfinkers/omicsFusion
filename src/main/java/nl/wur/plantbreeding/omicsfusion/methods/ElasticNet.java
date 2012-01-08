@@ -83,7 +83,7 @@ public class ElasticNet extends Analysis {
 
     /** {@inheritDoc} */
     @Override
-    public String writeResults() {
+    public String writeResultsToDisk() {
         String rCode = "# Write results to disk\n";
         rCode += "save.image(file=\"en.RData\")\n";
         rCode += "write.csv(Train_Coeff, paste(\"EN_coef\", \"_\", "
@@ -98,6 +98,20 @@ public class ElasticNet extends Analysis {
         rCode += "write.csv(methodResults, paste(\"EN\", \"_\", "
                 + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
         //rCode += "write.xls(methodResults, \"ennew.xls\")";
+        return rCode;
+    }
+
+        /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String writeResultsToDB() {
+        String rCode = "# Write results to the SQLite database\n";
+        rCode +="Train_Coeff_Summary_<-cbind(\"EN\",as.data.frame(Train_Coeff_Summary))\n";
+        rCode +="colnames(Train_Coeff_Summary_)[1]<-\"method\"\n";
+
+        rCode += "con <- dbConnect(\"SQLite\", dbname = \"omicsFusion.db\")\n";
+        rCode += "dbWriteTable(con, \"results\",Train_Coeff_Summary_,append=TRUE)\n";
         return rCode;
     }
 }

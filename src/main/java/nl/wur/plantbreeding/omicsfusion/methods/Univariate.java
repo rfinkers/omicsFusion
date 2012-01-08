@@ -58,7 +58,7 @@ public class Univariate extends Analysis {
 
     /** {@inheritDoc} */
     @Override
-    protected String writeResults() {
+    protected String writeResultsToDisk() {
         String rCode = "#Write Univariate and FDR correction results details\n";
         rCode += "save.image(file=\"univaridate.RData\")\n";
         rCode += "write.csv(outp,\"univariate_all_coef.csv\")\n";

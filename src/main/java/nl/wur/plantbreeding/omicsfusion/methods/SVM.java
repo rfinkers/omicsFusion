@@ -85,7 +85,7 @@ public class SVM extends Analysis {
 
     /** {@inheritDoc} */
     @Override
-    public String writeResults() {
+    public String writeResultsToDisk() {
         String rCode = "# Write results to disk\n";
         //TODO: implement summary method
         rCode += "save.image(file=\"svm.RData\")\n";

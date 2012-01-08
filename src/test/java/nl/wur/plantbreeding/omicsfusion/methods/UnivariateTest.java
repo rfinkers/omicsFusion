@@ -79,7 +79,7 @@ public class UnivariateTest {
         System.out.println("writeResults");
         Univariate instance = new Univariate();
         String expResult = "";
-        String result = instance.writeResults();
+        String result = instance.writeResultsToDisk();
         assertNotNull(result);
     }
 

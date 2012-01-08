@@ -196,7 +196,7 @@ public class AnalysisTest {
         System.out.println("writeResults");
         Analysis instance = new Analysis();
 
-        String result = instance.writeResults();
+        String result = instance.writeResultsToDisk();
         assertNotNull(result);
     }
 

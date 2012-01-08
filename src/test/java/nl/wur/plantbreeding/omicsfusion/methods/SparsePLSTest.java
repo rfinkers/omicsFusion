@@ -103,7 +103,7 @@ public class SparsePLSTest {
         System.out.println("writeResults");
         SparsePLS instance = new SparsePLS();
         String expResult = "";
-        String result = instance.writeResults();
+        String result = instance.writeResultsToDisk();
         assertNotNull(result);
     }
 }

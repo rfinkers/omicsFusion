@@ -15,6 +15,7 @@
  */
 package nl.wur.plantbreeding.omicsfusion.results;
 
+import com.almworks.sqlite4java.SQLiteException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -23,8 +24,10 @@ import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
+import nl.wur.plantbreeding.logic.sqlite4java.SqLiteQueries;
 import nl.wur.plantbreeding.logic.util.FileOrDirectoryExists;
 import nl.wur.plantbreeding.omicsfusion.datatypes.CsvSummaryDataType;
+import nl.wur.plantbreeding.omicsfusion.datatypes.SummaryResults;
 import nl.wur.plantbreeding.omicsfusion.utils.CSV;
 import nl.wur.plantbreeding.omicsfusion.utils.Constants;
 import nl.wur.plantbreeding.omicsfusion.utils.ReadFile;
@@ -36,6 +39,7 @@ import org.apache.struts2.interceptor.ServletRequestAware;
  * confirmation for each result is only sended at the end of the run, this
  * action can already be used to retrieve the results from the intermediate
  * result sets.
+ *
  * @author Richard Finkers
  * @version 1.0
  */
@@ -43,12 +47,18 @@ public class RetrieveResultsSummaryAction
         extends RetrieveResultsSummaryValidationForm
         implements ServletRequestAware {
 
-    /** The Logger */
+    /**
+     * The Logger
+     */
     private static final Logger LOG = Logger.getLogger(
             RetrieveResultsSummaryAction.class.getName());
-    /** Serial Version UID */
+    /**
+     * Serial Version UID
+     */
     private static final long serialVersionUID = 1L;
-    /** the request */
+    /**
+     * the request
+     */
     private HttpServletRequest request;
 
     @Override
@@ -78,9 +88,14 @@ public class RetrieveResultsSummaryAction
         //Check the availability of one or more respults file for this sessionID.
         //All potential summary files are scanned. Only methods with results are
         //added tot the HashMap.
+//        HashMap<String, ArrayList<CsvSummaryDataType>> methResults =
+//                getMethodsWithResultsSummaryFilesFromFile(getSessionId(),
+//                resultsDirectory);
+
         HashMap<String, ArrayList<CsvSummaryDataType>> methResults =
-                getMethodsWithResultsSummaryFiles(getSessionId(),
+                getMethodsWithResultsSummaryFilesFromDB(getSessionId(),
                 resultsDirectory);
+
         if (methResults.isEmpty()) {
             addActionError(getText("errors.no.result"));
             return ERROR;
@@ -250,6 +265,7 @@ public class RetrieveResultsSummaryAction
 
     /**
      * Get information for each row of the table.
+     *
      * @param rank
      * @param i
      * @param methResults
@@ -452,6 +468,7 @@ public class RetrieveResultsSummaryAction
     /**
      * Get the mean rank of a response variable from the individual result
      * files. univariate is not used to calculate the mean ranking.
+     *
      * @param oldResultRows Number of response variables.
      * @param methResults
      * @param lasso
@@ -544,6 +561,7 @@ public class RetrieveResultsSummaryAction
 
     /**
      * Sort the multidimensional results array.
+     *
      * @param rank
      */
     private void sortRankArray(int[][] rank) {
@@ -563,7 +581,8 @@ public class RetrieveResultsSummaryAction
     }
 
     /**
-     *Add background color to the cells.
+     * Add background color to the cells.
+     *
      * @param results
      */
     private void addTableBackgroundColors(ArrayList<CsvSummaryDataType> results,
@@ -595,8 +614,10 @@ public class RetrieveResultsSummaryAction
      * @throws FileNotFoundException
      * @throws IOException
      */
-    private HashMap<String, ArrayList<CsvSummaryDataType>> getMethodsWithResultsSummaryFiles(String sessionID, String resultsDirectory) throws FileNotFoundException, IOException {
-        HashMap<String, ArrayList<CsvSummaryDataType>> results = new HashMap<String, ArrayList<CsvSummaryDataType>>();
+    private HashMap<String, ArrayList<CsvSummaryDataType>> getMethodsWithResultsSummaryFilesFromFile(String sessionID, String resultsDirectory)
+            throws FileNotFoundException, IOException {
+        HashMap<String, ArrayList<CsvSummaryDataType>> results =
+                new HashMap<String, ArrayList<CsvSummaryDataType>>();
 
         if (sessionID == null || sessionID.isEmpty()) {
             addActionError(getText("errors.sessionID.required"));
@@ -657,9 +678,107 @@ public class RetrieveResultsSummaryAction
         return results;
     }
 
+    private HashMap<String, ArrayList<CsvSummaryDataType>> getMethodsWithResultsSummaryFilesFromDB(String sessionID, String resultsDirectory) throws SQLiteException {
+        HashMap<String, ArrayList<CsvSummaryDataType>> results =
+                new HashMap<String, ArrayList<CsvSummaryDataType>>();
+
+        if (sessionID == null || sessionID.isEmpty()) {
+            addActionError(getText("errors.sessionID.required"));
+        } else {
+            resultsDirectory += sessionID + "/";
+        }
+
+        //read data from the database
+        //one or several queries?
+        SqLiteQueries queries = new SqLiteQueries();
+        ArrayList<SummaryResults> readSummaryResults =
+                queries.readSummaryResults(resultsDirectory);
+
+        System.out.println("Database Size: " + readSummaryResults.size());
+
+        //add results to the different lists
+        ArrayList<CsvSummaryDataType> lasso =
+                new ArrayList<CsvSummaryDataType>();
+        ArrayList<CsvSummaryDataType> ridge =
+                new ArrayList<CsvSummaryDataType>();
+        ArrayList<CsvSummaryDataType> rf =
+                new ArrayList<CsvSummaryDataType>();
+        ArrayList<CsvSummaryDataType> en =
+                new ArrayList<CsvSummaryDataType>();
+        ArrayList<CsvSummaryDataType> pcr =
+                new ArrayList<CsvSummaryDataType>();
+        ArrayList<CsvSummaryDataType> pls =
+                new ArrayList<CsvSummaryDataType>();
+        ArrayList<CsvSummaryDataType> spls =
+                new ArrayList<CsvSummaryDataType>();
+        ArrayList<CsvSummaryDataType> svm =
+                new ArrayList<CsvSummaryDataType>();
+        ArrayList<CsvSummaryDataType> univariate_p =
+                new ArrayList<CsvSummaryDataType>();
+        ArrayList<CsvSummaryDataType> univariate_bh =
+                new ArrayList<CsvSummaryDataType>();
+
+        CsvSummaryDataType dataPoint = null;
+        for (SummaryResults summaryResults : readSummaryResults) {
+            dataPoint = new CsvSummaryDataType(
+                    summaryResults.getPredictorVariable(),
+                    summaryResults.getMean(),
+                    summaryResults.getSd(),
+                    summaryResults.getRank());
+
+            if (summaryResults.getMethod().equals("PCR")) {
+                pcr.add(dataPoint);
+            } else if (summaryResults.getMethod().equals("LASSO")) {
+                lasso.add(dataPoint);
+            } else if (summaryResults.getMethod().equals("PLS")) {
+                pls.add(dataPoint);
+            } else if (summaryResults.getMethod().equals("SPLS")) {
+                spls.add(dataPoint);
+            } else if (summaryResults.getMethod().equals("RF")) {
+                rf.add(dataPoint);
+            } else if (summaryResults.getMethod().equals("UNIVARIATE")) {
+                univariate_p.add(dataPoint);
+            } else if (summaryResults.getMethod().equals("BH")) {
+                univariate_bh.add(dataPoint);
+            } else if (summaryResults.getMethod().equals("RIDGE")) {
+                ridge.add(dataPoint);
+            } else if (summaryResults.getMethod().equals("SVM")) {
+                svm.add(dataPoint);
+            } else if (summaryResults.getMethod().equals("EN")) {
+                en.add(dataPoint);
+            }
+        }
+
+        //Only add lists with results.
+        if (pcr != null && !pcr.isEmpty()) {
+            results.put("pcr", pcr);
+        } else if (pls != null && !pls.isEmpty()) {
+            results.put("pls", pls);
+        } else if (lasso != null && !lasso.isEmpty()) {
+            results.put("lasso", lasso);
+        } else if (ridge != null && !ridge.isEmpty()) {
+            results.put("ridge", ridge);
+        } else if (rf != null && !rf.isEmpty()) {
+            results.put("rf", rf);
+        } else if (en != null && !en.isEmpty()) {
+            results.put("en", en);
+        } else if (spls != null && !spls.isEmpty()) {
+            results.put("spls", spls);
+        } else if (svm != null && !svm.isEmpty()) {
+            results.put("svm", svm);
+        } else if (univariate_p != null && !univariate_p.isEmpty()) {
+            results.put("univariate_p", univariate_p);
+        } else if (univariate_bh != null && !univariate_bh.isEmpty()) {
+            results.put("univariate_bh", univariate_bh);
+        }
+
+        return results;
+    }
+
     /**
      * Get the background color for the table according to a gradient of 20
      * colors from white to blue.
+     *
      * @param result
      * @param min
      * @param max

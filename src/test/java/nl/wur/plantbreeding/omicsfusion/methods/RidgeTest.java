@@ -103,7 +103,7 @@ public class RidgeTest {
         System.out.println("writeResults");
         Ridge instance = new Ridge();
         String expResult = "";
-        String result = instance.writeResults();
+        String result = instance.writeResultsToDisk();
         assertNotNull(result);
     }
 }

@@ -103,7 +103,7 @@ public class PCRTest {
         System.out.println("writeResults");
         PCR instance = new PCR();
         String expResult = "";
-        String result = instance.writeResults();
+        String result = instance.writeResultsToDisk();
         assertNotNull(result);
     }
 }

@@ -103,7 +103,7 @@ public class PartialLeasedSquaresTest {
         System.out.println("writeResults");
         PartialLeasedSquares instance = new PartialLeasedSquares();
         String expResult = "";
-        String result = instance.writeResults();
+        String result = instance.writeResultsToDisk();
         assertNotNull(result);
     }
 }

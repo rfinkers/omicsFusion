@@ -31,13 +31,17 @@ public class PCR extends Analysis {
      */
     private static final Logger LOG = Logger.getLogger(PCR.class.getName());
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected String initializeResultObjects() {
         return super.initializeResultObjects("pcr");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected String getRequiredLibraries() {
         String rCode = super.getRequiredLibraries();
@@ -46,13 +50,17 @@ public class PCR extends Analysis {
         return rCode;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getAnalysis() {
         return super.getAnalysis("pcr");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected String combineResults() {
         String rCode = super.combineResults();
@@ -67,9 +75,11 @@ public class PCR extends Analysis {
         return rCode + trainNcomp + ")\n\n";
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public String writeResults() {
+    public String writeResultsToDisk() {
         String rCode = "# Write results to disk\n";
         rCode += "save.image(file=\"pcr.RData\")\n";
         rCode += "write.csv(Train_Coeff, paste(\"PCR_coef\", \"_\", "
@@ -83,6 +93,20 @@ public class PCR extends Analysis {
                 + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
         //rCode += "write.xls(methodResults, \"PCRnew.xls\")";
 
+        return rCode;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String writeResultsToDB() {
+        String rCode = "# Write results to the SQLite database\n";
+        rCode +="Train_Coeff_Summary_<-cbind(\"PCR\",as.data.frame(Train_Coeff_Summary))\n";
+        rCode +="colnames(Train_Coeff_Summary_)[1]<-\"method\"\n";
+
+        rCode += "con <- dbConnect(\"SQLite\", dbname = \"omicsFusion.db\")\n";
+        rCode += "dbWriteTable(con, \"results\",Train_Coeff_Summary_,append=TRUE)\n";
         return rCode;
     }
 }

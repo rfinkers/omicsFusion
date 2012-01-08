@@ -115,7 +115,7 @@ public class RandomForestTest {
         System.out.println("writeResults");
         RandomForest instance = new RandomForest();
         String expResult = "";
-        String result = instance.writeResults();
+        String result = instance.writeResultsToDisk();
         assertNotNull(result);;
     }
 }

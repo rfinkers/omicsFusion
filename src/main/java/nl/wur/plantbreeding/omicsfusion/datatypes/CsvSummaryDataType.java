@@ -19,36 +19,66 @@ import java.util.logging.Logger;
 
 /**
  * Datatype containing the summary results.
+ *
  * @author Richard Finkers
  */
 public class CsvSummaryDataType {
 
-    /** predictor variable. */
+    /**
+     * predictor variable.
+     */
     private String predictorVariable;
-    /** Mean observation. */
+    /**
+     * Mean observation.
+     */
     private Double mean;
-    /** background color in table. */
+    /**
+     * background color in table.
+     */
     private String htmlColor;
-    /** Standard deviation. */
+    /**
+     * Standard deviation.
+     */
     private Double sd;
-    /** rank. */
+    /**
+     * rank.
+     */
     private Double rank;
-    /** The logger. */
+    /**
+     * The logger.
+     */
     private static final Logger LOG = Logger.getLogger(
             CsvSummaryDataType.class.getName());
 
-    /** default constructor. */
+    /**
+     * default constructor.
+     */
     public CsvSummaryDataType() {
     }
 
-    /** get the mean value.
+    public CsvSummaryDataType(
+            String predictorVariable, Double mean, Double sd, Double rank) {
+        this.predictorVariable = predictorVariable;
+        this.mean = mean;
+        this.sd = sd;
+        this.rank = rank;
+    }
+
+    /**
+     * Constructor to fill the initial object.
+     */
+    /**
+     * get the mean value.
+     *
      * @return Mean value.
      */
     public Double getMean() {
         return mean;
     }
 
-    /** set the mean value.
+    /**
+     * set the mean value.
+     *
      * @param mean Mean value.
      */
     public void setMean(Double mean) {
@@ -57,6 +87,7 @@ public class CsvSummaryDataType {
 
     /**
      * Get the rank.
+     *
      * @return the rank.
      */
     public Double getRank() {
@@ -65,6 +96,7 @@ public class CsvSummaryDataType {
 
     /**
      * set the rank.
+     *
      * @param rank the rank.
      */
     public void setRank(Double rank) {
@@ -73,6 +105,7 @@ public class CsvSummaryDataType {
 
     /**
      * Get the predictor variable.
+     *
      * @return predictor variable.
      */
     public String getPredictorVariable() {
@@ -81,6 +114,7 @@ public class CsvSummaryDataType {
 
     /**
      * Set the predictor variable.
+     *
      * @param predictorVariable the predictor variable.
      */
     public void setPredictorVariable(String predictorVariable) {
@@ -98,6 +132,7 @@ public class CsvSummaryDataType {
 
     /**
      * Get the standard deviation.
+     *
      * @return standard deviation.
      */
     public Double getSd() {
@@ -106,6 +141,7 @@ public class CsvSummaryDataType {
 
     /**
      * Set the standard deviation.
+     *
      * @param sd standard deviation.
      */
     public void setSd(Double sd) {
@@ -114,6 +150,7 @@ public class CsvSummaryDataType {
 
     /**
      * Get the HTML color code.
+     *
      * @return HTML color code.
      */
     public String getHtmlColor() {
@@ -122,6 +159,7 @@ public class CsvSummaryDataType {
 
     /**
      * Set the HTML color code.
+     *
      * @param htmlColor HTML color code.
      */
     public void setHtmlColor(String htmlColor) {

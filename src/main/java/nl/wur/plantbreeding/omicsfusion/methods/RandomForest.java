@@ -91,7 +91,7 @@ public class RandomForest extends Analysis {
 
     /** {@inheritDoc} */
     @Override
-    public String writeResults() {
+    public String writeResultsToDisk() {
         String rCode = "# Write results to disk\n";
         rCode += "save.image(file=\"rf.RData\")\n";
         rCode += "write.csv(Train_R2, paste(\"RF_R2\", \"_\", "

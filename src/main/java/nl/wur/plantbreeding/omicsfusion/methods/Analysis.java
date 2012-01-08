@@ -41,6 +41,7 @@ public class Analysis {
 
     /**
      * Loads The Excel sheets from the file system.
+     *
      * @param excelSheets The names of the predictor and response excel sheets.
      * @return R program code.
      */
@@ -78,9 +79,10 @@ public class Analysis {
     }
 
     /**
-    * Read data from the SQLite database.
-    * @return R program code.
-    */
+     * Read data from the SQLite database.
+     *
+     * @return R program code.
+     */
     protected String loadPredictorAndResponseDataSheets() {
         String rCode = "# Load the PredictResponse data sheet from the "
                 + "SQLite database.\n";
@@ -103,11 +105,12 @@ public class Analysis {
     }
 
     /**
-    * Handle missing data via omit or imputation. This method should correct for
-    * each analysis. Missing data in the response matrix might differ for each
-    * run.
-    * @return R program code.
-    */
+     * Handle missing data via omit or imputation. This method should correct
+     * for each analysis. Missing data in the response matrix might differ for
+     * each run.
+     *
+     * @return R program code.
+     */
     protected String handleMissingData() {
         String rCode = "# Missing data\n";
         //TODO: better na.omit strategies. Imputation? Added in addition to the
@@ -119,6 +122,7 @@ public class Analysis {
 
     /**
      * Write the current R session to disk.
+     *
      * @return R program code.
      */
     protected String writeRImage() {
@@ -127,6 +131,7 @@ public class Analysis {
 
     /**
      * Load the predictor and response sheets.
+     *
      * @param excelSheets Name of the excel sheets
      * @return R program code.
      */
@@ -155,6 +160,7 @@ public class Analysis {
 
     /**
      * Preprocess the data matrix.
+     *
      * @return R program code.
      */
     protected String preProcessMatrix() {
@@ -174,6 +180,7 @@ public class Analysis {
 
     /**
      * Get the training sets.
+     *
      * @return R program code.
      */
     protected String getTrainingSets() {
@@ -200,6 +207,7 @@ public class Analysis {
 
     /**
      * Load the required libraries for this method.
+     *
      * @return R compatible code.
      */
     protected String getRequiredLibraries() {
@@ -218,6 +226,7 @@ public class Analysis {
     /**
      * Initialization of the most commonly used empty variables to store the
      * results. Most methods do, however, require their own initialization.
+     *
      * @return R compatible code.
      */
     protected String initializeResultObjects() {
@@ -252,8 +261,9 @@ public class Analysis {
 
     /**
      * Initialization of empty variables to store the results.
-     * @param analysisMethod Name of the analysis method. Allowed names are:
-     * rf, en, ridge, lasso, pls, spls, pcr, univariate, & svm.
+     *
+     * @param analysisMethod Name of the analysis method. Allowed names are: rf,
+     * en, ridge, lasso, pls, spls, pcr, univariate, & svm.
      * @return R compatible code.
      */
     protected String initializeResultObjects(String analysisMethod) {
@@ -344,6 +354,7 @@ public class Analysis {
 
     /**
      * Analysis method specific run code.
+     *
      * @return R compatible code.
      */
     protected String getAnalysis() {
@@ -353,6 +364,7 @@ public class Analysis {
 
     /**
      * Generic analysis method run code.
+     *
      * @param analysisMethod Which Analysis should we run?
      * @return R compatible code.
      */
@@ -509,6 +521,7 @@ public class Analysis {
 
     /**
      * Method that combines the result sets.
+     *
      * @return R compatible code.
      */
     protected String combineResults() {
@@ -534,6 +547,7 @@ public class Analysis {
      * Calculate the row average and SD for each row in the data matrix. Some
      * methods calculates an intercept, this function will omit this from the
      * results.
+     *
      * @return R compatible code fragment.
      */
     protected String getRowMeansAndSD() {
@@ -559,16 +573,29 @@ public class Analysis {
 
     /**
      * Write the results to a csv file.
+     *
      * @return R compatible code.
      */
-    protected String writeResults() {
+    protected String writeResultsToDisk() {
         String rCode = "# Write results to disk\n";
         return rCode;
     }
 
     /**
+     * Write the results to a SQLite database.
+     *
+     * @return R compatible code.
+     */
+    protected String writeResultsToDB() {
+        String rCode = "# Write results to the SQLite database\n";
+        return rCode;
+    }
+
+    /**
      * Predict the response using a new set of predictors.
-     * @param analysisMethod Name of the method for which to predict the response.
+     *
+     * @param analysisMethod Name of the method for which to predict the
+     * response.
      * @return R compatible code.
      */
     protected String predictResponseFromNew(String analysisMethod) {
@@ -584,6 +611,7 @@ public class Analysis {
 
     /**
      * Generic run script.
+     *
      * @param excelSheets The names of the predictor and response excel sheets.
      * @return the complete R compatible script for the selected method.
      */
@@ -598,7 +626,8 @@ public class Analysis {
         rScript += getAnalysis();
         rScript += combineResults();
         rScript += getRowMeansAndSD();
-        rScript += writeResults();
+        rScript += writeRImage();
+        rScript += writeResultsToDB();
         rScript += writeRImage();
         return rScript;
     }

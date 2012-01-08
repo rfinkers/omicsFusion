@@ -102,7 +102,7 @@ public class ElasticNetTest {
         System.out.println("writeResults");
         ElasticNet instance = new ElasticNet();
         String expResult = "";
-        String result = instance.writeResults();
+        String result = instance.writeResultsToDisk();
         assertNotNull(result);
     }
 }
