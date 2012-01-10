@@ -36,9 +36,9 @@ import org.apache.struts2.interceptor.ServletRequestAware;
 
 /**
  * Action class that summarizes the results of the pipeline. Although the
- * confirmation for each result is only sended at the end of the run, this
- * action can already be used to retrieve the results from the intermediate
- * result sets.
+ * confirmation for each result is only send at the end of the run, this action
+ * can already be used to retrieve the results from the intermediate result
+ * sets.
  *
  * @author Richard Finkers
  * @version 1.0
@@ -91,7 +91,6 @@ public class RetrieveResultsSummaryAction
 //        HashMap<String, ArrayList<CsvSummaryDataType>> methResults =
 //                getMethodsWithResultsSummaryFilesFromFile(getSessionId(),
 //                resultsDirectory);
-
         HashMap<String, ArrayList<CsvSummaryDataType>> methResults =
                 getMethodsWithResultsSummaryFilesFromDB(getSessionId(),
                 resultsDirectory);
@@ -196,7 +195,7 @@ public class RetrieveResultsSummaryAction
 
         //Get the mean rank for each predictor
         int[][] rank = getMeanRank(oldResultRows, methResults, lasso, ridge,
-                rf, pcr, pls, spls, svm, en, univariate_p, univariate_bh);
+                rf, pcr, pls, spls, svm, en, univariate_p);
 
         //Sort the array according to the rank
         sortRankArray(rank);
@@ -237,9 +236,10 @@ public class RetrieveResultsSummaryAction
         boolean maxSummary = false;
         //Concatenate the HTML table.
         String table = "<table class='summaryTable'>\n";
-        table = getHtmlTableHeaderString(table, responseName, methResults);
+        table += getHtmlTableHeaderString(responseName, methResults);
         //Add data to the table
-        StringBuilder sb = new StringBuilder();//Use a stringBuilder, as string concatenation of large objects is slow.
+        //Use a stringBuilder, as string concatenation of large objects is slow.
+        StringBuilder sb = new StringBuilder(oldResultRows);
         for (int i = 0; i < oldResultRows; i++) {
             sb.append(getHtmlTableRowString(rank, i, methResults, univariate_p,
                     univariate_bh, lasso, svm, pcr, pls, ridge, rf, en, spls,
@@ -414,11 +414,11 @@ public class RetrieveResultsSummaryAction
         return row;
     }
 
-    private String getHtmlTableHeaderString(String table, String responseName,
+    private String getHtmlTableHeaderString(String responseName,
             HashMap<String, ArrayList<CsvSummaryDataType>> methResults) {
         //TODO: resource bundle
         //TODO: title back to href! with implementation of specific pages
-        table += "<thead>\n";
+        String table = "<thead>\n";
         table += "<tr><th>Response:<br/>" + responseName + "</th>";
         if (methResults.get("univariate_p") != null) {
             table += "<th class='univariate'>"
@@ -493,8 +493,7 @@ public class RetrieveResultsSummaryAction
             ArrayList<CsvSummaryDataType> spls,
             ArrayList<CsvSummaryDataType> svm,
             ArrayList<CsvSummaryDataType> en,
-            ArrayList<CsvSummaryDataType> univariate_p,
-            ArrayList<CsvSummaryDataType> univariate_bh) {
+            ArrayList<CsvSummaryDataType> univariate_p) {
         //TODO: add mean rank and use this for sorting (or instead of for loop?).
         int[][] rank = new int[oldResultRows][2];
         for (int i = 0; i < oldResultRows; i++) {
@@ -678,7 +677,8 @@ public class RetrieveResultsSummaryAction
         return results;
     }
 
-    private HashMap<String, ArrayList<CsvSummaryDataType>> getMethodsWithResultsSummaryFilesFromDB(String sessionID, String resultsDirectory) throws SQLiteException {
+    private HashMap<String, ArrayList<CsvSummaryDataType>> getMethodsWithResultsSummaryFilesFromDB(String sessionID, String resultsDirectory)
+            throws SQLiteException {
         HashMap<String, ArrayList<CsvSummaryDataType>> results =
                 new HashMap<String, ArrayList<CsvSummaryDataType>>();
 
@@ -694,7 +694,7 @@ public class RetrieveResultsSummaryAction
         ArrayList<SummaryResults> readSummaryResults =
                 queries.readSummaryResults(resultsDirectory);
 
-        System.out.println("Database Size: " + readSummaryResults.size());
+        LOG.log(Level.INFO, "Database Size: {0}", readSummaryResults.size());
 
         //add results to the different lists
         ArrayList<CsvSummaryDataType> lasso =
@@ -752,23 +752,32 @@ public class RetrieveResultsSummaryAction
         //Only add lists with results.
         if (pcr != null && !pcr.isEmpty()) {
             results.put("pcr", pcr);
-        } else if (pls != null && !pls.isEmpty()) {
+        }
+        if (pls != null && !pls.isEmpty()) {
             results.put("pls", pls);
-        } else if (lasso != null && !lasso.isEmpty()) {
+        }
+        if (lasso != null && !lasso.isEmpty()) {
             results.put("lasso", lasso);
-        } else if (ridge != null && !ridge.isEmpty()) {
+        }
+        if (ridge != null && !ridge.isEmpty()) {
             results.put("ridge", ridge);
-        } else if (rf != null && !rf.isEmpty()) {
+        }
+        if (rf != null && !rf.isEmpty()) {
             results.put("rf", rf);
-        } else if (en != null && !en.isEmpty()) {
+        }
+        if (en != null && !en.isEmpty()) {
             results.put("en", en);
-        } else if (spls != null && !spls.isEmpty()) {
+        }
+        if (spls != null && !spls.isEmpty()) {
             results.put("spls", spls);
-        } else if (svm != null && !svm.isEmpty()) {
+        }
+        if (svm != null && !svm.isEmpty()) {
             results.put("svm", svm);
-        } else if (univariate_p != null && !univariate_p.isEmpty()) {
+        }
+        if (univariate_p != null && !univariate_p.isEmpty()) {
             results.put("univariate_p", univariate_p);
-        } else if (univariate_bh != null && !univariate_bh.isEmpty()) {
+        }
+        if (univariate_bh != null && !univariate_bh.isEmpty()) {
             results.put("univariate_bh", univariate_bh);
         }
 

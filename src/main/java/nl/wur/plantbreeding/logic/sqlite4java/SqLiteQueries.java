@@ -15,17 +15,13 @@
  */
 package nl.wur.plantbreeding.logic.sqlite4java;
 
-import nl.wur.plantbreeding.omicsfusion.datatypes.SummaryResults;
 import com.almworks.sqlite4java.SQLiteConnection;
 import com.almworks.sqlite4java.SQLiteException;
 import com.almworks.sqlite4java.SQLiteStatement;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import nl.wur.plantbreeding.omicsfusion.datatypes.DataPointDataType;
+import nl.wur.plantbreeding.omicsfusion.datatypes.SummaryResults;
 import nl.wur.plantbreeding.omicsfusion.entities.UserList;
 
 /**
@@ -136,6 +132,17 @@ public class SqLiteQueries extends SqLiteHelper {
         cs.step();
         cs.dispose();
 
+        //table predictors
+        SQLiteStatement ct = db.prepare("CREATE TABLE responseVariables ("
+                + "counter INTEGER, "
+                + "response TEXT)");
+        try {
+            ct.step();
+        }
+        finally {
+            ct.dispose();
+        }
+
         closeDatabase();
     }
 
@@ -213,8 +220,8 @@ public class SqLiteQueries extends SqLiteHelper {
 //        closeDatabase();
 //    }
     public void loadExcelData(List<DataPointDataType> rdp,
-            List<DataPointDataType> pdp, String directory)
-            throws SQLiteException {
+            List<DataPointDataType> pdp, List<String> responseVariables,
+            String directory) throws SQLiteException {
         SQLiteConnection db = openDatabase(directory);
 
         db.exec("BEGIN");
@@ -251,6 +258,22 @@ public class SqLiteQueries extends SqLiteHelper {
 
         }
         db.exec("COMMIT");
+        db.exec("BEGIN");
+        int i=1;
+        for (String responseVariable : responseVariables) {
+            SQLiteStatement resp = db.prepare("INSERT INTO responseVariables "
+                    + "(counter, response) values (?,?)");
+            try {
+                resp.bind(1, i);
+                resp.bind(2, responseVariable);
+            }
+            finally {
+                resp.dispose();
+            }
+            i++;
+        }
+        db.exec("COMMIT");
+
         closeDatabase();
 
     }

@@ -96,13 +96,16 @@ public class UploadDataSheets extends ManipulateExcelSheet {
         //Data (first column genotype, other columns data).
         //parse the rest of the data.
         rdp = new ArrayList<DataPointDataType>();
+        List<String> resp = new ArrayList<String>();
+
         for (int i = responseRowCounter;
                 i < responseSheet.getLastRowNum(); i++) {
 
             String trait;
             Double observation;
             String genotype =
-                    responseSheet.getRow(i).getCell(0).getStringCellValue();
+                    responseSheet.getRow(i).getCell(0).getStringCellValue().trim();
+
             for (int j = 1; j < responseRowLenght; j++) {
                 if (!responseHeaderRow.getCell(j).getStringCellValue().equals("")) {
                     trait = responseHeaderRow.getCell(j).getStringCellValue();
@@ -118,17 +121,22 @@ public class UploadDataSheets extends ManipulateExcelSheet {
                         observation = Double.NaN;
                     }
                     rdp.add(new DataPointDataType(genotype, trait, observation));
+                    if (i == responseRowCounter) {
+                        resp.add(trait);
+                    }
                 }
             }
         }
 
         List<DataPointDataType> pdp = new ArrayList<DataPointDataType>();
+
+        //TODO: Check this logic, seems redundant!
         for (int i = predictorRowCounter;
                 i < predictorSheet.getLastRowNum(); i++) {
 
             String header;
             Double value;
-            String genotype = predictorSheet.getRow(i).getCell(0).getStringCellValue();
+            String genotype = predictorSheet.getRow(i).getCell(0).getStringCellValue().trim();
             for (int j = 1; j < predictorRowLength; j++) {
                 if (!predictorHeaderRow.getCell(j).getStringCellValue().equals("")) {
                     header = predictorHeaderRow.getCell(j).getStringCellValue();
@@ -145,10 +153,11 @@ public class UploadDataSheets extends ManipulateExcelSheet {
                     }
                     pdp.add(new DataPointDataType(genotype, header, value));
                 }
+
             }
         }
 
         SqLiteQueries sql = new SqLiteQueries();
-        sql.loadExcelData(rdp, pdp, directory);
+        sql.loadExcelData(rdp, pdp, resp, directory);
     }
 }
