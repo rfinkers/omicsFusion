@@ -125,6 +125,7 @@ public class SqLiteQueries extends SqLiteHelper {
         //table results
         SQLiteStatement cs = db.prepare("CREATE TABLE results ("
                 + "predictor TEXT, "
+                + "response TEXT, "
                 + "method_name TEXT, "
                 + "value REAL, "
                 + "sd REAL, "
@@ -163,7 +164,8 @@ public class SqLiteQueries extends SqLiteHelper {
         st.bind(2, userList.getEmail());
         st.bind(3, userList.getAffiliation());
         st.bind(4, userList.getCountry());
-        st.bind(5, Calendar.DAY_OF_MONTH + "-" + Calendar.MONTH + "-" + Calendar.YEAR);
+        st.bind(5, Calendar.DAY_OF_MONTH + "-" + Calendar.MONTH
+                + "-" + Calendar.YEAR);
         st.step();
         st.dispose();
         closeDatabase();
@@ -202,22 +204,6 @@ public class SqLiteQueries extends SqLiteHelper {
         closeDatabase();
     }
 
-//    /*
-//     * Add information about the files to the db.
-//     */
-//    public void addFileInfo(String directory, HashMap<String, String> file)
-//            throws SQLiteException {
-//        //add list of methods to the database
-//        SQLiteConnection db = openDatabase(directory);
-//        SQLiteStatement stm = db.prepare("INSERT INTO file_names "
-//                + "(predictor_name, response_name, predict_response_name, "
-//                + "predictor_type, response_type) "
-//                + "values (?,?,?,?,?)");
-//
-//        stm.step();
-//        stm.dispose();
-//        closeDatabase();
-//    }
     /**
      *
      * @param rdp
@@ -247,8 +233,8 @@ public class SqLiteQueries extends SqLiteHelper {
                 pred.dispose();
             }
         }
-
         db.exec("COMMIT");
+
         db.exec("BEGIN");
         for (DataPointDataType dataPointDataType : rdp) {
             SQLiteStatement resp = db.prepare("INSERT INTO response "
@@ -266,6 +252,7 @@ public class SqLiteQueries extends SqLiteHelper {
 
         }
         db.exec("COMMIT");
+
         db.exec("BEGIN");
         int i = 1;
         for (String responseVariable : responseVariables) {
@@ -359,8 +346,9 @@ public class SqLiteQueries extends SqLiteHelper {
         while (stm.step()) {
             stm.columnDouble(3);
             summaryResults = new SummaryResults(stm.columnString(0),
-                    stm.columnString(1), stm.columnDouble(2),
-                    stm.columnDouble(3), stm.columnDouble(4));
+                    stm.columnString(1), stm.columnString(2),
+                    stm.columnDouble(3), stm.columnDouble(4),
+                    stm.columnDouble(5));
             results.add(summaryResults);
         }
         stm.dispose();

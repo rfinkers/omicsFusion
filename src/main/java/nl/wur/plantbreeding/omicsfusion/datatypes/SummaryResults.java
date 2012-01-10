@@ -20,21 +20,39 @@ package nl.wur.plantbreeding.omicsfusion.datatypes;
  * @author finke002
  */
 public class SummaryResults {
-    /** predictor variable. */
+
+    /**
+     * predictor variable.
+     */
     private String predictorVariable;
-        /** Method. */
+    /**
+     * response variable.
+     */
+    private String responseVariable;
+    /**
+     * Method.
+     */
     private String method;
-    /** Mean observation. */
+    /**
+     * Mean observation.
+     */
     private Double mean;
-    /** Standard deviation. */
+    /**
+     * Standard deviation.
+     */
     private Double sd;
-    /** rank. */
+    /**
+     * rank.
+     */
     private Double rank;
 
-    public SummaryResults(){}
+    public SummaryResults() {
+    }
 
-    public SummaryResults(String predictorVariable, String method, Double mean, Double sd, Double rank) {
+    public SummaryResults(String predictorVariable, String responseVariable,
+            String method, Double mean, Double sd, Double rank) {
         this.predictorVariable = predictorVariable;
+        this.responseVariable = responseVariable;
         this.method = method;
         this.mean = mean;
         this.sd = sd;
@@ -81,6 +99,11 @@ public class SummaryResults {
         this.sd = sd;
     }
 
+    public String getResponseVariable() {
+        return responseVariable;
+    }
 
-
+    public void setResponseVariable(String responseVariable) {
+        this.responseVariable = responseVariable;
+    }
 }

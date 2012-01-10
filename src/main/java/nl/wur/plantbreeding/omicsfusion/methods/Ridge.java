@@ -35,7 +35,9 @@ public class Ridge extends Analysis {
         return super.initializeResultObjects("ridge");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected String getRequiredLibraries() {
         String rCode = super.getRequiredLibraries();
@@ -45,13 +47,17 @@ public class Ridge extends Analysis {
         return rCode;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getAnalysis() {
         return super.getAnalysis("ridge");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected String combineResults() {
         String rCode = "# Combine results\n";
@@ -76,7 +82,9 @@ public class Ridge extends Analysis {
                 + trainR2 + ")\n" + test + ")\n\n";
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String writeResultsToDisk() {
         String rCode = "# Write results to disk\n";
@@ -94,14 +102,15 @@ public class Ridge extends Analysis {
         return rCode;
     }
 
-        /**
+    /**
      * {@inheritDoc}
      */
     @Override
     public String writeResultsToDB() {
         String rCode = "# Write results to the SQLite database\n";
-        rCode +="Train_Coeff_Summary_<-cbind(\"RIDGE\",as.data.frame(Train_Coeff_Summary))\n";
-        rCode +="colnames(Train_Coeff_Summary_)[1]<-\"method\"\n";
+        rCode += "Train_Coeff_Summary_<-cbind(\"RIDGE\",\"responseVariable\","
+                + "as.data.frame(Train_Coeff_Summary))\n";
+        rCode += "colnames(Train_Coeff_Summary_)[1]<-\"method\"\n";
 
         rCode += "con <- dbConnect(\"SQLite\", dbname = \"omicsFusion.db\")\n";
         rCode += "dbWriteTable(con, \"results\",Train_Coeff_Summary_,append=TRUE)\n";

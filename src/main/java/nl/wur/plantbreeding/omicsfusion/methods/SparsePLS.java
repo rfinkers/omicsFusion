@@ -32,7 +32,9 @@ public class SparsePLS extends Analysis {
         return super.initializeResultObjects("spls");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected String getRequiredLibraries() {
         String rCode = super.getRequiredLibraries();
@@ -44,13 +46,17 @@ public class SparsePLS extends Analysis {
         return rCode;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getAnalysis() {
         return super.getAnalysis("spls");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected String combineResults() {
         String rCode = super.combineResults();
@@ -68,7 +74,9 @@ public class SparsePLS extends Analysis {
         return rCode + Train_eta + ")\n" + Train_K + ")\n\n";
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String writeResultsToDisk() {
         String rCode = "# Write results to disk\n";
@@ -88,14 +96,16 @@ public class SparsePLS extends Analysis {
         //rCode += "write.xls(methodResults, \"SPLSnew.xls\")";
         return rCode;
     }
-        /**
+
+    /**
      * {@inheritDoc}
      */
     @Override
     public String writeResultsToDB() {
         String rCode = "# Write results to the SQLite database\n";
-        rCode +="Train_Coeff_Summary_<-cbind(\"SPLS\",as.data.frame(Train_Coeff_Summary))\n";
-        rCode +="colnames(Train_Coeff_Summary_)[1]<-\"method\"\n";
+        rCode += "Train_Coeff_Summary_<-cbind(\"SPLS\",\"responseVariable\","
+                + "as.data.frame(Train_Coeff_Summary))\n";
+        rCode += "colnames(Train_Coeff_Summary_)[1]<-\"method\"\n";
 
         rCode += "con <- dbConnect(\"SQLite\", dbname = \"omicsFusion.db\")\n";
         rCode += "dbWriteTable(con, \"results\",Train_Coeff_Summary_,append=TRUE)\n";

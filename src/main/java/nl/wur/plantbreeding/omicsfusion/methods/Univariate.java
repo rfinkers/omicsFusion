@@ -19,14 +19,19 @@ import java.util.logging.Logger;
 
 /**
  * Contains the script required to perform Univariate analysis.
+ *
  * @author Richard Finkers
  */
 public class Univariate extends Analysis {
 
-    /** The logger */
+    /**
+     * The logger
+     */
     private static final Logger LOG = Logger.getLogger(Univariate.class.getName());
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected String getRequiredLibraries() {
         String rCode = super.getRequiredLibraries();
@@ -36,7 +41,9 @@ public class Univariate extends Analysis {
         return rCode;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected String getAnalysis() {
         String rCode = "#Univariate Analysis\n";
@@ -56,7 +63,9 @@ public class Univariate extends Analysis {
         return rCode;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected String writeResultsToDisk() {
         String rCode = "#Write Univariate and FDR correction results details\n";
@@ -67,7 +76,29 @@ public class Univariate extends Analysis {
         return rCode;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String writeResultsToDB() {
+        String rCode = "# Write results to the SQLite database\n";
+        rCode += "Summary_<-cbind(\"Univariate\",\"responseVariable\","
+                + "as.data.frame(pvalue))\n";
+        rCode += "colnames(Summary_)[1]<-\"method\"\n";
+
+        rCode += "Summary_bh_<-cbind(\"bh\",\"responseVariable\","
+                + "as.data.frame(bh))\n";
+        rCode += "colnames(Summary_bh_)[1]<-\"method\"\n";
+
+        rCode += "con <- dbConnect(\"SQLite\", dbname = \"omicsFusion.db\")\n";
+        rCode += "dbWriteTable(con, \"results\",Summary_,append=TRUE)\n";
+        rCode += "dbWriteTable(con, \"results\",Summary_bh_,append=TRUE)\n";
+        return rCode;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected String combineResults() {
         //Write results to XLS files
@@ -97,19 +128,25 @@ public class Univariate extends Analysis {
         return rCode;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected String getTrainingSets() {
         return "";
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected String getRowMeansAndSD() {
         return "";
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected String initializeResultObjects() {
         //initialize the variables

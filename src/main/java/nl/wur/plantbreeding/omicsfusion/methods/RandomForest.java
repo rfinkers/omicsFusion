@@ -32,13 +32,17 @@ public class RandomForest extends Analysis {
     private static final Logger LOG =
             Logger.getLogger(RandomForest.class.getName());
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected String initializeResultObjects() {
         return super.initializeResultObjects("rf");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected String getRequiredLibraries() {
         String rCode = super.getRequiredLibraries();
@@ -47,13 +51,17 @@ public class RandomForest extends Analysis {
         return rCode;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getAnalysis() {
         return super.getAnalysis("rf");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected String combineResults() {
         String rCode = "# Combine results\n";
@@ -77,7 +85,9 @@ public class RandomForest extends Analysis {
         return rCode + trainMtry + ")\n" + trainVarImp + ")\n" + trainR2 + ")\n" + test + ")\n\n";
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected String getRowMeansAndSD() {
         String rCode = "# Get row means, SD and (absolute) rank\n";
@@ -89,7 +99,9 @@ public class RandomForest extends Analysis {
         return rCode;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String writeResultsToDisk() {
         String rCode = "# Write results to disk\n";
@@ -104,6 +116,21 @@ public class RandomForest extends Analysis {
         rCode += "write.csv(methodResults, paste(\"RF\", \"_\", "
                 + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
         //rCode += "write.xls(methodResults, \"RFnew.xls\")";
+        return rCode;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String writeResultsToDB() {
+        String rCode = "# Write results to the SQLite database\n";
+        rCode += "RF_varImp_Summary_<-cbind(\"RF\",\"responseVariable\","
+                + "as.data.frame(RF_varImp_Summary))\n";
+        rCode += "colnames(RF_varImp_Summary_)[1]<-\"method\"\n";
+
+        rCode += "con <- dbConnect(\"SQLite\", dbname = \"omicsFusion.db\")\n";
+        rCode += "dbWriteTable(con, \"results\",RF_varImp_Summary_,append=TRUE)\n";
         return rCode;
     }
 }

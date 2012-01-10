@@ -86,14 +86,15 @@ public class PartialLeasedSquares extends Analysis {
         return rCode;
     }
 
-        /**
+    /**
      * {@inheritDoc}
      */
     @Override
     public String writeResultsToDB() {
         String rCode = "# Write results to the SQLite database\n";
-        rCode +="Train_Coeff_Summary_<-cbind(\"PLS\",as.data.frame(Train_Coeff_Summary))\n";
-        rCode +="colnames(Train_Coeff_Summary_)[1]<-\"method\"\n";
+        rCode += "Train_Coeff_Summary_<-cbind(\"PLS\",\"responceVariable\","
+                + "as.data.frame(Train_Coeff_Summary))\n";
+        rCode += "colnames(Train_Coeff_Summary_)[1]<-\"method\"\n";
 
         rCode += "con <- dbConnect(\"SQLite\", dbname = \"omicsFusion.db\")\n";
         rCode += "dbWriteTable(con, \"results\",Train_Coeff_Summary_,append=TRUE)\n";

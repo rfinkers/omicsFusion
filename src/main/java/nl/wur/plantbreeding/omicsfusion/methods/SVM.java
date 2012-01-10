@@ -30,13 +30,17 @@ public class SVM extends Analysis {
      */
     private static final Logger LOG = Logger.getLogger(SVM.class.getName());
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected String initializeResultObjects() {
         return super.initializeResultObjects("svm");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected String getRequiredLibraries() {
         String rCode = super.getRequiredLibraries();
@@ -45,13 +49,17 @@ public class SVM extends Analysis {
         return rCode;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getAnalysis() {
         return super.getAnalysis("svm");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected String combineResults() {
         String rCode = "# Combine results\n";
@@ -75,7 +83,9 @@ public class SVM extends Analysis {
         return rCode + trainR2 + ")\n" + sigma + ")\n" + cost + ")\n" + test + ")\n\n";
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected String getRowMeansAndSD() {
         String rCode = "# Get row means, SD and (absolute) rank\n";
@@ -83,7 +93,9 @@ public class SVM extends Analysis {
         return rCode;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String writeResultsToDisk() {
         String rCode = "# Write results to disk\n";
