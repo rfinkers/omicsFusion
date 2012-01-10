@@ -163,7 +163,7 @@ public class SqLiteQueries extends SqLiteHelper {
         st.bind(2, userList.getEmail());
         st.bind(3, userList.getAffiliation());
         st.bind(4, userList.getCountry());
-        st.bind(5, Calendar.DAY_OF_MONTH + "-" + Calendar.MONTH);
+        st.bind(5, Calendar.DAY_OF_MONTH + "-" + Calendar.MONTH + "-" + Calendar.YEAR);
         st.step();
         st.dispose();
         closeDatabase();
@@ -199,7 +199,6 @@ public class SqLiteQueries extends SqLiteHelper {
         //check for annotations and upload
 
         //add all data to the database
-
         closeDatabase();
     }
 
@@ -219,8 +218,17 @@ public class SqLiteQueries extends SqLiteHelper {
 //        stm.dispose();
 //        closeDatabase();
 //    }
+    /**
+     *
+     * @param rdp
+     * @param pdp
+     * @param responseVariables
+     * @param directory
+     * @throws SQLiteException
+     */
     public void loadExcelData(List<DataPointDataType> rdp,
-            List<DataPointDataType> pdp, List<String> responseVariables,
+            List<DataPointDataType> pdp,
+            List<String> responseVariables,
             String directory) throws SQLiteException {
         SQLiteConnection db = openDatabase(directory);
 
@@ -259,13 +267,14 @@ public class SqLiteQueries extends SqLiteHelper {
         }
         db.exec("COMMIT");
         db.exec("BEGIN");
-        int i=1;
+        int i = 1;
         for (String responseVariable : responseVariables) {
             SQLiteStatement resp = db.prepare("INSERT INTO responseVariables "
-                    + "(counter, response) values (?,?)");
+                    + "(counter, response) VALUES (?,?)");
             try {
                 resp.bind(1, i);
                 resp.bind(2, responseVariable);
+                resp.step();
             }
             finally {
                 resp.dispose();

@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import nl.wur.plantbreeding.logic.sqlite4java.SqLiteQueries;
 import nl.wur.plantbreeding.omicsfusion.datatypes.DataPointDataType;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -38,6 +39,15 @@ import org.apache.poi.ss.usermodel.Workbook;
  */
 public class UploadDataSheets extends ManipulateExcelSheet {
 
+    /**
+     *
+     * @param responseExcelFile
+     * @param responseType
+     * @param predictorExcelFile
+     * @param predictorType
+     * @param directory
+     * @throws SQLiteException
+     */
     public static void uploadExcelSheets(File responseExcelFile,
             String responseType, File predictorExcelFile, String predictorType,
             String directory) throws SQLiteException {
@@ -122,6 +132,7 @@ public class UploadDataSheets extends ManipulateExcelSheet {
                     }
                     rdp.add(new DataPointDataType(genotype, trait, observation));
                     if (i == responseRowCounter) {
+                        System.out.println("Trait: " + trait);
                         resp.add(trait);
                     }
                 }
