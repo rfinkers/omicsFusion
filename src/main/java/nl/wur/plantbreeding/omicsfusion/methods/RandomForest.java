@@ -126,7 +126,7 @@ public class RandomForest extends Analysis {
     public String writeResultsToDB() {
         String rCode = "# Write results to the SQLite database\n";
         rCode += "RF_varImp_Summary_<-cbind(\"RF\",\"responseVariable\","
-                + "as.data.frame(RF_varImp_Summary))\n";
+                + "as.data.frame(Train_varImp_Summary))\n";
         rCode += "colnames(RF_varImp_Summary_)[1]<-\"method\"\n";
 
         rCode += "con <- dbConnect(\"SQLite\", dbname = \"omicsFusion.db\")\n";
