@@ -82,7 +82,8 @@ public class RandomForest extends Analysis {
                 test += ", ";
             }
         }
-        return rCode + trainMtry + ")\n" + trainVarImp + ")\n" + trainR2 + ")\n" + test + ")\n\n";
+        return rCode + trainMtry + ")\n" + trainVarImp + ")\n"
+                + trainR2 + ")\n" + test + ")\n\n";
     }
 
     /**
@@ -110,7 +111,8 @@ public class RandomForest extends Analysis {
                 + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
         rCode += "write.csv(Train_varImp, paste(\"RF_varImp\", \"_\", "
                 + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
-        rCode += "write.csv(Train_varImp_Summary, paste(\"RF_varImp_Summary\", \".csv\" , sep = \"\"))\n";
+        rCode += "write.csv(Train_varImp_Summary, paste(\"RF_varImp_Summary\", "
+                + "\".csv\" , sep = \"\"))\n";
         rCode += "write.csv(Train_mtry, paste(\"RF_mtry\", \"_\", "
                 + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
         rCode += "write.csv(methodResults, paste(\"RF\", \"_\", "
@@ -130,7 +132,8 @@ public class RandomForest extends Analysis {
         rCode += "colnames(RF_varImp_Summary_)[1]<-\"method\"\n";
 
         rCode += "con <- dbConnect(\"SQLite\", dbname = \"omicsFusion.db\")\n";
-        rCode += "dbWriteTable(con, \"results\",RF_varImp_Summary_,append=TRUE)\n";
+        rCode += "dbWriteTable(con, \"results\","
+                + "RF_varImp_Summary_,append=TRUE)\n";
         return rCode;
     }
 }

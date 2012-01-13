@@ -101,6 +101,12 @@
             <artifactId>displaytag</artifactId>
             <version>1.2</version>
             <type>jar</type>
+            <exclusions>
+                <exclusion>
+                    <artifactId>itext</artifactId>
+                    <groupId>com.lowagie</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>net.sourceforge.javacsv</groupId>

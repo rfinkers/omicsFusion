@@ -75,7 +75,16 @@ public class SummaryResults {
         this.method = method;
     }
 
+    /**
+     * Return the predictor variable. R produced text quotas & spaces are
+     * trimmed from the predictor variable.
+     * TODO: test case & check.
+     * @return Cleaned predictor variable.
+     */
     public String getPredictorVariable() {
+        if(predictorVariable.startsWith("`")&& predictorVariable.endsWith("`")){
+            predictorVariable.replace("`", "").trim();
+        }
         return predictorVariable;
     }
 
@@ -106,4 +115,5 @@ public class SummaryResults {
     public void setResponseVariable(String responseVariable) {
         this.responseVariable = responseVariable;
     }
+
 }
