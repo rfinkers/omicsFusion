@@ -127,7 +127,7 @@ public class RandomForest extends Analysis {
     @Override
     public String writeResultsToDB() {
         String rCode = "# Write results to the SQLite database\n";
-        rCode += "RF_varImp_Summary_<-cbind(\"RF\",\"responseVariable\","
+        rCode += "RF_varImp_Summary_<-cbind(\"responseVariable\",\"RF\","
                 + "as.data.frame(Train_varImp_Summary))\n";
         rCode += "colnames(RF_varImp_Summary_)[1]<-\"method\"\n";
 

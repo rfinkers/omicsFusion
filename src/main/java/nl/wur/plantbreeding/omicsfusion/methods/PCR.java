@@ -102,7 +102,7 @@ public class PCR extends Analysis {
     @Override
     public String writeResultsToDB() {
         String rCode = "# Write results to the SQLite database\n";
-        rCode +="Train_Coeff_Summary_<-cbind(\"PCR\",\"responseVariable\","
+        rCode +="Train_Coeff_Summary_<-cbind(\"responseVariable\",\"PCR\","
                 + "as.data.frame(Train_Coeff_Summary))\n";
         rCode +="colnames(Train_Coeff_Summary_)[1]<-\"method\"\n";
 

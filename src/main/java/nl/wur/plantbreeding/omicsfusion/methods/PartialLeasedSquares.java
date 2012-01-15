@@ -92,7 +92,7 @@ public class PartialLeasedSquares extends Analysis {
     @Override
     public String writeResultsToDB() {
         String rCode = "# Write results to the SQLite database\n";
-        rCode += "Train_Coeff_Summary_<-cbind(\"PLS\",\"responceVariable\","
+        rCode += "Train_Coeff_Summary_<-cbind(\"responceVariable\",\"PLS\","
                 + "as.data.frame(Train_Coeff_Summary))\n";
         rCode += "colnames(Train_Coeff_Summary_)[1]<-\"method\"\n";
 

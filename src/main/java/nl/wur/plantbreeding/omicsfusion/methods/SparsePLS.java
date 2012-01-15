@@ -103,7 +103,7 @@ public class SparsePLS extends Analysis {
     @Override
     public String writeResultsToDB() {
         String rCode = "# Write results to the SQLite database\n";
-        rCode += "Train_Coeff_Summary_<-cbind(\"SPLS\",\"responseVariable\","
+        rCode += "Train_Coeff_Summary_<-cbind(\"responseVariable\",\"SPLS\","
                 + "as.data.frame(Train_Coeff_Summary))\n";
         rCode += "colnames(Train_Coeff_Summary_)[1]<-\"method\"\n";
 
