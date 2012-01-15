@@ -95,6 +95,8 @@ public class RetrieveResultsSummaryAction
                 getMethodsWithResultsSummaryFilesFromDB(getSessionId(),
                 resultsDirectory);
 
+        System.out.println("Methods: " + methResults.size());
+
         if (methResults.isEmpty()) {
             addActionError(getText("errors.no.result"));
             return ERROR;
@@ -764,6 +766,7 @@ public class RetrieveResultsSummaryAction
         }
         if (rf != null && !rf.isEmpty()) {
             results.put("rf", rf);
+            LOG.info("adding RF");
         }
         if (en != null && !en.isEmpty()) {
             results.put("en", en);

@@ -64,12 +64,6 @@ public class PredictorResponseXYScatterAction
             predictor = request.getHeader("referer");
             String[] split = predictor.split("=");
             predictor = split[1].trim();
-//            if (predictor.startsWith("X.")) {
-//                predictor = predictor.substring(2);
-//            } else if (predictor.startsWith("X")) {//TODO: not a perfect solution!!
-//                predictor = predictor.substring(1);
-//            }
-// Logic moved to the CvsSummaryDataType.
         }
         catch (Exception e) {
             //TODO: Check
@@ -129,6 +123,7 @@ public class PredictorResponseXYScatterAction
         }
 
         LOG.info("got data");
+        LOG.info("DataSet size: " + xyDataset.getSeriesCount());
 
         //X (predictor) and Y axis (response)
         ValueAxis yAxis = new NumberAxis(getText("response.text") + ": "
@@ -213,7 +208,7 @@ public class PredictorResponseXYScatterAction
         String fileNames[] = null;
 
         try {
-            fileNames = rf.ReadSheetFileNames(ServletUtils.getResultsDir(request)
+            fileNames = rf.ReadSheetFileNames(ServletUtils.getResultsDir(request, sessionID)
                     + "/filenames.txt");
             //currently only valid for excel sheets as input. Otherwise throw error.
         }
@@ -224,9 +219,9 @@ public class PredictorResponseXYScatterAction
         }
 
         //Read the names of the predictor and response file
-        String responseFile = ServletUtils.getResultsDir(request) + "/"
+        String responseFile = ServletUtils.getResultsDir(request, sessionID) + "/"
                 + fileNames[0].trim();
-        String predictorFile = ServletUtils.getResultsDir(request) + "/"
+        String predictorFile = ServletUtils.getResultsDir(request, sessionID) + "/"
                 + fileNames[1].trim();
 
         File predFile = new File(predictorFile);
