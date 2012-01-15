@@ -126,7 +126,7 @@ public class Analysis {
      * @return R program code.
      */
     protected String writeRImage() {
-        return "save.image(file=\"test.RData\")\n\n";
+        return "save.image(file=\"test.RData\", safe = TRUE)\n\n";
     }
 
     /**

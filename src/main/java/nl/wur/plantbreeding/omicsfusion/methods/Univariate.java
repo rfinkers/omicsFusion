@@ -82,11 +82,11 @@ public class Univariate extends Analysis {
     @Override
     public String writeResultsToDB() {
         String rCode = "# Write results to the SQLite database\n";
-        rCode += "Summary_<-cbind(\"responseVariable\",\"Univariate\","
+        rCode += "Summary_<-cbind(\"responseVariable\",\"UNIVARIATE\","
                 + "as.data.frame(pvalue))\n";
         rCode += "colnames(Summary_)[1]<-\"method\"\n";
 
-        rCode += "Summary_bh_<-cbind(\"bh\",\"responseVariable\","
+        rCode += "Summary_bh_<-cbind(\"BH\",\"responseVariable\","
                 + "as.data.frame(bh))\n";
         rCode += "colnames(Summary_bh_)[1]<-\"method\"\n";
 
