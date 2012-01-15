@@ -125,6 +125,9 @@ public class CsvSummaryDataType {
             this.predictorVariable = predictorVariable.substring(1);
             //handle Col replacement here as well?
             //or not, as Col is used later to directly access the column.
+        } else if (predictorVariable.startsWith("`")
+                && predictorVariable.endsWith("`")) {
+            this.predictorVariable = predictorVariable.replace("`", "").trim();
         } else {
             this.predictorVariable = predictorVariable;
         }
@@ -184,7 +187,7 @@ public class CsvSummaryDataType {
 
     @Override
     public String toString() {
-        return "CsvSummaryDataType{" + "responsVariable= " + predictorVariable
+        return "CsvSummaryDataType{" + "predictorVariable= " + predictorVariable
                 + " mean= " + mean + " htmlColor= " + htmlColor + " sd= " + sd
                 + " rank= " + rank + '}';
     }

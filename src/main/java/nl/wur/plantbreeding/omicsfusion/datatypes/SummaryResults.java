@@ -51,7 +51,12 @@ public class SummaryResults {
 
     public SummaryResults(String predictorVariable, String responseVariable,
             String method, Double mean, Double sd, Double rank) {
-        this.predictorVariable = predictorVariable;
+        if (predictorVariable.startsWith("`")
+                && predictorVariable.endsWith("`")) {
+            this.predictorVariable = predictorVariable.replace("`", "").trim();
+        } else {
+            this.predictorVariable = predictorVariable;
+        }
         this.responseVariable = responseVariable;
         this.method = method;
         this.mean = mean;
@@ -75,21 +80,29 @@ public class SummaryResults {
         this.method = method;
     }
 
-    /**
-     * Return the predictor variable. R produced text quotas & spaces are
-     * trimmed from the predictor variable.
-     * TODO: test case & check.
-     * @return Cleaned predictor variable.
-     */
     public String getPredictorVariable() {
-        if(predictorVariable.startsWith("`")&& predictorVariable.endsWith("`")){
-            predictorVariable.replace("`", "").trim();
-        }
         return predictorVariable;
     }
 
+    /**
+     * Set the predictor variable. R produced text quotas & spaces are trimmed
+     * from the predictor variable. TODO: test case & check.
+     *
+     * @param predictorVariable
+     */
     public void setPredictorVariable(String predictorVariable) {
-        this.predictorVariable = predictorVariable;
+        if (predictorVariable.startsWith("`")) {
+            System.out.println("start");
+        }
+        if (predictorVariable.endsWith("`")) {
+            System.out.println("end");
+        }
+        if (predictorVariable.startsWith("`")
+                && predictorVariable.endsWith("`")) {
+            this.predictorVariable = predictorVariable.replace("`", "").trim();
+        } else {
+            this.predictorVariable = predictorVariable;
+        }
     }
 
     public Double getRank() {
@@ -115,5 +128,4 @@ public class SummaryResults {
     public void setResponseVariable(String responseVariable) {
         this.responseVariable = responseVariable;
     }
-
 }
