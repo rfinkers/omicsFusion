@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import nl.wur.plantbreeding.logic.jfreechart.GenotypeXYToolTipGenerator;
 import nl.wur.plantbreeding.logic.jfreechart.GenotypeXYDataset;
 import nl.wur.plantbreeding.logic.jfreechart.GenotypeXYUrlGenerator;
+import nl.wur.plantbreeding.logic.sqlite4java.SqLiteQueries;
 import nl.wur.plantbreeding.omicsfusion.excel.DataSheetValidationException;
 import nl.wur.plantbreeding.omicsfusion.excel.ReadExcelSheet;
 import nl.wur.plantbreeding.omicsfusion.utils.ReadFile;
@@ -207,18 +208,24 @@ public class PredictorResponseXYScatterAction
         //The filenames are stored in this string array
         String fileNames[] = null;
 
-        try {
-            fileNames = rf.ReadSheetFileNames(ServletUtils.getResultsDir(request, sessionID)
-                    + "/filenames.txt");
-            //currently only valid for excel sheets as input. Otherwise throw error.
-        }
-        catch (IOException ex) {
-            Logger.getLogger(
-                    PredictorResponseXYScatterAction.class.getName()).
-                    log(Level.SEVERE, null, ex);
-        }
+        //FIXME: cleanup code
+        //        try {
+//            fileNames = rf.ReadSheetFileNames(ServletUtils.getResultsDir(request, sessionID)
+//                    + "/filenames.txt");
+//            //currently only valid for excel sheets as input. Otherwise throw error.
+//        }
+//        catch (IOException ex) {
+//            Logger.getLogger(
+//                    PredictorResponseXYScatterAction.class.getName()).
+//                    log(Level.SEVERE, null, ex);
+//        }
 
-        //Read the names of the predictor and response file
+        //Read the names of the names of the predictor and response file.
+        SqLiteQueries sql = new SqLiteQueries();
+        fileNames[0] = sql.getResponseSheetName(sessionID);
+        fileNames[1] = sql.getPredictorSheetName(sessionID);
+
+        //Read the predictor and response file.
         String responseFile = ServletUtils.getResultsDir(request, sessionID) + "/"
                 + fileNames[0].trim();
         String predictorFile = ServletUtils.getResultsDir(request, sessionID) + "/"

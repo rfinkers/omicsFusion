@@ -355,4 +355,44 @@ public class SqLiteQueries extends SqLiteHelper {
         closeDatabase();
         return results;
     }
+
+    /**
+     *
+     * @param directory
+     * @return
+     * @throws SQLiteException
+     */
+    public String getResponseSheetName(String directory)
+            throws SQLiteException {
+        String result = "";
+        SQLiteConnection db = openDatabase(directory);
+        SQLiteStatement stm = db.prepare("SELECT response_name "
+                + "FROM file_names ");
+        while (stm.step()) {
+            result = stm.columnString(0);
+        }
+        stm.dispose();
+        closeDatabase();
+        return result;
+    }
+
+    /**
+     *
+     * @param directory
+     * @return
+     * @throws SQLiteException
+     */
+    public String getPredictorSheetName(String directory)
+            throws SQLiteException {
+        String result = "";
+        SQLiteConnection db = openDatabase(directory);
+        SQLiteStatement stm = db.prepare("SELECT predictor_name "
+                + "FROM file_names ");
+        while (stm.step()) {
+            result = stm.columnString(0);
+        }
+        stm.dispose();
+        closeDatabase();
+        return result;
+    }
 }
