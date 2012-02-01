@@ -15,6 +15,7 @@
  */
 package nl.wur.plantbreeding.omicsfusion.results;
 
+import com.almworks.sqlite4java.SQLiteException;
 import java.awt.Color;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -44,17 +45,24 @@ import org.jfree.data.xy.DefaultXYDataset;
 
 /**
  * Show a XY scatterplot for a predictor / response variable.
+ *
  * @author Richard Finkers
  * @version 1.0.
  */
 public class PredictorResponseXYScatterAction
         extends PredictorResponseXYScatterForm implements ServletRequestAware {
 
-    /** Serial Version UID. */
+    /**
+     * Serial Version UID.
+     */
     private static final long serialVersionUID = 100906L;
-    /** Chart object. */
+    /**
+     * Chart object.
+     */
     private JFreeChart chart;
-    /** the request. */
+    /**
+     * the request.
+     */
     private HttpServletRequest request;//TODO: use RequestAware (map version) instead!
 
     @Override
@@ -97,7 +105,7 @@ public class PredictorResponseXYScatterAction
         LOG.info("get data");
         DefaultXYDataset xyDataset = null;
         try {
-            xyDataset = getDataSet(predictor, sessionName);
+            xyDataset = getDataSetFromXLS(predictor, sessionName);
         }
         catch (InvalidFormatException invalidFormatException) {
             addActionError(getText("errors.xyscatter.data"));
@@ -124,7 +132,7 @@ public class PredictorResponseXYScatterAction
         }
 
         LOG.info("got data");
-        LOG.info("DataSet size: " + xyDataset.getSeriesCount());
+        LOG.log(Level.INFO, "DataSet size: {0}", xyDataset.getSeriesCount());
 
         //X (predictor) and Y axis (response)
         ValueAxis yAxis = new NumberAxis(getText("response.text") + ": "
@@ -174,7 +182,8 @@ public class PredictorResponseXYScatterAction
 
     /**
      * Create a random test dataset of 100 xy points.
-     * @return  A random test dataset.
+     *
+     * @return A random test dataset.
      */
     private DefaultXYDataset getTestDataSet() {
         // chart creation logic...
@@ -195,18 +204,20 @@ public class PredictorResponseXYScatterAction
 
     /**
      * Read two data sheets and parse the right columns for the XY scatter.
+     *
      * @param predictor Name of the predictor variable.
      * @param sessionID SessionID of the original analysis run.
      * @return XYDataset.
      * @throws InvalidFormatException Not an excel compatible sheet!
      */
-    private DefaultXYDataset getDataSet(String predictor, String sessionID)
+    private DefaultXYDataset getDataSetFromXLS(String predictor,
+            String sessionID)
             throws InvalidFormatException, FileNotFoundException, IOException,
             DataSheetValidationException, Exception {
         //read the filenames from filenames.txt
         ReadFile rf = new ReadFile();
         //The filenames are stored in this string array
-        String fileNames[] = null;
+        String fileNames[] = new String[2];
 
         //FIXME: cleanup code
         //        try {
@@ -222,14 +233,19 @@ public class PredictorResponseXYScatterAction
 
         //Read the names of the names of the predictor and response file.
         SqLiteQueries sql = new SqLiteQueries();
-        fileNames[0] = sql.getResponseSheetName(sessionID);
-        fileNames[1] = sql.getPredictorSheetName(sessionID);
+        fileNames[0] = sql.getResponseSheetName(
+                ServletUtils.getResultsDir(request, sessionID));
+        fileNames[1] = sql.getPredictorSheetName(
+                ServletUtils.getResultsDir(request, sessionID));
+
+        LOG.log(Level.INFO, "File: {0} and {1}",
+                new Object[]{fileNames[0], fileNames[1]});
 
         //Read the predictor and response file.
-        String responseFile = ServletUtils.getResultsDir(request, sessionID) + "/"
-                + fileNames[0].trim();
-        String predictorFile = ServletUtils.getResultsDir(request, sessionID) + "/"
-                + fileNames[1].trim();
+        String responseFile = ServletUtils.getResultsDir(request, sessionID)
+                + "/" + fileNames[0].trim();
+        String predictorFile = ServletUtils.getResultsDir(request, sessionID)
+                + "/" + fileNames[1].trim();
 
         File predFile = new File(predictorFile);
         File respFile = new File(responseFile);
@@ -239,6 +255,58 @@ public class PredictorResponseXYScatterAction
         readPredictorAndResponseValue =
                 ReadExcelSheet.readPredictorAndResponseValue(respFile,
                 predFile, predictor);
+
+        return readPredictorAndResponseValue;
+    }
+
+        /**
+     * Read two data for the XY scatter.
+     *
+     * @param predictor Name of the predictor variable.
+     * @param response Name of the response (trait) to show in the plot.
+     * @param sessionID SessionID of the original analysis run.
+     * @return XYDataset.
+     */
+    private DefaultXYDataset getDataSetFromDB(String predictor, String response,
+            String sessionID) throws SQLiteException {
+
+        //connect to the db.
+        SqLiteQueries sql = new SqLiteQueries();
+
+        //Read the data for the predictor (order by)
+
+        //Read the data for the response (order by)
+
+        //combine the two lists (check the name order)
+
+        //We need a DefaultXYDataset.
+
+        //We want to include an regression line (and plot the R2).
+
+
+
+//        fileNames[0] = sql.getResponseSheetName(
+//                ServletUtils.getResultsDir(request, sessionID));
+//        fileNames[1] = sql.getPredictorSheetName(
+//                ServletUtils.getResultsDir(request, sessionID));
+//
+//        LOG.log(Level.INFO, "File: {0} and {1}",
+//                new Object[]{fileNames[0], fileNames[1]});
+//
+//        //Read the predictor and response file.
+//        String responseFile = ServletUtils.getResultsDir(request, sessionID)
+//                + "/" + fileNames[0].trim();
+//        String predictorFile = ServletUtils.getResultsDir(request, sessionID)
+//                + "/" + fileNames[1].trim();
+
+//        File predFile = new File(predictorFile);
+//        File respFile = new File(responseFile);
+        DefaultXYDataset readPredictorAndResponseValue = null;
+
+        LOG.info("try");
+//        readPredictorAndResponseValue =
+//                ReadExcelSheet.readPredictorAndResponseValue(respFile,
+//                predFile, predictor);
 
         return readPredictorAndResponseValue;
     }

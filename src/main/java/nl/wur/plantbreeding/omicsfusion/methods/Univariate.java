@@ -16,6 +16,7 @@
 package nl.wur.plantbreeding.omicsfusion.methods;
 
 import java.util.logging.Logger;
+import nl.wur.plantbreeding.omicsfusion.utils.Constants;
 
 /**
  * Contains the script required to perform Univariate analysis.
@@ -82,11 +83,11 @@ public class Univariate extends Analysis {
     @Override
     public String writeResultsToDB() {
         String rCode = "# Write results to the SQLite database\n";
-        rCode += "Summary_<-cbind(\"responseVariable\",\"UNIVARIATE\","
+        rCode += "Summary_<-cbind(\"responseVariable\",\"" + Constants.UNIVARIATE + "\","
                 + "as.data.frame(pvalue))\n";
         rCode += "colnames(Summary_)[1]<-\"method\"\n";
 
-        rCode += "Summary_bh_<-cbind(\"BH\",\"responseVariable\","
+        rCode += "Summary_bh_<-cbind(\"responseVariable\",\"" + Constants.BH + "\","
                 + "as.data.frame(bh))\n";
         rCode += "colnames(Summary_bh_)[1]<-\"method\"\n";
 
@@ -156,5 +157,13 @@ public class Univariate extends Analysis {
         rCode += "beta1<-NULL\n";
         rCode += "pval<-NULL\n";
         return rCode;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected String writeRImage() {
+        return "save.image(file=\"univariate.RData\", safe = TRUE)\n\n";
     }
 }

@@ -27,6 +27,7 @@ import nl.wur.plantbreeding.omicsfusion.email.ExceptionEmail;
 import static nl.wur.plantbreeding.omicsfusion.email.SubmissionCompleteEmail.SubmissionCompleteEmail;
 import nl.wur.plantbreeding.omicsfusion.methods.*;
 import nl.wur.plantbreeding.omicsfusion.utils.CmdExec;
+import nl.wur.plantbreeding.omicsfusion.utils.Constants;
 import nl.wur.plantbreeding.omicsfusion.utils.ServletUtils;
 import nl.wur.plantbreeding.omicsfusion.utils.WriteFile;
 import org.apache.struts2.interceptor.ServletRequestAware;
@@ -82,54 +83,54 @@ public class RunAnalysisAction extends ActionSupport
             //Relative time: RF - 50 /SPLS - 34 /Ridge - 32 /EN - 8
             //SVM - 5 /PCR - 2 /PLS - 1 /LASSO - 1
             for (String method : methods) {
-                if (method.equals("rf")) {
+                if (method.equals(Constants.RF)) {
                     RandomForest mth = new RandomForest();
                     String mthString = mth.getAnalysisScript(sheets);
                     writeScriptFile("rf.R", mthString);
-                    jobIds.put("rf", submitToSGE("rf"));
-                } else if (method.equals("spls")) {
+                    jobIds.put(Constants.RF, submitToSGE(Constants.RF));
+                } else if (method.equals(Constants.SPLS)) {
                     SparsePLS mth = new SparsePLS();
                     String mthString = mth.getAnalysisScript(sheets);
                     writeScriptFile("spls.R", mthString);
-                    jobIds.put("spls", submitToSGE("spls"));
-                } else if (method.equals("ridge")) {
+                    jobIds.put(Constants.SPLS, submitToSGE(Constants.SPLS));
+                } else if (method.equals(Constants.RIDGE)) {
                     Ridge mth = new Ridge();
                     String mthString = mth.getAnalysisScript(sheets);
                     writeScriptFile(method + ".R", mthString);
                     int job = submitToSGE(method);
                     if (job != 0) {
-                        jobIds.put("ridge", job);
+                        jobIds.put(Constants.RIDGE, job);
                     }
-                } else if (method.equals("en")) {
+                } else if (method.equals(Constants.EN)) {
                     ElasticNet mth = new ElasticNet();
                     String mthString = mth.getAnalysisScript(sheets);
                     writeScriptFile("en.R", mthString);
-                    jobIds.put("en", submitToSGE("en"));
-                } else if (method.equals("svm")) {
+                    jobIds.put(Constants.EN, submitToSGE(Constants.EN));
+                } else if (method.equals(Constants.SVM)) {
                     SVM mth = new SVM();
                     String mthString = mth.getAnalysisScript(sheets);
                     writeScriptFile("svm.R", mthString);
-                    jobIds.put("svm", submitToSGE("svm"));
-                } else if (method.equals("pcr")) {
+                    jobIds.put(Constants.SVM, submitToSGE(Constants.SVM));
+                } else if (method.equals(Constants.PCR)) {
                     PCR mth = new PCR();
                     String mthString = mth.getAnalysisScript(sheets);
                     writeScriptFile("pcr.R", mthString);
-                    jobIds.put("pcr", submitToSGE("pcr"));
-                } else if (method.equals("pls")) {
+                    jobIds.put(Constants.PCR, submitToSGE(Constants.PCR));
+                } else if (method.equals(Constants.PLS)) {
                     PartialLeasedSquares mth = new PartialLeasedSquares();
                     String mthString = mth.getAnalysisScript(sheets);
                     writeScriptFile("pls.R", mthString);
-                    jobIds.put("pls", submitToSGE("pls"));
-                } else if (method.equals("lasso")) {
+                    jobIds.put(Constants.PLS, submitToSGE(Constants.PLS));
+                } else if (method.equals(Constants.LASSO)) {
                     Lasso mth = new Lasso();
                     String mthString = mth.getAnalysisScript(sheets);
                     writeScriptFile("lasso.R", mthString);
-                    jobIds.put("lasso", submitToSGE("lasso"));
-                } else if (method.equals("univariate")) {
+                    jobIds.put(Constants.LASSO, submitToSGE(Constants.LASSO));
+                } else if (method.equals(Constants.UNIVARIATE)) {
                     Univariate mth = new Univariate();
                     String mthString = mth.getAnalysisScript(sheets);
                     writeScriptFile("univariate.R", mthString);
-                    jobIds.put("univariate", submitToSGE("univariate"));
+                    jobIds.put(Constants.UNIVARIATE, submitToSGE(Constants.UNIVARIATE));
                 }
             }
             //Always run the RSessionInfo job

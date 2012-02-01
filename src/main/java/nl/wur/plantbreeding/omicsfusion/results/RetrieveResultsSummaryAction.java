@@ -119,62 +119,62 @@ public class RetrieveResultsSummaryAction
 
         // Make each results matrix available and add the HTML color code which
         // is used for highlighting the results.
-        if (methResults.get("lasso") != null) {
-            lasso = methResults.get("lasso");
+        if (methResults.get(Constants.LASSO) != null) {
+            lasso = methResults.get(Constants.LASSO);
             addTableBackgroundColors(lasso, false);
             resultRows[resultRowsCounter] = lasso.size();
             resultRowsCounter++;
         }
-        if (methResults.get("ridge") != null) {
-            ridge = methResults.get("ridge");
+        if (methResults.get(Constants.RIDGE) != null) {
+            ridge = methResults.get(Constants.RIDGE);
             addTableBackgroundColors(ridge, false);
             resultRows[resultRowsCounter] = ridge.size();
             resultRowsCounter++;
         }
-        if (methResults.get("rf") != null) {
-            rf = methResults.get("rf");
+        if (methResults.get(Constants.RF) != null) {
+            rf = methResults.get(Constants.RF);
             addTableBackgroundColors(rf, false);
             resultRows[resultRowsCounter] = rf.size();
             resultRowsCounter++;
         }
-        if (methResults.get("pcr") != null) {
-            pcr = methResults.get("pcr");
+        if (methResults.get(Constants.PCR) != null) {
+            pcr = methResults.get(Constants.PCR);
             addTableBackgroundColors(pcr, false);
             resultRows[resultRowsCounter] = pcr.size();
             resultRowsCounter++;
         }
-        if (methResults.get("pls") != null) {
-            pls = methResults.get("pls");
+        if (methResults.get(Constants.PLS) != null) {
+            pls = methResults.get(Constants.PLS);
             addTableBackgroundColors(pls, false);
             resultRows[resultRowsCounter] = pls.size();
             resultRowsCounter++;
         }
-        if (methResults.get("spls") != null) {
-            spls = methResults.get("spls");
+        if (methResults.get(Constants.SPLS) != null) {
+            spls = methResults.get(Constants.SPLS);
             addTableBackgroundColors(spls, false);
             resultRows[resultRowsCounter] = spls.size();
             resultRowsCounter++;
         }
-        if (methResults.get("svm") != null) {
-            svm = methResults.get("svm");
+        if (methResults.get(Constants.SVM) != null) {
+            svm = methResults.get(Constants.SVM);
             addTableBackgroundColors(svm, false);
             resultRows[resultRowsCounter] = svm.size();
             resultRowsCounter++;
         }
-        if (methResults.get("en") != null) {
-            en = methResults.get("en");
+        if (methResults.get(Constants.EN) != null) {
+            en = methResults.get(Constants.EN);
             addTableBackgroundColors(en, false);
             resultRows[resultRowsCounter] = en.size();
             resultRowsCounter++;
         }
-        if (methResults.get("univariate_p") != null) {
-            univariate_p = methResults.get("univariate_p");
+        if (methResults.get(Constants.UNIVARIATE) != null) {
+            univariate_p = methResults.get(Constants.UNIVARIATE);
             addTableBackgroundColors(univariate_p, true);
             resultRows[resultRowsCounter] = univariate_p.size();
             resultRowsCounter++;
         }
-        if (methResults.get("univariate_bh") != null) {
-            univariate_bh = methResults.get("univariate_bh");
+        if (methResults.get(Constants.BH) != null) {
+            univariate_bh = methResults.get(Constants.BH);
             addTableBackgroundColors(univariate_bh, true);
             resultRows[resultRowsCounter] = univariate_bh.size();
             resultRowsCounter++;
@@ -304,25 +304,25 @@ public class RetrieveResultsSummaryAction
         row += "<td>";
         String predictorVariable = "";
         //Only add the rowname once (from the first available result set).
-        if (methResults.get("univariate_p") != null) {
+        if (methResults.get(Constants.UNIVARIATE) != null) {
             predictorVariable = univariate_p.get(element).getPredictorVariable();
-        } else if (methResults.get("univariate_bh") != null) {
+        } else if (methResults.get(Constants.BH) != null) {
             predictorVariable = univariate_bh.get(element).getPredictorVariable();
-        } else if (methResults.get("rf") != null) {
+        } else if (methResults.get(Constants.RF) != null) {
             predictorVariable = lasso.get(element).getPredictorVariable();
-        } else if (methResults.get("svm") != null) {
+        } else if (methResults.get(Constants.SVM) != null) {
             predictorVariable = svm.get(element).getPredictorVariable();
-        } else if (methResults.get("pcr") != null) {
+        } else if (methResults.get(Constants.PCR) != null) {
             predictorVariable = pcr.get(element).getPredictorVariable();
-        } else if (methResults.get("pls") != null) {
+        } else if (methResults.get(Constants.PLS) != null) {
             predictorVariable = pls.get(element).getPredictorVariable();
-        } else if (methResults.get("ridge") != null) {
+        } else if (methResults.get(Constants.RIDGE) != null) {
             predictorVariable = ridge.get(element).getPredictorVariable();
-        } else if (methResults.get("lasso") != null) {
+        } else if (methResults.get(Constants.LASSO) != null) {
             predictorVariable = rf.get(element).getPredictorVariable();
-        } else if (methResults.get("en") != null) {
+        } else if (methResults.get(Constants.EN) != null) {
             predictorVariable = en.get(element).getPredictorVariable();
-        } else if (methResults.get("spls") != null) {
+        } else if (methResults.get(Constants.SPLS) != null) {
             predictorVariable = spls.get(element).getPredictorVariable();
         }
 
@@ -339,49 +339,49 @@ public class RetrieveResultsSummaryAction
         //+ predictorVariable + "</s:url>";//TODO: add URL
         row += "</td>";
         //Results
-        if (methResults.get("univariate_p") != null) {
+        if (methResults.get(Constants.UNIVARIATE) != null) {
             row += "<td class=\"" + univariate_p.get(element).getHtmlColor()
                     + "\"><a title=\"rank: "
                     + univariate_p.get(element).getRank() + "\"> "
                     + df.format(univariate_p.get(element).getMean()) + "</td>";
         }
-        if (methResults.get("univariate_bh") != null) {
+        if (methResults.get(Constants.BH) != null) {
             row += "<td class=\"" + univariate_bh.get(element).getHtmlColor()
                     + "\"><a title=\"rank: "
                     + univariate_bh.get(element).getRank() + "\"> "
                     + df.format(univariate_bh.get(element).getMean()) + "</td>";
         }
-        if (methResults.get("rf") != null) {
+        if (methResults.get(Constants.RF) != null) {
             row += "<td class=\"" + rf.get(element).getHtmlColor()
                     + "\"><a title=\"rank: " + rf.get(element).getRank()
                     + " / sd: " + df.format(rf.get(element).getSd()) + " \"> "
                     + df.format(rf.get(element).getMean()) + " </a></td>";
         }
-        if (methResults.get("svm") != null) {
+        if (methResults.get(Constants.SVM) != null) {
             row += "<td class=\"" + svm.get(element).getHtmlColor()
                     + "\"><a title=\"rank: " + svm.get(element).getRank()
                     + " / sd: " + df.format(svm.get(element).getSd()) + " \"> "
                     + df.format(svm.get(element).getMean()) + " </a></td>";
         }
-        if (methResults.get("pcr") != null) {
+        if (methResults.get(Constants.PCR) != null) {
             row += "<td class=\"" + pcr.get(element).getHtmlColor()
                     + "\"><a title=\"rank: " + pcr.get(element).getRank()
                     + " / sd: " + df.format(pcr.get(element).getSd()) + " \"> "
                     + df.format(pcr.get(element).getMean()) + " </a></td>";
         }
-        if (methResults.get("pls") != null) {
+        if (methResults.get(Constants.PLS) != null) {
             row += "<td class=\"" + pls.get(element).getHtmlColor()
                     + "\"><a title=\"rank: " + pls.get(element).getRank()
                     + " / sd: " + df.format(pls.get(element).getSd()) + " \"> "
                     + df.format(pls.get(element).getMean()) + " </a></td>";
         }
-        if (methResults.get("ridge") != null) {
+        if (methResults.get(Constants.RIDGE) != null) {
             row += "<td class=\"" + ridge.get(element).getHtmlColor()
                     + "\"><a title=\"rank: " + ridge.get(element).getRank()
                     + " / sd: " + df.format(ridge.get(element).getSd()) + " \"> "
                     + df.format(ridge.get(element).getMean()) + " </a></td>";
         }
-        if (methResults.get("lasso") != null) {
+        if (methResults.get(Constants.LASSO) != null) {
             if (lasso.get(element).getMean() != 0) {
                 row += "<td class=\"" + lasso.get(element).getHtmlColor()
                         + "\"><a title=\"rank: " + lasso.get(element).getRank()
@@ -392,7 +392,7 @@ public class RetrieveResultsSummaryAction
                 row += "<td></td>";
             }
         }
-        if (methResults.get("en") != null) {
+        if (methResults.get(Constants.EN) != null) {
             if (en.get(element).getMean() != 0) {
                 row += "<td class=\"" + en.get(element).getHtmlColor()
                         + "\"><a title=\"rank: " + en.get(element).getRank()
@@ -402,7 +402,7 @@ public class RetrieveResultsSummaryAction
                 row += "<td></td>";
             }
         }
-        if (methResults.get("spls") != null) {
+        if (methResults.get(Constants.SPLS) != null) {
             if (spls.get(element).getMean() != 0) {
                 row += "<td class=\"" + spls.get(element).getHtmlColor()
                         + "\"><a title=\"rank: " + spls.get(element).getRank()
@@ -422,43 +422,43 @@ public class RetrieveResultsSummaryAction
         //TODO: title back to href! with implementation of specific pages
         String table = "<thead>\n";
         table += "<tr><th>Response:<br/>" + responseName + "</th>";
-        if (methResults.get("univariate_p") != null) {
+        if (methResults.get(Constants.UNIVARIATE) != null) {
             table += "<th class='univariate'>"
                     + "<a title='univariate'>Univariate pval</a></th>";
         }
-        if (methResults.get("univariate_bh") != null) {
+        if (methResults.get(Constants.BH) != null) {
             table += "<th class='univariate'>"
                     + "<a title='BH'>Univariate BH</a></th>";
         }
-        if (methResults.get("rf") != null) {
+        if (methResults.get(Constants.RF) != null) {
             table += "<th class='machine'>"
                     + "<a title='RF'>Random Forest</a></th>";
         }
-        if (methResults.get("svm") != null) {
+        if (methResults.get(Constants.SVM) != null) {
             table += "<th class='machine'>"
                     + "<a title='SVM'>SVM</a></th>";
         }
-        if (methResults.get("pcr") != null) {
+        if (methResults.get(Constants.PCR) != null) {
             table += "<th class='regression'>"
                     + "<a title='PCR'>PCR</a></th>";
         }
-        if (methResults.get("pls") != null) {
+        if (methResults.get(Constants.PLS) != null) {
             table += "<th class='regression'>"
                     + "<a title='PLS'>PLS</a></th>";
         }
-        if (methResults.get("ridge") != null) {
+        if (methResults.get(Constants.RIDGE) != null) {
             table += "<th class='regression'>"
                     + "<a title='Ridge'>Ridge</a></th>";
         }
-        if (methResults.get("lasso") != null) {
+        if (methResults.get(Constants.LASSO) != null) {
             table += "<th class='variableSelection'>"
                     + "<a title='Lasso'>Lasso</a></th>";
         }
-        if (methResults.get("en") != null) {
+        if (methResults.get(Constants.EN) != null) {
             table += "<th class='variableSelection'>"
                     + "<a title='EN'>Elastic net</a></th>";
         }
-        if (methResults.get("spls") != null) {
+        if (methResults.get(Constants.SPLS) != null) {
             table += "<th class='variableSelection'>"
                     + "<a title='SPLS'>SPLS</a></th>";
         }
@@ -501,41 +501,41 @@ public class RetrieveResultsSummaryAction
         for (int i = 0; i < oldResultRows; i++) {
             int count = 0;
             int sumRank = 0;
-            if (methResults.get("lasso") != null) {
+            if (methResults.get(Constants.LASSO) != null) {
                 //variable selection method.
                 if (lasso.get(i).getMean() != 0) {
                     sumRank += lasso.get(i).getRank();
                     count++;
                 }
             }
-            if (methResults.get("ridge") != null) {
+            if (methResults.get(Constants.RIDGE) != null) {
                 sumRank += ridge.get(i).getRank();
                 count++;
             }
-            if (methResults.get("rf") != null) {
+            if (methResults.get(Constants.RF) != null) {
                 sumRank += rf.get(i).getRank();
                 count++;
             }
-            if (methResults.get("pcr") != null) {
+            if (methResults.get(Constants.PCR) != null) {
                 sumRank += pcr.get(i).getRank();
                 count++;
             }
-            if (methResults.get("pls") != null) {
+            if (methResults.get(Constants.PLS) != null) {
                 sumRank += pls.get(i).getRank();
                 count++;
             }
-            if (methResults.get("spls") != null) {
+            if (methResults.get(Constants.SPLS) != null) {
                 //variable selection method.
                 if (spls.get(i).getMean() != 0) {
                     sumRank += spls.get(i).getRank();
                     count++;
                 }
             }
-            if (methResults.get("svm") != null) {
+            if (methResults.get(Constants.SVM) != null) {
                 sumRank += svm.get(i).getRank();
                 count++;
             }
-            if (methResults.get("en") != null) {
+            if (methResults.get(Constants.EN) != null) {
                 //variable selection method.
                 //TODO: check validity
                 if (en.get(i).getMean() != 0) {
@@ -546,11 +546,11 @@ public class RetrieveResultsSummaryAction
             //We only want to use the univariate for the overal rank.
             //The BH corrected rank looses part of the ranking as gives the same
             //rank to variables which have different ranks within univariate.
-            if (methResults.get("univariate_p") != null) {
+            if (methResults.get(Constants.UNIVARIATE) != null) {
                 sumRank += univariate_p.get(i).getRank();
                 count++;
             }
-//            if (methResults.get("univariate_bh") != null) {
+//            if (methResults.get(Constants.BH) != null) {
 //                sumRank += univariate_bh.get(i).getRank();
 //                count++;
 //            }
@@ -628,52 +628,52 @@ public class RetrieveResultsSummaryAction
 
         if (FileOrDirectoryExists.FileOrDirectoryExists(resultsDirectory
                 + "LASSO_coef_Sum.csv") == true) {
-            results.put("lasso", CSV.readSummaryCsv(resultsDirectory
+            results.put(Constants.LASSO, CSV.readSummaryCsv(resultsDirectory
                     + "LASSO_coef_Sum.csv"));
         }
         if (FileOrDirectoryExists.FileOrDirectoryExists(resultsDirectory
                 + "RIDGE_coef_Sum.csv") == true) {
-            results.put("ridge", CSV.readSummaryCsv(resultsDirectory
+            results.put(Constants.RIDGE, CSV.readSummaryCsv(resultsDirectory
                     + "RIDGE_coef_Sum.csv"));
         }
         if (FileOrDirectoryExists.FileOrDirectoryExists(resultsDirectory
                 + "RF_varImp_Summary.csv") == true) {
-            results.put("rf", CSV.readSummaryCsv(resultsDirectory
+            results.put(Constants.RF, CSV.readSummaryCsv(resultsDirectory
                     + "RF_varImp_Summary.csv"));
         }
         if (FileOrDirectoryExists.FileOrDirectoryExists(resultsDirectory
                 + "EN_coef_Sum.csv") == true) {
-            results.put("en", CSV.readSummaryCsv(resultsDirectory
+            results.put(Constants.EN, CSV.readSummaryCsv(resultsDirectory
                     + "EN_coef_Sum.csv"));
         }
         if (FileOrDirectoryExists.FileOrDirectoryExists(resultsDirectory
                 + "PCR_coef_Sum.csv") == true) {
-            results.put("pcr", CSV.readSummaryCsv(resultsDirectory
+            results.put(Constants.PCR, CSV.readSummaryCsv(resultsDirectory
                     + "PCR_coef_Sum.csv"));
         }
         if (FileOrDirectoryExists.FileOrDirectoryExists(resultsDirectory
                 + "PLS_coef_Sum.csv") == true) {
-            results.put("pls", CSV.readSummaryCsv(resultsDirectory
+            results.put(Constants.PLS, CSV.readSummaryCsv(resultsDirectory
                     + "PLS_coef_Sum.csv"));
         }
         if (FileOrDirectoryExists.FileOrDirectoryExists(resultsDirectory
                 + "SPLS_coef_Sum.csv") == true) {
-            results.put("spls", CSV.readSummaryCsv(resultsDirectory
+            results.put(Constants.SPLS, CSV.readSummaryCsv(resultsDirectory
                     + "SPLS_coef_Sum.csv"));
         }
         if (FileOrDirectoryExists.FileOrDirectoryExists(resultsDirectory
                 + "SVM_coef_Sum.csv") == true) {
-            results.put("svm", CSV.readSummaryCsv(resultsDirectory
+            results.put(Constants.SVM, CSV.readSummaryCsv(resultsDirectory
                     + "SVM_coef_Sum.csv"));
         } //Disable univariate for now
         if (FileOrDirectoryExists.FileOrDirectoryExists(resultsDirectory
                 + "univariate_bh_coef.csv") == true) {
-            results.put("univariate_bh", CSV.readSummaryCsv(resultsDirectory
+            results.put(Constants.BH, CSV.readSummaryCsv(resultsDirectory
                     + "univariate_bh_coef.csv"));
         }
         if (FileOrDirectoryExists.FileOrDirectoryExists(resultsDirectory
                 + "univariate_p_coef.csv") == true) {
-            results.put("univariate_p", CSV.readSummaryCsv(resultsDirectory
+            results.put(Constants.UNIVARIATE, CSV.readSummaryCsv(resultsDirectory
                     + "univariate_p_coef.csv"));
         }
         return results;
@@ -728,60 +728,60 @@ public class RetrieveResultsSummaryAction
                     summaryResults.getSd(),
                     summaryResults.getRank());
 
-            if (summaryResults.getMethod().equals("PCR")) {
+            if (summaryResults.getMethod().equals(Constants.PCR)) {
                 pcr.add(dataPoint);
-            } else if (summaryResults.getMethod().equals("LASSO")) {
+            } else if (summaryResults.getMethod().equals(Constants.LASSO)) {
                 lasso.add(dataPoint);
-            } else if (summaryResults.getMethod().equals("PLS")) {
+            } else if (summaryResults.getMethod().equals(Constants.PLS)) {
                 pls.add(dataPoint);
-            } else if (summaryResults.getMethod().equals("SPLS")) {
+            } else if (summaryResults.getMethod().equals(Constants.SPLS)) {
                 spls.add(dataPoint);
-            } else if (summaryResults.getMethod().equals("RF")) {
+            } else if (summaryResults.getMethod().equals(Constants.RF)) {
                 rf.add(dataPoint);
-            } else if (summaryResults.getMethod().equals("UNIVARIATE")) {
+            } else if (summaryResults.getMethod().equals(Constants.UNIVARIATE)) {
                 univariate_p.add(dataPoint);
-            } else if (summaryResults.getMethod().equals("BH")) {
+            } else if (summaryResults.getMethod().equals(Constants.BH)) {
                 univariate_bh.add(dataPoint);
-            } else if (summaryResults.getMethod().equals("RIDGE")) {
+            } else if (summaryResults.getMethod().equals(Constants.RIDGE)) {
                 ridge.add(dataPoint);
-            } else if (summaryResults.getMethod().equals("SVM")) {
+            } else if (summaryResults.getMethod().equals(Constants.SVM)) {
                 svm.add(dataPoint);
-            } else if (summaryResults.getMethod().equals("EN")) {
+            } else if (summaryResults.getMethod().equals(Constants.EN)) {
                 en.add(dataPoint);
             }
         }
 
         //Only add lists with results.
         if (pcr != null && !pcr.isEmpty()) {
-            results.put("pcr", pcr);
+            results.put(Constants.PCR, pcr);
         }
         if (pls != null && !pls.isEmpty()) {
-            results.put("pls", pls);
+            results.put(Constants.PLS, pls);
         }
         if (lasso != null && !lasso.isEmpty()) {
-            results.put("lasso", lasso);
+            results.put(Constants.LASSO, lasso);
         }
         if (ridge != null && !ridge.isEmpty()) {
-            results.put("ridge", ridge);
+            results.put(Constants.RIDGE, ridge);
         }
         if (rf != null && !rf.isEmpty()) {
-            results.put("rf", rf);
+            results.put(Constants.RF, rf);
             LOG.info("adding RF");
         }
         if (en != null && !en.isEmpty()) {
-            results.put("en", en);
+            results.put(Constants.EN, en);
         }
         if (spls != null && !spls.isEmpty()) {
-            results.put("spls", spls);
+            results.put(Constants.SPLS, spls);
         }
         if (svm != null && !svm.isEmpty()) {
-            results.put("svm", svm);
+            results.put(Constants.SVM, svm);
         }
         if (univariate_p != null && !univariate_p.isEmpty()) {
-            results.put("univariate_p", univariate_p);
+            results.put(Constants.UNIVARIATE, univariate_p);
         }
         if (univariate_bh != null && !univariate_bh.isEmpty()) {
-            results.put("univariate_bh", univariate_bh);
+            results.put(Constants.BH, univariate_bh);
         }
 
         return results;

@@ -32,13 +32,17 @@ public class PartialLeasedSquares extends Analysis {
     private static final Logger LOG =
             Logger.getLogger(PartialLeasedSquares.class.getName());
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected String initializeResultObjects() {
         return super.initializeResultObjects("pls");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected String getRequiredLibraries() {
         String rCode = super.getRequiredLibraries();
@@ -47,13 +51,17 @@ public class PartialLeasedSquares extends Analysis {
         return rCode;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getAnalysis() {
         return super.getAnalysis("pls");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected String combineResults() {
         String rCode = super.combineResults();
@@ -68,7 +76,9 @@ public class PartialLeasedSquares extends Analysis {
         return rCode + trainNcomp + ")\n\n";
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String writeResultsToDisk() {
         String rCode = "# Write results to disk\n";
@@ -92,12 +102,20 @@ public class PartialLeasedSquares extends Analysis {
     @Override
     public String writeResultsToDB() {
         String rCode = "# Write results to the SQLite database\n";
-        rCode += "Train_Coeff_Summary_<-cbind(\"responceVariable\",\"PLS\","
+        rCode += "Train_Coeff_Summary_<-cbind(\"responceVariable\",\"" + Constants.PLS + "\","
                 + "as.data.frame(Train_Coeff_Summary))\n";
         rCode += "colnames(Train_Coeff_Summary_)[1]<-\"method\"\n";
 
         rCode += "con <- dbConnect(\"SQLite\", dbname = \"omicsFusion.db\")\n";
         rCode += "dbWriteTable(con, \"results\",Train_Coeff_Summary_,append=TRUE)\n";
         return rCode;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected String writeRImage() {
+        return "save.image(file=\"pls.RData\", safe = TRUE)\n\n";
     }
 }

@@ -57,7 +57,7 @@ public class Lasso extends Analysis {
      */
     @Override
     public String getAnalysis() {
-        return super.getAnalysis("lasso");
+        return super.getAnalysis(Constants.LASSO);
     }
 
     /**
@@ -113,12 +113,20 @@ public class Lasso extends Analysis {
     @Override
     public String writeResultsToDB() {
         String rCode = "# Write results to the SQLite database\n";
-        rCode += "Train_Coeff_Summary_<-cbind(\"responseVariable\",\"LASSO\","
+        rCode += "Train_Coeff_Summary_<-cbind(\"responseVariable\",\"" + Constants.LASSO + "\","
                 + "as.data.frame(Train_Coeff_Summary))\n";
         rCode += "colnames(Train_Coeff_Summary_)[1]<-\"method\"\n";
 
         rCode += "con <- dbConnect(\"SQLite\", dbname = \"omicsFusion.db\")\n";
         rCode += "dbWriteTable(con, \"results\",Train_Coeff_Summary_,append=TRUE)\n";
         return rCode;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected String writeRImage() {
+        return "save.image(file=\"lasso.RData\", safe = TRUE)\n\n";
     }
 }

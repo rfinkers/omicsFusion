@@ -44,31 +44,31 @@ public class MethodSelectionAction extends MethodSelectionValidationForm
         ArrayList<String> methods = new ArrayList<String>();
 
         if (isRidge() == true) {
-            methods.add("ridge");
+            methods.add(Constants.RIDGE);
         }
         if (isElasticNet() == true) {
-            methods.add("en");
+            methods.add(Constants.EN);
         }
         if (isRf() == true) {
-            methods.add("rf");
+            methods.add(Constants.RF);
         }
         if (isSvm() == true) {
-            methods.add("svm");
+            methods.add(Constants.SVM);
         }
         if (isPcr() == true) {
-            methods.add("pcr");
+            methods.add(Constants.PCR);
         }
         if (isPls() == true) {
-            methods.add("pls");
+            methods.add(Constants.PLS);
         }
         if (isSpls() == true) {
-            methods.add("spls");
+            methods.add(Constants.SPLS);
         }
         if (isLasso() == true) {
-            methods.add("lasso");
+            methods.add(Constants.LASSO);
         }
         if (isUnivariate() == true) {
-            methods.add("univariate");
+            methods.add(Constants.UNIVARIATE);
         }
 
         SqLiteQueries sql = new SqLiteQueries();

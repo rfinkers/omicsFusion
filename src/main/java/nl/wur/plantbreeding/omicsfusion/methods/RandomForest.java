@@ -56,7 +56,7 @@ public class RandomForest extends Analysis {
      */
     @Override
     public String getAnalysis() {
-        return super.getAnalysis("rf");
+        return super.getAnalysis(Constants.RF);
     }
 
     /**
@@ -92,7 +92,8 @@ public class RandomForest extends Analysis {
     @Override
     protected String getRowMeansAndSD() {
         String rCode = "# Get row means, SD and (absolute) rank\n";
-        //dataSet contains predictor column. So, function == trye when the Train_Coef also contains the intercept.
+        //dataSet contains predictor column. So, function == trye when the
+        //Train_Coef also contains the intercept.
         rCode += "means<-apply(Train_varImp,1,mean)\n";
         rCode += "sd<-apply(Train_varImp,1,sd)\n";
         rCode += "ra<-rank(abs(apply(Train_varImp,1,mean)))\n";
@@ -127,7 +128,7 @@ public class RandomForest extends Analysis {
     @Override
     public String writeResultsToDB() {
         String rCode = "# Write results to the SQLite database\n";
-        rCode += "RF_varImp_Summary_<-cbind(\"responseVariable\",\"RF\","
+        rCode += "RF_varImp_Summary_<-cbind(\"responseVariable\",\"" + Constants.RF + "\","
                 + "as.data.frame(Train_varImp_Summary))\n";
         rCode += "colnames(RF_varImp_Summary_)[1]<-\"method\"\n";
 
@@ -135,5 +136,13 @@ public class RandomForest extends Analysis {
         rCode += "dbWriteTable(con, \"results\","
                 + "RF_varImp_Summary_,append=TRUE)\n";
         return rCode;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected String writeRImage() {
+        return "save.image(file=\"rf.RData\", safe = TRUE)\n\n";
     }
 }

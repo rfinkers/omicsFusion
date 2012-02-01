@@ -108,12 +108,20 @@ public class Ridge extends Analysis {
     @Override
     public String writeResultsToDB() {
         String rCode = "# Write results to the SQLite database\n";
-        rCode += "Train_Coeff_Summary_<-cbind(\"responseVariable\",\"RIDGE\","
+        rCode += "Train_Coeff_Summary_<-cbind(\"responseVariable\",\"" + Constants.RIDGE + "\","
                 + "as.data.frame(Train_Coeff_Summary))\n";
         rCode += "colnames(Train_Coeff_Summary_)[1]<-\"method\"\n";
 
         rCode += "con <- dbConnect(\"SQLite\", dbname = \"omicsFusion.db\")\n";
         rCode += "dbWriteTable(con, \"results\",Train_Coeff_Summary_,append=TRUE)\n";
         return rCode;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected String writeRImage() {
+        return "save.image(file=\"ridge.RData\", safe = TRUE)\n\n";
     }
 }

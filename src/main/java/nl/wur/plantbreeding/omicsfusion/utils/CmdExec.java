@@ -48,8 +48,8 @@ public class CmdExec {
     public static int ExecuteQSubCmd(String executionDir, String method)
             throws IOException {
         Process p;
-        if (method.equals("rf") || method.equals("spls")
-                || method.equals("ridge")) {
+        if (method.equals(Constants.RF) || method.equals(Constants.SPLS)
+                || method.equals(Constants.RIDGE)) {
 
             //TODO: replace email with email user?
             //TODO: add this to the if test above?
