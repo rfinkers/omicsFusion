@@ -319,6 +319,12 @@ public class SqLiteQueries extends SqLiteHelper {
         closeDatabase();
     }
 
+    /**
+     * Read the SGE job status.
+     *
+     * @param directory
+     * @throws SQLiteException
+     */
     public void readSgeJobStatus(String directory) throws SQLiteException {
         //if not all completed, check status from SGE.
         SQLiteConnection db = openDatabase(directory);

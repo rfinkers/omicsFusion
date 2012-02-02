@@ -17,13 +17,15 @@ package nl.wur.plantbreeding.omicsfusion.results;
 
 import com.almworks.sqlite4java.SQLiteException;
 import java.awt.Color;
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import nl.wur.plantbreeding.logic.jfreechart.GenotypeXYDataset;
 import nl.wur.plantbreeding.logic.jfreechart.GenotypeXYToolTipGenerator;
-import nl.wur.plantbreeding.logic.jfreechart.GenotypeXYUrlGenerator;
 import nl.wur.plantbreeding.logic.sqlite4java.SqLiteQueries;
 import nl.wur.plantbreeding.omicsfusion.datatypes.XYScatterDataType;
 import nl.wur.plantbreeding.omicsfusion.excel.DataSheetValidationException;
@@ -31,16 +33,17 @@ import nl.wur.plantbreeding.omicsfusion.excel.ReadExcelSheet;
 import nl.wur.plantbreeding.omicsfusion.utils.ServletUtils;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.struts2.interceptor.ServletRequestAware;
+import org.apache.struts2.interceptor.ServletResponseAware;
 import org.jfree.chart.ChartRenderingInfo;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.axis.ValueAxis;
-import org.jfree.chart.imagemap.ImageMapUtilities;
+import org.jfree.chart.entity.StandardEntityCollection;
+import org.jfree.chart.labels.StandardXYToolTipGenerator;
 import org.jfree.chart.labels.XYToolTipGenerator;
 import org.jfree.chart.plot.Plot;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.DefaultXYItemRenderer;
-import org.jfree.chart.urls.XYURLGenerator;
 import org.jfree.data.xy.DefaultXYDataset;
 
 /**
@@ -50,7 +53,8 @@ import org.jfree.data.xy.DefaultXYDataset;
  * @version 1.0.
  */
 public class PredictorResponseXYScatterAction
-        extends PredictorResponseXYScatterForm implements ServletRequestAware {
+        extends PredictorResponseXYScatterForm
+        implements ServletRequestAware, ServletResponseAware {
 
     /**
      * Serial Version UID.
@@ -60,11 +64,12 @@ public class PredictorResponseXYScatterAction
      * Chart object.
      */
     private JFreeChart chart;
-    /** Output stream. */
-     private OutputStream outputStream;
     /**
-     * the request.
-     * TODO: use RequestAware (map version) instead!
+     * Output stream.
+     */
+    private HttpServletResponse response;
+    /**
+     * the request. TODO: use RequestAware (map version) instead!
      */
     private HttpServletRequest request;
 
@@ -135,7 +140,6 @@ public class PredictorResponseXYScatterAction
 
         //TODO: imagemap
 
-
         //Renderer
         DefaultXYItemRenderer renderer = new DefaultXYItemRenderer();
         //Options for the XY scatter (line 0)
@@ -146,14 +150,13 @@ public class PredictorResponseXYScatterAction
         renderer.setSeriesPaint(1, Color.BLACK);
         renderer.setBaseOutlinePaint(Color.WHITE);
 
-
-        //Tooltip
-        XYToolTipGenerator tooltipGen = new GenotypeXYToolTipGenerator();
+        //Tooltip - GenotypeXYToolTipGenerator
+        XYToolTipGenerator tooltipGen = new StandardXYToolTipGenerator();
         renderer.setSeriesToolTipGenerator(0, tooltipGen);
 
         //URL generator
-        XYURLGenerator urlGen = new GenotypeXYUrlGenerator();
-        renderer.setURLGenerator(urlGen);
+//        XYURLGenerator urlGen = new GenotypeXYUrlGenerator();
+//        renderer.setURLGenerator(urlGen);
 
         Plot plot = new XYPlot(xyDataset, xAxis, yAxis, renderer);
         plot.setNoDataMessage("NO DATA");
@@ -166,10 +169,20 @@ public class PredictorResponseXYScatterAction
                 false);
         chart.setBackgroundPaint(java.awt.Color.white);
 
-                //try
-//        ChartRenderingInfo chartRenderingInfo = new ChartRenderingInfo();
-//        ImageMapUtilities.writeImageMap(new PrintWriter(getOutputStream()),
-//                "map", chartRenderingInfo);
+
+        try {
+            ChartRenderingInfo info = new ChartRenderingInfo(
+                    new StandardEntityCollection());
+
+//            PrintWriter w = new PrintWriter(
+//                    getServletResponse().getWriter());
+//
+//            ChartUtilities.writeImageMap(w,
+//                    "#imageMap", info, false);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
 
         LOG.info("Chart created");
 
@@ -280,7 +293,12 @@ public class PredictorResponseXYScatterAction
         this.request = request;
     }
 
-       public OutputStream getOutputStream(){
-           return outputStream;
-       }
+    @Override
+    public void setServletResponse(HttpServletResponse response) {
+        this.response = response;
+    }
+
+    public HttpServletResponse getServletResponse() {
+        return response;
+    }
 }
