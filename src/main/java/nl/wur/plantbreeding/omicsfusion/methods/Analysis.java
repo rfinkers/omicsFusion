@@ -213,7 +213,7 @@ public class Analysis {
     protected String getRequiredLibraries() {
         String rCode = "# Load requried generic libraries\n";
 //        rCode += "library(gdata)\n";//Used to load excel sheets.
-        rCode += "library(XLConnect)\n";//Used to load excel 2010 sheets.
+//        rCode += "library(XLConnect)\n";//Used to load excel 2010 sheets.
         rCode += "library(lattice)\n";//dependencies of caret.
         rCode += "library(reshape)\n";//dependencies of caret.
         rCode += "library(plyr)\n";//dependencies of caret.

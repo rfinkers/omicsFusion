@@ -78,8 +78,7 @@ public class DataUploadAction extends DataUploadValidationForm
             }
 
             //prepare a file with the names of the input sheets.
-            //This will be used to read the names during the results wizard.
-            writeNamesToDisk();
+
             //Write the names to the database.
             writeNamesToDB();
 

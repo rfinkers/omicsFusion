@@ -17,25 +17,25 @@ package nl.wur.plantbreeding.omicsfusion.results;
 
 import com.almworks.sqlite4java.SQLiteException;
 import java.awt.Color;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
+import java.util.ArrayList;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
-import nl.wur.plantbreeding.logic.jfreechart.GenotypeXYToolTipGenerator;
 import nl.wur.plantbreeding.logic.jfreechart.GenotypeXYDataset;
+import nl.wur.plantbreeding.logic.jfreechart.GenotypeXYToolTipGenerator;
 import nl.wur.plantbreeding.logic.jfreechart.GenotypeXYUrlGenerator;
 import nl.wur.plantbreeding.logic.sqlite4java.SqLiteQueries;
+import nl.wur.plantbreeding.omicsfusion.datatypes.XYScatterDataType;
 import nl.wur.plantbreeding.omicsfusion.excel.DataSheetValidationException;
 import nl.wur.plantbreeding.omicsfusion.excel.ReadExcelSheet;
-import nl.wur.plantbreeding.omicsfusion.utils.ReadFile;
 import nl.wur.plantbreeding.omicsfusion.utils.ServletUtils;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.struts2.interceptor.ServletRequestAware;
+import org.jfree.chart.ChartRenderingInfo;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.axis.ValueAxis;
+import org.jfree.chart.imagemap.ImageMapUtilities;
 import org.jfree.chart.labels.XYToolTipGenerator;
 import org.jfree.chart.plot.Plot;
 import org.jfree.chart.plot.XYPlot;
@@ -60,10 +60,13 @@ public class PredictorResponseXYScatterAction
      * Chart object.
      */
     private JFreeChart chart;
+    /** Output stream. */
+     private OutputStream outputStream;
     /**
      * the request.
+     * TODO: use RequestAware (map version) instead!
      */
-    private HttpServletRequest request;//TODO: use RequestAware (map version) instead!
+    private HttpServletRequest request;
 
     @Override
     public String execute() throws Exception {
@@ -105,18 +108,7 @@ public class PredictorResponseXYScatterAction
         LOG.info("get data");
         DefaultXYDataset xyDataset = null;
         try {
-            xyDataset = getDataSetFromXLS(predictor, sessionName);
-        }
-        catch (InvalidFormatException invalidFormatException) {
-            addActionError(getText("errors.xyscatter.data"));
-            LOG.log(Level.INFO, "XYScatter, invalid format: {0}",
-                    invalidFormatException.getMessage());
-        }
-        catch (FileNotFoundException e) {
-            addActionError(getText("errors.file.not.found"));
-        }
-        catch (DataSheetValidationException e) {
-            addActionError(getText("errors.resonse.not.found"));
+            xyDataset = getDataSetFromDB(predictor, response, sessionName);
         }
         catch (Exception e) {
             addActionError(getText("errors.general.exception"));
@@ -154,6 +146,7 @@ public class PredictorResponseXYScatterAction
         renderer.setSeriesPaint(1, Color.BLACK);
         renderer.setBaseOutlinePaint(Color.WHITE);
 
+
         //Tooltip
         XYToolTipGenerator tooltipGen = new GenotypeXYToolTipGenerator();
         renderer.setSeriesToolTipGenerator(0, tooltipGen);
@@ -173,7 +166,10 @@ public class PredictorResponseXYScatterAction
                 false);
         chart.setBackgroundPaint(java.awt.Color.white);
 
-        //ImageMapUtilities.writeImageMap(new PrintWriter(request.get  .response.getWriter()), NONE, null);
+                //try
+//        ChartRenderingInfo chartRenderingInfo = new ChartRenderingInfo();
+//        ImageMapUtilities.writeImageMap(new PrintWriter(getOutputStream()),
+//                "map", chartRenderingInfo);
 
         LOG.info("Chart created");
 
@@ -214,22 +210,9 @@ public class PredictorResponseXYScatterAction
             String sessionID)
             throws InvalidFormatException, FileNotFoundException, IOException,
             DataSheetValidationException, Exception {
-        //read the filenames from filenames.txt
-        ReadFile rf = new ReadFile();
+
         //The filenames are stored in this string array
         String fileNames[] = new String[2];
-
-        //FIXME: cleanup code
-        //        try {
-//            fileNames = rf.ReadSheetFileNames(ServletUtils.getResultsDir(request, sessionID)
-//                    + "/filenames.txt");
-//            //currently only valid for excel sheets as input. Otherwise throw error.
-//        }
-//        catch (IOException ex) {
-//            Logger.getLogger(
-//                    PredictorResponseXYScatterAction.class.getName()).
-//                    log(Level.SEVERE, null, ex);
-//        }
 
         //Read the names of the names of the predictor and response file.
         SqLiteQueries sql = new SqLiteQueries();
@@ -259,7 +242,7 @@ public class PredictorResponseXYScatterAction
         return readPredictorAndResponseValue;
     }
 
-        /**
+    /**
      * Read two data for the XY scatter.
      *
      * @param predictor Name of the predictor variable.
@@ -272,43 +255,20 @@ public class PredictorResponseXYScatterAction
 
         //connect to the db.
         SqLiteQueries sql = new SqLiteQueries();
-
-        //Read the data for the predictor (order by)
-
-        //Read the data for the response (order by)
-
-        //combine the two lists (check the name order)
+        //Read the data for the predictor & response (order by)
+        ArrayList<XYScatterDataType> observationsForPredictorAndResponse =
+                sql.getObservationsForPredictorAndResponse(
+                ServletUtils.getResultsDir(request, sessionID),
+                predictor, response);
 
         //We need a DefaultXYDataset.
+        PredictorResponseXYScatterPlot xyp =
+                new PredictorResponseXYScatterPlot();
+        DefaultXYDataset predictResponseXYScatterPlotDataSet =
+                xyp.predictResponseXYScatterPlot(
+                observationsForPredictorAndResponse);
 
-        //We want to include an regression line (and plot the R2).
-
-
-
-//        fileNames[0] = sql.getResponseSheetName(
-//                ServletUtils.getResultsDir(request, sessionID));
-//        fileNames[1] = sql.getPredictorSheetName(
-//                ServletUtils.getResultsDir(request, sessionID));
-//
-//        LOG.log(Level.INFO, "File: {0} and {1}",
-//                new Object[]{fileNames[0], fileNames[1]});
-//
-//        //Read the predictor and response file.
-//        String responseFile = ServletUtils.getResultsDir(request, sessionID)
-//                + "/" + fileNames[0].trim();
-//        String predictorFile = ServletUtils.getResultsDir(request, sessionID)
-//                + "/" + fileNames[1].trim();
-
-//        File predFile = new File(predictorFile);
-//        File respFile = new File(responseFile);
-        DefaultXYDataset readPredictorAndResponseValue = null;
-
-        LOG.info("try");
-//        readPredictorAndResponseValue =
-//                ReadExcelSheet.readPredictorAndResponseValue(respFile,
-//                predFile, predictor);
-
-        return readPredictorAndResponseValue;
+        return predictResponseXYScatterPlotDataSet;
     }
 
     public JFreeChart getChart() {
@@ -319,4 +279,8 @@ public class PredictorResponseXYScatterAction
     public void setServletRequest(HttpServletRequest request) {
         this.request = request;
     }
+
+       public OutputStream getOutputStream(){
+           return outputStream;
+       }
 }

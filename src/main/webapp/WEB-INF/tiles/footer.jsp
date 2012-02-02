@@ -7,5 +7,5 @@
 <img src="<s:url value="/images/eusol_4.jpg"/>" alt="<s:text name="footer.potato.alt"/>"/>
 <img src="<s:url value="/images/eusol_5.jpg"/>" alt="<s:text name="footer.tomato.alt"/>"/>
 <img src="<s:url value="/images/eusol_6.jpg"/>" alt="<s:text name="footer.potato.flower.alt"/>"/>
-<s:a href="http://www.plantbreeding.wur.nl"><img src="<s:url value="/images/wur_logo.gif"/>"  alt="<s:text name="plantbreeding.alt.alt"/>"/></s:a>
+<s:a href="http://www.plantbreeding.wur.nl"><img src="<s:url value="/images/wur_logo.gif"/>"  alt="<s:text name="plantbreeding.alt"/>"/></s:a>
 <%--<s:url />--%>

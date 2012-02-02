@@ -22,7 +22,7 @@ Author     : Richard Finkers
 <!-- end vertical menu -->
 <!-- Methods submenu -->
 <div id="menu_1" class="mbmenu">
-    <a rel="title" ><s:text name="menu.search.heading"/></a>
-    <a href="<s:url action="methods/rf.jsp"/>" class="{img: 'ico_view.gif'}"><s:text name="menu.rf"/></a> 
+    <a rel="title" ><s:text name="menu.methods.heading"/></a>
+    <a href="<s:url action="methods/rf.jsp"/>" class="{img: 'ico_view.gif'}"><s:text name="menu.rf"/></a>
 </div>
 <!-- end menu -->

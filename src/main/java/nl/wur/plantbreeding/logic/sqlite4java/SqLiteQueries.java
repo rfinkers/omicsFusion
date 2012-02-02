@@ -22,6 +22,7 @@ import java.io.File;
 import java.util.*;
 import nl.wur.plantbreeding.omicsfusion.datatypes.DataPointDataType;
 import nl.wur.plantbreeding.omicsfusion.datatypes.SummaryResults;
+import nl.wur.plantbreeding.omicsfusion.datatypes.XYScatterDataType;
 import nl.wur.plantbreeding.omicsfusion.entities.UserList;
 
 /**
@@ -357,9 +358,10 @@ public class SqLiteQueries extends SqLiteHelper {
     }
 
     /**
+     * Get the name of file containing the response sheet.
      *
      * @param directory
-     * @return
+     * @return Name of the response sheet.
      * @throws SQLiteException
      */
     public String getResponseSheetName(String directory)
@@ -377,6 +379,7 @@ public class SqLiteQueries extends SqLiteHelper {
     }
 
     /**
+     * Get the name of file containing the predictor sheet.
      *
      * @param directory
      * @return
@@ -394,5 +397,41 @@ public class SqLiteQueries extends SqLiteHelper {
         stm.dispose();
         closeDatabase();
         return result;
+    }
+
+    /**
+     * Obtain a list with observations for the selected response and predictor.
+     *
+     * @param directory Directory containing the results.
+     * @param preditor Predictor variable.
+     * @param response Response variable.
+     * @return A list of observations
+     * @throws SQLiteException
+     */
+    public ArrayList<XYScatterDataType> getObservationsForPredictorAndResponse(
+            String directory, String preditor, String response)
+            throws SQLiteException {
+        ArrayList<XYScatterDataType> resultList =
+                new ArrayList<XYScatterDataType>();
+        XYScatterDataType dataPoint = null;
+        SQLiteConnection db = openDatabase(directory);
+        SQLiteStatement stm = db.prepare("SELECT response.genotype_name, "
+                + "response.observation, predictor.observation "
+                + "FROM predictor, response "
+                + "WHERE response.genotype_name = predictor.genotype_name "
+                + "AND predictor.variable_name LIKE '%" + preditor + "'");
+        //FIXME: LIKE is temp fix for spaces at the beginning of the name in db.
+        while (stm.step()) {
+            dataPoint = new XYScatterDataType();
+            dataPoint.setGenotypeName(stm.columnString(0));
+            dataPoint.setPredictorVariable(preditor);
+            dataPoint.setPredictorValue(stm.columnDouble(2));
+            dataPoint.setResponseVariable(response);
+            dataPoint.setResponseValue(stm.columnDouble(1));
+            resultList.add(dataPoint);
+        }
+        stm.dispose();
+        closeDatabase();
+        return resultList;
     }
 }
