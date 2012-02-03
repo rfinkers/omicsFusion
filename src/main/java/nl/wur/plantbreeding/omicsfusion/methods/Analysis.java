@@ -630,12 +630,13 @@ public class Analysis {
     public String getAnalysisScript(String responseVariable) {
         String rScript = "# Concatenating analisis script\n";
         rScript += getRequiredLibraries();
+        //Do not use checkResponseName for loading: SQLite handles this fine.
         rScript += loadPredictorAndResponseDataSheets(responseVariable);
         rScript += writeRImage();
         rScript += handleMissingData();
-        rScript += preProcessMatrix(responseVariable);
+        rScript += preProcessMatrix(checkResponseName(responseVariable));
         rScript += initializeResultObjects();
-        rScript += getAnalysis(responseVariable);
+        rScript += getAnalysis(checkResponseName(responseVariable));
         rScript += combineResults();
         rScript += getRowMeansAndSD();
         //rScript += writeRImage();
@@ -648,5 +649,28 @@ public class Analysis {
         rScript += writeResultsToDB();
         rScript += writeRImage();
         return rScript;
+    }
+
+    /**
+     * Check if the response name starts with an integer. If yes, part of the R
+     * code will not work, unless '' are introduced.
+     *
+     * @param responseName Name of the response variable
+     * @return checked response variable.
+     */
+    private String checkResponseName(String responseName) {
+        //If the response starts with a number, R chrashes!
+        String tmp = responseName.substring(0, 1);
+        boolean startWithInteger = true;
+        try {
+            Integer.parseInt(tmp);
+        }
+        catch (NumberFormatException e) {
+            startWithInteger = false;
+        }
+        if (startWithInteger == true) {
+            responseName = "'" + responseName + "'";
+        }
+        return responseName;
     }
 }

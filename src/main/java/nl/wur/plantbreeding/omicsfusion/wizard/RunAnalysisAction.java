@@ -60,15 +60,11 @@ public class RunAnalysisAction extends ActionSupport
     public String execute() throws Exception {
         //Read the relevant data from the session
         @SuppressWarnings("unchecked")
-        HashMap<String, String> sheets =
-                (HashMap<String, String>) getRequest().getSession().
-                getAttribute("sheets");
-        @SuppressWarnings("unchecked")
         ArrayList<String> methods =
                 (ArrayList<String>) getRequest().getSession().
                 getAttribute("methods");
 
-                //Get the name of the response from the SQLite databse.
+        //Get the name of the response from the SQLite databse.
         SqLiteQueries slq = new SqLiteQueries();
         ArrayList<String> responseNames =
                 slq.getResponseNames(ServletUtils.getResultsDir(request));
@@ -188,6 +184,7 @@ public class RunAnalysisAction extends ActionSupport
 
     /**
      * Write the R analysis script to the file system.
+     *
      * @param scriptName Name of the script file.
      * @param script Contents of the script.
      * @throws IOException When writing to disk fails.
@@ -201,6 +198,7 @@ public class RunAnalysisAction extends ActionSupport
 
     /**
      * Create the SGE submission script and submit the job to SGE.
+     *
      * @param scriptName Name of the scripts.
      * @return The jobID.
      * @throws IOException When writing to disk fails.
