@@ -30,7 +30,6 @@ import nl.wur.plantbreeding.omicsfusion.datatypes.CsvSummaryDataType;
 import nl.wur.plantbreeding.omicsfusion.datatypes.SummaryResults;
 import nl.wur.plantbreeding.omicsfusion.utils.CSV;
 import nl.wur.plantbreeding.omicsfusion.utils.Constants;
-import nl.wur.plantbreeding.omicsfusion.utils.ReadFile;
 import nl.wur.plantbreeding.omicsfusion.utils.ServletUtils;
 import org.apache.struts2.interceptor.ServletRequestAware;
 
@@ -85,32 +84,30 @@ public class RetrieveResultsSummaryAction
             return ERROR;
         }
 
-        //Check the availability of one or more respults file for this sessionID.
-        //All potential summary files are scanned. Only methods with results are
-        //added tot the HashMap.
-//        HashMap<String, ArrayList<CsvSummaryDataType>> methResults =
-//                getMethodsWithResultsSummaryFilesFromFile(getSessionId(),
-//                resultsDirectory);
+        //Get the name of the response from the SQLite databse.
+        SqLiteQueries slq = new SqLiteQueries();
+        ArrayList<String> responseNames =
+                slq.getResponseNames(ServletUtils.getResultsDir(request));
+
+        String responseName = "";
+        if (responseNames.isEmpty()) {
+            addActionError(getText("error.no.responsevariable"));
+        } else if (responseNames.size() == 1) {
+            responseName = responseNames.get(0);
+        } else {
+            //TODO: implment for > 1 response variable.
+            responseName = responseNames.get(0);
+        }
+
         HashMap<String, ArrayList<CsvSummaryDataType>> methResults =
                 getMethodsWithResultsSummaryFilesFromDB(getSessionId(),
-                resultsDirectory);
+                resultsDirectory, responseName);
 
         System.out.println("Methods: " + methResults.size());
 
         if (methResults.isEmpty()) {
             addActionError(getText("errors.no.result"));
             return ERROR;
-        }
-
-        //Get the name of the response file.
-        ReadFile rrn = new ReadFile();
-        String responseName = null;
-        try {
-            responseName = rrn.ReadResponseName(resultsDirectory
-                    + getSessionId() + "/analysis.txt");
-        }
-        catch (IOException iOException) {
-            responseName = "Not found!";
         }
 
         //This counter should increase if additional methods are added!
@@ -679,7 +676,8 @@ public class RetrieveResultsSummaryAction
         return results;
     }
 
-    private HashMap<String, ArrayList<CsvSummaryDataType>> getMethodsWithResultsSummaryFilesFromDB(String sessionID, String resultsDirectory)
+    private HashMap<String, ArrayList<CsvSummaryDataType>> getMethodsWithResultsSummaryFilesFromDB(
+            String sessionID, String resultsDirectory, String responseVariable)
             throws SQLiteException {
         HashMap<String, ArrayList<CsvSummaryDataType>> results =
                 new HashMap<String, ArrayList<CsvSummaryDataType>>();
@@ -694,7 +692,7 @@ public class RetrieveResultsSummaryAction
         //one or several queries?
         SqLiteQueries queries = new SqLiteQueries();
         ArrayList<SummaryResults> readSummaryResults =
-                queries.readSummaryResults(resultsDirectory);
+                queries.readSummaryResults(resultsDirectory, responseVariable);
 
         LOG.log(Level.INFO, "Database Size: {0}", readSummaryResults.size());
 

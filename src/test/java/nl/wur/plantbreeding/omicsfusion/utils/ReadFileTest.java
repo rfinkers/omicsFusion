@@ -51,7 +51,7 @@ public class ReadFileTest {
 
     /**
      * Test of ReadSheetFileNames method, of class ReadFile.
-     * @throws Exception 
+     * @throws Exception
      */
     @Test
     @Ignore
@@ -67,6 +67,7 @@ public class ReadFileTest {
     /**
      * Test of ReadResponseName method, of class ReadFile.
      * @throws Exception
+     * @deprecated SQLite database should be used.
      */
     @Test
     @Ignore

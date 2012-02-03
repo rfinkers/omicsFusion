@@ -168,7 +168,7 @@ public class Analysis {
         //Hack. TODO: Isn't there another way than overriding the trait name?
         rCode += "nameVector<-colnames(dataSet)\n";
         rCode += "traitName<-nameVector[1]\n";
-        rCode += "write.table(file=\"analysis.txt\", traitName)\n";
+        //rCode += "write.table(file=\"analysis.txt\", traitName)\n";
         rCode += "nameVector[1]<-\"Response\"\n";
         rCode += "colnames(dataSet)<-nameVector\n";
         //Ok, back to normal

@@ -157,6 +157,7 @@ public class DataUploadAction extends DataUploadValidationForm
      * Write the names of the input data sheets to the file system.
      *
      * @throws IOException
+     * @deprecated Take names from sqlite database.
      */
     private void writeNamesToDisk() throws IOException {
         WriteFile wf = new WriteFile();

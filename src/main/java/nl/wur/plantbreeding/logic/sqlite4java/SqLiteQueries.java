@@ -340,15 +340,19 @@ public class SqLiteQueries extends SqLiteHelper {
      * Reads the results summaries from the database.
      *
      * @param directory
+     * @param responseVariable Name of the response variable
      * @return A list containing the stored results.
      * @throws SQLiteException
      */
-    public ArrayList<SummaryResults> readSummaryResults(String directory)
+    public ArrayList<SummaryResults> readSummaryResults(
+            String directory, String responseVariable)
             throws SQLiteException {
         ArrayList<SummaryResults> results = new ArrayList<SummaryResults>();
         SummaryResults summaryResults = null;
         SQLiteConnection db = openDatabase(directory);
         SQLiteStatement stm = db.prepare("SELECT * FROM results "
+                //TODO: implement use of actual responseVariable!
+                + "WHERE response='responseVariable' "
                 + "ORDER BY predictor, method_name");
         while (stm.step()) {
             stm.columnDouble(3);
@@ -388,7 +392,7 @@ public class SqLiteQueries extends SqLiteHelper {
      * Get the name of file containing the predictor sheet.
      *
      * @param directory
-     * @return
+     * @return The name of the predictor sheet.
      * @throws SQLiteException
      */
     public String getPredictorSheetName(String directory)
@@ -439,5 +443,18 @@ public class SqLiteQueries extends SqLiteHelper {
         stm.dispose();
         closeDatabase();
         return resultList;
+    }
+
+    public ArrayList<String> getResponseNames(String directory) throws SQLiteException {
+        ArrayList<String> result = new ArrayList<String>();
+        SQLiteConnection db = openDatabase(directory);
+        SQLiteStatement stm = db.prepare("SELECT response "
+                + "FROM responseVariables ");
+        while (stm.step()) {
+            result.add(stm.columnString(0));
+        }
+        stm.dispose();
+        closeDatabase();
+        return result;
     }
 }

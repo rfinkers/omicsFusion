@@ -73,8 +73,9 @@ public class ReadFile {
     /**
      * Read the name of the response from the (R generated) analysis.txt file.
      * @param filename Name of the file.
-     * @return Name fo the response variable.
+     * @return Name of the response variable.
      * @throws IOException
+     * @deprecated Take name from sqlite database.
      */
     public String ReadResponseName(String filename) throws IOException {
         File f = new File(filename);
