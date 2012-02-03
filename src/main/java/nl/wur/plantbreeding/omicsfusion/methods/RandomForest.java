@@ -55,8 +55,8 @@ public class RandomForest extends Analysis {
      * {@inheritDoc}
      */
     @Override
-    public String getAnalysis() {
-        return super.getAnalysis(Constants.RF);
+    public String getAnalysis(String responseVariable) {
+        return super.getAnalysis(Constants.RF, responseVariable);
     }
 
     /**
@@ -128,7 +128,7 @@ public class RandomForest extends Analysis {
     @Override
     public String writeResultsToDB() {
         String rCode = "# Write results to the SQLite database\n";
-        rCode += "RF_varImp_Summary_<-cbind(\"responseVariable\",\"" + Constants.RF + "\","
+        rCode += "RF_varImp_Summary_<-cbind(responseVariable,\"" + Constants.RF + "\","
                 + "as.data.frame(Train_varImp_Summary))\n";
         rCode += "colnames(RF_varImp_Summary_)[1]<-\"method\"\n";
 

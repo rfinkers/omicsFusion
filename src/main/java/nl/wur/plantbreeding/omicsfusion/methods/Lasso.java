@@ -56,8 +56,8 @@ public class Lasso extends Analysis {
      * {@inheritDoc}
      */
     @Override
-    public String getAnalysis() {
-        return super.getAnalysis(Constants.LASSO);
+    public String getAnalysis(String responseVariable) {
+        return super.getAnalysis(Constants.LASSO, responseVariable);
     }
 
     /**
@@ -113,7 +113,7 @@ public class Lasso extends Analysis {
     @Override
     public String writeResultsToDB() {
         String rCode = "# Write results to the SQLite database\n";
-        rCode += "Train_Coeff_Summary_<-cbind(\"responseVariable\",\"" + Constants.LASSO + "\","
+        rCode += "Train_Coeff_Summary_<-cbind(responseVariable,\"" + Constants.LASSO + "\","
                 + "as.data.frame(Train_Coeff_Summary))\n";
         rCode += "colnames(Train_Coeff_Summary_)[1]<-\"method\"\n";
 

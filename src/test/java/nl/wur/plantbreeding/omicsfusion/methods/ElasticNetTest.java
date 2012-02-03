@@ -79,7 +79,7 @@ public class ElasticNetTest {
         System.out.println("getAnalysis");
         ElasticNet instance = new ElasticNet();
         String expResult = "";
-        String result = instance.getAnalysis();
+        String result = instance.getAnalysis("");
         assertNotNull(result);
     }
 

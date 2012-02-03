@@ -15,12 +15,8 @@
  */
 package nl.wur.plantbreeding.omicsfusion.methods;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import org.junit.*;
 
 /**
  *
@@ -79,7 +75,7 @@ public class RidgeTest {
         System.out.println("getAnalysis");
         Ridge instance = new Ridge();
         String expResult = "";
-        String result = instance.getAnalysis();
+        String result = instance.getAnalysis("");
         assertNotNull(result);
     }
 

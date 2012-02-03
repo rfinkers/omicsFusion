@@ -55,8 +55,8 @@ public class PartialLeasedSquares extends Analysis {
      * {@inheritDoc}
      */
     @Override
-    public String getAnalysis() {
-        return super.getAnalysis("pls");
+    public String getAnalysis(String responseVariable) {
+        return super.getAnalysis(Constants.PLS, responseVariable);
     }
 
     /**
@@ -102,7 +102,7 @@ public class PartialLeasedSquares extends Analysis {
     @Override
     public String writeResultsToDB() {
         String rCode = "# Write results to the SQLite database\n";
-        rCode += "Train_Coeff_Summary_<-cbind(\"responceVariable\",\"" + Constants.PLS + "\","
+        rCode += "Train_Coeff_Summary_<-cbind(responseVariable,\"" + Constants.PLS + "\","
                 + "as.data.frame(Train_Coeff_Summary))\n";
         rCode += "colnames(Train_Coeff_Summary_)[1]<-\"method\"\n";
 

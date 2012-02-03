@@ -79,7 +79,7 @@ public class RandomForestTest {
         System.out.println("getAnalysis");
         RandomForest instance = new RandomForest();
         String expResult = "";
-        String result = instance.getAnalysis();
+        String result = instance.getAnalysis("");
         assertNotNull(result);
     }
 

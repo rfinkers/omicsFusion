@@ -68,7 +68,20 @@ public class RunAnalysisAction extends ActionSupport
                 (ArrayList<String>) getRequest().getSession().
                 getAttribute("methods");
 
-        //we want to write text files.
+                //Get the name of the response from the SQLite databse.
+        SqLiteQueries slq = new SqLiteQueries();
+        ArrayList<String> responseNames =
+                slq.getResponseNames(ServletUtils.getResultsDir(request));
+
+        String responseName = "";
+        if (responseNames.isEmpty()) {
+            addActionError(getText("error.no.responsevariable"));
+        } else if (responseNames.size() == 1) {
+            responseName = responseNames.get(0);
+        } else {
+            //TODO: implment for > 1 response variable.
+            responseName = responseNames.get(0);
+        }
 
         //Get the list with jobId's from SGE
         HashMap<String, Integer> jobIds = new HashMap<String, Integer>();
@@ -85,17 +98,17 @@ public class RunAnalysisAction extends ActionSupport
             for (String method : methods) {
                 if (method.equals(Constants.RF)) {
                     RandomForest mth = new RandomForest();
-                    String mthString = mth.getAnalysisScript(sheets);
+                    String mthString = mth.getAnalysisScript(responseName);
                     writeScriptFile("rf.R", mthString);
                     jobIds.put(Constants.RF, submitToSGE(Constants.RF));
                 } else if (method.equals(Constants.SPLS)) {
                     SparsePLS mth = new SparsePLS();
-                    String mthString = mth.getAnalysisScript(sheets);
+                    String mthString = mth.getAnalysisScript(responseName);
                     writeScriptFile("spls.R", mthString);
                     jobIds.put(Constants.SPLS, submitToSGE(Constants.SPLS));
                 } else if (method.equals(Constants.RIDGE)) {
                     Ridge mth = new Ridge();
-                    String mthString = mth.getAnalysisScript(sheets);
+                    String mthString = mth.getAnalysisScript(responseName);
                     writeScriptFile(method + ".R", mthString);
                     int job = submitToSGE(method);
                     if (job != 0) {
@@ -103,39 +116,39 @@ public class RunAnalysisAction extends ActionSupport
                     }
                 } else if (method.equals(Constants.EN)) {
                     ElasticNet mth = new ElasticNet();
-                    String mthString = mth.getAnalysisScript(sheets);
+                    String mthString = mth.getAnalysisScript(responseName);
                     writeScriptFile("en.R", mthString);
                     jobIds.put(Constants.EN, submitToSGE(Constants.EN));
                 } else if (method.equals(Constants.SVM)) {
                     SVM mth = new SVM();
-                    String mthString = mth.getAnalysisScript(sheets);
+                    String mthString = mth.getAnalysisScript(responseName);
                     writeScriptFile("svm.R", mthString);
                     jobIds.put(Constants.SVM, submitToSGE(Constants.SVM));
                 } else if (method.equals(Constants.PCR)) {
                     PCR mth = new PCR();
-                    String mthString = mth.getAnalysisScript(sheets);
+                    String mthString = mth.getAnalysisScript(responseName);
                     writeScriptFile("pcr.R", mthString);
                     jobIds.put(Constants.PCR, submitToSGE(Constants.PCR));
                 } else if (method.equals(Constants.PLS)) {
                     PartialLeasedSquares mth = new PartialLeasedSquares();
-                    String mthString = mth.getAnalysisScript(sheets);
+                    String mthString = mth.getAnalysisScript(responseName);
                     writeScriptFile("pls.R", mthString);
                     jobIds.put(Constants.PLS, submitToSGE(Constants.PLS));
                 } else if (method.equals(Constants.LASSO)) {
                     Lasso mth = new Lasso();
-                    String mthString = mth.getAnalysisScript(sheets);
+                    String mthString = mth.getAnalysisScript(responseName);
                     writeScriptFile("lasso.R", mthString);
                     jobIds.put(Constants.LASSO, submitToSGE(Constants.LASSO));
                 } else if (method.equals(Constants.UNIVARIATE)) {
                     Univariate mth = new Univariate();
-                    String mthString = mth.getAnalysisScript(sheets);
+                    String mthString = mth.getAnalysisScript(responseName);
                     writeScriptFile("univariate.R", mthString);
                     jobIds.put(Constants.UNIVARIATE, submitToSGE(Constants.UNIVARIATE));
                 }
             }
             //Always run the RSessionInfo job
             RSessionInfo rsi = new RSessionInfo();
-            String mthString = rsi.getAnalysisScript(sheets);
+            String mthString = rsi.getAnalysisScript(responseName);
             writeScriptFile("sessionInfo.R", mthString);
             jobIds.put("sessionInfo", submitToSGE("sessionInfo"));
 

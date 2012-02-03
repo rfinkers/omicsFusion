@@ -53,8 +53,8 @@ public class SVM extends Analysis {
      * {@inheritDoc}
      */
     @Override
-    public String getAnalysis() {
-        return super.getAnalysis("svm");
+    public String getAnalysis(String responseVariable) {
+        return super.getAnalysis(Constants.SVM, responseVariable);
     }
 
     /**

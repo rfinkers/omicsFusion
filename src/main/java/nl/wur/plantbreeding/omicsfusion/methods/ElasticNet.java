@@ -55,8 +55,8 @@ public class ElasticNet extends Analysis {
      * {@inheritDoc}
      */
     @Override
-    public String getAnalysis() {
-        return super.getAnalysis("en");
+    public String getAnalysis(String responseVariable) {
+        return super.getAnalysis(Constants.EN, responseVariable);
     }
 
     /**
@@ -117,7 +117,7 @@ public class ElasticNet extends Analysis {
     @Override
     public String writeResultsToDB() {
         String rCode = "# Write results to the SQLite database\n";
-        rCode += "Train_Coeff_Summary_<-cbind(\"responseVariable\",\"" + Constants.EN + "\","
+        rCode += "Train_Coeff_Summary_<-cbind(responseVariable,\"" + Constants.EN + "\","
                 + "as.data.frame(Train_Coeff_Summary))\n";
         rCode += "colnames(Train_Coeff_Summary_)[1]<-\"method\"\n";
 

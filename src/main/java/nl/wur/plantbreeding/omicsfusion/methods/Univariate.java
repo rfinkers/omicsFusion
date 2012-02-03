@@ -46,12 +46,13 @@ public class Univariate extends Analysis {
      * {@inheritDoc}
      */
     @Override
-    protected String getAnalysis() {
+    protected String getAnalysis(String responseVariable) {
         String rCode = "#Univariate Analysis\n";
         //run the analysis
         rCode += "for(i in 1:dim(DesignMatrix)[2])\n";
         rCode += "{\n";
-        rCode += "    lmres<-lm(dataSet$Response ~ DesignMatrix[,i])\n";
+        rCode += "    lmres<-lm(dataSet$" + responseVariable.trim()
+                + " ~ DesignMatrix[,i])\n";
         rCode += "    anovares<-anova(lmres)\n";
         rCode += "    sumres<-summary(lmres)\n";
         rCode += "    r2[i]<-sumres$r.squared\n";
@@ -83,11 +84,11 @@ public class Univariate extends Analysis {
     @Override
     public String writeResultsToDB() {
         String rCode = "# Write results to the SQLite database\n";
-        rCode += "Summary_<-cbind(\"responseVariable\",\"" + Constants.UNIVARIATE + "\","
+        rCode += "Summary_<-cbind(responseVariable,\"" + Constants.UNIVARIATE + "\","
                 + "as.data.frame(pvalue))\n";
         rCode += "colnames(Summary_)[1]<-\"method\"\n";
 
-        rCode += "Summary_bh_<-cbind(\"responseVariable\",\"" + Constants.BH + "\","
+        rCode += "Summary_bh_<-cbind(responseVariable,\"" + Constants.BH + "\","
                 + "as.data.frame(bh))\n";
         rCode += "colnames(Summary_bh_)[1]<-\"method\"\n";
 
@@ -133,7 +134,7 @@ public class Univariate extends Analysis {
      * {@inheritDoc}
      */
     @Override
-    protected String getTrainingSets() {
+    protected String getTrainingSets(String responseVariable) {
         return "";
     }
 

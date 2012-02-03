@@ -50,8 +50,8 @@ public class SparsePLS extends Analysis {
      * {@inheritDoc}
      */
     @Override
-    public String getAnalysis() {
-        return super.getAnalysis("spls");
+    public String getAnalysis(String responseVariable) {
+        return super.getAnalysis(Constants.SPLS, responseVariable);
     }
 
     /**
@@ -103,7 +103,7 @@ public class SparsePLS extends Analysis {
     @Override
     public String writeResultsToDB() {
         String rCode = "# Write results to the SQLite database\n";
-        rCode += "Train_Coeff_Summary_<-cbind(\"responseVariable\",\"" + Constants.SPLS + "\","
+        rCode += "Train_Coeff_Summary_<-cbind(responseVariable,\"" + Constants.SPLS + "\","
                 + "as.data.frame(Train_Coeff_Summary))\n";
         rCode += "colnames(Train_Coeff_Summary_)[1]<-\"method\"\n";
 

@@ -79,7 +79,7 @@ public class SVMTest {
         System.out.println("getAnalysis");
         SVM instance = new SVM();
         String expResult = "";
-        String result = instance.getAnalysis();
+        String result = instance.getAnalysis("");
         assertNotNull(result);
     }
 

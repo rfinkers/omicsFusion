@@ -54,8 +54,8 @@ public class PCR extends Analysis {
      * {@inheritDoc}
      */
     @Override
-    public String getAnalysis() {
-        return super.getAnalysis("pcr");
+    public String getAnalysis(String responseVariable) {
+        return super.getAnalysis(Constants.PCR, responseVariable);
     }
 
     /**
@@ -102,7 +102,7 @@ public class PCR extends Analysis {
     @Override
     public String writeResultsToDB() {
         String rCode = "# Write results to the SQLite database\n";
-        rCode += "Train_Coeff_Summary_<-cbind(\"responseVariable\",\"" + Constants.PCR + "\","
+        rCode += "Train_Coeff_Summary_<-cbind(responseVariable,\"" + Constants.PCR + "\","
                 + "as.data.frame(Train_Coeff_Summary))\n";
         rCode += "colnames(Train_Coeff_Summary_)[1]<-\"method\"\n";
 

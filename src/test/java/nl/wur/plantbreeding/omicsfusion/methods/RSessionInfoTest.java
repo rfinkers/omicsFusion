@@ -68,7 +68,7 @@ public class RSessionInfoTest {
         System.out.println("getAnalysis");
         RSessionInfo instance = new RSessionInfo();
         String expResult = "";
-        String result = instance.getAnalysis();
+        String result = instance.getAnalysis("test");
         assertNotNull(result);
     }
 
@@ -92,7 +92,7 @@ public class RSessionInfoTest {
         System.out.println("preProcessMatrix");
         RSessionInfo instance = new RSessionInfo();
         String expResult = "";
-        String result = instance.preProcessMatrix();
+        String result = instance.preProcessMatrix("");
         assertNotNull(result);
     }
 
@@ -116,7 +116,7 @@ public class RSessionInfoTest {
         System.out.println("getTrainingSets");
         RSessionInfo instance = new RSessionInfo();
         String expResult = "";
-        String result = instance.getTrainingSets();
+        String result = instance.getTrainingSets("");
         assertNotNull(result);
     }
 

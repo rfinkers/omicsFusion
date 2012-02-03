@@ -50,14 +50,16 @@ public class RSessionInfo extends Analysis {
         rCode += "library(doMPI)\n";
         rCode += "library(snow)\n";
         //Load excel sheets
-        rCode += "library(gdata)\n";
-        rCode += "library(XLConnect)\n";
+//        rCode += "library(gdata)\n";
+//        rCode += "library(XLConnect)\n";
+        //SQLite library
+        rCode += "library(RSQLite)\n";
         return rCode;
     }
 
     /** {@inheritDoc} */
     @Override
-    protected String getAnalysis() {
+    protected String getAnalysis(String responseVariable) {
         String rCode = "#Analysis methods\n";
         rCode += "session <- sessionInfo()\n";
         rCode += "latex <- toLatex(sessionInfo(), locale=FALSE)";
@@ -77,7 +79,7 @@ public class RSessionInfo extends Analysis {
     //script and should therfere return nothing.
     /** {@inheritDoc} */
     @Override
-    protected String preProcessMatrix() {
+    protected String preProcessMatrix(String responseVariable) {
         return "";
     }
 
@@ -89,7 +91,7 @@ public class RSessionInfo extends Analysis {
 
     /** {@inheritDoc} */
     @Override
-    protected String getTrainingSets() {
+    protected String getTrainingSets(String responseVariable) {
         return "";
     }
 

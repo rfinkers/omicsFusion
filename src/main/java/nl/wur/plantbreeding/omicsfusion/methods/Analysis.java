@@ -44,6 +44,7 @@ public class Analysis {
      *
      * @param excelSheets The names of the predictor and response excel sheets.
      * @return R program code.
+     * @deprecated Load from SQLite database.
      */
     protected String loadPredictorAndResponseDataSheets(
             HashMap<String, String> excelSheets) {
@@ -73,18 +74,21 @@ public class Analysis {
         //Concatenate the final dataSet, containing 1 response and a predictor
         //matrix. The rownames are set acoording to the sample names
         rCode += "dataSet=cbind(responseSheet[2],predictorSheet[-1])\n\n";
-        //FIXME: set rownames
-        //rCode += "rownames(dataSet) <- responseSheet[1]\n";
+
         return rCode;
     }
 
     /**
      * Read data from the SQLite database.
      *
+     * @param responseVariable responseVariable to analyze.
      * @return R program code.
      */
-    protected String loadPredictorAndResponseDataSheets() {
-        String rCode = "# Load the PredictResponse data sheet from the "
+    protected String loadPredictorAndResponseDataSheets(
+            String responseVariable) {
+        String rCode = "# Set the response variable\n";
+        rCode += "responseVariable <- '" + responseVariable + "'\n\n";
+        rCode += "# Load the PredictResponse data sheet from the "
                 + "SQLite database.\n";
         rCode += "con <- dbConnect(\"SQLite\", dbname = \"omicsFusion.db\")\n";
         rCode += "predQuery <- dbSendQuery(con, \"SELECT genotype_name, "
@@ -92,14 +96,18 @@ public class Analysis {
         rCode += "predData <- fetch(predQuery, n = -1)\n";
         rCode += "dbClearResult(predQuery)\n";
         rCode += "respQuery <- dbSendQuery(con, \"SELECT genotype_name, "
-                + "variable_name, observation FROM response\")\n";
+                + "variable_name, observation "
+                + "FROM response "
+                + "WHERE variable_name ='" + responseVariable.trim() + "'\")\n";
         rCode += "respData <- fetch(respQuery, n = -1)\n";
         rCode += "dbClearResult(respQuery)\n";
         //Convert to matrix
         //We need a data frame instead of an matrix. Why?
-        rCode += "respMatrix <- as.data.frame(tapply(respData[,3],respData[,c(1,2)],c))\n";
-        rCode += "predMatrix <- as.data.frame(tapply(predData[,3],predData[,c(1,2)],c))\n";
-        //Prepare the dataset object (is same object as reading from excel).
+        rCode += "respMatrix <- "
+                + "as.data.frame(tapply(respData[,3],respData[,c(1,2)],c))\n";
+        rCode += "predMatrix <- "
+                + "as.data.frame(tapply(predData[,3],predData[,c(1,2)],c))\n";
+        //Prepare the dataset object.
         rCode += "dataSet=cbind(respMatrix,predMatrix)\n\n";
         return rCode;
     }
@@ -134,6 +142,7 @@ public class Analysis {
      *
      * @param excelSheets Name of the excel sheets
      * @return R program code.
+     * @deprecated Load from SQLite db.
      */
     protected String loadPredictResponseDataSheet(
             HashMap<String, String> excelSheets) {
@@ -149,12 +158,7 @@ public class Analysis {
                 rCode += "predictResponse <- read.xls(\""
                         + excelSheets.get("predictResponse") + "\")\n";
             }
-        } else {
-            //TODO: error handling
         }
-
-        //TODO: file validation. Should also be done during upload
-
         return rCode;
     }
 
@@ -163,16 +167,11 @@ public class Analysis {
      *
      * @return R program code.
      */
-    protected String preProcessMatrix() {
+    protected String preProcessMatrix(String responseVariable) {
         String rCode = "# Pre process data matrix\n";
-        //Hack. TODO: Isn't there another way than overriding the trait name?
-        rCode += "nameVector<-colnames(dataSet)\n";
-        rCode += "traitName<-nameVector[1]\n";
-        //rCode += "write.table(file=\"analysis.txt\", traitName)\n";
-        rCode += "nameVector[1]<-\"Response\"\n";
-        rCode += "colnames(dataSet)<-nameVector\n";
-        //Ok, back to normal
-        rCode += "DesignMatrix <- model.matrix(dataSet$Response ~ . - 1, dataSet)\n";
+
+        rCode += "DesignMatrix <- "
+                + "model.matrix(dataSet$" + responseVariable.trim() + " ~ . - 1, dataSet)\n";
         //TODO: different centering and autoscaling algorithms? User selectable.
         rCode += "DesignMatrix <- scale(DesignMatrix)\n\n";
         return rCode;
@@ -181,15 +180,17 @@ public class Analysis {
     /**
      * Get the training sets.
      *
+     * @param responseVariable
      * @return R program code.
      */
-    protected String getTrainingSets() {
+    protected String getTrainingSets(String responseVariable) {
         //TODO: we might get different training and test sets profided via the dataset upload.
         String rCode = " # Create training sets\n";
-        //TODO: dataSet[1] coding does not work. currently using unlist(dataset[1]). Does this work, or should we code it now to dataSet$Response?
+
         //Can do different procedures. E.G. bootstraps, resampling, leaf-one-out, etc. User selectable?
-        rCode += "  inTrainingSet <- createFolds(dataSet$Response, k = "
-                + Constants.NUMBER_FOLDS_OUTER
+        rCode += "  inTrainingSet <- createFolds(dataSet$"
+                + responseVariable.trim()
+                + ", k = " + Constants.NUMBER_FOLDS_OUTER
                 + ", list = TRUE, returnTrain = T)\n";
         for (int i = 0; i < Constants.NUMBER_FOLDS_OUTER; i++) {
             int j = i + 1;//R object contains 1-10 instead of 0-9!
@@ -212,8 +213,6 @@ public class Analysis {
      */
     protected String getRequiredLibraries() {
         String rCode = "# Load requried generic libraries\n";
-//        rCode += "library(gdata)\n";//Used to load excel sheets.
-//        rCode += "library(XLConnect)\n";//Used to load excel 2010 sheets.
         rCode += "library(lattice)\n";//dependencies of caret.
         rCode += "library(reshape)\n";//dependencies of caret.
         rCode += "library(plyr)\n";//dependencies of caret.
@@ -355,9 +354,12 @@ public class Analysis {
     /**
      * Analysis method specific run code.
      *
+     * @param responseVariable Name of the response variable.
      * @return R compatible code.
      */
-    protected String getAnalysis() {
+    //Note: univariate has the analysis implemented here, while most methods
+    //only return the name of the analysis.
+    protected String getAnalysis(String responseVariable) {
         String rCode = "# Perform analysis\n";
         return rCode;
     }
@@ -366,12 +368,13 @@ public class Analysis {
      * Generic analysis method run code.
      *
      * @param analysisMethod Which Analysis should we run?
+     * @param responseVariable Name of the response variable.
      * @return R compatible code.
      */
-    protected String getAnalysis(String analysisMethod) {
+    protected String getAnalysis(String analysisMethod, String responseVariable) {
         String rCode = "# Analysis Loop \n";//TODO: generalize
         rCode += "for (index in 1:" + Constants.ITERATIONS + ") {\n";
-        rCode += getTrainingSets();
+        rCode += getTrainingSets(responseVariable);
         // innerLoop = how many times to do the inner loop cross validation.
         // The NUMBER_FOLDS_INNER reflects how the test / predictor subsets
         // are made! 10 means automatically 10 % / 90 % while 20 means 5% / 95%.
@@ -396,13 +399,19 @@ public class Analysis {
             } else if (analysisMethod.equals(Constants.RF)) {
                 rCode += "      ## RF Round: " + j + "\n";
             }
-            rCode += "      ## Create predictor and response test and training sets\n";
+            rCode += "      ## Create predictor and response test and "
+                    + "training sets\n";
             //TODO: test set can be an separate set of sheets!
-            rCode += "      predictorTrainSet" + i + " <- DesignMatrix[trainingSet" + i + ",]\n";
-            rCode += "      predictorTestSet" + i + " <- DesignMatrix[-trainingSet" + i + ",]\n";// outer test set
+            rCode += "      predictorTrainSet" + i
+                    + " <- DesignMatrix[trainingSet" + i + ",]\n";
+            // outer test set
+            rCode += "      predictorTestSet" + i
+                    + " <- DesignMatrix[-trainingSet" + i + ",]\n";
             //FIXME: predictorSets are scaled, responseSets are not scaled??
-            rCode += "      responseTrainSet" + i + " <- dataSet$Response[trainingSet" + i + "]\n";//dataSet[1] does not work. Selects potentially wrong columns
-            rCode += "      responseTestSet" + i + " <- dataSet$Response[-trainingSet" + i + "]\n";//dataSet[1] does not work
+            rCode += "      responseTrainSet" + i + " <- dataSet$"
+                    + responseVariable.trim() + "[trainingSet" + i + "]\n";
+            rCode += "      responseTestSet" + i + " <- dataSet$"
+                    + responseVariable.trim() + "[-trainingSet" + i + "]\n";
             //TODO: write trainingset to a file.
             rCode += "      ## Parameter optimalization\n";
             if (analysisMethod.equals(Constants.EN)) {
@@ -447,7 +456,9 @@ public class Analysis {
             //TODO: why somethimes type="response" and other times type="coefficient" in predecit function?
             //TODO: overall. what is the impact of the difference used within the functions on the overall comparability.
             //parameter optimalization & back-rediction of the outer training set and coefficients under that optimized model.
-            if (analysisMethod.equals(Constants.EN) || analysisMethod.equals(Constants.LASSO) || analysisMethod.equals(Constants.RIDGE)) {
+            if (analysisMethod.equals(Constants.EN)
+                    || analysisMethod.equals(Constants.LASSO)
+                    || analysisMethod.equals(Constants.RIDGE)) {
                 if (analysisMethod.equals(Constants.EN)) {
                     rCode += "      frac_" + i + "[, index] <- fit_" + i + "$finalModel$tuneValue$.alpha\n";
                     rCode += "      lambda_" + i + "[, index] <- fit_" + i + "$finalModel$tuneValue$.lambda\n";
@@ -575,6 +586,7 @@ public class Analysis {
      * Write the results to a csv file.
      *
      * @return R compatible code.
+     * @deprecated Write to SQLite DB.
      */
     protected String writeResultsToDisk() {
         String rCode = "# Write results to disk\n";
@@ -612,18 +624,18 @@ public class Analysis {
     /**
      * Generic run script.
      *
-     * @param excelSheets The names of the predictor and response excel sheets.
+     * @param responseVariable Name of the response variable.
      * @return the complete R compatible script for the selected method.
      */
-    public String getAnalysisScript(HashMap<String, String> excelSheets) {
+    public String getAnalysisScript(String responseVariable) {
         String rScript = "# Concatenating analisis script\n";
         rScript += getRequiredLibraries();
-        rScript += loadPredictorAndResponseDataSheets();
+        rScript += loadPredictorAndResponseDataSheets(responseVariable);
         rScript += writeRImage();
         rScript += handleMissingData();
-        rScript += preProcessMatrix();
+        rScript += preProcessMatrix(responseVariable);
         rScript += initializeResultObjects();
-        rScript += getAnalysis();
+        rScript += getAnalysis(responseVariable);
         rScript += combineResults();
         rScript += getRowMeansAndSD();
         //rScript += writeRImage();

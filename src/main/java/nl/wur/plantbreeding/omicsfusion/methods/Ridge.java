@@ -51,8 +51,8 @@ public class Ridge extends Analysis {
      * {@inheritDoc}
      */
     @Override
-    public String getAnalysis() {
-        return super.getAnalysis("ridge");
+    public String getAnalysis(String responseVariable) {
+        return super.getAnalysis(Constants.RIDGE, responseVariable);
     }
 
     /**
@@ -108,7 +108,7 @@ public class Ridge extends Analysis {
     @Override
     public String writeResultsToDB() {
         String rCode = "# Write results to the SQLite database\n";
-        rCode += "Train_Coeff_Summary_<-cbind(\"responseVariable\",\"" + Constants.RIDGE + "\","
+        rCode += "Train_Coeff_Summary_<-cbind(responseVariable,\"" + Constants.RIDGE + "\","
                 + "as.data.frame(Train_Coeff_Summary))\n";
         rCode += "colnames(Train_Coeff_Summary_)[1]<-\"method\"\n";
 
