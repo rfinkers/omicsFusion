@@ -29,6 +29,7 @@ public class CSV {
      * @return A list containing the data points from the parsed CSV file.
      * @throws FileNotFoundException
      * @throws IOException
+     * @deprecated CSV -> SQLite transition.
      */
     public static ArrayList<CsvSummaryDataType> readSummaryCsv(String fileName)
             throws FileNotFoundException, IOException {
