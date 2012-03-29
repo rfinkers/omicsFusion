@@ -113,12 +113,19 @@ public class Lasso extends Analysis {
     @Override
     public String writeResultsToDB() {
         String rCode = "# Write results to the SQLite database\n";
+        //Write training coefficients summary to db.
         rCode += "Train_Coeff_Summary_<-cbind(responseVariable,\"" + Constants.LASSO + "\","
                 + "as.data.frame(Train_Coeff_Summary))\n";
         rCode += "colnames(Train_Coeff_Summary_)[1]<-\"method\"\n";
-
         rCode += "con <- dbConnect(\"SQLite\", dbname = \"omicsFusion.db\")\n";
         rCode += "dbWriteTable(con, \"results\",Train_Coeff_Summary_,append=TRUE)\n";
+        //Write training coefficients to db.
+
+        //Write R2 to db.
+
+        //Write training lambda to db.
+
+        //Write method results to db.
         return rCode;
     }
 

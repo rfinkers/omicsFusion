@@ -6,8 +6,12 @@ Form
 --%>
 
 <%@ taglib prefix="s" uri="/struts-tags"%>
+<%@ taglib prefix="sj" uri="/struts-jquery-tags"%>
 
 <s:text name="uploadExcel.progress" />
+<sj:a openDialog="myclickdialog" button="true" buttonIcon="ui-icon-newwin" cssStyle="allign:right" >help</sj:a>
+<sj:dialog id="myclickdialog" autoOpen="false" modal="true" title="help"><s:text name="userDetails.explanation"/></sj:dialog>
+<!-- TODO: correct help text -->
 
 <h2><s:text name="uploadExcel.heading" /></h2>
 <s:actionerror theme="jquery"/>

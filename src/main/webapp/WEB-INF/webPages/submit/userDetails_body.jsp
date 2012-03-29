@@ -9,10 +9,10 @@ Form
 <%@ taglib prefix="sj" uri="/struts-jquery-tags"%>
 
 <s:text name="userDetails.progress"/>
-<sj:dialog id="myclickdialog"    autoOpen="false"    modal="true"    title="help"    >
+<sj:dialog id="myclickdialog" autoOpen="false"    modal="true"    title="help"    >
     <s:text name="userDetails.explanation"/>
 </sj:dialog>
-<sj:a openDialog="myclickdialog"    button="true"    buttonIcon="ui-icon-newwin" cssStyle="allign:right"   >
+<sj:a openDialog="myclickdialog" button="true"    buttonIcon="ui-icon-newwin" cssStyle="allign:right"   >
     help
 </sj:a>
 <h2><s:text name="userDetails.heading" /></h2>
