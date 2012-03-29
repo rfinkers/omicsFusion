@@ -17,14 +17,16 @@ Form
 <s:text name="uploadExcel.explanation"/>
 
 <!--    TODO: separate this from the lines above? Add instructions-->
-<s:form action="/userRegistration/dataUpload" enctype="multipart/form-data" >
+<s:form action="/userRegistration/dataUpload" enctype="multipart/form-data" method="POST" namespace="/userRegistration">
     <!-- TODO: use listKey instead of list?)-->
     <s:file name="dataSheetResponseFile" key="dataSheetResponseFile" />
-    <s:select key="dataset.type" name="responseType" headerValue="-- Please select --" headerKey="select" list="#{'ph':'Phenomics','me':'Metabolomics','tr':'Transcriptomics','ma':'Markers'}"/>
+    <s:select key="dataset.type" name="responseType" headerValue="-- Please select --" headerKey="select"
+              list="#{'ph':'Phenomics','me':'Metabolomics','tr':'Transcriptomics','ma':'Markers'}" />
     <s:file name="dataSheetPredictorFile" key="dataSheetPredictorFile"/>
-    <s:select key="dataset.type" name="predictorType" headerValue="-- Please select --" headerKey="select" list="#{'ph':'Phenomics','me':'Metabolomics','tr':'Transcriptomics','ma':'Markers'}"/>
+    <s:select key="dataset.type" name="predictorType" headerValue="-- Please select --" headerKey="select"
+              list="#{'ph':'Phenomics','me':'Metabolomics','tr':'Transcriptomics','ma':'Markers'}"/>
     <%-- <s:file name="dataSheetPredictResponseFile" key="dataSheetPredictResponseFile"/> --%>
-    <s:reset/><s:submit id="validateSheet"/>
+    <s:reset/><s:submit id="validateSheet" />
 </s:form>
 
 

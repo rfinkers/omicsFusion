@@ -352,7 +352,7 @@ public class SqLiteQueries extends SqLiteHelper {
         SQLiteConnection db = openDatabase(directory);
         SQLiteStatement stm = db.prepare("SELECT * FROM results "
                 //TODO: implement use of actual responseVariable!
-                + "WHERE response='responseVariable' "
+                //+ "WHERE response='" + responseVariable.trim() + "' "
                 + "ORDER BY predictor, method_name");
         while (stm.step()) {
             stm.columnDouble(3);

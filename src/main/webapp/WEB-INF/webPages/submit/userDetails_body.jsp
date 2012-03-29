@@ -20,7 +20,7 @@ Form
 <s:actionmessage theme="jquery"/>
 
 <s:text name="userDetails.explanation"/>
-<s:form action="/userRegistration/userDetails" name="userDetails" >
+<s:form action="/userRegistration/userDetails" name="userDetails" method="POST" namespace="/userRegistration">
     <%--<s:textfield name="user.username" label="Username"/>--%>
     <sj:textfield key="name" />
     <sj:textfield key="email" />
@@ -30,4 +30,4 @@ Form
 
 </s:form>
 
-<sj:submit formIds="userDetails" button="true"/>
+<sj:submit formIds="userDetails" button="true" />

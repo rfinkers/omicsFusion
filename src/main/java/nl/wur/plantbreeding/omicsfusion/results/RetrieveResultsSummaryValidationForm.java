@@ -25,14 +25,22 @@ import nl.wur.plantbreeding.logic.util.Validation;
  */
 public class RetrieveResultsSummaryValidationForm extends ActionSupport {
 
-    /** The logger */
+    /**
+     * The logger
+     */
     private static final Logger LOG = Logger.getLogger(
             RetrieveResultsSummaryValidationForm.class.getName());
-    /** Serial Version UID */
+    /**
+     * Serial Version UID
+     */
     private static final long serialVersionUID = 1L;
-    /** session token */
+    /**
+     * session token
+     */
     private String sessionId;
-    /** The response variable */
+    /**
+     * The response variable
+     */
     private String variable;
 
     public String getSessionId() {
@@ -56,7 +64,10 @@ public class RetrieveResultsSummaryValidationForm extends ActionSupport {
         LOG.info("Validate");
         if (Validation.containsSpecialCharactersCheck(sessionId) == true) {
             //do something like throwing an error
-            LOG.info("TRUE");
+            LOG.warning("Input contains special characters");
+        }
+        if (sessionId != null) {
+            LOG.info("SessionID: " + sessionId);
         }
         //TODO: we expect a fixed length for the sessionID Include a length check
         //TODO: null check

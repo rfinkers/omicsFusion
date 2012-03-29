@@ -85,13 +85,21 @@ public class RetrieveResultsSummaryAction
         }
 
         //Get the name of the response from the SQLite databse.
-        SqLiteQueries slq = new SqLiteQueries();
-        ArrayList<String> responseNames =
-                slq.getResponseNames(ServletUtils.getResultsDir(request));
+        ArrayList<String> responseNames = null;
+        try {
+            SqLiteQueries slq = new SqLiteQueries();
+            responseNames =
+                    slq.getResponseNames(resultsDirectory + "/" + getSessionId());
+        }
+        catch (SQLiteException sQLiteException) {
+            addActionError(getText("error.opening.db"));
+            return ERROR;
+        }
 
         String responseName = "";
         if (responseNames.isEmpty()) {
             addActionError(getText("error.no.responsevariable"));
+            return ERROR;
         } else if (responseNames.size() == 1) {
             responseName = responseNames.get(0);
         } else {
@@ -103,7 +111,7 @@ public class RetrieveResultsSummaryAction
                 getMethodsWithResultsSummaryFilesFromDB(getSessionId(),
                 resultsDirectory, responseName);
 
-        System.out.println("Methods: " + methResults.size());
+        LOG.log(Level.INFO, "Methods: {0}", methResults.size());
 
         if (methResults.isEmpty()) {
             addActionError(getText("errors.no.result"));

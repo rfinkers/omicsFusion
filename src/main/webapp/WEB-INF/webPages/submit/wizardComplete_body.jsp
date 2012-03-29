@@ -30,7 +30,7 @@
     </s:iterator>
 </ul>
 
-<s:form action="/analysis/pipeline" >
+<s:form action="/analysis/pipeline" method="POST" namespace="/userRegistration">
     <s:hidden value="go" name="ready"/>
     <s:submit styleId="submitMoment" />
 </s:form>

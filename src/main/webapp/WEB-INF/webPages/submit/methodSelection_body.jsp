@@ -6,7 +6,7 @@
 <s:actionmessage theme="jquery" />
 <s:text name="analisis.methods.explanation"/>
 
-<s:form action="/userRegistration/methodSelection" cssClass="methods">
+<s:form action="/userRegistration/methodSelection" cssClass="methods" method="POST" namespace="/userRegistration">
     <s:checkbox key="analysis.method.rf" name="rf" />
     <s:checkbox key="analysis.method.svm" name="svm" disabled="true"/>
     <s:checkbox key="analysis.method.lasso" name="lasso" checked="checked"/>
