@@ -11,9 +11,9 @@ Form
 <s:text name="uploadExcel.progress" />
 <sj:a openDialog="myclickdialog" button="true" buttonIcon="ui-icon-newwin" cssStyle="allign:right" >help</sj:a>
 <sj:dialog id="myclickdialog" autoOpen="false" modal="true" title="help"><s:text name="userDetails.explanation"/></sj:dialog>
-<!-- TODO: correct help text -->
+    <!-- TODO: correct help text -->
 
-<h2><s:text name="uploadExcel.heading" /></h2>
+    <h2><s:text name="uploadExcel.heading" /></h2>
 <s:actionerror theme="jquery"/>
 <s:actionmessage theme="jquery"/>
 <s:fielderror theme="jquery"/>
@@ -23,12 +23,16 @@ Form
 <!--    TODO: separate this from the lines above? Add instructions-->
 <s:form action="/userRegistration/dataUpload" enctype="multipart/form-data" method="POST" namespace="/userRegistration">
     <!-- TODO: use listKey instead of list?)-->
-    <s:file name="dataSheetResponseFile" key="dataSheetResponseFile" />
+    <s:file name="dataSheetResponseFile" key="dataSheetResponseFile"
+            tooltip="Select an excel sheet which contains the response variables."/>
     <s:select key="dataset.type" name="responseType" headerValue="-- Please select --" headerKey="select"
-              list="#{'ph':'Phenomics','me':'Metabolomics','tr':'Transcriptomics','ma':'Markers'}" />
-    <s:file name="dataSheetPredictorFile" key="dataSheetPredictorFile"/>
+              list="#{'ph':'Phenomics','me':'Metabolomics','tr':'Transcriptomics','ma':'Markers'}"
+              tooltip="Select the type of the response sheet."/>
+    <s:file name="dataSheetPredictorFile" key="dataSheetPredictorFile"
+            tooltip="Select an excel sheet which contains the predictor variables."/>
     <s:select key="dataset.type" name="predictorType" headerValue="-- Please select --" headerKey="select"
-              list="#{'ph':'Phenomics','me':'Metabolomics','tr':'Transcriptomics','ma':'Markers'}"/>
+              list="#{'ph':'Phenomics','me':'Metabolomics','tr':'Transcriptomics','ma':'Markers'}"
+              tooltip="Select the type of the predictor sheet."/>
     <%-- <s:file name="dataSheetPredictResponseFile" key="dataSheetPredictResponseFile"/> --%>
     <s:reset/><s:submit id="validateSheet" />
 </s:form>
