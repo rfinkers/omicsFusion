@@ -89,7 +89,7 @@
         <dependency>
             <groupId>com.jgeppert.struts2.jquery</groupId>
             <artifactId>struts2-jquery-grid-plugin</artifactId>
-            <version>3.3.0</version>
+            <version>3.3.1</version>
         </dependency>
 <!--        <dependency>
             <groupId>com.jgeppert.struts2.jquery</groupId>
@@ -153,19 +153,19 @@
         <dependency>
             <groupId>org.apache.struts</groupId>
             <artifactId>struts2-core</artifactId>
-            <version>2.3.1.2</version>
+            <version>2.3.4</version>
             <type>jar</type>
         </dependency>
         <dependency>
             <groupId>org.apache.struts</groupId>
             <artifactId>struts2-tiles-plugin</artifactId>
-            <version>2.3.1.2</version>
+            <version>2.3.4</version>
             <type>jar</type>
         </dependency>
         <dependency>
             <groupId>org.apache.struts</groupId>
             <artifactId>struts2-jfreechart-plugin</artifactId>
-            <version>2.3.1.2</version>
+            <version>2.3.4</version>
             <type>jar</type>
         </dependency>
         <dependency>
