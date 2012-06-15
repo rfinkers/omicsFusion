@@ -24,7 +24,9 @@ import nl.wur.plantbreeding.omicsfusion.utils.ServletUtils;
 import org.apache.struts2.interceptor.ServletRequestAware;
 
 /**
- * Process the selected methods and make them available on the session scope under the variable methods.
+ * Process the selected methods and make them available on the session scope
+ * under the variable methods.
+ *
  * @author Richard Finkers
  * @version 1.0
  */
@@ -32,10 +34,14 @@ public class MethodSelectionAction extends MethodSelectionValidationForm
         implements ServletRequestAware {
 
     private static final long serialVersionUID = 180610L;
-    /** The logger */
+    /**
+     * The logger
+     */
     private static final Logger LOG =
             Logger.getLogger(MethodSelectionAction.class.getName());
-    /** the request */
+    /**
+     * the request
+     */
     private HttpServletRequest request;
 
     @Override

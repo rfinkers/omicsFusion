@@ -33,7 +33,9 @@ public class PartialLeasedSquares extends Analysis {
             Logger.getLogger(PartialLeasedSquares.class.getName());
 
     /**
-     * {@inheritDoc}
+     * {
+     *
+     * @inheritDoc}
      */
     @Override
     protected String initializeResultObjects() {
@@ -41,7 +43,9 @@ public class PartialLeasedSquares extends Analysis {
     }
 
     /**
-     * {@inheritDoc}
+     * {
+     *
+     * @inheritDoc}
      */
     @Override
     protected String getRequiredLibraries() {
@@ -52,7 +56,9 @@ public class PartialLeasedSquares extends Analysis {
     }
 
     /**
-     * {@inheritDoc}
+     * {
+     *
+     * @inheritDoc}
      */
     @Override
     public String getAnalysis(String responseVariable) {
@@ -60,7 +66,9 @@ public class PartialLeasedSquares extends Analysis {
     }
 
     /**
-     * {@inheritDoc}
+     * {
+     *
+     * @inheritDoc}
      */
     @Override
     protected String combineResults() {
@@ -77,7 +85,9 @@ public class PartialLeasedSquares extends Analysis {
     }
 
     /**
-     * {@inheritDoc}
+     * {
+     *
+     * @inheritDoc}
      */
     @Override
     public String writeResultsToDisk() {
@@ -97,7 +107,9 @@ public class PartialLeasedSquares extends Analysis {
     }
 
     /**
-     * {@inheritDoc}
+     * {
+     *
+     * @inheritDoc}
      */
     @Override
     public String writeResultsToDB() {
@@ -112,7 +124,9 @@ public class PartialLeasedSquares extends Analysis {
     }
 
     /**
-     * {@inheritDoc}
+     * {
+     *
+     * @inheritDoc}
      */
     @Override
     protected String writeRImage() {

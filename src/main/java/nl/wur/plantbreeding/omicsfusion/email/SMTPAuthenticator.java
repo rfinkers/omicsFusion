@@ -14,7 +14,9 @@ import javax.mail.PasswordAuthentication;
  */
 public class SMTPAuthenticator extends Authenticator {
 
-    /** The logger */
+    /**
+     * The logger
+     */
     private static final Logger LOG = Logger.getLogger(
             SMTPAuthenticator.class.getName());
     private String username;

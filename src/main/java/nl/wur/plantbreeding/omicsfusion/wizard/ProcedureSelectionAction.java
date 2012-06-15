@@ -30,10 +30,14 @@ public class ProcedureSelectionAction extends DataUploadValidationForm
         implements ServletRequestAware {
 
     private static final long serialVersionUID = 170610L;
-    /** The logger. */
+    /**
+     * The logger.
+     */
     private static final Logger LOG =
             Logger.getLogger(ProcedureSelectionAction.class.getName());
-    /** the request. */
+    /**
+     * the request.
+     */
     private HttpServletRequest request;
 
     @Override

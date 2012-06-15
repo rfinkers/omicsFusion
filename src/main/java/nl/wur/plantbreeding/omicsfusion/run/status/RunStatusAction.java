@@ -13,15 +13,20 @@ import nl.wur.plantbreeding.omicsfusion.utils.ServletUtils;
 
 /**
  * Action class that shows the progress of the R jobs.
+ *
  * @author Richard Finkers
  * @version 1.0
  */
 public class RunStatusAction extends RunStatusValidationForm {
 
-    /** The Logger */
+    /**
+     * The Logger
+     */
     private static final Logger LOG = Logger.getLogger(
             RunStatusAction.class.getName());
-    /** Serial Version UID */
+    /**
+     * Serial Version UID
+     */
     private static final long serialVersionUID = 26082010L;
 
     @Override

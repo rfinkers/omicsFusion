@@ -11,15 +11,20 @@ import org.apache.struts2.interceptor.ServletRequestAware;
 /**
  * Check for which methods results are available. This action results in an page
  * that allows further investigation of more detailed methods results.
+ *
  * @author Richard Finkers
  * @version 1.0
  */
 public class MethodsWithResultsAction extends MethodsWithResultsForm
         implements ServletRequestAware {
 
-    /** the request */
+    /**
+     * the request
+     */
     private HttpServletRequest request;
-    /** The logger */
+    /**
+     * The logger
+     */
     private static final Logger LOG = Logger.getLogger(
             MethodsWithResultsAction.class.getName());
 

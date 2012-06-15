@@ -33,7 +33,9 @@ public class ElasticNet extends Analysis {
             Logger.getLogger(ElasticNet.class.getName());
 
     /**
-     * {@inheritDoc}
+     * {
+     *
+     * @inheritDoc}
      */
     @Override
     protected String initializeResultObjects() {
@@ -41,7 +43,9 @@ public class ElasticNet extends Analysis {
     }
 
     /**
-     * {@inheritDoc}
+     * {
+     *
+     * @inheritDoc}
      */
     @Override
     public String getRequiredLibraries() {
@@ -52,7 +56,9 @@ public class ElasticNet extends Analysis {
     }
 
     /**
-     * {@inheritDoc}
+     * {
+     *
+     * @inheritDoc}
      */
     @Override
     public String getAnalysis(String responseVariable) {
@@ -60,7 +66,9 @@ public class ElasticNet extends Analysis {
     }
 
     /**
-     * {@inheritDoc}
+     * {
+     *
+     * @inheritDoc}
      */
     @Override
     protected String combineResults() {
@@ -90,7 +98,9 @@ public class ElasticNet extends Analysis {
     }
 
     /**
-     * {@inheritDoc}
+     * {
+     *
+     * @inheritDoc}
      */
     @Override
     public String writeResultsToDisk() {
@@ -112,7 +122,9 @@ public class ElasticNet extends Analysis {
     }
 
     /**
-     * {@inheritDoc}
+     * {
+     *
+     * @inheritDoc}
      */
     @Override
     public String writeResultsToDB() {
@@ -127,7 +139,9 @@ public class ElasticNet extends Analysis {
     }
 
     /**
-     * {@inheritDoc}
+     * {
+     *
+     * @inheritDoc}
      */
     @Override
     protected String writeRImage() {

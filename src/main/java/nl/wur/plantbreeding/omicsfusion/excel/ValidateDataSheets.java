@@ -29,22 +29,25 @@ import org.apache.poi.ss.usermodel.Workbook;
  * Validation if the excel sheets are valid, have the correct dimensions and
  * that the names of the individuals are identical in the different excel
  * sheets.
+ *
  * @author Richard Finkers
  * @version 1.0
  * @since 1.0
  */
 public class ValidateDataSheets extends ManipulateExcelSheet {
 
-    /** The logger. */
+    /**
+     * The logger.
+     */
     private static final Logger LOG = Logger.getLogger(
             ValidateDataSheets.class.getName());
 
-    /** Default constructor.
-    private ValidateDataSheets() {
-    }
-
     /**
+     * Default constructor. private ValidateDataSheets() { }
+     *
+     * /**
      * Checks if a file is a valid excel (2003/2007/2010) workbook.
+     *
      * @param responseSheet The response sheet object.
      * @param predictorSheet The predictor sheet object.
      * @throws DataSheetValidationException Excel sheet validation failed.
@@ -59,14 +62,22 @@ public class ValidateDataSheets extends ManipulateExcelSheet {
             File predictorSheet) throws DataSheetValidationException,
             InvalidFormatException, FileNotFoundException, IOException {
 
-        /** nr of rows in response sheet. */
+        /**
+         * nr of rows in response sheet.
+         */
         int responseRows;
-        /** nr of rows in predictor sheet. */
+        /**
+         * nr of rows in predictor sheet.
+         */
         int predictorRows;
 
-        /** wb for the response variables. */
+        /**
+         * wb for the response variables.
+         */
         Workbook responseWorkbook;
-        /** wb for the predictor variables. */
+        /**
+         * wb for the predictor variables.
+         */
         Workbook predictorWorkbook;
 
         responseWorkbook = loadExcelSheet(responseSheet);
@@ -96,13 +107,14 @@ public class ValidateDataSheets extends ManipulateExcelSheet {
 
     /**
      * Check the dimension of an excel sheet.
+     *
      * @param wb Name of the workbook.
      * @param fileName The name of the excel sheet.
-     * @param minColumns Minimal number of variables (columns) required for
-     * this type of workbook.
+     * @param minColumns Minimal number of variables (columns) required for this
+     * type of workbook.
      * @return The number of rows (= number of individuals).
-     * @throws DataSheetValidationException Dimensions of the workbook are
-     * not correct.
+     * @throws DataSheetValidationException Dimensions of the workbook are not
+     * correct.
      */
     private static int checkWorkbookDimensions(Workbook wb, String fileName,
             int minColumns) throws DataSheetValidationException {
@@ -128,6 +140,7 @@ public class ValidateDataSheets extends ManipulateExcelSheet {
     /**
      * Check if the individual name column has an header and if the names within
      * the excel sheets has the same order.
+     *
      * @param responseWorkbook The response workbook.
      * @param predictorWorkbook The predictor workbook.
      * @throws DataSheetValidationException Error validating the excel sheet.

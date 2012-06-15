@@ -61,8 +61,7 @@ public class RunAnalysisAction extends ActionSupport
         //Read the relevant data from the session
         @SuppressWarnings("unchecked")
         ArrayList<String> methods =
-                (ArrayList<String>) getRequest().getSession().
-                getAttribute("methods");
+                (ArrayList<String>) getRequest().getSession().getAttribute("methods");
 
         //Get the name of the response from the SQLite databse.
         SqLiteQueries slq = new SqLiteQueries();

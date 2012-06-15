@@ -62,23 +62,23 @@ public class PredictorResponseXYScatterPlot {
             LOG.log(Level.INFO, "response: {0} predictor: {1}",
                     new Object[]{obs.getResponseValue(), obs.getPredictorValue()});
 //            if (obs.getResponseValue() == 0 && obs.getPredictorValue() == 0) {
-                data[1][z] = obs.getResponseValue(); // response -> Y
-                data[0][z] = obs.getPredictorValue(); // predictor -> X
-                if (obs.getGenotypeName() != null) {
-                    genotypeLabels[z] = obs.getGenotypeName();
-                } else {
-                    genotypeLabels[z] = "No label";
-                }
-                //Get the min and max response variable for regression.
-                if (data[0][z] > maxX) {
-                    maxX = data[0][z];
-                }
-                if (data[0][z] < minX) {
-                    minX = data[0][z];
-                }
-                //Add data to regression dataset (x,y) = pred, resp
-                slr.addData(data[0][z], data[1][z]);
-                z++;
+            data[1][z] = obs.getResponseValue(); // response -> Y
+            data[0][z] = obs.getPredictorValue(); // predictor -> X
+            if (obs.getGenotypeName() != null) {
+                genotypeLabels[z] = obs.getGenotypeName();
+            } else {
+                genotypeLabels[z] = "No label";
+            }
+            //Get the min and max response variable for regression.
+            if (data[0][z] > maxX) {
+                maxX = data[0][z];
+            }
+            if (data[0][z] < minX) {
+                minX = data[0][z];
+            }
+            //Add data to regression dataset (x,y) = pred, resp
+            slr.addData(data[0][z], data[1][z]);
+            z++;
 //            }
         }
 

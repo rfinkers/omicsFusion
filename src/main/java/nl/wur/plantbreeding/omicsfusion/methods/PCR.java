@@ -32,7 +32,9 @@ public class PCR extends Analysis {
     private static final Logger LOG = Logger.getLogger(PCR.class.getName());
 
     /**
-     * {@inheritDoc}
+     * {
+     *
+     * @inheritDoc}
      */
     @Override
     protected String initializeResultObjects() {
@@ -40,7 +42,9 @@ public class PCR extends Analysis {
     }
 
     /**
-     * {@inheritDoc}
+     * {
+     *
+     * @inheritDoc}
      */
     @Override
     protected String getRequiredLibraries() {
@@ -51,7 +55,9 @@ public class PCR extends Analysis {
     }
 
     /**
-     * {@inheritDoc}
+     * {
+     *
+     * @inheritDoc}
      */
     @Override
     public String getAnalysis(String responseVariable) {
@@ -59,7 +65,9 @@ public class PCR extends Analysis {
     }
 
     /**
-     * {@inheritDoc}
+     * {
+     *
+     * @inheritDoc}
      */
     @Override
     protected String combineResults() {
@@ -76,7 +84,9 @@ public class PCR extends Analysis {
     }
 
     /**
-     * {@inheritDoc}
+     * {
+     *
+     * @inheritDoc}
      */
     @Override
     public String writeResultsToDisk() {
@@ -97,7 +107,9 @@ public class PCR extends Analysis {
     }
 
     /**
-     * {@inheritDoc}
+     * {
+     *
+     * @inheritDoc}
      */
     @Override
     public String writeResultsToDB() {
@@ -112,7 +124,9 @@ public class PCR extends Analysis {
     }
 
     /**
-     * {@inheritDoc}
+     * {
+     *
+     * @inheritDoc}
      */
     @Override
     protected String writeRImage() {

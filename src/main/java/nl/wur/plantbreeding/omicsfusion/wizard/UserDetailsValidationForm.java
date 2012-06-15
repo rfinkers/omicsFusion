@@ -20,18 +20,27 @@ import com.opensymphony.xwork2.util.logging.Logger;
 
 /**
  * Form containg basic information on the person that want to use the tool.
+ *
  * @author Richard Finkers
  */
 public class UserDetailsValidationForm extends ActionSupport {
 
     private static final long serialVersionUID = 170610L;
-    /** name of the user */
+    /**
+     * name of the user
+     */
     private String name;
-    /** email of the user */
+    /**
+     * email of the user
+     */
     private String email;
-    /** country */
+    /**
+     * country
+     */
     private String country;
-    /** affiliation */
+    /**
+     * affiliation
+     */
     private String affiliation;
 
     public String getEmail() {

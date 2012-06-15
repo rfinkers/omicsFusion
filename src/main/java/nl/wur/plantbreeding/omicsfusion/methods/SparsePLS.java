@@ -25,7 +25,9 @@ import nl.wur.plantbreeding.omicsfusion.utils.Constants;
 public class SparsePLS extends Analysis {
 
     /**
-     * {@inheritDoc}
+     * {
+     *
+     * @inheritDoc}
      */
     @Override
     protected String initializeResultObjects() {
@@ -33,7 +35,9 @@ public class SparsePLS extends Analysis {
     }
 
     /**
-     * {@inheritDoc}
+     * {
+     *
+     * @inheritDoc}
      */
     @Override
     protected String getRequiredLibraries() {
@@ -47,7 +51,9 @@ public class SparsePLS extends Analysis {
     }
 
     /**
-     * {@inheritDoc}
+     * {
+     *
+     * @inheritDoc}
      */
     @Override
     public String getAnalysis(String responseVariable) {
@@ -55,7 +61,9 @@ public class SparsePLS extends Analysis {
     }
 
     /**
-     * {@inheritDoc}
+     * {
+     *
+     * @inheritDoc}
      */
     @Override
     protected String combineResults() {
@@ -75,7 +83,9 @@ public class SparsePLS extends Analysis {
     }
 
     /**
-     * {@inheritDoc}
+     * {
+     *
+     * @inheritDoc}
      */
     @Override
     public String writeResultsToDisk() {
@@ -98,7 +108,9 @@ public class SparsePLS extends Analysis {
     }
 
     /**
-     * {@inheritDoc}
+     * {
+     *
+     * @inheritDoc}
      */
     @Override
     public String writeResultsToDB() {
@@ -112,8 +124,10 @@ public class SparsePLS extends Analysis {
         return rCode;
     }
 
-        /**
-     * {@inheritDoc}
+    /**
+     * {
+     *
+     * @inheritDoc}
      */
     @Override
     protected String writeRImage() {

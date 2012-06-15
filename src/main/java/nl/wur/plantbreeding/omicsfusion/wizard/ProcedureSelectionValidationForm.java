@@ -21,18 +21,22 @@ import java.util.logging.Logger;
 
 /**
  * Form containing information about the uploaded file's.
+ *
  * @author Richard Finkers
  * @version 1.0
  */
 public class ProcedureSelectionValidationForm extends ActionSupport {
 
     private static final long serialVersionUID = 170610L;
-    /** The logger */
+    /**
+     * The logger
+     */
     private static final Logger LOG =
             Logger.getLogger(ProcedureSelectionValidationForm.class.getName());
-    /** File containing the response variables */
+    /**
+     * File containing the response variables
+     */
     private File dataSheetResponseFile;
-
 
     @Override
     public void validate() {

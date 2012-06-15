@@ -26,11 +26,14 @@ import org.apache.poi.ss.util.CellReference;
 
 /**
  * Functions to work with excel sheets.
+ *
  * @author Richard Finkers
  */
 public class ManipulateExcelSheet {
 
-    /** the logger. */
+    /**
+     * the logger.
+     */
     private static final Logger LOG = Logger.getLogger(
             ManipulateExcelSheet.class.getName());
 
@@ -38,6 +41,7 @@ public class ManipulateExcelSheet {
      * Extracts the contents of the matrix formatted excel sheets and writes the
      * contents to an list type of excel sheet? Alternatively: leave this to R
      * and use this method to validate the sheet?
+     *
      * @param wb An excel workbook
      */
     public void extractCellContents(Workbook wb) {
@@ -52,8 +56,7 @@ public class ManipulateExcelSheet {
 
                 switch (cell.getCellType()) {
                     case Cell.CELL_TYPE_STRING:
-                        LOG.info(cell.getRichStringCellValue().
-                                getString());
+                        LOG.info(cell.getRichStringCellValue().getString());
                         break;
                     case Cell.CELL_TYPE_NUMERIC:
                         if (DateUtil.isCellDateFormatted(cell)) {
@@ -78,6 +81,7 @@ public class ManipulateExcelSheet {
 
     /**
      * Load an excel sheet from the file system.
+     *
      * @param excelSheet
      * @return The excel sheet which was loaded from the file system.
      * @throws FileNotFoundException

@@ -375,7 +375,7 @@
                         menuVoice.addClass("textBox");
                         if ($.browser.msie) menuVoice.css({
                             maxWidth:op.options.menuWidth
-                            });
+                        });
                         this.isOpener=true;
                     }
                     if(isDisabled){

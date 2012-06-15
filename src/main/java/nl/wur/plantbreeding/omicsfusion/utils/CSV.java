@@ -13,6 +13,7 @@ import nl.wur.plantbreeding.omicsfusion.datatypes.CsvSummaryDataType;
 
 /**
  * Utility class to read/write CVS file's.
+ *
  * @author Richard Finkers
  * @version 1.0
  */
@@ -25,6 +26,7 @@ public class CSV {
 
     /**
      * Read the summary CSV files for a method.
+     *
      * @param fileName Name of the result file
      * @return A list containing the data points from the parsed CSV file.
      * @throws FileNotFoundException

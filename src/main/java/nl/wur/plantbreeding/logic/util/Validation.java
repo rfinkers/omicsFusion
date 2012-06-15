@@ -10,7 +10,9 @@ import java.util.regex.Pattern;
  */
 public class Validation {
 
-    /** The logger. */
+    /**
+     * The logger.
+     */
     private static final Logger LOG = Logger.getLogger(
             Validation.class.getName());
 
@@ -19,6 +21,7 @@ public class Validation {
 
     /**
      * Validate if String contains special characters.
+     *
      * @param validation
      * @return TRUE if string contains special characters.
      */
@@ -37,8 +40,8 @@ public class Validation {
     }
 
     /**
-     * Validates int.
-     * TODO: int cannot store these characters anyway?
+     * Validates int. TODO: int cannot store these characters anyway?
+     *
      * @param validation
      * @return TRUE if string contains special characters.
      */
@@ -55,13 +58,14 @@ public class Validation {
 
     /**
      * See if string contains information.
+     *
      * @param nullString
      * @return string (null or given string).
      */
     public static String nullString(String nullString) {
         Pattern characters = Pattern.compile("[\\S\\W\\D]+");
         Matcher letterMatch = characters.matcher(nullString);
-        if (!(letterMatch.find())) {
+        if (!( letterMatch.find() )) {
             return null;
         } else {
             return nullString;
@@ -70,6 +74,7 @@ public class Validation {
 
     /**
      * See if float contains letters.
+     *
      * @param floatValidation
      * @return TRUE if string contains special characters.
      */

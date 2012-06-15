@@ -73,7 +73,7 @@ public class SubmissionCompleteEmail extends Email {
             email.sendEmailToUsers("omicsFusion run: "
                     + now.get(Calendar.DATE)
                     + "-"
-                    + (now.get(Calendar.MONTH) + 1)
+                    + ( now.get(Calendar.MONTH) + 1 )
                     + "-"
                     + now.get(Calendar.YEAR)
                     + " / "
@@ -83,11 +83,13 @@ public class SubmissionCompleteEmail extends Email {
                     + ":"
                     + now.get(Calendar.SECOND), emailBody);
             LOG.info("email send");
-        } catch (AddressException ex) {
+        }
+        catch (AddressException ex) {
             Logger.getLogger(SubmissionCompleteEmail.class.getName()).log(
                     Level.SEVERE, null, ex);
             ex.printStackTrace();
-        } catch (MessagingException ex) {
+        }
+        catch (MessagingException ex) {
             Logger.getLogger(SubmissionCompleteEmail.class.getName()).log(
                     Level.SEVERE, null, ex);
             ex.printStackTrace();

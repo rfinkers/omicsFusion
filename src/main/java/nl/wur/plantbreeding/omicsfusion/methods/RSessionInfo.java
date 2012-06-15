@@ -31,7 +31,11 @@ public class RSessionInfo extends Analysis {
     private static final Logger LOG =
             Logger.getLogger(RSessionInfo.class.getName());
 
-    /** {@inheritDoc} */
+    /**
+     * {
+     *
+     * @inheritDoc}
+     */
     @Override
     protected String getRequiredLibraries() {
         String rCode = super.getRequiredLibraries();
@@ -57,7 +61,11 @@ public class RSessionInfo extends Analysis {
         return rCode;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {
+     *
+     * @inheritDoc}
+     */
     @Override
     protected String getAnalysis(String responseVariable) {
         String rCode = "#Analysis methods\n";
@@ -66,7 +74,11 @@ public class RSessionInfo extends Analysis {
         return rCode;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {
+     *
+     * @inheritDoc}
+     */
     @Override
     protected String writeResultsToDisk() {
         String rCode = "#Write R sesion info details\n";
@@ -77,37 +89,61 @@ public class RSessionInfo extends Analysis {
 
     //Next section contains overrided methods that are not relevant to this
     //script and should therfere return nothing.
-    /** {@inheritDoc} */
+    /**
+     * {
+     *
+     * @inheritDoc}
+     */
     @Override
     protected String preProcessMatrix(String responseVariable) {
         return "";
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {
+     *
+     * @inheritDoc}
+     */
     @Override
     protected String combineResults() {
         return "";
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {
+     *
+     * @inheritDoc}
+     */
     @Override
     protected String getTrainingSets(String responseVariable) {
         return "";
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {
+     *
+     * @inheritDoc}
+     */
     @Override
     protected String getRowMeansAndSD() {
         return "";
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {
+     *
+     * @inheritDoc}
+     */
     @Override
     protected String initializeResultObjects() {
         return "";
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {
+     *
+     * @inheritDoc}
+     */
     @Override
     protected String loadPredictorAndResponseDataSheets(HashMap<String, String> excelSheets) {
         return "";

@@ -40,12 +40,13 @@ import org.apache.struts2.ServletActionContext;
 public class Email extends ActionSupport {
 
     private static final long serialVersionUID = 80111L;
-    /** User object */
+    /**
+     * User object
+     */
     private UserList user;
 
     public UserList getUser() {
-        return (UserList) ServletActionContext.getContext().getSession().
-                get(Constants.USER);
+        return (UserList) ServletActionContext.getContext().getSession().get(Constants.USER);
     }
 
     public static Logger getLOG() {
@@ -54,20 +55,20 @@ public class Email extends ActionSupport {
 
     /**
      * Obtain the administrators email address from the context parameters.
+     *
      * @return The configured administrator email.
      */
     public String getAdminEmailAdress() {
-        return ServletActionContext.getServletContext().
-                getInitParameter("adminEmail");
+        return ServletActionContext.getServletContext().getInitParameter("adminEmail");
     }
 
     /**
      * Obtain the smtp server from the context parameters.
+     *
      * @return The configured smtp server.
      */
     public String getSmtpServer() {
-        return ServletActionContext.getServletContext().
-                getInitParameter("smtpServer");
+        return ServletActionContext.getServletContext().getInitParameter("smtpServer");
     }
 
     public String getSessionID() {
@@ -77,6 +78,7 @@ public class Email extends ActionSupport {
     /**
      * Generic wrapper to send an email address from the BreeDB administrator to
      * the administrator.
+     *
      * @param subject
      * @param emailBody
      * @throws AddressException
@@ -115,6 +117,7 @@ public class Email extends ActionSupport {
 
     /**
      * Send a email containing the licensefile as an attachment to the user.
+     *
      * @param subject subject of the email
      * @param emailBody
      * @throws MessagingException Error creating or sending the email.

@@ -20,28 +20,47 @@ import com.opensymphony.xwork2.util.logging.Logger;
 
 /**
  * Overview of selected methods.
+ *
  * @author Richard Finkers
  */
 public class MethodSelectionValidationForm extends ActionSupport {
 
     private static final long serialVersionUID = 180610L;
-    /** lasso regression */
+    /**
+     * lasso regression
+     */
     private boolean lasso;
-    /** Elastic net 1 */
+    /**
+     * Elastic net 1
+     */
     private boolean elasticNet;
-    /** pcr */
+    /**
+     * pcr
+     */
     private boolean pcr;
-    /** pls */
+    /**
+     * pls
+     */
     private boolean pls;
-    /** random forest */
+    /**
+     * random forest
+     */
     private boolean rf;
-    /** ridge regression */
+    /**
+     * ridge regression
+     */
     private boolean ridge;
-    /** svm */
+    /**
+     * svm
+     */
     private boolean svm;
-    /** spls */
+    /**
+     * spls
+     */
     private boolean spls;
-    /** univariate */
+    /**
+     * univariate
+     */
     private boolean univariate;
 
     public boolean isLasso() {

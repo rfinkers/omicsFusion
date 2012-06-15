@@ -20,9 +20,14 @@ package nl.wur.plantbreeding.omicsfusion.datatypes;
  * @author finke002
  */
 public class OntologyTraitDataType {
-    /** Name of the variable. */
+
+    /**
+     * Name of the variable.
+     */
     private String variableName;
-    /** Name of the ontology identifier. */
+    /**
+     * Name of the ontology identifier.
+     */
     private String ontologyID;
 
     public OntologyTraitDataType() {
@@ -79,7 +84,4 @@ public class OntologyTraitDataType {
         hash = 97 * hash + ( this.ontologyID != null ? this.ontologyID.hashCode() : 0 );
         return hash;
     }
-
-    
-
 }

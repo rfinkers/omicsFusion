@@ -33,7 +33,9 @@ public class RandomForest extends Analysis {
             Logger.getLogger(RandomForest.class.getName());
 
     /**
-     * {@inheritDoc}
+     * {
+     *
+     * @inheritDoc}
      */
     @Override
     protected String initializeResultObjects() {
@@ -41,7 +43,9 @@ public class RandomForest extends Analysis {
     }
 
     /**
-     * {@inheritDoc}
+     * {
+     *
+     * @inheritDoc}
      */
     @Override
     protected String getRequiredLibraries() {
@@ -52,7 +56,9 @@ public class RandomForest extends Analysis {
     }
 
     /**
-     * {@inheritDoc}
+     * {
+     *
+     * @inheritDoc}
      */
     @Override
     public String getAnalysis(String responseVariable) {
@@ -60,7 +66,9 @@ public class RandomForest extends Analysis {
     }
 
     /**
-     * {@inheritDoc}
+     * {
+     *
+     * @inheritDoc}
      */
     @Override
     protected String combineResults() {
@@ -87,7 +95,9 @@ public class RandomForest extends Analysis {
     }
 
     /**
-     * {@inheritDoc}
+     * {
+     *
+     * @inheritDoc}
      */
     @Override
     protected String getRowMeansAndSD() {
@@ -102,7 +112,9 @@ public class RandomForest extends Analysis {
     }
 
     /**
-     * {@inheritDoc}
+     * {
+     *
+     * @inheritDoc}
      */
     @Override
     public String writeResultsToDisk() {
@@ -123,7 +135,9 @@ public class RandomForest extends Analysis {
     }
 
     /**
-     * {@inheritDoc}
+     * {
+     *
+     * @inheritDoc}
      */
     @Override
     public String writeResultsToDB() {
@@ -139,7 +153,9 @@ public class RandomForest extends Analysis {
     }
 
     /**
-     * {@inheritDoc}
+     * {
+     *
+     * @inheritDoc}
      */
     @Override
     protected String writeRImage() {

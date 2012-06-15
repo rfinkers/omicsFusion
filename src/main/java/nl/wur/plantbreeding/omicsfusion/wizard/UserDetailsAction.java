@@ -16,18 +16,15 @@
 package nl.wur.plantbreeding.omicsfusion.wizard;
 
 import com.almworks.sqlite4java.SQLiteException;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import nl.wur.plantbreeding.logic.sqlite4java.SqLiteQueries;
 import nl.wur.plantbreeding.omicsfusion.email.ExceptionEmail;
 import nl.wur.plantbreeding.omicsfusion.entities.UserList;
 import nl.wur.plantbreeding.omicsfusion.utils.Constants;
 import nl.wur.plantbreeding.omicsfusion.utils.ServletUtils;
 import org.apache.struts2.interceptor.ServletRequestAware;
-import org.apache.struts2.interceptor.SessionAware;
 
 /**
  * process the user information and makes it available on the session scope.
@@ -88,8 +85,10 @@ public class UserDetailsAction extends UserDetailsValidationForm
             LOG.log(Level.SEVERE, "Exception: {0}",
                     sQLiteException.getMessage());
             addActionError("SQLite exception: " + sQLiteException.getMessage());
-            /**FIXME: this error gets thrown when the "omicsFusion" data dir 
-            does not exists. We have tho handle that differently.*/
+            /**
+             * FIXME: this error gets thrown when the "omicsFusion" data dir
+             * does not exists. We have tho handle that differently.
+             */
             sQLiteException.printStackTrace();
             return ERROR;
         }

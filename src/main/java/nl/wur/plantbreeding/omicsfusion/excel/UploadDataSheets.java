@@ -89,15 +89,13 @@ public class UploadDataSheets extends ManipulateExcelSheet {
         final String ontologyID = "ontology";
         int responseRowCounter = 1;
         predictorRowCounter = 1;
-        if (responseSheet.getRow(responseRowCounter).getCell(0).
-                getRichStringCellValue().getString().equals(ontologyID)) {
+        if (responseSheet.getRow(responseRowCounter).getCell(0).getRichStringCellValue().getString().equals(ontologyID)) {
             responseRowCounter++;
             //parse row to db
 
             //variable, ontologyID
         }
-        if (predictorSheet.getRow(predictorRowCounter).getCell(0).
-                getRichStringCellValue().getString().equals(ontologyID)) {
+        if (predictorSheet.getRow(predictorRowCounter).getCell(0).getRichStringCellValue().getString().equals(ontologyID)) {
             predictorRowCounter++;
             //parse row to DB
 

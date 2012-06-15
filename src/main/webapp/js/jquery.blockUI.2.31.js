@@ -458,7 +458,7 @@
                 if (fwd || back) {
                     setTimeout(function(){
                         focus(back)
-                        },10);
+                    },10);
                     return false;
                 }
             }

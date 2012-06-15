@@ -33,6 +33,7 @@ public class SqLiteHelper {
     /**
      * Open an sqlite database. The database will be created if it does not
      * exist.
+     *
      * @param directory directory and name of the database to be opened.
      * @return Connection tot the database.
      * @throws SQLiteException

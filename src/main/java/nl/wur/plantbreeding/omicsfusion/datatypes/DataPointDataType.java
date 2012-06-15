@@ -20,11 +20,18 @@ package nl.wur.plantbreeding.omicsfusion.datatypes;
  * @author finke002
  */
 public class DataPointDataType {
-/** Name of the genotype. */
+
+    /**
+     * Name of the genotype.
+     */
     private String genotypeName;
-    /** Name of the trait. */
+    /**
+     * Name of the trait.
+     */
     private String traitName;
-    /** The observation. */
+    /**
+     * The observation.
+     */
     private double observation;
 
     public DataPointDataType() {
@@ -94,5 +101,4 @@ public class DataPointDataType {
         hash = 83 * hash + (int) ( Double.doubleToLongBits(this.observation) ^ ( Double.doubleToLongBits(this.observation) >>> 32 ) );
         return hash;
     }
-
 }

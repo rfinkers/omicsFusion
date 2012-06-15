@@ -52,8 +52,8 @@ public class Constants {
      */
     public final static int MIN_INDIVIDUALS = 20;
     /**
-     * The total number of iterations on the dataset.
-     * FIXME: set to 100 for final program.
+     * The total number of iterations on the dataset. FIXME: set to 100 for
+     * final program.
      */
     public static final int ITERATIONS = 10;
     /**

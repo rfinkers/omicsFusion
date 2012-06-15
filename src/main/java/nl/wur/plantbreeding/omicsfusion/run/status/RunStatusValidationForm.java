@@ -10,16 +10,23 @@ import nl.wur.plantbreeding.logic.util.Validation;
 
 /**
  * Validates the SessionID within the run status validation scripts.
+ *
  * @author Richard Finkers
  */
 public class RunStatusValidationForm extends ActionSupport {
 
-    /** The logger */
+    /**
+     * The logger
+     */
     private static final Logger LOG = Logger.getLogger(
             RunStatusValidationForm.class.getName());
-    /** Serial Version UID */
+    /**
+     * Serial Version UID
+     */
     private static final long serialVersionUID = 1L;
-    /** session token */
+    /**
+     * session token
+     */
     private String sessionId;
 
     public String getSessionId() {

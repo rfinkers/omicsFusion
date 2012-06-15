@@ -39,6 +39,7 @@ public class CmdExec {
 
     /**
      * Executes a SGE batch script and returns the job id of the submission.
+     *
      * @param executionDir Name of the directory where the job scripts / data
      * resides.
      * @param method Method to be executed.
@@ -96,6 +97,7 @@ public class CmdExec {
 
     /**
      * Check the status of the jobs with the SGE cluster.
+     *
      * @param jobId Job to check.
      * @return true if jobID does not exist on the SGE queue.
      * @throws IOException

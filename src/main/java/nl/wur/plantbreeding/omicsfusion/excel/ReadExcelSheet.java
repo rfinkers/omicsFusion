@@ -43,13 +43,16 @@ public class ReadExcelSheet extends ManipulateExcelSheet {
     private static final Logger LOG = Logger.getLogger(
             ReadExcelSheet.class.getName());
 
-    /** Default constructor. */
+    /**
+     * Default constructor.
+     */
     public ReadExcelSheet() {
     }
 
     /**
      * Read the values of the predictor and response sheets and store these in
      * an DefaultXYDataset object.
+     *
      * @param responseSheet Name and location of the response sheet.
      * @param predictorSheet Name and location of the predictor sheet.
      * @param predictor Name of the selected predictor.
@@ -114,8 +117,7 @@ public class ReadExcelSheet extends ManipulateExcelSheet {
                     if (DateUtil.isCellDateFormatted(cell)) {
                         LOG.severe("Invalid Type in heading of predictor sheet.");
                     } else {
-                        if (Double.toString(cell.getNumericCellValue()).
-                                split("\\.")[0].trim().equals(
+                        if (Double.toString(cell.getNumericCellValue()).split("\\.")[0].trim().equals(
                                 predictor.substring(3))) {
                             found = true;
                             break;
@@ -136,8 +138,7 @@ public class ReadExcelSheet extends ManipulateExcelSheet {
                 //spaces get converted to dot in R. Try if we can find an unique
                 //partial mach on the filename in case found == false?
                 for (i = 1; i < predictorRow.getLastCellNum(); i++) {
-                    if (predictorRow.getCell(i).getStringCellValue().trim().
-                            contains(predictor.split("\\.")[0])) {
+                    if (predictorRow.getCell(i).getStringCellValue().trim().contains(predictor.split("\\.")[0])) {
                         partialResultCounter++;
                         lastPartialResultRow = i;
 
@@ -185,18 +186,15 @@ public class ReadExcelSheet extends ManipulateExcelSheet {
                 //data matrix is 0 based, however, we have to start reading the
                 //excel sheet from row 1 (row0 = header).
                 z = j + 1;
-                data[1][j] = respWbSheet.getRow(z).getCell(1).
-                        getNumericCellValue();//response -> Y
-                data[0][j] = predWbSheet.getRow(z).getCell(i).
-                        getNumericCellValue();//predictor -> X
+                data[1][j] = respWbSheet.getRow(z).getCell(1).getNumericCellValue();//response -> Y
+                data[0][j] = predWbSheet.getRow(z).getCell(i).getNumericCellValue();//predictor -> X
                 //Genotype labels can contain numeric or string values.
                 //TODO: generic switch?
                 Cell cell = respWbSheet.getRow(z).getCell(0);
 
                 switch (cell.getCellType()) {
                     case Cell.CELL_TYPE_STRING:
-                        genotypeLabels[j] = respWbSheet.getRow(z).getCell(0).
-                                getStringCellValue();
+                        genotypeLabels[j] = respWbSheet.getRow(z).getCell(0).getStringCellValue();
                         break;
                     case Cell.CELL_TYPE_NUMERIC:
                         if (DateUtil.isCellDateFormatted(cell)) {

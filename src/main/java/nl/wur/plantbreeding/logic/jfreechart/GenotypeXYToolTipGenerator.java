@@ -31,21 +31,24 @@ import org.jfree.data.xy.XYDataset;
  */
 public class GenotypeXYToolTipGenerator implements XYToolTipGenerator {
 
-    /** The logger. */
+    /**
+     * The logger.
+     */
     private static final Logger LOG = Logger.getLogger(
             GenotypeXYToolTipGenerator.class.getName());
 
     /**
      * Returns a Genotype XY values Tooltip.
+     *
      * @param dataset the dataset (<code>null</code> not permitted).
-     * @param series  the series index (zero-based).
+     * @param series the series index (zero-based).
      * @param item the item index (zero-based).
      * @return A tooltip containing the genotype name and the x,y values.
      */
     @Override
     public final String generateToolTip(XYDataset dataset, int series, int item) {
         NumberFormat formatter = new DecimalFormat("#.###");
-        return ((GenotypeXYDataset) dataset).getGenotypeLabel(series, item)
+        return ( (GenotypeXYDataset) dataset ).getGenotypeLabel(series, item)
                 + " - (" + formatter.format(dataset.getX(series, item))
                 + ", " + formatter.format(dataset.getY(series, item)) + ")";
     }

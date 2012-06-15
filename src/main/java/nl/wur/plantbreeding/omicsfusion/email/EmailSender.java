@@ -27,12 +27,15 @@ import javax.mail.internet.MimeMessage;
 
 /**
  * Sends notification emails to users.
+ *
  * @author Richard Finkers
  * @version 1.0
  */
 public class EmailSender {
 
-    /** The logger */
+    /**
+     * The logger
+     */
     private static final Logger LOG = Logger.getLogger(
             EmailSender.class.getName());
     private String smtpServer;
@@ -44,6 +47,7 @@ public class EmailSender {
 
     /**
      * Initializes the email wiht all requied data.
+     *
      * @param smtpServer
      * @param port
      * @param user
@@ -63,6 +67,7 @@ public class EmailSender {
 
     /**
      * Set the properties.
+     *
      * @return An object with relevant system properties.
      */
     private Properties prepareProperties() {
@@ -77,6 +82,7 @@ public class EmailSender {
 
     /**
      * Prepare the email.
+     *
      * @param mailSession
      * @param charset
      * @param from
@@ -100,15 +106,16 @@ public class EmailSender {
             }
             message.setContent(HtmlMessage, "text/html; charset=\""
                     + charset + "\"");
-        } catch (Exception ex) {
-            Logger.getLogger(EmailSender.class.getName()).
-                    log(Level.SEVERE, null, ex);
+        }
+        catch (Exception ex) {
+            Logger.getLogger(EmailSender.class.getName()).log(Level.SEVERE, null, ex);
         }
         return message;
     }
 
     /**
      * Send the email.
+     *
      * @param subject
      * @param HtmlMessage
      * @param to
@@ -124,14 +131,16 @@ public class EmailSender {
                     from, subject, HtmlMessage, to);
             transport.connect();
             Transport.send(message);
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
             ex.printStackTrace();
-        } finally {
+        }
+        finally {
             try {
                 transport.close();
-            } catch (MessagingException ex) {
-                Logger.getLogger(EmailSender.class.getName()).
-                        log(Level.SEVERE, null, ex);
+            }
+            catch (MessagingException ex) {
+                Logger.getLogger(EmailSender.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }

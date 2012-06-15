@@ -21,36 +21,61 @@ import java.util.logging.Logger;
 
 /**
  * Form containing information about the uploaded file's.
+ *
  * @author Richard Finkers
  * @version 1.0
  */
 public class DataUploadValidationForm extends ActionSupport {
 
     private static final long serialVersionUID = 170610L;
-    /** The logger */
+    /**
+     * The logger
+     */
     private static final Logger LOG =
             Logger.getLogger(DataUploadValidationForm.class.getName());
-    /** File containing the response variables */
+    /**
+     * File containing the response variables
+     */
     private File dataSheetResponseFile;
-    /** content type of the data sheet */
+    /**
+     * content type of the data sheet
+     */
     private String dataSheetResponseFileContentType;
-    /** name of the dataSheet */
+    /**
+     * name of the dataSheet
+     */
     private String dataSheetResponseFileFileName;
-    /** Type of the response variables */
+    /**
+     * Type of the response variables
+     */
     private String responseType;
-    /** File containing the predictor variables */
+    /**
+     * File containing the predictor variables
+     */
     private File dataSheetPredictorFile;
-    /** content type of the data sheet */
+    /**
+     * content type of the data sheet
+     */
     private String dataSheetPredictorFileContentType;
-    /** name of the dataSheet */
+    /**
+     * name of the dataSheet
+     */
     private String dataSheetPredictorFileFileName;
-    /** Type of the predictor variables */
+    /**
+     * Type of the predictor variables
+     */
     private String predictorType;
-    /** File containing the xxxxx */
+    /**
+     * File containing the xxxxx
+     */
     private File dataSheetPredictResponseFile = null;
-    /** Name */
+    /**
+     * Name
+     */
     private String dataSheetPredictResponseFileFileName = null;
-    /** type of the PredictResponse */
+    /**
+     * type of the PredictResponse
+     */
     private String dataSheetPredictResponseFileContentType = null;
 
     public File getDataSheetPredictorFile() {
@@ -154,7 +179,7 @@ public class DataUploadValidationForm extends ActionSupport {
     @Override
     public void validate() {
         LOG.info("Start Excel form validation");
-        
+
         //TODO: file size check??
 
         //Order of test is important for the order in which the errors are shown.

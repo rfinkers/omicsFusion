@@ -17,7 +17,7 @@
         <put-attribute name="title" value="omicsFusion" />
         <put-attribute name="body" value="/WEB-INF/webPages/index_body.jsp" />
     </definition>
-        <definition name="about" extends="baseLayout">
+    <definition name="about" extends="baseLayout">
         <put-attribute name="title" value="About omicsFusion" />
         <put-attribute name="body" value="/WEB-INF/webPages/about_body.jsp" />
     </definition>
@@ -86,7 +86,7 @@
         <put-attribute name="title" value="omicsFusion" />
         <put-attribute name="body" value="/WEB-INF/webPages/results/resultsSummary_body.jsp" />
     </definition>
-        <definition name="predRespXYScatter" extends="baseLayout">
+    <definition name="predRespXYScatter" extends="baseLayout">
         <put-attribute name="title" value="omicsFusion" />
         <put-attribute name="body" value="/WEB-INF/webPages/results/predRespXYScatter_body.jsp" />
     </definition>
@@ -131,7 +131,7 @@
         <put-attribute name="title" value="omicsFusion" />
         <put-attribute name="body" value="/WEB-INF/webPages/methods/index_body.jsp" />
     </definition>
-        <!-- Help -->
+    <!-- Help -->
     <definition name="helpIndex" extends="baseLayout">
         <put-attribute name="title" value="omicsFusion help" />
         <put-attribute name="body" value="/WEB-INF/webPages/help/index_body.jsp" />

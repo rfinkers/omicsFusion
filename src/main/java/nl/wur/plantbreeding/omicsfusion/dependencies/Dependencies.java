@@ -19,6 +19,7 @@ import java.util.logging.Logger;
 
 /**
  * Check if the required dependencies are available.
+ *
  * @author Richard Finkers
  * @version 1.0
  */

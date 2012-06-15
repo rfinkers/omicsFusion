@@ -3,6 +3,6 @@
 
     //Unselect all
     $('#resetButton').click(){
-        form.reset()
+    form.reset()
     }
-</script>
+    </script>

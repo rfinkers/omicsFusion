@@ -5,22 +5,28 @@ import java.util.logging.Logger;
 
 /**
  * Utility class to check if a file or directory exists (true / false).
+ *
  * @author Richard Finkers
  * @version 0.1
  * @since 0.1
  */
 public class FileOrDirectoryExists {
 
-    /** The logger. */
+    /**
+     * The logger.
+     */
     private static final Logger LOG = Logger.getLogger(
             FileOrDirectoryExists.class.getName());
 
-    /** default constructor. */
+    /**
+     * default constructor.
+     */
     private FileOrDirectoryExists() {
     }
 
     /**
      * Check if a file or directory exists in the file system.
+     *
      * @param name Name of the file or directory to check.
      * @return Boolean if file/directory exists.
      */

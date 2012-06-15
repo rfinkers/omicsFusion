@@ -11,17 +11,21 @@ import java.util.logging.Logger;
 
 /**
  * Write files to the filesystem.
+ *
  * @author Richard Finkers
  * @version 1.0
  */
 public class WriteFile {
 
-    /** The logger */
+    /**
+     * The logger
+     */
     private static final Logger LOG =
             Logger.getLogger(WriteFile.class.getName());
 
     /**
      * Writes data to a textfile.
+     *
      * @param fileName Name of the target file.
      * @param content Text contents.
      * @throws IOException if something witn wring with file IO.

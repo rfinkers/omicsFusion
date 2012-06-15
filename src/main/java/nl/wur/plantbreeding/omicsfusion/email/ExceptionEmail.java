@@ -22,15 +22,19 @@ import javax.mail.internet.AddressException;
 
 /**
  * Sends exception emails to the administrator.
+ *
  * @author Richard Finkers
  */
 public class ExceptionEmail extends Email {
 
-    /** SerialVersionUID. */
+    /**
+     * SerialVersionUID.
+     */
     private static final long serialVersionUID = 90111L;
 
     /**
      * Send an exception mail to the administrator.
+     *
      * @param e The exception
      */
     public static void SendExceptionEmail(Exception e) {
@@ -45,13 +49,11 @@ public class ExceptionEmail extends Email {
             LOG.info("email send");
         }
         catch (AddressException ex) {
-            Logger.getLogger(SubmissionCompleteEmail.class.getName()).
-                    log(Level.SEVERE, null, ex);
+            Logger.getLogger(SubmissionCompleteEmail.class.getName()).log(Level.SEVERE, null, ex);
             ex.printStackTrace();
         }
         catch (MessagingException ex) {
-            Logger.getLogger(SubmissionCompleteEmail.class.getName()).
-                    log(Level.SEVERE, null, ex);
+            Logger.getLogger(SubmissionCompleteEmail.class.getName()).log(Level.SEVERE, null, ex);
             ex.printStackTrace();
         }
     }

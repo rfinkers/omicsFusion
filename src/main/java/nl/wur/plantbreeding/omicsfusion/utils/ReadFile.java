@@ -28,13 +28,16 @@ import java.util.logging.Logger;
  */
 public class ReadFile {
 
-    /** The logger. */
+    /**
+     * The logger.
+     */
     private static final Logger LOG = Logger.getLogger(ReadFile.class.getName());
 
     /**
      * Read the filenames fo the opriginal input excel sheets.
-     * @param fileName Name of the file with the names of the response
-     * and predictor sheets.
+     *
+     * @param fileName Name of the file with the names of the response and
+     * predictor sheets.
      * @return Names of the sheets.
      * @throws IOException if something witn wring with file IO.
      */
@@ -72,6 +75,7 @@ public class ReadFile {
 
     /**
      * Read the name of the response from the (R generated) analysis.txt file.
+     *
      * @param filename Name of the file.
      * @return Name of the response variable.
      * @throws IOException
