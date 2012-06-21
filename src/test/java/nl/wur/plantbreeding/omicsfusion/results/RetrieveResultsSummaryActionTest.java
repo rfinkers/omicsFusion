@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package nl.wur.plantbreeding.omicsfusion.results;
 
 import org.junit.After;
@@ -65,5 +64,4 @@ public class RetrieveResultsSummaryActionTest {
         String result = instance.getBackgroundColor(result_2, min, max, false);
         assertEquals(expResult, result);
     }
-
 }

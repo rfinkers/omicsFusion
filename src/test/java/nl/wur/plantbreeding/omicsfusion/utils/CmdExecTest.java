@@ -9,11 +9,14 @@ import org.junit.*;
 
 /**
  * Tests the submissions to SGE.
+ *
  * @author Richard Finkers
  */
 public class CmdExecTest {
 
-    /** The Logger */
+    /**
+     * The Logger
+     */
     private static final Logger LOG = Logger.getLogger(CmdExecTest.class.getName());
 
     public CmdExecTest() {
@@ -37,6 +40,7 @@ public class CmdExecTest {
 
     /**
      * Test of ExecuteQSubCmd method, of class CmdExec.
+     *
      * @throws Exception
      */
     @Test
@@ -52,6 +56,7 @@ public class CmdExecTest {
 
     /**
      * Test of CheckJobStatus method, of class CmdExec.
+     *
      * @throws Exception
      */
     @Test
@@ -62,7 +67,8 @@ public class CmdExecTest {
         boolean result;
         try {
             result = CheckJobStatus(jobId);
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             //NO qstat installed on the system!
             result = true;
             LOG.warning("No qstat installed on this system. "

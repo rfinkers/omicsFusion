@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package nl.wur.plantbreeding.omicsfusion.utils;
 
 import org.junit.After;
@@ -51,6 +50,7 @@ public class ReadFileTest {
 
     /**
      * Test of ReadSheetFileNames method, of class ReadFile.
+     *
      * @throws Exception
      */
     @Test
@@ -66,6 +66,7 @@ public class ReadFileTest {
 
     /**
      * Test of ReadResponseName method, of class ReadFile.
+     *
      * @throws Exception
      * @deprecated SQLite database should be used.
      */
@@ -79,5 +80,4 @@ public class ReadFileTest {
         String result = instance.ReadResponseName(filename);
         assertEquals(expResult, result);
     }
-
 }

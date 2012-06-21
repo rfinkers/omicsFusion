@@ -41,7 +41,8 @@ public class CSVTest {
 
     /**
      * Test of readSummaryCsv method, of class CSV.
-     * @throws Exception 
+     *
+     * @throws Exception
      */
     @Test
     @Ignore//FIXME: we do not want to ignore this

@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package nl.wur.plantbreeding.omicsfusion.results;
 
 import javax.servlet.http.HttpServletRequest;
@@ -70,7 +69,8 @@ public class PredictorResponseXYScatterActionTest {
     }
 
     /**
-     * Test of setServletRequest method, of class PredictorResponseXYScatterAction.
+     * Test of setServletRequest method, of class
+     * PredictorResponseXYScatterAction.
      */
     @Test
     @Ignore
@@ -82,5 +82,4 @@ public class PredictorResponseXYScatterActionTest {
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
-
 }

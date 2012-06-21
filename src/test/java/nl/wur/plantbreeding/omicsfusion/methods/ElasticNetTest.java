@@ -92,7 +92,8 @@ public class ElasticNetTest {
         ElasticNet instance = new ElasticNet();
         String expResult = "";
         String result = instance.combineResults();
-        assertNotNull(result);    }
+        assertNotNull(result);
+    }
 
     /**
      * Test of writeResults method, of class ElasticNet.

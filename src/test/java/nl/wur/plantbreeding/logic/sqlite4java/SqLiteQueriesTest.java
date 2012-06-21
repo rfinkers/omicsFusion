@@ -26,6 +26,7 @@ import org.junit.*;
  * @author finke002
  */
 public class SqLiteQueriesTest {
+
     String directory;
 
     public SqLiteQueriesTest() {
