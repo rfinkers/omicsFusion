@@ -1,0 +1,11 @@
+nbaction*
+nb-configuration.xml
+target/
+.jar
+.classpath
+.project
+.settings
+.idea
+*.iml
+.class
+.~
