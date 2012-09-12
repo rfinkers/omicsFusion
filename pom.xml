@@ -115,6 +115,12 @@
             <type>so</type>
             <version>${sqlite4java.version}</version>
         </dependency>
+        <dependency>                                                                            
+            <groupId>com.almworks.sqlite4java</groupId>
+            <artifactId>libsqlite4java-osx</artifactId>
+            <version>${sqlite4java.version}</version>
+            <type>jnilib</type>
+        </dependency>
         <dependency>
             <groupId>nl.wur.plantbreeding</groupId>
             <artifactId>chebi2gene</artifactId>
@@ -229,19 +235,22 @@
                         <configuration>
                             <artifactItems>
                                 <artifactItem>
-                                    <groupId>com.almworks.sqlite4java</groupId>
-                                    <artifactId>libsqlite4java-linux-amd64</artifactId>
+                                    <!--<artifactId>libsqlite4java-linux-amd64</artifactId>-->
+                                    <artifactId>libsqlite4java-osx</artifactId>
                                     <version>${sqlite4java.version}</version>
-                                    <type>so</type>
+                                    <!--<type>so</type>-->
+                                    <type>jnilib</type>
                                     <overWrite>true</overWrite>
                                     <!--                                    WebApp -->
                                     <outputDirectory>${project.build.directory}/omicsFusion/WEB-INF/lib</outputDirectory>
                                 </artifactItem>
                                 <artifactItem>
                                     <groupId>com.almworks.sqlite4java</groupId>
-                                    <artifactId>libsqlite4java-linux-amd64</artifactId>
+                                    <!--<artifactId>libsqlite4java-linux-amd64</artifactId>-->
+                                    <artifactId>libsqlite4java-osx</artifactId>
                                     <version>${sqlite4java.version}</version>
-                                    <type>so</type>
+                                    <!--<type>so</type>-->
+                                    <type>jnilib</type>
                                     <overWrite>true</overWrite>
                                     <!--                                    JUnit tests -->
                                     <outputDirectory>${project.build.directory}/lib</outputDirectory>
