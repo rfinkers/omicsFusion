@@ -9,8 +9,8 @@
     <constant name="struts.devMode" value="false" />
     <constant name="struts.custom.i18n.resources"
               value="nl.wur.plantbreeding.omicsfusion.resources.OmicsFusion" />
-    <constant name="struts.multipart.maxSize" value="10000000" />
-
+    <constant name="struts.multipart.maxSize" value="15000000" />
+    
     <!-- Actions for the framework-->
     <include file="submitWizard.xml"/>
     <include file="runStatus.xml"/>
