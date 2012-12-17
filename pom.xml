@@ -83,7 +83,7 @@
         <dependency>
             <groupId>com.jgeppert.struts2.jquery</groupId>
             <artifactId>struts2-jquery-grid-plugin</artifactId>
-            <version>3.4.0</version>
+            <version>3.5.0</version>
         </dependency>
         <!--        TODO: remove CSV capabilities from project (in favor of SQLite) -->
         <dependency>
