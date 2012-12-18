@@ -27,7 +27,7 @@
 <ul>
     <s:iterator value="#session.methods">
         <li><s:property/></li>
-    </s:iterator>
+        </s:iterator>
 </ul>
 
 <s:form action="/analysis/pipeline" method="POST" namespace="/userRegistration">

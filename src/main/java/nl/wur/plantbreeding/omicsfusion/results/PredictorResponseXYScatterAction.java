@@ -147,7 +147,7 @@ public class PredictorResponseXYScatterAction
         //Otions for the regression line (line 1)
         renderer.setSeriesShapesVisible(1, Boolean.FALSE);
         renderer.setSeriesPaint(1, Color.BLACK);
-        renderer.setBaseOutlinePaint(Color.WHITE);
+        //renderer.setBaseOutlinePaint(Color.WHITE); TODO: removed by new API
 
         //Tooltip - GenotypeXYToolTipGenerator
         XYToolTipGenerator tooltipGen = new StandardXYToolTipGenerator();
