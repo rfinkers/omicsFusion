@@ -83,7 +83,7 @@
         <dependency>
             <groupId>com.jgeppert.struts2.jquery</groupId>
             <artifactId>struts2-jquery-grid-plugin</artifactId>
-            <version>3.4.0</version>
+            <version>3.5.0</version>
         </dependency>
         <!--        TODO: remove CSV capabilities from project (in favor of SQLite) -->
         <dependency>
@@ -116,6 +116,18 @@
             <version>${sqlite4java.version}</version>
         </dependency>
         <dependency>
+            <groupId>com.almworks.sqlite4java</groupId>
+            <artifactId>libsqlite4java-osx</artifactId>
+            <version>${sqlite4java.version}</version>
+            <type>jnilib</type>
+        </dependency>
+        <dependency>
+            <groupId>nl.wur.plantbreeding</groupId>
+            <artifactId>chebi2gene</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
             <version>6.0</version>
@@ -124,25 +136,24 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.10</version>
+            <version>4.11</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.struts</groupId>
             <artifactId>struts2-core</artifactId>
-            <version>2.3.4.1</version>
-            <type>jar</type>
+            <version>2.3.7</version>
         </dependency>
         <dependency>
             <groupId>org.apache.struts</groupId>
             <artifactId>struts2-tiles-plugin</artifactId>
-            <version>2.3.4.1</version>
+            <version>2.3.7</version>
             <type>jar</type>
         </dependency>
         <dependency>
             <groupId>org.apache.struts</groupId>
             <artifactId>struts2-jfreechart-plugin</artifactId>
-            <version>2.3.4.1</version>
+            <version>2.3.7</version>
             <type>jar</type>
         </dependency>
         <dependency>
@@ -224,18 +235,22 @@
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>com.almworks.sqlite4java</groupId>
-                                    <artifactId>libsqlite4java-linux-amd64</artifactId>
+                                    <!--<artifactId>libsqlite4java-linux-amd64</artifactId>-->
+                                    <artifactId>libsqlite4java-osx</artifactId>
                                     <version>${sqlite4java.version}</version>
-                                    <type>so</type>
+                                    <!--<type>so</type>-->
+                                    <type>jnilib</type>
                                     <overWrite>true</overWrite>
                                     <!--                                    WebApp -->
                                     <outputDirectory>${project.build.directory}/omicsFusion/WEB-INF/lib</outputDirectory>
                                 </artifactItem>
                                 <artifactItem>
                                     <groupId>com.almworks.sqlite4java</groupId>
-                                    <artifactId>libsqlite4java-linux-amd64</artifactId>
+                                    <!--<artifactId>libsqlite4java-linux-amd64</artifactId>-->
+                                    <artifactId>libsqlite4java-osx</artifactId>
                                     <version>${sqlite4java.version}</version>
-                                    <type>so</type>
+                                    <!--<type>so</type>-->
+                                    <type>jnilib</type>
                                     <overWrite>true</overWrite>
                                     <!--                                    JUnit tests -->
                                     <outputDirectory>${project.build.directory}/lib</outputDirectory>
@@ -248,7 +263,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.12</version>
+                <version>2.12.2</version>
                 <configuration>
                     <systemProperties>
                         <property>
@@ -300,6 +315,5 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <sqlite4java.version>0.282</sqlite4java.version>
-        <netbeans.hint.deploy.server>gfv3ee6</netbeans.hint.deploy.server>
     </properties>
 </project>
