@@ -32,10 +32,6 @@
         <!-- other -->
         <script type="text/javascript" src="<s:url value="/js/jquery.blockUI.2.31.js"/>"></script>
         <script type="text/javascript" src="<s:url value="/js/jquery.breeDB.0.1.js"/>"></script>
-        <!-- mbMenu -->
-        <script type="text/javascript" src="<s:url value="/js/mbMenu.js"/>"></script>
-        <script type="text/javascript" src="<s:url value="/js/jquery.metadata.js"/>"></script>
-        <script type="text/javascript" src="<s:url value="/js/jquery.hoverIntent.js"/>"></script>
         <script type="text/javascript">
             var _gaq = _gaq || [];
             _gaq.push(['_setAccount', 'UA-18743767-2']);
