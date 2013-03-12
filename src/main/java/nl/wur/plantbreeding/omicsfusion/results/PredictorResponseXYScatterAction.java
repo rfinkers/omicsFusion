@@ -34,6 +34,14 @@ import org.apache.struts2.interceptor.ServletRequestAware;
  * @author Richard Finkers
  * @version 2.0.
  */
+@Actions({
+    @Action(value = "/charts", results = {
+        @Result(location = "/results/predRespXYScatter.jsp", name = "success")
+    }),
+    @Action(value = "/jsonchartdata", results = {
+        @Result(location = "/results/predRespXYScatter.jsp", name = "success")
+    })
+})
 public class PredictorResponseXYScatterAction
         extends PredictorResponseXYScatterForm implements ServletRequestAware {
 

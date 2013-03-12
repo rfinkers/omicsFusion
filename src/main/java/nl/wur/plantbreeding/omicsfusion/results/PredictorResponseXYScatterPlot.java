@@ -15,7 +15,10 @@
  */
 package nl.wur.plantbreeding.omicsfusion.results;
 
+import java.awt.Point;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import nl.wur.plantbreeding.logic.jfreechart.GenotypeXYDataset;
@@ -35,6 +38,10 @@ public class PredictorResponseXYScatterPlot {
      */
     private static final Logger LOG =
             Logger.getLogger(PredictorResponseXYScatterPlot.class.getName());
+    /**
+     * List with the data points.
+     */
+    private List<Point> points;
 
     /**
      * Create a XY dataset, and add the regression line.
