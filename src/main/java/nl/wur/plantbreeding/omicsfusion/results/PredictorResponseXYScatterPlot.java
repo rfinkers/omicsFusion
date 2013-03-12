@@ -15,7 +15,10 @@
  */
 package nl.wur.plantbreeding.omicsfusion.results;
 
+import java.awt.Point;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import nl.wur.plantbreeding.logic.jfreechart.GenotypeXYDataset;
@@ -34,14 +37,19 @@ public class PredictorResponseXYScatterPlot {
      */
     private static final Logger LOG =
             Logger.getLogger(PredictorResponseXYScatterPlot.class.getName());
+    /**
+     * List with the data points.
+     */
+    private List<Point> points;
 
     /**
      * Create a XY dataset, and add the regression line.
      *
      * @param observationsForPredictorAndResponse scatter data.
      * @return JFreeChart compatible dataSet.
+     * @deprecated Migrate in favor of jQuery-chart.
      */
-    protected DefaultXYDataset predictResponseXYScatterPlot(
+    protected DefaultXYDataset predictResponseXYScatterPlotOld(
             ArrayList<XYScatterDataType> observationsForPredictorAndResponse) {
 
         double[][] data =
@@ -88,7 +96,7 @@ public class PredictorResponseXYScatterPlot {
         LOG.log(Level.INFO,
                 "preY: {0} predY: {1}",
                 new Object[]{slr.predict(minX), slr.predict(maxX)
-                });
+        });
         regLine[0][0] = minX;
         regLine[1][0] = slr.predict(minX);
         regLine[0][1] = maxX;
@@ -104,5 +112,24 @@ public class PredictorResponseXYScatterPlot {
 
         //return dataset
         return dataSet;
+    }
+
+    /**
+     * Create a XY dataset, and add the regression line.
+     *
+     * @param observationsForPredictorAndResponse List with observations.
+     * @return A list with points.
+     */
+    protected List<Point> predictResponseXYScatterPlot(
+            ArrayList<XYScatterDataType> observationsForPredictorAndResponse) {
+
+        points = new LinkedList<Point>();
+
+        points.add(new Point(0, 3));
+        points.add(new Point(4, 8));
+        points.add(new Point(8, 5));
+        points.add(new Point(9, 13));
+        //return dataset
+        return points;
     }
 }

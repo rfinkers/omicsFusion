@@ -18,8 +18,8 @@ package nl.wur.plantbreeding.logic.sqlite4java;
 import java.io.File;
 import java.util.Date;
 import nl.wur.plantbreeding.omicsfusion.entities.UserList;
-import static org.junit.Assert.fail;
 import org.junit.*;
+import static org.junit.Assert.fail;
 
 /**
  *
@@ -27,7 +27,7 @@ import org.junit.*;
  */
 public class SqLiteQueriesTest {
 
-    String directory;
+    private static String directory = "/tmp/";
 
     public SqLiteQueriesTest() {
     }
@@ -36,6 +36,8 @@ public class SqLiteQueriesTest {
     public static void setUpClass() throws Exception {
         File tempFile = new File("/tmp/omicsFusion.db");
         tempFile.delete();
+        SqLiteQueries instance = new SqLiteQueries();
+        instance.initializeDatabase(directory);
     }
 
     @AfterClass
@@ -44,23 +46,10 @@ public class SqLiteQueriesTest {
 
     @Before
     public void setUp() {
-        directory = "/tmp/";
     }
 
     @After
     public void tearDown() {
-    }
-
-    /**
-     * Test of initializeDatabase method, of class sqLiteQueries.
-     */
-    @Test
-    public void testInitializeDatabase() throws Exception {
-        System.out.println("initializeDatabase");
-
-        SqLiteQueries instance = new SqLiteQueries();
-        instance.initializeDatabase(directory);
-
     }
 
     /**

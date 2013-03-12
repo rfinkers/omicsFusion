@@ -24,5 +24,6 @@ Any value defined here will override the pom.xml file value but is only applicab
         <org-netbeans-modules-editor-indent.CodeStyle.project.text-limit-width>140</org-netbeans-modules-editor-indent.CodeStyle.project.text-limit-width>
         <org-netbeans-modules-html-editor-lib.default-public-id>-//W3C//DTD XHTML 1.0 Transitional//EN</org-netbeans-modules-html-editor-lib.default-public-id>
         <org-netbeans-modules-html-editor-lib.default-html-public-id>HTML5</org-netbeans-modules-html-editor-lib.default-html-public-id>
+        <netbeans.deploy.on.save>false</netbeans.deploy.on.save>
     </properties>
 </project-shared-configuration>

@@ -15,10 +15,10 @@
  */
 package nl.wur.plantbreeding.omicsfusion.wizard;
 
-import com.almworks.sqlite4java.SQLiteException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
@@ -175,7 +175,7 @@ public class DataUploadAction extends DataUploadValidationForm
      *
      * @throws SQLiteException
      */
-    private void writeNamesToDB() throws SQLiteException {
+    private void writeNamesToDB() throws SQLException, ClassNotFoundException {
         SqLiteQueries sql = new SqLiteQueries();
         sql.uploadDataNameAndType(ServletUtils.getResultsDir(request),
                 getDataSheetPredictorFileFileName(),

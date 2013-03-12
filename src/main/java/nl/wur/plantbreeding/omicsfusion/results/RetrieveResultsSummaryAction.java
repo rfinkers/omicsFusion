@@ -15,9 +15,9 @@
  */
 package nl.wur.plantbreeding.omicsfusion.results;
 
-import com.almworks.sqlite4java.SQLiteException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -91,7 +91,7 @@ public class RetrieveResultsSummaryAction
             responseNames =
                     slq.getResponseNames(resultsDirectory + "/" + getSessionId());
         }
-        catch (SQLiteException sQLiteException) {
+        catch (SQLException sQLiteException) {
             addActionError(getText("error.opening.db"));
             return ERROR;
         }
@@ -686,7 +686,7 @@ public class RetrieveResultsSummaryAction
 
     private HashMap<String, ArrayList<CsvSummaryDataType>> getMethodsWithResultsSummaryFilesFromDB(
             String sessionID, String resultsDirectory, String responseVariable)
-            throws SQLiteException {
+            throws SQLException, ClassNotFoundException {
         HashMap<String, ArrayList<CsvSummaryDataType>> results =
                 new HashMap<String, ArrayList<CsvSummaryDataType>>();
 
@@ -811,7 +811,7 @@ public class RetrieveResultsSummaryAction
         Double value = Math.abs(result) - Math.abs(min);
         range *= 1000;
         value *= 1000;
-        int group = (int) Math.abs(value / ( range / 20 ));
+        int group = (int) Math.abs(value / (range / 20));
         //Part of the largest observations resolves to a value > 20 using
         //this equation. Set them manually to the max value.
         if (group > 20) {

@@ -15,12 +15,14 @@
  */
 package nl.wur.plantbreeding.omicsfusion.results;
 
-import com.almworks.sqlite4java.SQLiteException;
 import java.awt.Color;
+import java.awt.Point;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,6 +33,9 @@ import nl.wur.plantbreeding.omicsfusion.excel.DataSheetValidationException;
 import nl.wur.plantbreeding.omicsfusion.excel.ReadExcelSheet;
 import nl.wur.plantbreeding.omicsfusion.utils.ServletUtils;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.struts2.convention.annotation.Action;
+import org.apache.struts2.convention.annotation.Actions;
+import org.apache.struts2.convention.annotation.Result;
 import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.interceptor.ServletResponseAware;
 import org.jfree.chart.ChartRenderingInfo;
@@ -40,8 +45,6 @@ import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.entity.StandardEntityCollection;
 import org.jfree.chart.labels.StandardXYToolTipGenerator;
 import org.jfree.chart.labels.XYToolTipGenerator;
-import org.jfree.chart.plot.Plot;
-import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.DefaultXYItemRenderer;
 import org.jfree.data.xy.DefaultXYDataset;
 
@@ -51,6 +54,14 @@ import org.jfree.data.xy.DefaultXYDataset;
  * @author Richard Finkers
  * @version 1.0.
  */
+@Actions({
+    @Action(value = "/charts", results = {
+        @Result(location = "/results/predRespXYScatter.jsp", name = "success")
+    }),
+    @Action(value = "/jsonchartdata", results = {
+        @Result(location = "/results/predRespXYScatter.jsp", name = "success")
+    })
+})
 public class PredictorResponseXYScatterAction
         extends PredictorResponseXYScatterForm
         implements ServletRequestAware, ServletResponseAware {
@@ -59,6 +70,10 @@ public class PredictorResponseXYScatterAction
      * Serial Version UID.
      */
     private static final long serialVersionUID = 100906L;
+    /**
+     * List with points.
+     */
+    private List<Point> points;
     /**
      * Chart object.
      */
@@ -110,7 +125,7 @@ public class PredictorResponseXYScatterAction
 
         //Should also include model summaries?
         LOG.info("get data");
-        DefaultXYDataset xyDataset = null;
+        List<Point> xyDataset = null;
         try {
             xyDataset = getDataSetFromDB(predictor, response, sessionName);
         }
@@ -128,7 +143,8 @@ public class PredictorResponseXYScatterAction
         }
 
         LOG.info("got data");
-        LOG.log(Level.INFO, "DataSet size: {0}", xyDataset.getSeriesCount());
+        //TODO: null check.
+        LOG.log(Level.INFO, "DataSet size: {0}", xyDataset.size());
 
         //X (predictor) and Y axis (response)
         ValueAxis yAxis = new NumberAxis(getText("response.text") + ": "
@@ -157,16 +173,16 @@ public class PredictorResponseXYScatterAction
 //        XYURLGenerator urlGen = new GenotypeXYUrlGenerator();
 //        renderer.setURLGenerator(urlGen);
 
-        Plot plot = new XYPlot(xyDataset, xAxis, yAxis, renderer);
-        plot.setNoDataMessage("NO DATA");
-
-        // set my chart variable
-        chart = new JFreeChart(
-                response + " vs " + predictor,
-                JFreeChart.DEFAULT_TITLE_FONT,
-                plot,
-                false);
-        chart.setBackgroundPaint(java.awt.Color.white);
+//        Plot plot = new XYPlot(xyDataset, xAxis, yAxis, renderer);
+//        plot.setNoDataMessage("NO DATA");
+//
+//        // set my chart variable
+//        chart = new JFreeChart(
+//                response + " vs " + predictor,
+//                JFreeChart.DEFAULT_TITLE_FONT,
+//                plot,
+//                false);
+//        chart.setBackgroundPaint(java.awt.Color.white);
 
 
         try {
@@ -261,9 +277,10 @@ public class PredictorResponseXYScatterAction
      * @param response Name of the response (trait) to show in the plot.
      * @param sessionID SessionID of the original analysis run.
      * @return XYDataset.
+     * @deprecated Remove in favor of struts2-jquery chart.
      */
-    private DefaultXYDataset getDataSetFromDB(String predictor, String response,
-            String sessionID) throws SQLiteException {
+    private DefaultXYDataset getDataSetFromDB2(String predictor, String response,
+            String sessionID) throws SQLException, ClassNotFoundException {
 
         //connect to the db.
         SqLiteQueries sql = new SqLiteQueries();
@@ -277,10 +294,43 @@ public class PredictorResponseXYScatterAction
         PredictorResponseXYScatterPlot xyp =
                 new PredictorResponseXYScatterPlot();
         DefaultXYDataset predictResponseXYScatterPlotDataSet =
+                xyp.predictResponseXYScatterPlotOld(
+                observationsForPredictorAndResponse);
+
+        return predictResponseXYScatterPlotDataSet;
+    }
+
+    /**
+     * Read two data for the XY scatter.
+     *
+     * @param predictor Name of the predictor variable.
+     * @param response Name of the response (trait) to show in the plot.
+     * @param sessionID SessionID of the original analysis run.
+     * @return XYDataset.
+     */
+    private List<Point> getDataSetFromDB(String predictor, String response,
+            String sessionID) throws SQLException, ClassNotFoundException {
+
+        //connect to the db.
+        SqLiteQueries sql = new SqLiteQueries();
+        //Read the data for the predictor & response (order by)
+        ArrayList<XYScatterDataType> observationsForPredictorAndResponse =
+                sql.getObservationsForPredictorAndResponse(
+                ServletUtils.getResultsDir(request, sessionID),
+                predictor, response);
+
+        //We need a DefaultXYDataset.
+        PredictorResponseXYScatterPlot xyp =
+                new PredictorResponseXYScatterPlot();
+        List<Point> predictResponseXYScatterPlotDataSet =
                 xyp.predictResponseXYScatterPlot(
                 observationsForPredictorAndResponse);
 
         return predictResponseXYScatterPlotDataSet;
+    }
+
+    public List<Point> getPoints() {
+        return points;
     }
 
     public JFreeChart getChart() {

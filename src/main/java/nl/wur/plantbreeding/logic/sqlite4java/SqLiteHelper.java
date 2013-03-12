@@ -15,9 +15,11 @@
  */
 package nl.wur.plantbreeding.logic.sqlite4java;
 
-import com.almworks.sqlite4java.SQLiteConnection;
-import com.almworks.sqlite4java.SQLiteException;
-import java.io.File;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Properties;
 
 /**
  *
@@ -28,7 +30,7 @@ public class SqLiteHelper {
     /**
      * SQLite db
      */
-    private SQLiteConnection db;
+    private Connection db;
 
     /**
      * Open an sqlite database. The database will be created if it does not
@@ -38,23 +40,41 @@ public class SqLiteHelper {
      * @return Connection tot the database.
      * @throws SQLiteException
      */
-    protected SQLiteConnection openDatabase(String directory)
-            throws SQLiteException {
+    protected Connection openDatabase(String directory)
+            throws SQLException, ClassNotFoundException {
+
         if (directory == null) {
             directory = "/tmp";
         }
         System.out.println("Directory: " + directory);
-        db = new SQLiteConnection(new File(directory + "/omicsFusion.db"));
-        db.open(true);
+
+        // READ_UNCOMMITTED mode works only in shared_cache mode.
+        Properties prop = new Properties();
+        prop.setProperty("shared_cache", "true");
+
+        Class.forName("org.sqlite.JDBC");
+        //TODO: slashes for windows
+        db = DriverManager.getConnection("jdbc:sqlite:"
+                + directory + "/omicsFusion.db", prop);
+
+        db.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
+
+        //db.prepareStatement("ATTACH DATABASE omicsFusion");
         return db;
+    }
+
+    protected Statement prepareStatement() throws SQLException {
+        Statement statement = db.createStatement();
+        statement.setQueryTimeout(30);  // set timeout to 30 sec.
+        return statement;
     }
 
     /**
      * Close the current database connection.
      */
-    protected void closeDatabase() {
-        if (db.isOpen()) {
-            db.dispose();
+    protected void closeDatabase(Connection connection) throws SQLException {
+        if (connection != null) {
+            connection.close();
         }
     }
 }

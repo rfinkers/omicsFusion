@@ -15,8 +15,8 @@
  */
 package nl.wur.plantbreeding.omicsfusion.excel;
 
-import com.almworks.sqlite4java.SQLiteException;
 import java.io.File;
+import java.sql.SQLException;
 import org.junit.*;
 
 /**
@@ -49,12 +49,13 @@ public class UploadDataSheetsTest {
      */
     @Test
     @Ignore
-    public void testUploadExcelSheets() throws SQLiteException {
+    public void testUploadExcelSheets() throws SQLException, ClassNotFoundException {
         System.out.println("uploadExcelSheets");
         File responseExcelFile = new File("/home/finke002/NetBeansProjects/omicsFusion2/src/main/resources/CE_Flesh.xls");
         String responseType = "response";
         File predictorExcelFile = new File("/home/finke002/NetBeansProjects/omicsFusion2/src/main/resources/CE_Met.xls");
         String predictorType = "predict";
-        UploadDataSheets.uploadExcelSheets(responseExcelFile, responseType, predictorExcelFile, predictorType, "/tmp");
+        UploadDataSheets.uploadExcelSheets(responseExcelFile, responseType,
+                predictorExcelFile, predictorType, "/tmp");
     }
 }

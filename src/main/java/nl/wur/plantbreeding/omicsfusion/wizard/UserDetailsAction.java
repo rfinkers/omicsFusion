@@ -15,7 +15,7 @@
  */
 package nl.wur.plantbreeding.omicsfusion.wizard;
 
-import com.almworks.sqlite4java.SQLiteException;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
@@ -81,7 +81,7 @@ public class UserDetailsAction extends UserDetailsValidationForm
             sq2.addUser(ServletUtils.getResultsDir(
                     request.getSession()), user);
         }
-        catch (SQLiteException sQLiteException) {
+        catch (SQLException sQLiteException) {
             LOG.log(Level.SEVERE, "Exception: {0}",
                     sQLiteException.getMessage());
             addActionError("SQLite exception: " + sQLiteException.getMessage());
