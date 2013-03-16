@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
-import nl.wur.plantbreeding.logic.sqlite4java.SqLiteQueries;
+import nl.wur.plantbreeding.logic.sqlite.SqLiteQueries;
 import nl.wur.plantbreeding.logic.util.FileOrDirectoryExists;
 import nl.wur.plantbreeding.omicsfusion.datatypes.CsvSummaryDataType;
 import nl.wur.plantbreeding.omicsfusion.datatypes.SummaryResults;

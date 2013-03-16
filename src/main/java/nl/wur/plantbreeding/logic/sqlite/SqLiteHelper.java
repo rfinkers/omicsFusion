@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package nl.wur.plantbreeding.logic.sqlite4java;
+package nl.wur.plantbreeding.logic.sqlite;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package nl.wur.plantbreeding.logic.sqlite4java;
+package nl.wur.plantbreeding.logic.sqlite;
 
 import java.io.File;
 import java.sql.Connection;
@@ -35,7 +35,8 @@ public class SqLiteQueries extends SqLiteHelper {
      * Initialize a new SQLite database in the specified directory.
      *
      * @param directory
-     * @throws SQLiteException
+     * @throws SQLException
+     * @throws ClassNotFoundException
      */
     public void initializeDatabase(String directory)
             throws SQLException, ClassNotFoundException {
@@ -67,11 +68,13 @@ public class SqLiteQueries extends SqLiteHelper {
                     + "response_type VARCHAR(75))");
             //table data
             statement.executeUpdate("CREATE TABLE predictor ("
+                    + "variableID INTEGER(4), "
                     + "variable_name VARCHAR(75), "
                     + "genotype_name VARCHAR(75), "
                     + "observation FLOAT(10,5))");
             //table response
             statement.executeUpdate("CREATE TABLE response  ("
+                    + "variableID INTEGER(4), "
                     + "variable_name VARCHAR(75), "
                     + "genotype_name VARCHAR(75), "
                     + "observation FLOAT(10,5))");
@@ -119,7 +122,8 @@ public class SqLiteQueries extends SqLiteHelper {
      *
      * @param directory Name of the directory.
      * @param userList User data.
-     * @throws SQLiteException Error.
+     * @throws SQLException
+     * @throws ClassNotFoundException
      */
     public void addUser(String directory, UserList userList)
             throws SQLException, ClassNotFoundException {
@@ -164,7 +168,8 @@ public class SqLiteQueries extends SqLiteHelper {
      * @param responseName Name of the response.
      * @param responseType Type of the response.
      * @param predictResponseName Name of the predict response file.
-     * @throws SQLiteException SQL exception.
+     * @throws SQLException
+     * @throws ClassNotFoundException
      */
     public void uploadDataNameAndType(String directory, String predictorName,
             String predictorType, String responseName, String responseType,
@@ -197,7 +202,8 @@ public class SqLiteQueries extends SqLiteHelper {
      * @param pdp
      * @param responseVariables
      * @param directory
-     * @throws SQLiteException
+     * @throws SQLException
+     * @throws ClassNotFoundException
      */
     public void loadExcelData(List<DataPointDataType> rdp,
             List<DataPointDataType> pdp,
@@ -213,18 +219,23 @@ public class SqLiteQueries extends SqLiteHelper {
                     + "','" + dataPointDataType.getTraitName().trim()
                     + "','" + dataPointDataType.getObservation() + "')");
         }
+        db.setAutoCommit(false);
         int[] predictorStatus = statement.executeBatch();
+        db.commit();
+
         System.out.println("Status : " + predictorStatus[0]);
         statement.clearBatch();
 
-        for (DataPointDataType dataPointDataType : pdp) {
+        for (DataPointDataType dataPointDataType : rdp) {
             statement.addBatch("INSERT INTO response "
                     + "(genotype_name, variable_name, observation) "
                     + "values ('" + dataPointDataType.getGenotypeName().trim()
                     + "','" + dataPointDataType.getTraitName().trim()
                     + "','" + dataPointDataType.getObservation() + "')");
         }
+        db.setAutoCommit(false);
         int[] responseStatus = statement.executeBatch();
+        db.commit();
         System.out.println("Status : " + responseStatus[0]);
         statement.clearBatch();
 
@@ -262,7 +273,8 @@ public class SqLiteQueries extends SqLiteHelper {
     }
 
     public void addSgeId(String directory,
-            HashMap<String, Integer> jobIds) throws SQLException, ClassNotFoundException {
+            HashMap<String, Integer> jobIds)
+            throws SQLException, ClassNotFoundException {
         //update methdods with SGE run ID.
         Connection db = openDatabase(directory);
         Statement statement = prepareStatement();
@@ -288,9 +300,11 @@ public class SqLiteQueries extends SqLiteHelper {
      * Read the SGE job status.
      *
      * @param directory
-     * @throws SQLiteException
+     * @throws SQLException
+     * @throws ClassNotFoundException
      */
-    public void readSgeJobStatus(String directory) throws SQLException, ClassNotFoundException {
+    public void readSgeJobStatus(String directory)
+            throws SQLException, ClassNotFoundException {
         //if not all completed, check status from SGE.
         Connection db = openDatabase(directory);
         Statement statement = prepareStatement();
@@ -312,7 +326,8 @@ public class SqLiteQueries extends SqLiteHelper {
      * @param directory
      * @param responseVariable Name of the response variable
      * @return A list containing the stored results.
-     * @throws SQLiteException
+     * @throws SQLException
+     * @throws ClassNotFoundException
      */
     public ArrayList<SummaryResults> readSummaryResults(
             String directory, String responseVariable)
