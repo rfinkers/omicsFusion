@@ -20,6 +20,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
+import nl.wur.plantbreeding.omicsfusion.utils.Constants;
 
 /**
  *
@@ -55,7 +56,7 @@ public class SqLiteHelper {
         Class.forName("org.sqlite.JDBC");
         //TODO: slashes for windows
         db = DriverManager.getConnection("jdbc:sqlite:"
-                + directory + "/omicsFusion.db", prop);
+                + directory + "/" + Constants.OMICSFUSION_DB, prop);
 
         db.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
 

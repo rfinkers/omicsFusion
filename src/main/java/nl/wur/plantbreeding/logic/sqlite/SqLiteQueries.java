@@ -17,13 +17,19 @@ package nl.wur.plantbreeding.logic.sqlite;
 
 import java.io.File;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import nl.wur.plantbreeding.omicsfusion.datatypes.DataPointDataType;
 import nl.wur.plantbreeding.omicsfusion.datatypes.SummaryResults;
 import nl.wur.plantbreeding.omicsfusion.datatypes.XYScatterDataType;
 import nl.wur.plantbreeding.omicsfusion.entities.UserList;
+import nl.wur.plantbreeding.omicsfusion.utils.Constants;
 
 /**
  *
@@ -239,16 +245,19 @@ public class SqLiteQueries extends SqLiteHelper {
         System.out.println("Status : " + responseStatus[0]);
         statement.clearBatch();
 
-
+        System.out.println("resp lenght: " + responseVariables.size()
+                + " value: " + responseVariables.get(0));
         int i = 1;
+        db.setAutoCommit(true);
         for (String responseVariable : responseVariables) {
-            statement.addBatch("INSERT INTO responseVariables "
-                    + "(counter, response) VALUES "
-                    + "('" + i + "','" + responseVariable + "')");
+            System.out.println(i + " - Variable: " + responseVariable);
+            statement.executeUpdate("INSERT INTO responseVariables "
+                    + "(counter, response) values "
+                    + "(" + i + ",'" + responseVariable + "')");
             i++;
         }
-        int[] variableStatus = statement.executeBatch();
-        statement.clearBatch();
+        //int[] variableStatus = statement.executeBatch();
+        //statement.clearBatch();
 
         closeDatabase(db);
 
@@ -283,10 +292,11 @@ public class SqLiteQueries extends SqLiteHelper {
             Iterator<String> iterator = jobIds.keySet().iterator();
             while (iterator.hasNext()) {
                 String method = iterator.next();
-                if (!"sessionInfo".equals(method)) {
+                if (!Constants.SESSIONINFO.equals(method)) {
+                    System.out.println("Method: " + method + " ID: " + jobIds.get(method));
                     statement.executeUpdate("UPDATE methods "
-                            + "SET sge_id =  '" + jobIds.get(method) + "',"
-                            + "WHERE method_name = '" + method + ")");
+                            + "SET sge_id =  " + jobIds.get(method) + " "
+                            + "WHERE method_name = '" + method + "'");
                 }
             }
         }
@@ -362,7 +372,8 @@ public class SqLiteQueries extends SqLiteHelper {
      *
      * @param directory
      * @return Name of the response sheet.
-     * @throws SQLiteException
+     * @throws SQLException
+     * @throws ClassNotFoundException
      */
     public String getResponseSheetName(String directory)
             throws SQLException, ClassNotFoundException {
@@ -457,12 +468,11 @@ public class SqLiteQueries extends SqLiteHelper {
         Statement statement = prepareStatement();
 
         try {
-//            statement.executeUpdate("SELECT response "
-//                    + "FROM responseVariables ");
-//            while (stm.step()) {
-//                result.add(stm.columnString(0));
-//            }
-//            stm.dispose();
+            ResultSet rs = statement.executeQuery("SELECT response "
+                    + "FROM responseVariables ");
+            while (rs.next()) {
+                result.add(rs.getString("response"));
+            }
         }
         finally {
             closeDatabase(db);
