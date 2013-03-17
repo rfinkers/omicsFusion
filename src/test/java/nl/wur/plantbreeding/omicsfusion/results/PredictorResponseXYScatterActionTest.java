@@ -15,8 +15,6 @@
  */
 package nl.wur.plantbreeding.omicsfusion.results;
 
-import javax.servlet.http.HttpServletRequest;
-import org.jfree.chart.JFreeChart;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -51,35 +49,5 @@ public class PredictorResponseXYScatterActionTest {
         String expResult = "success";
         String result = instance.execute();
         assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of getChart method, of class PredictorResponseXYScatterAction.
-     */
-    @Test
-    @Ignore
-    public void testGetChart() {
-        System.out.println("getChart");
-        PredictorResponseXYScatterAction instance = new PredictorResponseXYScatterAction();
-        JFreeChart expResult = null;
-        JFreeChart result = instance.getChart();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of setServletRequest method, of class
-     * PredictorResponseXYScatterAction.
-     */
-    @Test
-    @Ignore
-    public void testSetServletRequest() {
-        System.out.println("setServletRequest");
-        HttpServletRequest request = null;
-        PredictorResponseXYScatterAction instance = new PredictorResponseXYScatterAction();
-        instance.setServletRequest(request);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 }

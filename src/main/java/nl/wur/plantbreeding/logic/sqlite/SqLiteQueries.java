@@ -348,18 +348,19 @@ public class SqLiteQueries extends SqLiteHelper {
         Statement statement = prepareStatement();
 
         try {
-//            statement.executeUpdate("SELECT * FROM results "
-//                    //TODO: implement use of actual responseVariable!
-//                    //+ "WHERE response='" + responseVariable.trim() + "' "
-//                    + "ORDER BY predictor, method_name");
-//            while (stm.step()) {
-//                stm.columnDouble(3);
-//                summaryResults = new SummaryResults(stm.columnString(0),
-//                        stm.columnString(1), stm.columnString(2),
-//                        stm.columnDouble(3), stm.columnDouble(4),
-//                        stm.columnDouble(5));
-//                results.add(summaryResults);
-//            }
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM results "
+                    + "WHERE response='" + responseVariable.trim() + "' "
+                    + "ORDER BY predictor, response, method_name");
+            while (resultSet.next()) {
+                summaryResults = new SummaryResults(
+                        resultSet.getString("predictor"),
+                        resultSet.getString("response"),
+                        resultSet.getString("method_name"),
+                        resultSet.getDouble("value"),
+                        resultSet.getDouble("sd"),
+                        resultSet.getDouble("rank"));
+                results.add(summaryResults);
+            }
         }
         finally {
             closeDatabase(db);

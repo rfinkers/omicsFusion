@@ -97,7 +97,7 @@ public class RetrieveResultsSummaryAction
         }
 
         String responseName = "";
-        if (responseNames.isEmpty()) {
+        if (responseNames == null || responseNames.isEmpty()) {
             addActionError(getText("error.no.responsevariable"));
             return ERROR;
         } else if (responseNames.size() == 1) {
@@ -429,11 +429,11 @@ public class RetrieveResultsSummaryAction
         table += "<tr><th>Response:<br/>" + responseName + "</th>";
         if (methResults.get(Constants.UNIVARIATE) != null) {
             table += "<th class='univariate'>"
-                    + "<a title='univariate'>Univariate pval</a></th>";
+                    + "<a title='univariate'>Univariate<br/>pval</a></th>";
         }
         if (methResults.get(Constants.BH) != null) {
             table += "<th class='univariate'>"
-                    + "<a title='BH'>Univariate BH</a></th>";
+                    + "<a title='BH'>Univariate<br/>BH</a></th>";
         }
         if (methResults.get(Constants.RF) != null) {
             table += "<th class='machine'>"
