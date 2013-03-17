@@ -42,8 +42,8 @@
         <action name="pipeline" class="nl.wur.plantbreeding.omicsfusion.wizard.RunAnalysisAction">
             <result name="input">/submit/wizardComplete.jsp</result>
             <result name="success">/submit/run.jsp</result>
-            <!--            <result name="success">/submit/run.jsp</result>-->
-            <!--            <result name="error">/submit/methodSelection.jsp</result>-->
+            <!-- TODO: error.jsp -->
+            <result name="error">/submit/run.jsp</result>
         </action>
     </package>
 </struts>
