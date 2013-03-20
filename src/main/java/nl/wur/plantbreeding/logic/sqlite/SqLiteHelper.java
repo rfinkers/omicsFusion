@@ -39,7 +39,8 @@ public class SqLiteHelper {
      *
      * @param directory directory and name of the database to be opened.
      * @return Connection tot the database.
-     * @throws SQLiteException
+     * @throws SQLException
+     * @throws ClassNotFoundException
      */
     protected Connection openDatabase(String directory)
             throws SQLException, ClassNotFoundException {
@@ -72,6 +73,9 @@ public class SqLiteHelper {
 
     /**
      * Close the current database connection.
+     *
+     * @param connection
+     * @throws SQLException
      */
     protected void closeDatabase(Connection connection) throws SQLException {
         if (connection != null) {

@@ -70,8 +70,8 @@ public class PredictorResponseXYScatterAction
 //        })
 //    })
     @Actions({
-        @Action(value = "/results/predRespXYScatter.jsp", results = {
-            @Result(location = "predRespXYScatter.jsp", name = "success")
+        @Action(value = "/results/predRespXYScatter", results = {
+            @Result(location = "/results/predRespXYScatter.jsp", name = "success")
         })
     })
     @Override
