@@ -1,4 +1,5 @@
 <%@ taglib prefix="s" uri="/struts-tags"%>
+<%@ taglib prefix="sj" uri="/struts-jquery-tags"%>
 
 <s:text name="analysis.methods.progress"/>
 <h2><s:text name="analysis.methods.heading" /></h2>
@@ -19,5 +20,5 @@
     <!--TODO: select all / deselect all buttons-->
     <!--TODO: is there a way to add categories to the different type of methods in the form?
     <s:text name="analysis.methods.variable.selection"/>-->
-    <s:submit key="method.submit"/> <s:reset key="button.reset" cssClass="resetButon"/>
+    <sj:submit key="method.submit"/> <s:reset key="button.reset" cssClass="resetButon"/>
 </s:form>
