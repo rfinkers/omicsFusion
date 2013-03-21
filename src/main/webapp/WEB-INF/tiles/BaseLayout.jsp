@@ -28,9 +28,9 @@
         <!-- taglib auto generated -->
         <s:head/>
         <!-- javascript. jQuery/ jQueryUI libraries are loaded this tag instead of the script element. -->
-        <sj:head jqueryui="true" loadAtOnce="true" jquerytheme="cupertino" />
+        <sj:head jqueryui="true" loadAtOnce="true" jquerytheme="cupertino" loadFromGoogle="true" />
         <!-- other -->
-        <script type="text/javascript" src="<s:url value="/js/jquery.blockUI.2.31.js"/>"></script>
+        <script type="text/javascript" src="<s:url value="/js/jquery.blockUI.2.57.js"/>"></script>
         <script type="text/javascript" src="<s:url value="/js/jquery.breeDB.0.1.js"/>"></script>
         <script type="text/javascript">
             var _gaq = _gaq || [];
