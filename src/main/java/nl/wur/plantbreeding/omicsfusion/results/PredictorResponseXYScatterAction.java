@@ -15,9 +15,8 @@
  */
 package nl.wur.plantbreeding.omicsfusion.results;
 
-import java.awt.Point;
 import java.sql.SQLException;
-import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
@@ -50,7 +49,7 @@ public class PredictorResponseXYScatterAction
     /**
      * List with points.
      */
-    private List<Point> points;
+    private Map<Double, Double> points;
     /**
      * Output stream.
      */
@@ -142,13 +141,14 @@ public class PredictorResponseXYScatterAction
      * @param response Name of the response (trait) to show in the plot.
      * @param sessionID SessionID of the original analysis run.
      */
-    private List<Point> getDataSetFromDB(String predictor, String response,
-            String sessionID) throws SQLException, ClassNotFoundException {
+    private Map<Double, Double> getDataSetFromDB(String predictor,
+            String response, String sessionID)
+            throws SQLException, ClassNotFoundException {
 
         //connect to the db.
         SqLiteQueries sql = new SqLiteQueries();
         //Read the data for the predictor & response (order by
-        List<Point> predictResponseXYScatterPlotDataSet =
+        Map<Double, Double> predictResponseXYScatterPlotDataSet =
                 sql.getObservationsForPredictorAndResponse(
                 ServletUtils.getResultsDir(request, sessionID),
                 predictor, response);
@@ -156,7 +156,7 @@ public class PredictorResponseXYScatterAction
         return predictResponseXYScatterPlotDataSet;
     }
 
-    public List<Point> getPoints() {
+    public Map<Double, Double> getPoints() {
         return points;
     }
 

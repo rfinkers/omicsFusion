@@ -15,7 +15,6 @@
  */
 package nl.wur.plantbreeding.logic.sqlite;
 
-import java.awt.Point;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -26,6 +25,8 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import nl.wur.plantbreeding.omicsfusion.datatypes.DataPointDataType;
 import nl.wur.plantbreeding.omicsfusion.datatypes.SummaryResults;
 import nl.wur.plantbreeding.omicsfusion.entities.UserList;
@@ -430,17 +431,16 @@ public class SqLiteQueries extends SqLiteHelper {
      * @return A list of observations
      * @throws SQLiteException
      */
-    public List<Point> getObservationsForPredictorAndResponse(
+    public Map<Double, Double> getObservationsForPredictorAndResponse(
             String directory, String preditor, String response)
             throws SQLException, ClassNotFoundException {
 
-        List<Point> resultList =
-                new ArrayList<Point>();
+        Map<Double, Double> resultList =
+                new TreeMap<Double, Double>();
 
 
         Connection db = openDatabase(directory);
         Statement statement = prepareStatement();
-
 
         try {
             ResultSet resultSet = statement.executeQuery("SELECT "
@@ -452,11 +452,14 @@ public class SqLiteQueries extends SqLiteHelper {
                     + "AND predictor.variable_name LIKE '%" + preditor.trim() + "' "
                     + "ORDER BY pred, resp ");
 //            //FIXME: LIKE is temp fix for spaces at the beginning of the name in db.
+            int i = 0;
             while (resultSet.next()) {
-                Float resp = resultSet.getFloat("resp");
-                Float pred = resultSet.getFloat("pred");
-                resultList.add(new Point(resp.intValue(), pred.intValue()));
+                Double resp = resultSet.getDouble("resp");
+                Double pred = resultSet.getDouble("pred");
+                resultList.put(pred, resp);
+                i++;
             }
+            System.out.println("Counter: " + i);
         }
         finally {
             closeDatabase(db);
