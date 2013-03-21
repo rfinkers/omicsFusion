@@ -40,45 +40,6 @@ public class Analysis {
     }
 
     /**
-     * Loads The Excel sheets from the file system.
-     *
-     * @param excelSheets The names of the predictor and response excel sheets.
-     * @return R program code.
-     * @deprecated Load from SQLite database.
-     */
-    protected String loadPredictorAndResponseDataSheets(
-            HashMap<String, String> excelSheets) {
-        String rCode = "# Load the generic R libraries \n";
-        rCode += "# Load the excel sheets\n";
-        //TODO: test how generic CSV import works. test for decimal point, etc?
-        if (excelSheets.get("predictor").contains("csv")) {
-            rCode += "predictorSheet <- read.csv2(\""
-                    + excelSheets.get("predictor")
-                    + "\", header=TRUE,sep=\",\",dec=\".\")\n";
-        } else {
-            rCode += "predictorSheet <- readWorksheetFromFile(\""
-                    + excelSheets.get("predictor") + "\",sheet=1)\n";
-//            rCode += "predictorSheet <- read.xls(\""
-//                    + excelSheets.get("predictor") + "\")\n";
-        }
-        if (excelSheets.get("response").contains("csv")) {
-            rCode += "responseSheet  <- read.csv2(\""
-                    + excelSheets.get("response")
-                    + "\", header=TRUE,sep=\",\",dec=\".\")\n";
-        } else {
-            rCode += "responseSheet <- readWorksheetFromFile(\""
-                    + excelSheets.get("response") + "\",sheet=1)\n";
-//            rCode += "responseSheet  <- read.xls(\""
-//                    + excelSheets.get("response") + "\")\n";
-        }
-        //Concatenate the final dataSet, containing 1 response and a predictor
-        //matrix. The rownames are set acoording to the sample names
-        rCode += "dataSet=cbind(responseSheet[2],predictorSheet[-1])\n\n";
-
-        return rCode;
-    }
-
-    /**
      * Read data from the SQLite database.
      *
      * @param responseVariable responseVariable to analyze.

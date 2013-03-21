@@ -18,11 +18,11 @@ package nl.wur.plantbreeding.omicsfusion.methods;
 import java.util.HashMap;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Test;
-import static org.junit.Assert.*;
 import org.junit.Ignore;
+import org.junit.Test;
 
 /**
  *
@@ -47,21 +47,6 @@ public class AnalysisTest {
 
     @After
     public void tearDown() {
-    }
-
-    /**
-     * Test of loadPredictorAndResponseDataSheets method, of class Analysis.
-     */
-    @Test
-    public void testLoadPredictorAndResponseDataSheets() {
-        System.out.println("loadPredictorAndResponseDataSheets");
-        HashMap<String, String> excelSheets = new HashMap<String, String>(2);
-        excelSheets.put("response", "test");
-        excelSheets.put("predictor", "test");
-        Analysis instance = new Analysis();
-
-        String result = instance.loadPredictorAndResponseDataSheets(excelSheets);
-        assertNotNull(result);
     }
 
     /**

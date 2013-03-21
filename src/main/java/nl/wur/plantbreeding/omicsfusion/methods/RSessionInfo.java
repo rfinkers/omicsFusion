@@ -15,7 +15,6 @@
  */
 package nl.wur.plantbreeding.omicsfusion.methods;
 
-import java.util.HashMap;
 import java.util.logging.Logger;
 
 /**
@@ -136,16 +135,6 @@ public class RSessionInfo extends Analysis {
      */
     @Override
     protected String initializeResultObjects() {
-        return "";
-    }
-
-    /**
-     * {
-     *
-     * @inheritDoc}
-     */
-    @Override
-    protected String loadPredictorAndResponseDataSheets(HashMap<String, String> excelSheets) {
         return "";
     }
 }

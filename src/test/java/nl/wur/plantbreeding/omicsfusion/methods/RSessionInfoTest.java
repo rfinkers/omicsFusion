@@ -15,7 +15,6 @@
  */
 package nl.wur.plantbreeding.omicsfusion.methods;
 
-import java.util.HashMap;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -142,18 +141,5 @@ public class RSessionInfoTest {
         String expResult = "";
         String result = instance.initializeResultObjects();
         assertNotNull(result);;
-    }
-
-    /**
-     * Test of loadPredictorAndResponseDataSheets method, of class RSessionInfo.
-     */
-    @Test
-    public void testLoadPredictorAndResponseDataSheets() {
-        System.out.println("loadPredictorAndResponseDataSheets");
-        HashMap<String, String> excelSheets = null;
-        RSessionInfo instance = new RSessionInfo();
-        String expResult = "";
-        String result = instance.loadPredictorAndResponseDataSheets(excelSheets);
-        assertNotNull(result);
     }
 }
