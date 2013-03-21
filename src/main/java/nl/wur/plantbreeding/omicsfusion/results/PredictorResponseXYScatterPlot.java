@@ -15,10 +15,7 @@
  */
 package nl.wur.plantbreeding.omicsfusion.results;
 
-import java.awt.Point;
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import nl.wur.plantbreeding.logic.jfreechart.GenotypeXYDataset;
@@ -29,6 +26,7 @@ import org.jfree.data.xy.DefaultXYDataset;
 /**
  *
  * @author finke002
+ * @deprecated Move to predRespXYScatter?
  */
 public class PredictorResponseXYScatterPlot {
 
@@ -37,10 +35,6 @@ public class PredictorResponseXYScatterPlot {
      */
     private static final Logger LOG =
             Logger.getLogger(PredictorResponseXYScatterPlot.class.getName());
-    /**
-     * List with the data points.
-     */
-    private List<Point> points;
 
     /**
      * Create a XY dataset, and add the regression line.
@@ -112,26 +106,5 @@ public class PredictorResponseXYScatterPlot {
 
         //return dataset
         return dataSet;
-    }
-
-    /**
-     * Create a XY dataset, and add the regression line.
-     *
-     * @param observationsForPredictorAndResponse List with observations.
-     * @return A list with points.
-     */
-    protected List<Point> predictResponseXYScatterPlot(
-            ArrayList<XYScatterDataType> observationsForPredictorAndResponse) {
-
-        System.out.println("Points list");
-
-        points = new LinkedList<Point>();
-
-        points.add(new Point(0, 3));
-        points.add(new Point(4, 8));
-        points.add(new Point(8, 5));
-        points.add(new Point(9, 13));
-        //return dataset
-        return points;
     }
 }
