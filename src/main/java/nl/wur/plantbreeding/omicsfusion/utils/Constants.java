@@ -26,7 +26,7 @@ public class Constants {
     /**
      * Name of the omicsFusion SQLite database.
      */
-    public static final String omicsFusionDB = "omicsFusion.db";
+    public static final String OMICSFUSION_DB = "omicsFusion.db";
     /**
      * user details object name.
      */
@@ -112,6 +112,10 @@ public class Constants {
      * Elastic Net identifier.
      */
     public static final String EN = "en";
+    /**
+     * Package Versions.
+     */
+    public static final String SESSIONINFO = "sessionInfo";
 
     private Constants() {
     }

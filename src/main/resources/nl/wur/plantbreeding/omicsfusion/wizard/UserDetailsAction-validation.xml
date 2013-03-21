@@ -32,7 +32,7 @@
             <message key="requiredlength"/>
         </field-validator>
     </field>
-<!--    <field name="country">
+    <!--    <field name="country">
         <field-validator type="requiredstring">
             <message key="requiredstring"/>
         </field-validator>

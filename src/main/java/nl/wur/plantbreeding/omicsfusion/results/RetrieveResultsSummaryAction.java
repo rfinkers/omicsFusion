@@ -15,16 +15,16 @@
  */
 package nl.wur.plantbreeding.omicsfusion.results;
 
-import com.almworks.sqlite4java.SQLiteException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
-import nl.wur.plantbreeding.logic.sqlite4java.SqLiteQueries;
+import nl.wur.plantbreeding.logic.sqlite.SqLiteQueries;
 import nl.wur.plantbreeding.logic.util.FileOrDirectoryExists;
 import nl.wur.plantbreeding.omicsfusion.datatypes.CsvSummaryDataType;
 import nl.wur.plantbreeding.omicsfusion.datatypes.SummaryResults;
@@ -91,13 +91,13 @@ public class RetrieveResultsSummaryAction
             responseNames =
                     slq.getResponseNames(resultsDirectory + "/" + getSessionId());
         }
-        catch (SQLiteException sQLiteException) {
+        catch (SQLException sQLiteException) {
             addActionError(getText("error.opening.db"));
             return ERROR;
         }
 
         String responseName = "";
-        if (responseNames.isEmpty()) {
+        if (responseNames == null || responseNames.isEmpty()) {
             addActionError(getText("error.no.responsevariable"));
             return ERROR;
         } else if (responseNames.size() == 1) {
@@ -429,11 +429,11 @@ public class RetrieveResultsSummaryAction
         table += "<tr><th>Response:<br/>" + responseName + "</th>";
         if (methResults.get(Constants.UNIVARIATE) != null) {
             table += "<th class='univariate'>"
-                    + "<a title='univariate'>Univariate pval</a></th>";
+                    + "<a title='univariate'>Univariate<br/>pval</a></th>";
         }
         if (methResults.get(Constants.BH) != null) {
             table += "<th class='univariate'>"
-                    + "<a title='BH'>Univariate BH</a></th>";
+                    + "<a title='BH'>Univariate<br/>BH</a></th>";
         }
         if (methResults.get(Constants.RF) != null) {
             table += "<th class='machine'>"
@@ -686,7 +686,7 @@ public class RetrieveResultsSummaryAction
 
     private HashMap<String, ArrayList<CsvSummaryDataType>> getMethodsWithResultsSummaryFilesFromDB(
             String sessionID, String resultsDirectory, String responseVariable)
-            throws SQLiteException {
+            throws SQLException, ClassNotFoundException {
         HashMap<String, ArrayList<CsvSummaryDataType>> results =
                 new HashMap<String, ArrayList<CsvSummaryDataType>>();
 
@@ -811,7 +811,7 @@ public class RetrieveResultsSummaryAction
         Double value = Math.abs(result) - Math.abs(min);
         range *= 1000;
         value *= 1000;
-        int group = (int) Math.abs(value / ( range / 20 ));
+        int group = (int) Math.abs(value / (range / 20));
         //Part of the largest observations resolves to a value > 20 using
         //this equation. Set them manually to the max value.
         if (group > 20) {

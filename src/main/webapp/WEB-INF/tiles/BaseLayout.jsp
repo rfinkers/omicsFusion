@@ -28,23 +28,22 @@
         <!-- taglib auto generated -->
         <s:head/>
         <!-- javascript. jQuery/ jQueryUI libraries are loaded this tag instead of the script element. -->
-        <sj:head jqueryui="true" loadAtOnce="true" jquerytheme="cupertino" />
+        <sj:head jqueryui="true" loadAtOnce="true" jquerytheme="cupertino" loadFromGoogle="true" />
         <!-- other -->
-        <script type="text/javascript" src="<s:url value="/js/jquery.blockUI.2.31.js"/>"></script>
+        <script type="text/javascript" src="<s:url value="/js/jquery.blockUI.2.57.js"/>"></script>
         <script type="text/javascript" src="<s:url value="/js/jquery.breeDB.0.1.js"/>"></script>
-        <!-- mbMenu -->
-        <script type="text/javascript" src="<s:url value="/js/mbMenu.js"/>"></script>
-        <script type="text/javascript" src="<s:url value="/js/jquery.metadata.js"/>"></script>
-        <script type="text/javascript" src="<s:url value="/js/jquery.hoverIntent.js"/>"></script>
         <script type="text/javascript">
             var _gaq = _gaq || [];
             _gaq.push(['_setAccount', 'UA-18743767-2']);
             _gaq.push(['_trackPageview']);
 
             (function() {
-                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                var ga = document.createElement('script');
+                ga.type = 'text/javascript';
+                ga.async = true;
                 ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+                var s = document.getElementsByTagName('script')[0];
+                s.parentNode.insertBefore(ga, s);
             })();
         </script>
         <!-- custom scripts for individual pages -->

@@ -15,13 +15,12 @@
  */
 package nl.wur.plantbreeding.omicsfusion.excel;
 
-import com.almworks.sqlite4java.SQLiteException;
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import nl.wur.plantbreeding.logic.sqlite4java.SqLiteQueries;
+import nl.wur.plantbreeding.logic.sqlite.SqLiteQueries;
 import nl.wur.plantbreeding.omicsfusion.datatypes.DataPointDataType;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
@@ -50,7 +49,7 @@ public class UploadDataSheets extends ManipulateExcelSheet {
      */
     public static void uploadExcelSheets(File responseExcelFile,
             String responseType, File predictorExcelFile, String predictorType,
-            String directory) throws SQLiteException {
+            String directory) throws SQLException, ClassNotFoundException {
         //TODO: refractor to methods!
 
         /**

@@ -2,5 +2,4 @@
 
 @import "layout.css";     /* Define the layout of the page */
 @import "styleguide.css"; /* Define the basic style of the different elements */
-@import "menu_red.css";   /* Layout of the mbMenu */
 @import "table_blue.css"; /* Layout of the summary table*/

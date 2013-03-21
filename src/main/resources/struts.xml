@@ -6,10 +6,14 @@
 <struts>
     <constant name="struts.enable.DynamicMethodInvocation"
               value="false" />
-    <constant name="struts.devMode" value="false" />
+    <constant name="struts.devMode" value="true" />
     <constant name="struts.custom.i18n.resources"
               value="nl.wur.plantbreeding.omicsfusion.resources.OmicsFusion" />
-    <constant name="struts.multipart.maxSize" value="10000000" />
+    <constant name="struts.multipart.maxSize" value="15000000" />
+
+    <constant name="struts.convention.action.packages" value="nl.wur.plantbreeding.omicsfusion"/>
+    <constant name="struts.convention.classes.reload" value="true" />
+    <!--<constant name="struts.convention.default.parent.package" value="json-default"/>-->
 
     <!-- Actions for the framework-->
     <include file="submitWizard.xml"/>

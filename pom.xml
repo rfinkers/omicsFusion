@@ -83,7 +83,12 @@
         <dependency>
             <groupId>com.jgeppert.struts2.jquery</groupId>
             <artifactId>struts2-jquery-grid-plugin</artifactId>
-            <version>3.4.0</version>
+            <version>3.6.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.jgeppert.struts2.jquery</groupId>
+            <artifactId>struts2-jquery-chart-plugin</artifactId>
+            <version>3.6.0-SNAPSHOT</version>
         </dependency>
         <!--        TODO: remove CSV capabilities from project (in favor of SQLite) -->
         <dependency>
@@ -93,9 +98,9 @@
             <type>jar</type>
         </dependency>
         <dependency>
-            <groupId>org.jfree</groupId>
-            <artifactId>jfreechart</artifactId>
-            <version>1.0.15-SNAPSHOT</version>
+            <groupId>org.jfree.chart</groupId>
+            <artifactId>jfreechart-fse</artifactId>
+            <version>1.0-SNAPSHOT</version>
             <type>jar</type>
         </dependency>
         <dependency>
@@ -104,28 +109,15 @@
             <version>2.6</version>
         </dependency>
         <dependency>
-            <groupId>com.almworks.sqlite4java</groupId>
-            <artifactId>sqlite4java</artifactId>
-            <type>jar</type>
-            <version>${sqlite4java.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.almworks.sqlite4java</groupId>
-            <artifactId>libsqlite4java-linux-amd64</artifactId>
-            <type>so</type>
-            <version>${sqlite4java.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.almworks.sqlite4java</groupId>
-            <artifactId>libsqlite4java-osx</artifactId>
-            <version>${sqlite4java.version}</version>
-            <type>jnilib</type>
-        </dependency>
-        <dependency>
             <groupId>nl.wur.plantbreeding</groupId>
             <artifactId>chebi2gene</artifactId>
             <version>1.0-SNAPSHOT</version>
             <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.xerial</groupId>
+            <artifactId>sqlite-jdbc</artifactId>
+            <version>3.7.2</version>
         </dependency>
         <dependency>
             <groupId>javax</groupId>
@@ -142,24 +134,29 @@
         <dependency>
             <groupId>org.apache.struts</groupId>
             <artifactId>struts2-core</artifactId>
-            <version>2.3.7</version>
+            <version>2.3.12</version>
         </dependency>
         <dependency>
             <groupId>org.apache.struts</groupId>
             <artifactId>struts2-tiles-plugin</artifactId>
-            <version>2.3.7</version>
+            <version>2.3.12</version>
             <type>jar</type>
         </dependency>
         <dependency>
             <groupId>org.apache.struts</groupId>
-            <artifactId>struts2-jfreechart-plugin</artifactId>
-            <version>2.3.7</version>
+            <artifactId>struts2-json-plugin</artifactId>
+            <version>2.3.12</version>
             <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.struts</groupId>
+            <artifactId>struts2-convention-plugin</artifactId>
+            <version>2.3.12</version>
         </dependency>
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
-            <version>3.8</version>
+            <version>3.9</version>
             <type>jar</type>
         </dependency>
         <dependency>
@@ -173,7 +170,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.5.1</version>
+                <version>3.0</version>
                 <configuration>
                     <source>1.6</source>
                     <target>1.6</target>
@@ -183,7 +180,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
-                <version>2.2</version>
+                <version>2.3</version>
                 <configuration>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
@@ -191,7 +188,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
-                <version>3.1</version>
+                <version>3.2</version>
                 <configuration>
                     <reportPlugins>
                         <plugin>
@@ -221,58 +218,6 @@
                     </reportPlugins>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>copy</id>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>copy</goal>
-                        </goals>
-                        <configuration>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>com.almworks.sqlite4java</groupId>
-                                    <!--<artifactId>libsqlite4java-linux-amd64</artifactId>-->
-                                    <artifactId>libsqlite4java-osx</artifactId>
-                                    <version>${sqlite4java.version}</version>
-                                    <!--<type>so</type>-->
-                                    <type>jnilib</type>
-                                    <overWrite>true</overWrite>
-                                    <!--                                    WebApp -->
-                                    <outputDirectory>${project.build.directory}/omicsFusion/WEB-INF/lib</outputDirectory>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>com.almworks.sqlite4java</groupId>
-                                    <!--<artifactId>libsqlite4java-linux-amd64</artifactId>-->
-                                    <artifactId>libsqlite4java-osx</artifactId>
-                                    <version>${sqlite4java.version}</version>
-                                    <!--<type>so</type>-->
-                                    <type>jnilib</type>
-                                    <overWrite>true</overWrite>
-                                    <!--                                    JUnit tests -->
-                                    <outputDirectory>${project.build.directory}/lib</outputDirectory>
-                                </artifactItem>
-                            </artifactItems>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.12.2</version>
-                <configuration>
-                    <systemProperties>
-                        <property>
-                            <name>sqlite4java.library.path</name>
-                            <value>${project.build.directory}/lib</value>
-                        </property>
-                    </systemProperties>
-                </configuration>
-            </plugin>
         </plugins>
         <finalName>omicsFusion</finalName>
     </build>
@@ -289,7 +234,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-compiler-plugin</artifactId>
-                        <version>2.5.1</version>
+                        <version>3.0</version>
                         <configuration>
                             <!-- javaee6 contains upgrades of APIs contained within the JDK itself.
                             As such these need to be placed on the bootclasspath, rather than classpath of the
@@ -314,6 +259,5 @@
     </profiles>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <sqlite4java.version>0.282</sqlite4java.version>
     </properties>
 </project>

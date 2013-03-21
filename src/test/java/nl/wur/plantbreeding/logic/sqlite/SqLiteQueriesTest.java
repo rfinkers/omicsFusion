@@ -13,13 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.wur.plantbreeding.logic.sqlite4java;
+package nl.wur.plantbreeding.logic.sqlite;
 
 import java.io.File;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import nl.wur.plantbreeding.omicsfusion.entities.UserList;
-import static org.junit.Assert.fail;
+import nl.wur.plantbreeding.omicsfusion.utils.Constants;
 import org.junit.*;
+import static org.junit.Assert.fail;
 
 /**
  *
@@ -27,7 +32,7 @@ import org.junit.*;
  */
 public class SqLiteQueriesTest {
 
-    String directory;
+    private static String directory = "/tmp/";
 
     public SqLiteQueriesTest() {
     }
@@ -36,6 +41,8 @@ public class SqLiteQueriesTest {
     public static void setUpClass() throws Exception {
         File tempFile = new File("/tmp/omicsFusion.db");
         tempFile.delete();
+        SqLiteQueries instance = new SqLiteQueries();
+        instance.initializeDatabase(directory);
     }
 
     @AfterClass
@@ -44,23 +51,10 @@ public class SqLiteQueriesTest {
 
     @Before
     public void setUp() {
-        directory = "/tmp/";
     }
 
     @After
     public void tearDown() {
-    }
-
-    /**
-     * Test of initializeDatabase method, of class sqLiteQueries.
-     */
-    @Test
-    public void testInitializeDatabase() throws Exception {
-        System.out.println("initializeDatabase");
-
-        SqLiteQueries instance = new SqLiteQueries();
-        instance.initializeDatabase(directory);
-
     }
 
     /**
@@ -104,16 +98,24 @@ public class SqLiteQueriesTest {
 
     /**
      * Test of addSgeId method, of class sqLiteQueries.
+     *
+     * @throws SQLException
+     * @throws ClassNotFoundException
      */
     @Test
-    @Ignore
-    public void testAddSgeId() {
+    public void testAddSgeId() throws SQLException, ClassNotFoundException {
         System.out.println("addSgeId");
-        String directory = "";
         SqLiteQueries instance = new SqLiteQueries();
-        //instance.addSgeId(directory);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+
+        HashMap<String, Integer> jobIds = new HashMap<String, Integer>();
+        List<String> methods = new ArrayList<String>();
+
+        jobIds.put(Constants.SPLS, 1);
+        methods.add(Constants.SPLS);
+
+        instance.addMethods(directory, methods);
+        instance.addSgeId(directory, jobIds);
+
     }
 
     /**

@@ -73,6 +73,7 @@ public class PredictorResponseXYScatterForm extends ActionSupport {
 
     @Override
     public void validate() {
+        LOG.info("validate pred resp xy chatter form");
 //        LOG.log(Level.INFO, "sessionID: {0}", getSession());
 //        LOG.log(Level.INFO, "Predictor: {0}", getPredictor());
 //        LOG.log(Level.INFO, "Response : {0}", getResponse());

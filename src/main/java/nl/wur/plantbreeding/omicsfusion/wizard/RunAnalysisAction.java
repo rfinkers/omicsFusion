@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
-import nl.wur.plantbreeding.logic.sqlite4java.SqLiteQueries;
+import nl.wur.plantbreeding.logic.sqlite.SqLiteQueries;
 import nl.wur.plantbreeding.omicsfusion.email.ExceptionEmail;
 import static nl.wur.plantbreeding.omicsfusion.email.SubmissionCompleteEmail.SubmissionCompleteEmail;
 import nl.wur.plantbreeding.omicsfusion.methods.*;
@@ -58,27 +58,36 @@ public class RunAnalysisAction extends ActionSupport
 
     @Override
     public String execute() throws Exception {
+        LOG.info("Starting RunAnalysisAction");
         //Read the relevant data from the session
         @SuppressWarnings("unchecked")
         ArrayList<String> methods =
-                (ArrayList<String>) getRequest().getSession().getAttribute("methods");
+                (ArrayList<String>) getRequest().getSession()
+                .getAttribute("methods");
 
         //Get the name of the response from the SQLite databse.
         SqLiteQueries slq = new SqLiteQueries();
         ArrayList<String> responseNames =
                 slq.getResponseNames(ServletUtils.getResultsDir(request));
 
+        LOG.info("Got response names from db");
         String responseName = "";
-        if (responseNames.isEmpty()) {
-            addActionError(getText("error.no.responsevariable"));
-        } else if (responseNames.size() == 1) {
-            responseName = responseNames.get(0);
-        } else {
-            //TODO: implment for > 1 response variable.
-            responseName = responseNames.get(0);
+        try {
+            if (responseNames.isEmpty()) {
+                addActionError(getText("error.no.responsevariable"));
+            } else if (responseNames.size() == 1) {
+                responseName = responseNames.get(0);
+            } else {
+                //TODO: implment for > 1 response variable.
+                responseName = responseNames.get(0);
+            }
+        }
+        catch (Exception e) {
+            LOG.severe("Error getting response names from db");
+            return ERROR;
         }
 
-        //Get the list with jobId's from SGE
+        //Initiate the list with jobId's from SGE
         HashMap<String, Integer> jobIds = new HashMap<String, Integer>();
 
         //which methods to run?

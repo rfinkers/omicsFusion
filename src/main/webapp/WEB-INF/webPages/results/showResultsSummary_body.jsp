@@ -5,6 +5,7 @@
 --%>
 
 <%@ taglib prefix="s" uri="/struts-tags"%>
+<%@ taglib prefix="sj" uri="/struts-jquery-tags"%>
 
 <h2><s:text name="results.heading" /></h2>
 <s:actionerror/>
@@ -12,5 +13,5 @@
 <br/><br/>
 <s:form action="/results/summaryResults" >
     <s:textfield name="sessionId" size="26"/>
-    <s:submit styleId="submitMoment" />
+    <sj:submit styleId="submitMoment" />
 </s:form>

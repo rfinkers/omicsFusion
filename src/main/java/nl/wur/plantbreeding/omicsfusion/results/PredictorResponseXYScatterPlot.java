@@ -26,6 +26,7 @@ import org.jfree.data.xy.DefaultXYDataset;
 /**
  *
  * @author finke002
+ * @deprecated Move to predRespXYScatter?
  */
 public class PredictorResponseXYScatterPlot {
 
@@ -40,8 +41,9 @@ public class PredictorResponseXYScatterPlot {
      *
      * @param observationsForPredictorAndResponse scatter data.
      * @return JFreeChart compatible dataSet.
+     * @deprecated Migrate in favor of jQuery-chart.
      */
-    protected DefaultXYDataset predictResponseXYScatterPlot(
+    protected DefaultXYDataset predictResponseXYScatterPlotOld(
             ArrayList<XYScatterDataType> observationsForPredictorAndResponse) {
 
         double[][] data =
@@ -88,7 +90,7 @@ public class PredictorResponseXYScatterPlot {
         LOG.log(Level.INFO,
                 "preY: {0} predY: {1}",
                 new Object[]{slr.predict(minX), slr.predict(maxX)
-                });
+        });
         regLine[0][0] = minX;
         regLine[1][0] = slr.predict(minX);
         regLine[0][1] = maxX;

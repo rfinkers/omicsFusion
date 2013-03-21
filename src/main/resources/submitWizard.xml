@@ -22,7 +22,7 @@
                 <param name="maximumSize">10000000</param><!--Approx 9.5MB-->
                 <param name="allowedTypes"><!--Allows excel 2003 & 2007. TODO: CVS is under testing-->
                     application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv
-<!--			application/vnd.ms-excel,image/png example for multiple types-->
+                    <!--			application/vnd.ms-excel,image/png example for multiple types-->
                 </param>
             </interceptor-ref>
             <interceptor-ref name="defaultStack"></interceptor-ref>
@@ -42,8 +42,8 @@
         <action name="pipeline" class="nl.wur.plantbreeding.omicsfusion.wizard.RunAnalysisAction">
             <result name="input">/submit/wizardComplete.jsp</result>
             <result name="success">/submit/run.jsp</result>
-<!--            <result name="success">/submit/run.jsp</result>-->
-<!--            <result name="error">/submit/methodSelection.jsp</result>-->
+            <!-- TODO: error.jsp -->
+            <result name="error">/submit/run.jsp</result>
         </action>
     </package>
 </struts>
