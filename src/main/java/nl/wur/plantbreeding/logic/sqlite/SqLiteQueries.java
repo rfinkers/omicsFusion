@@ -15,6 +15,7 @@
  */
 package nl.wur.plantbreeding.logic.sqlite;
 
+import java.awt.Point;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -441,6 +442,7 @@ public class SqLiteQueries extends SqLiteHelper {
 
         Connection db = openDatabase(directory);
         Statement statement = prepareStatement();
+
 
         try {
             ResultSet resultSet = statement.executeQuery("SELECT "
