@@ -24,11 +24,7 @@
         label="List -Points-"
         list="points"
         points="{ show: true }"
-        lines="{ show: true }"
-        />
-    <sjc:chartData
-        label="Map -Integer, Integer-"
-        list="pointsFromMap"
+        lines="{ show: false }"
         />
 </sjc:chart>
 

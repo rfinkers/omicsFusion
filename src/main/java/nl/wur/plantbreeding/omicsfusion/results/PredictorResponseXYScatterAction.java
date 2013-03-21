@@ -17,18 +17,17 @@ package nl.wur.plantbreeding.omicsfusion.results;
 
 import java.awt.Point;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import nl.wur.plantbreeding.logic.sqlite.SqLiteQueries;
-import nl.wur.plantbreeding.omicsfusion.datatypes.XYScatterDataType;
 import nl.wur.plantbreeding.omicsfusion.utils.ServletUtils;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Actions;
 import org.apache.struts2.convention.annotation.Result;
+import org.apache.struts2.interceptor.ServletRequestAware;
 
 /**
  * Show a XY scatterplot for a predictor / response variable.
@@ -37,7 +36,7 @@ import org.apache.struts2.convention.annotation.Result;
  * @version 2.0.
  */
 public class PredictorResponseXYScatterAction
-        extends PredictorResponseXYScatterForm {
+        extends PredictorResponseXYScatterForm implements ServletRequestAware {
 
     /**
      * Serial Version UID.
@@ -78,26 +77,26 @@ public class PredictorResponseXYScatterAction
     public String execute() throws Exception {
         LOG.info("Starting chart class");
 
-        String predictor = null;
+        String predictorVariable = null;
         try {
-            predictor = request.getHeader("referer");
-            String[] split = predictor.split("=");
-            predictor = split[1].trim();
+            predictorVariable = request.getParameter("predictor");
+            LOG.log(Level.INFO, "Predictor: {0}", predictorVariable);
         }
         catch (Exception e) {
             //TODO: Check
-            LOG.severe("Error in parsing header: referer");
+            LOG.severe("Error obtaining predictor");
             e.printStackTrace();
             addActionError(getText("errors.reading.predictor"));
             return ERROR;
         }
         String sessionName =
                 (String) request.getSession().getAttribute("resultSession");
-        String response =
+        String responseVariable =
                 (String) request.getSession().getAttribute("responseName");
+        LOG.log(Level.INFO, "Response: {0}", responseVariable);
         //response vs continues or response vs discrete.
 
-        if (sessionName == null || response == null) {
+        if (sessionName == null || responseVariable == null) {
 
             if (sessionName == null) {
                 addActionError(getText("errors.session.expired"));
@@ -113,9 +112,9 @@ public class PredictorResponseXYScatterAction
 
         //Should also include model summaries?
         LOG.info("get data");
-        List<Point> xyDataset = null;
+        //List<Point> points = null;
         try {
-            xyDataset = getDataSetFromDB(predictor, response, sessionName);
+            points = getDataSetFromDB(predictorVariable, responseVariable, sessionName);
         }
         catch (Exception e) {
             addActionError(getText("errors.general.exception"));
@@ -130,11 +129,8 @@ public class PredictorResponseXYScatterAction
             }
         }
 
-        LOG.info("got data");
         //TODO: null check.
-        LOG.info("DataSet size: " + xyDataset.size());
-
-        LOG.info("Chart created");
+        LOG.log(Level.INFO, "DataSet size: {0}", points.size());
 
         return SUCCESS;
     }
@@ -145,25 +141,17 @@ public class PredictorResponseXYScatterAction
      * @param predictor Name of the predictor variable.
      * @param response Name of the response (trait) to show in the plot.
      * @param sessionID SessionID of the original analysis run.
-     * @return XYDataset.
      */
     private List<Point> getDataSetFromDB(String predictor, String response,
             String sessionID) throws SQLException, ClassNotFoundException {
 
         //connect to the db.
         SqLiteQueries sql = new SqLiteQueries();
-        //Read the data for the predictor & response (order by)
-        ArrayList<XYScatterDataType> observationsForPredictorAndResponse =
+        //Read the data for the predictor & response (order by
+        List<Point> predictResponseXYScatterPlotDataSet =
                 sql.getObservationsForPredictorAndResponse(
                 ServletUtils.getResultsDir(request, sessionID),
                 predictor, response);
-
-        //We need a DefaultXYDataset.
-        PredictorResponseXYScatterPlot xyp =
-                new PredictorResponseXYScatterPlot();
-        List<Point> predictResponseXYScatterPlotDataSet =
-                xyp.predictResponseXYScatterPlot(
-                observationsForPredictorAndResponse);
 
         return predictResponseXYScatterPlotDataSet;
     }
@@ -174,5 +162,10 @@ public class PredictorResponseXYScatterAction
 
     public HttpServletResponse getServletResponse() {
         return response;
+    }
+
+    @Override
+    public void setServletRequest(HttpServletRequest request) {
+        this.request = request;
     }
 }

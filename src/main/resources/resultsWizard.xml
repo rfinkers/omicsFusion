@@ -11,10 +11,10 @@
             <result name="success">/results/resultsSummary.jsp</result>
         </action>
     </package>
-    <!--    <package name="charts" namespace="/results" extends="struts-default">
-        <action name="predRespXYScatter">
+    <package name="charts" namespace="/results" extends="struts-default,json-default">
+        <action name="predRespXYScatter" class="nl.wur.plantbreeding.omicsfusion.results.PredictorResponseXYScatterAction">
             <result name="success">/results/predRespXYScatter.jsp</result>
             <result name="error">/results/showResultsSummary.jsp</result>
         </action>
-    </package>-->
+    </package>
 </struts>

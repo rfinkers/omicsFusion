@@ -15,6 +15,7 @@
  */
 package nl.wur.plantbreeding.logic.sqlite;
 
+import java.awt.Point;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -27,7 +28,6 @@ import java.util.Iterator;
 import java.util.List;
 import nl.wur.plantbreeding.omicsfusion.datatypes.DataPointDataType;
 import nl.wur.plantbreeding.omicsfusion.datatypes.SummaryResults;
-import nl.wur.plantbreeding.omicsfusion.datatypes.XYScatterDataType;
 import nl.wur.plantbreeding.omicsfusion.entities.UserList;
 import nl.wur.plantbreeding.omicsfusion.utils.Constants;
 
@@ -430,32 +430,33 @@ public class SqLiteQueries extends SqLiteHelper {
      * @return A list of observations
      * @throws SQLiteException
      */
-    public ArrayList<XYScatterDataType> getObservationsForPredictorAndResponse(
+    public List<Point> getObservationsForPredictorAndResponse(
             String directory, String preditor, String response)
             throws SQLException, ClassNotFoundException {
-        ArrayList<XYScatterDataType> resultList =
-                new ArrayList<XYScatterDataType>();
-        XYScatterDataType dataPoint = null;
+
+        List<Point> resultList =
+                new ArrayList<Point>();
+
+
         Connection db = openDatabase(directory);
         Statement statement = prepareStatement();
 
+
         try {
-//            statement.executeUpdate("SELECT response.genotype_name, "
-//                    + "response.observation, predictor.observation "
-//                    + "FROM predictor, response "
-//                    + "WHERE response.genotype_name = predictor.genotype_name "
-//                    + "AND predictor.variable_name LIKE '%" + preditor + "'");
+            ResultSet resultSet = statement.executeQuery("SELECT "
+                    //+ "response.genotype_name, "
+                    + "response.observation AS resp, "
+                    + "predictor.observation AS pred "
+                    + "FROM predictor, response "
+                    + "WHERE response.genotype_name = predictor.genotype_name "
+                    + "AND predictor.variable_name LIKE '%" + preditor.trim() + "' "
+                    + "ORDER BY pred, resp ");
 //            //FIXME: LIKE is temp fix for spaces at the beginning of the name in db.
-//            while (stm.step()) {
-//                dataPoint = new XYScatterDataType();
-//                dataPoint.setGenotypeName(stm.columnString(0));
-//                dataPoint.setPredictorVariable(preditor);
-//                dataPoint.setPredictorValue(stm.columnDouble(2));
-//                dataPoint.setResponseVariable(response);
-//                dataPoint.setResponseValue(stm.columnDouble(1));
-//                resultList.add(dataPoint);
-//            }
-//            stm.dispose();
+            while (resultSet.next()) {
+                Float resp = resultSet.getFloat("resp");
+                Float pred = resultSet.getFloat("pred");
+                resultList.add(new Point(resp.intValue(), pred.intValue()));
+            }
         }
         finally {
             closeDatabase(db);

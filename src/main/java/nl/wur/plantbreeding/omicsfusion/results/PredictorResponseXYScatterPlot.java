@@ -123,6 +123,8 @@ public class PredictorResponseXYScatterPlot {
     protected List<Point> predictResponseXYScatterPlot(
             ArrayList<XYScatterDataType> observationsForPredictorAndResponse) {
 
+        System.out.println("Points list");
+
         points = new LinkedList<Point>();
 
         points.add(new Point(0, 3));

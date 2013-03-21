@@ -35,8 +35,8 @@
     <context-param>
         <description>Directory where the results will be stored</description>
         <param-name>resultsDirectory</param-name>
-        <param-value>/media/bulk_01/users/finke002/omicsFusion/</param-value>
-        <!--<param-value>/Users/richardfinkers/NetBeansProjects/ofResults</param-value>-->
+        <!--<param-value>/media/bulk_01/users/finke002/omicsFusion/</param-value>-->
+        <param-value>/Users/richardfinkers/NetBeansProjects/ofResults/</param-value>
     </context-param>
     <filter>
         <filter-name>struts2</filter-name>
