@@ -15,8 +15,6 @@
  */
 package nl.wur.plantbreeding.omicsfusion.results;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -25,10 +23,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import nl.wur.plantbreeding.logic.sqlite.SqLiteQueries;
-import nl.wur.plantbreeding.logic.util.FileOrDirectoryExists;
 import nl.wur.plantbreeding.omicsfusion.datatypes.CsvSummaryDataType;
 import nl.wur.plantbreeding.omicsfusion.datatypes.SummaryResults;
-import nl.wur.plantbreeding.omicsfusion.utils.CSV;
 import nl.wur.plantbreeding.omicsfusion.utils.Constants;
 import nl.wur.plantbreeding.omicsfusion.utils.ServletUtils;
 import org.apache.struts2.interceptor.ServletRequestAware;
@@ -611,77 +607,6 @@ public class RetrieveResultsSummaryAction
             csvSummaryDataType.setHtmlColor(getBackgroundColor(
                     csvSummaryDataType.getMean(), min, max, inverse));
         }
-    }
-
-    /**
-     *
-     * @param sessionID
-     * @return
-     * @throws FileNotFoundException
-     * @throws IOException
-     */
-    private HashMap<String, ArrayList<CsvSummaryDataType>> getMethodsWithResultsSummaryFilesFromFile(String sessionID, String resultsDirectory)
-            throws FileNotFoundException, IOException {
-        HashMap<String, ArrayList<CsvSummaryDataType>> results =
-                new HashMap<String, ArrayList<CsvSummaryDataType>>();
-
-        if (sessionID == null || sessionID.isEmpty()) {
-            addActionError(getText("errors.sessionID.required"));
-        } else {
-            resultsDirectory += sessionID + "/";
-        }
-
-        if (FileOrDirectoryExists.FileOrDirectoryExists(resultsDirectory
-                + "LASSO_coef_Sum.csv") == true) {
-            results.put(Constants.LASSO, CSV.readSummaryCsv(resultsDirectory
-                    + "LASSO_coef_Sum.csv"));
-        }
-        if (FileOrDirectoryExists.FileOrDirectoryExists(resultsDirectory
-                + "RIDGE_coef_Sum.csv") == true) {
-            results.put(Constants.RIDGE, CSV.readSummaryCsv(resultsDirectory
-                    + "RIDGE_coef_Sum.csv"));
-        }
-        if (FileOrDirectoryExists.FileOrDirectoryExists(resultsDirectory
-                + "RF_varImp_Summary.csv") == true) {
-            results.put(Constants.RF, CSV.readSummaryCsv(resultsDirectory
-                    + "RF_varImp_Summary.csv"));
-        }
-        if (FileOrDirectoryExists.FileOrDirectoryExists(resultsDirectory
-                + "EN_coef_Sum.csv") == true) {
-            results.put(Constants.EN, CSV.readSummaryCsv(resultsDirectory
-                    + "EN_coef_Sum.csv"));
-        }
-        if (FileOrDirectoryExists.FileOrDirectoryExists(resultsDirectory
-                + "PCR_coef_Sum.csv") == true) {
-            results.put(Constants.PCR, CSV.readSummaryCsv(resultsDirectory
-                    + "PCR_coef_Sum.csv"));
-        }
-        if (FileOrDirectoryExists.FileOrDirectoryExists(resultsDirectory
-                + "PLS_coef_Sum.csv") == true) {
-            results.put(Constants.PLS, CSV.readSummaryCsv(resultsDirectory
-                    + "PLS_coef_Sum.csv"));
-        }
-        if (FileOrDirectoryExists.FileOrDirectoryExists(resultsDirectory
-                + "SPLS_coef_Sum.csv") == true) {
-            results.put(Constants.SPLS, CSV.readSummaryCsv(resultsDirectory
-                    + "SPLS_coef_Sum.csv"));
-        }
-        if (FileOrDirectoryExists.FileOrDirectoryExists(resultsDirectory
-                + "SVM_coef_Sum.csv") == true) {
-            results.put(Constants.SVM, CSV.readSummaryCsv(resultsDirectory
-                    + "SVM_coef_Sum.csv"));
-        } //Disable univariate for now
-        if (FileOrDirectoryExists.FileOrDirectoryExists(resultsDirectory
-                + "univariate_bh_coef.csv") == true) {
-            results.put(Constants.BH, CSV.readSummaryCsv(resultsDirectory
-                    + "univariate_bh_coef.csv"));
-        }
-        if (FileOrDirectoryExists.FileOrDirectoryExists(resultsDirectory
-                + "univariate_p_coef.csv") == true) {
-            results.put(Constants.UNIVARIATE, CSV.readSummaryCsv(resultsDirectory
-                    + "univariate_p_coef.csv"));
-        }
-        return results;
     }
 
     private HashMap<String, ArrayList<CsvSummaryDataType>> getMethodsWithResultsSummaryFilesFromDB(
