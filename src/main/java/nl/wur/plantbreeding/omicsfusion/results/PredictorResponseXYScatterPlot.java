@@ -15,13 +15,12 @@
  */
 package nl.wur.plantbreeding.omicsfusion.results;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import nl.wur.plantbreeding.logic.jfreechart.GenotypeXYDataset;
-import nl.wur.plantbreeding.omicsfusion.datatypes.XYScatterDataType;
 import org.apache.commons.math.stat.regression.SimpleRegression;
-import org.jfree.data.xy.DefaultXYDataset;
 
 /**
  *
@@ -40,16 +39,15 @@ public class PredictorResponseXYScatterPlot {
      * Create a XY dataset, and add the regression line.
      *
      * @param observationsForPredictorAndResponse scatter data.
-     * @return JFreeChart compatible dataSet.
-     * @deprecated Migrate in favor of jQuery-chart.
+     * @return Struts2-jquery compatible regression line dataset..
      */
-    protected DefaultXYDataset predictResponseXYScatterPlotOld(
-            ArrayList<XYScatterDataType> observationsForPredictorAndResponse) {
+    protected Map<Double, Double> getRegressionLine(
+            Map<Double, Double> points) {
 
         double[][] data =
-                new double[2][observationsForPredictorAndResponse.size()];
+                new double[2][points.size()];
         String[] genotypeLabels =
-                new String[observationsForPredictorAndResponse.size()];
+                new String[points.size()];
 
         double minX = Double.POSITIVE_INFINITY;
         double maxX = Double.NEGATIVE_INFINITY;
@@ -59,18 +57,22 @@ public class PredictorResponseXYScatterPlot {
         //initialize z which holds the correct row number.
         int z = 0;
 
-        for (XYScatterDataType obs : observationsForPredictorAndResponse) {
+        Iterator<Map.Entry<Double, Double>> observations;
+        observations = points.entrySet().iterator();
+
+        while (observations.hasNext()) {
+            Map.Entry<Double, Double> obs = observations.next();
             //FIXME: chech how emty / null values are obtained from the DB.
             LOG.log(Level.INFO, "response: {0} predictor: {1}",
-                    new Object[]{obs.getResponseValue(), obs.getPredictorValue()});
+                    new Object[]{obs.getKey(), obs.getValue()});
 //            if (obs.getResponseValue() == 0 && obs.getPredictorValue() == 0) {
-            data[1][z] = obs.getResponseValue(); // response -> Y
-            data[0][z] = obs.getPredictorValue(); // predictor -> X
-            if (obs.getGenotypeName() != null) {
-                genotypeLabels[z] = obs.getGenotypeName();
-            } else {
-                genotypeLabels[z] = "No label";
-            }
+            data[1][z] = obs.getKey(); // response -> Y
+            data[0][z] = obs.getValue(); // predictor -> X
+//            if (obs.getGenotypeName() != null) {
+//                genotypeLabels[z] = obs.getGenotypeName();
+//            } else {
+//                genotypeLabels[z] = "No label";
+//            }
             //Get the min and max response variable for regression.
             if (data[0][z] > maxX) {
                 maxX = data[0][z];
@@ -98,13 +100,13 @@ public class PredictorResponseXYScatterPlot {
         /**
          * The dataset
          */
-        DefaultXYDataset dataSet = new GenotypeXYDataset("Genotype",
-                data, genotypeLabels, genotypeLabels);
+        Map<Double, Double> regDataSet = new HashMap<Double, Double>();
         //add the regression series to the dataSet.
 
-        dataSet.addSeries(slr.getR(), regLine);
+        //TODO: implement regression dataset.
+        //regDataSet.addSeries(slr.getR(), regLine);
 
         //return dataset
-        return dataSet;
+        return regDataSet;
     }
 }

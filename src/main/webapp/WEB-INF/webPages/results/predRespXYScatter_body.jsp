@@ -35,7 +35,7 @@
 <div id="topicsClick"></div>
 <sjc:chart id="chartPoints" cssStyle="width: 790px; height: 500px;" onClickTopics="chartClick" onHoverTopics="chartHover">
     <sjc:chartData
-        label="List -Points-"
+        label="series 1"
         list="points"
         points="{ show: true }"
         lines="{ show: false }"
