@@ -25,7 +25,7 @@ import org.apache.commons.math.stat.regression.SimpleRegression;
 /**
  *
  * @author finke002
- * @deprecated Move to predRespXYScatter?
+ *
  */
 public class PredictorResponseXYScatterPlot {
 
@@ -60,14 +60,15 @@ public class PredictorResponseXYScatterPlot {
         Iterator<Map.Entry<Double, Double>> observations;
         observations = points.entrySet().iterator();
 
+        int i = 0;
         while (observations.hasNext()) {
             Map.Entry<Double, Double> obs = observations.next();
-            //FIXME: chech how emty / null values are obtained from the DB.
-            LOG.log(Level.INFO, "response: {0} predictor: {1}",
+            //FIXME: chech how empty / null values are obtained from the DB.
+            LOG.log(Level.INFO, i + " response: {0} predictor: {1}",
                     new Object[]{obs.getKey(), obs.getValue()});
-//            if (obs.getResponseValue() == 0 && obs.getPredictorValue() == 0) {
-            data[1][z] = obs.getKey(); // response -> Y
-            data[0][z] = obs.getValue(); // predictor -> X
+            i++;
+            data[0][z] = obs.getKey(); // response -> Y
+            data[1][z] = obs.getValue(); // predictor -> X
 //            if (obs.getGenotypeName() != null) {
 //                genotypeLabels[z] = obs.getGenotypeName();
 //            } else {
@@ -101,12 +102,11 @@ public class PredictorResponseXYScatterPlot {
          * The dataset
          */
         Map<Double, Double> regDataSet = new HashMap<Double, Double>();
+
         //add the regression series to the dataSet.
+        regDataSet.put(minX, slr.predict(minX));
+        regDataSet.put(maxX, slr.predict(maxX));
 
-        //TODO: implement regression dataset.
-        //regDataSet.addSeries(slr.getR(), regLine);
-
-        //return dataset
         return regDataSet;
     }
 }

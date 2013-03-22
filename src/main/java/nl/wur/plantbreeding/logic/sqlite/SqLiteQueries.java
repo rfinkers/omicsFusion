@@ -458,8 +458,11 @@ public class SqLiteQueries extends SqLiteHelper {
                 Double pred = resultSet.getDouble("pred");
                 resultList.put(pred, resp);
                 i++;
+                System.out.println("Counter: " + i
+                        + " Response: " + Double.toString(resp)
+                        + "Predictor: " + Double.toString(pred));
             }
-            System.out.println("Counter: " + i);
+
         }
         finally {
             closeDatabase(db);

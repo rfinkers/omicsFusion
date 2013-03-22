@@ -51,6 +51,10 @@ public class PredictorResponseXYScatterAction
      */
     private Map<Double, Double> points;
     /**
+     * List with regression line.
+     */
+    private Map<Double, Double> regression;
+    /**
      * Output stream.
      */
     private HttpServletResponse response;
@@ -130,6 +134,8 @@ public class PredictorResponseXYScatterAction
 
         //TODO: null check.
         LOG.log(Level.INFO, "DataSet size: {0}", points.size());
+        PredictorResponseXYScatterPlot pl = new PredictorResponseXYScatterPlot();
+        regression = pl.getRegressionLine(points);
 
         return SUCCESS;
     }
@@ -158,6 +164,10 @@ public class PredictorResponseXYScatterAction
 
     public Map<Double, Double> getPoints() {
         return points;
+    }
+
+    public Map<Double, Double> getRegression() {
+        return regression;
     }
 
     public HttpServletResponse getServletResponse() {

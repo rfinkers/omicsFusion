@@ -30,17 +30,23 @@
         }
     });
 </script>
-
+<% String resp = response.getHeader("response");%>
 <div id="topicsHover"></div>
 <div id="topicsClick"></div>
 <sjc:chart id="chartPoints" cssStyle="width: 790px; height: 500px;" onClickTopics="chartClick" onHoverTopics="chartHover">
     <sjc:chartData
-        label="series 1"
+        label="data"
         list="points"
         points="{ show: true }"
         lines="{ show: false }"
         clickable="true"
         hoverable="true"
+        />
+    <sjc:chartData
+        label="regression"
+        list="regression"
+        points="{ show: false }"
+        lines="{ show:true }"
         />
 </sjc:chart>
 
