@@ -33,7 +33,9 @@
 <% String resp = response.getHeader("response");%>
 <div id="topicsHover"></div>
 <div id="topicsClick"></div>
-<sjc:chart id="chartPoints" cssStyle="width: 790px; height: 500px;" onClickTopics="chartClick" onHoverTopics="chartHover">
+<sjc:chart id="chartPoints" cssStyle="width: 790px; height: 500px;"
+           onClickTopics="chartClick" onHoverTopics="chartHover"
+           yaxisLabel="predictor" xaxisLabel="response" >
     <sjc:chartData
         label="data"
         list="points"
