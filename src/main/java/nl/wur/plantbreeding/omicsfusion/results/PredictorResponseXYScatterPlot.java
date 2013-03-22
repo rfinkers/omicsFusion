@@ -16,10 +16,11 @@
 package nl.wur.plantbreeding.omicsfusion.results;
 
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import nl.wur.plantbreeding.omicsfusion.datatypes.XYScatterDataType;
 import org.apache.commons.math.stat.regression.SimpleRegression;
 
 /**
@@ -42,12 +43,10 @@ public class PredictorResponseXYScatterPlot {
      * @return Struts2-jquery compatible regression line dataset..
      */
     protected Map<Double, Double> getRegressionLine(
-            Map<Double, Double> points) {
+            List<XYScatterDataType> points) {
 
         double[][] data =
                 new double[2][points.size()];
-        String[] genotypeLabels =
-                new String[points.size()];
 
         double minX = Double.POSITIVE_INFINITY;
         double maxX = Double.NEGATIVE_INFINITY;
@@ -57,23 +56,14 @@ public class PredictorResponseXYScatterPlot {
         //initialize z which holds the correct row number.
         int z = 0;
 
-        Iterator<Map.Entry<Double, Double>> observations;
-        observations = points.entrySet().iterator();
+        for (XYScatterDataType point : points) {
+            LOG.log(Level.INFO, z + " response: {0} predictor: {1}",
+                    new Object[]{point.getResponseValue(),
+                point.getPredictorValue()});
 
-        int i = 0;
-        while (observations.hasNext()) {
-            Map.Entry<Double, Double> obs = observations.next();
-            //FIXME: chech how empty / null values are obtained from the DB.
-            LOG.log(Level.INFO, i + " response: {0} predictor: {1}",
-                    new Object[]{obs.getKey(), obs.getValue()});
-            i++;
-            data[0][z] = obs.getKey(); // response -> Y
-            data[1][z] = obs.getValue(); // predictor -> X
-//            if (obs.getGenotypeName() != null) {
-//                genotypeLabels[z] = obs.getGenotypeName();
-//            } else {
-//                genotypeLabels[z] = "No label";
-//            }
+            data[0][z] = point.getPredictorValue(); // predictor -> X
+            data[1][z] = point.getResponseValue(); // response -> Y
+
             //Get the min and max response variable for regression.
             if (data[0][z] > maxX) {
                 maxX = data[0][z];
@@ -84,7 +74,6 @@ public class PredictorResponseXYScatterPlot {
             //Add data to regression dataset (x,y) = pred, resp
             slr.addData(data[0][z], data[1][z]);
             z++;
-//            }
         }
 
         //Predict a new y values for the extreme X?

@@ -25,10 +25,9 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 import nl.wur.plantbreeding.omicsfusion.datatypes.DataPointDataType;
 import nl.wur.plantbreeding.omicsfusion.datatypes.SummaryResults;
+import nl.wur.plantbreeding.omicsfusion.datatypes.XYScatterDataType;
 import nl.wur.plantbreeding.omicsfusion.entities.UserList;
 import nl.wur.plantbreeding.omicsfusion.utils.Constants;
 
@@ -431,16 +430,13 @@ public class SqLiteQueries extends SqLiteHelper {
      * @return A list of observations
      * @throws SQLiteException
      */
-    public Map<Double, Double> getObservationsForPredictorAndResponse(
+    public List<XYScatterDataType> getObservationsForPredictorAndResponse(
             String directory, String preditor, String response)
             throws SQLException, ClassNotFoundException {
 
-        Map<Double, Double> resultList =
-                new TreeMap<Double, Double>();
-
-
         Connection db = openDatabase(directory);
         Statement statement = prepareStatement();
+        List<XYScatterDataType> resultList;
 
         try {
             ResultSet resultSet = statement.executeQuery("SELECT "
@@ -453,20 +449,33 @@ public class SqLiteQueries extends SqLiteHelper {
                     + "ORDER BY pred, resp ");
 //            //FIXME: LIKE is temp fix for spaces at the beginning of the name in db.
             int i = 0;
+
+            //TODO: initiate initial capacity
+            resultList = new ArrayList<XYScatterDataType>();
+
+            XYScatterDataType data;
             while (resultSet.next()) {
-                Double resp = resultSet.getDouble("resp");
-                Double pred = resultSet.getDouble("pred");
-                resultList.put(pred, resp);
+                data = new XYScatterDataType();
+                //TODO: add genotypename to the query.
+                //data.setGenotypeName(resultSet.getString("genotype"));
+                data.setResponseValue(resultSet.getDouble("resp"));
+                data.setResponseVariable(response);
+                data.setPredictorValue(resultSet.getDouble("pred"));
+                data.setPredictorVariable(preditor);
+
+                resultList.add(data);
+
                 i++;
                 System.out.println("Counter: " + i
-                        + " Response: " + Double.toString(resp)
-                        + "Predictor: " + Double.toString(pred));
+                        + " Response: " + Double.toString(resultSet.getDouble("resp"))
+                        + " Predictor: " + Double.toString(resultSet.getDouble("pred")));
             }
 
         }
         finally {
             closeDatabase(db);
         }
+
         return resultList;
     }
 

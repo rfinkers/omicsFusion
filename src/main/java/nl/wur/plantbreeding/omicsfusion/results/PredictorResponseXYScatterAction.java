@@ -16,12 +16,15 @@
 package nl.wur.plantbreeding.omicsfusion.results;
 
 import java.sql.SQLException;
+import java.util.IdentityHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import nl.wur.plantbreeding.logic.sqlite.SqLiteQueries;
+import nl.wur.plantbreeding.omicsfusion.datatypes.XYScatterDataType;
 import nl.wur.plantbreeding.omicsfusion.utils.ServletUtils;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Actions;
@@ -63,14 +66,6 @@ public class PredictorResponseXYScatterAction
      */
     private HttpServletRequest request;
 
-//    @Actions({
-//        @Action(value = "/charts", results = {
-//            @Result(location = "/results/predRespXYScatter.jsp", name = "success")
-//        }),
-//        @Action(value = "/jsonchartdata", results = {
-//            @Result(location = "/results/predRespXYScatter.jsp", name = "success")
-//        })
-//    })
     @Actions({
         @Action(value = "/results/predRespXYScatter", results = {
             @Result(location = "/results/predRespXYScatter.jsp", name = "success")
@@ -80,18 +75,6 @@ public class PredictorResponseXYScatterAction
     public String execute() throws Exception {
         LOG.info("Starting chart class");
 
-        String predictorVariable = null;
-        try {
-            predictorVariable = request.getParameter("predictor");
-            LOG.log(Level.INFO, "Predictor: {0}", predictorVariable);
-        }
-        catch (Exception e) {
-            //TODO: Check
-            LOG.severe("Error obtaining predictor");
-            e.printStackTrace();
-            addActionError(getText("errors.reading.predictor"));
-            return ERROR;
-        }
         String sessionName =
                 (String) request.getSession().getAttribute("resultSession");
         String responseVariable =
@@ -100,7 +83,6 @@ public class PredictorResponseXYScatterAction
         //response vs continues or response vs discrete.
 
         if (sessionName == null || responseVariable == null) {
-
             if (sessionName == null) {
                 addActionError(getText("errors.session.expired"));
                 LOG.info("PredictorResponseXYScatterAction: SessionName was "
@@ -113,11 +95,10 @@ public class PredictorResponseXYScatterAction
             return ERROR;
         }
 
-        //Should also include model summaries?
-        LOG.info("get data");
-        //List<Point> points = null;
+        List<XYScatterDataType> dataSet = null;
         try {
-            points = getDataSetFromDB(predictorVariable, responseVariable, sessionName);
+            dataSet = getDataSetFromDB(getPredictor(),
+                    responseVariable, sessionName);
         }
         catch (Exception e) {
             addActionError(getText("errors.general.exception"));
@@ -130,12 +111,22 @@ public class PredictorResponseXYScatterAction
                 LOG.severe("Exception occurred.");
                 e.printStackTrace();
             }
+            return ERROR;
         }
 
-        //TODO: null check.
-        LOG.log(Level.INFO, "DataSet size: {0}", points.size());
+        if (dataSet == null || dataSet.isEmpty()) {
+            addActionError("No datapoints obtained from database");
+            return ERROR;
+        }
+
         PredictorResponseXYScatterPlot pl = new PredictorResponseXYScatterPlot();
-        regression = pl.getRegressionLine(points);
+        regression = pl.getRegressionLine(dataSet);
+
+        //Finally, parse to the map (removes redunant response varables :(
+        points = new IdentityHashMap<Double, Double>(dataSet.size());
+        for (XYScatterDataType data : dataSet) {
+            points.put(data.getPredictorValue(), data.getResponseValue());
+        }
 
         return SUCCESS;
     }
@@ -147,14 +138,14 @@ public class PredictorResponseXYScatterAction
      * @param response Name of the response (trait) to show in the plot.
      * @param sessionID SessionID of the original analysis run.
      */
-    private Map<Double, Double> getDataSetFromDB(String predictor,
+    private List<XYScatterDataType> getDataSetFromDB(String predictor,
             String response, String sessionID)
             throws SQLException, ClassNotFoundException {
 
         //connect to the db.
         SqLiteQueries sql = new SqLiteQueries();
         //Read the data for the predictor & response (order by
-        Map<Double, Double> predictResponseXYScatterPlotDataSet =
+        List<XYScatterDataType> predictResponseXYScatterPlotDataSet =
                 sql.getObservationsForPredictorAndResponse(
                 ServletUtils.getResultsDir(request, sessionID),
                 predictor, response);
