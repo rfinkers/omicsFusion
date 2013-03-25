@@ -11,7 +11,7 @@
 <s:actionerror/>
 <s:text name="results.introduction" />
 <br/><br/>
-<s:form action="/results/summaryResults" >
+<s:form action="summaryResults"  namespace="/results">
     <s:textfield name="sessionId" size="26"/>
-    <sj:submit styleId="submitMoment" />
+    <sj:submit styleId="submitMoment" button="true" />
 </s:form>

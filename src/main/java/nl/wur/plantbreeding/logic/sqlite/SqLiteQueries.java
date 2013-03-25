@@ -140,7 +140,8 @@ public class SqLiteQueries extends SqLiteHelper {
         System.out.println("Insert data in user table.");
         try {
             String sql = "INSERT INTO user "
-                    + "(user_name, email,affiliation,country,date_created) values "
+                    + "(user_name, email,affiliation,country,date_created) "
+                    + "values "
                     + "('" + userList.getUserName() + "','"
                     + userList.getEmail() + "','"
                     + userList.getAffiliation() + "','"
@@ -179,7 +180,8 @@ public class SqLiteQueries extends SqLiteHelper {
      */
     public void uploadDataNameAndType(String directory, String predictorName,
             String predictorType, String responseName, String responseType,
-            String predictResponseName) throws SQLException, ClassNotFoundException {
+            String predictResponseName)
+            throws SQLException, ClassNotFoundException {
 
         //add names and types to the database
         //TODO: take from reading the excel sheet.
@@ -293,7 +295,8 @@ public class SqLiteQueries extends SqLiteHelper {
             while (iterator.hasNext()) {
                 String method = iterator.next();
                 if (!Constants.SESSIONINFO.equals(method)) {
-                    System.out.println("Method: " + method + " ID: " + jobIds.get(method));
+                    System.out.println("Method: " + method
+                            + " ID: " + jobIds.get(method));
                     statement.executeUpdate("UPDATE methods "
                             + "SET sge_id =  " + jobIds.get(method) + " "
                             + "WHERE method_name = '" + method + "'");
@@ -445,7 +448,8 @@ public class SqLiteQueries extends SqLiteHelper {
                     + "predictor.observation AS pred "
                     + "FROM predictor, response "
                     + "WHERE response.genotype_name = predictor.genotype_name "
-                    + "AND predictor.variable_name LIKE '%" + preditor.trim() + "' "
+                    + "AND predictor.variable_name LIKE "
+                    + "'%" + preditor.trim() + "' "
                     + "ORDER BY pred, resp ");
 //            //FIXME: LIKE is temp fix for spaces at the beginning of the name in db.
             int i = 0;
@@ -479,7 +483,8 @@ public class SqLiteQueries extends SqLiteHelper {
         return resultList;
     }
 
-    public ArrayList<String> getResponseNames(String directory) throws SQLException, ClassNotFoundException {
+    public ArrayList<String> getResponseNames(String directory)
+            throws SQLException, ClassNotFoundException {
         ArrayList<String> result = new ArrayList<String>();
         Connection db = openDatabase(directory);
         Statement statement = prepareStatement();
