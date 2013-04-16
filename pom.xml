@@ -15,10 +15,8 @@
     </description>
     <url>http://www.omicsfusion.nl</url>
     <scm>
-        <!--        <connection>scm:svn:http://dev2.plantbreeding.nl/svn/BreeDB/BreeDBweb/trunk</connection>-->
-        <developerConnection>scm:svn:http://dev2.plantbreeding.nl/svn/dbprivate-repos/omicsFusion2/</developerConnection>
-        <tag>trunk</tag>
-        <!--        <url>http://dev2.plantbreeding.nl/svn/BreeDB/BreeDBweb</url>-->
+        <connection>scm:git@github.com:rfinkers/omicsFusion.git</connection>
+        <developerConnection>scm:git@github.com:rfinkers/omicsFusion.git</developerConnection>
     </scm>
 
     <issueManagement>
