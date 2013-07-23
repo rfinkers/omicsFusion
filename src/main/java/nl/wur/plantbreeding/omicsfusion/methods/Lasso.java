@@ -29,8 +29,8 @@ public class Lasso extends Analysis {
     /**
      * The logger.
      */
-    private static final Logger LOG =
-            Logger.getLogger(Lasso.class.getName());
+    private static final Logger LOG
+            = Logger.getLogger(Lasso.class.getName());
 
     /**
      * {
@@ -134,9 +134,7 @@ public class Lasso extends Analysis {
         //Write training coefficients to db.
 
         //Write R2 to db.
-
         //Write training lambda to db.
-
         //Write method results to db.
         return rCode;
     }

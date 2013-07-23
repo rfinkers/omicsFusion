@@ -71,11 +71,10 @@ public class CmdExec {
         //TODO: if qsub not present, this will result in an error. Finally this
         //will lead to an nullpointer exception because of problems with
         //404 page.
-        BufferedReader input =
-                new BufferedReader(new InputStreamReader(p.getInputStream()));
+        BufferedReader input
+                = new BufferedReader(new InputStreamReader(p.getInputStream()));
         String line = input.readLine();
         input.close();
-
 
         int jobId = 0;
         if (line != null) {
@@ -86,8 +85,7 @@ public class CmdExec {
                     if (jobId != 0) {
                         break;
                     }
-                }
-                catch (NumberFormatException numberFormatException) {
+                } catch (NumberFormatException numberFormatException) {
                     //do nothing
                 }
             }
@@ -109,10 +107,10 @@ public class CmdExec {
         boolean finished = false;
         //String line;
         Process p = Runtime.getRuntime().exec("qstat -j " + jobId);
-        BufferedReader input =
-                new BufferedReader(new InputStreamReader(p.getInputStream()));
-        BufferedReader error =
-                new BufferedReader(new InputStreamReader(p.getErrorStream()));
+        BufferedReader input
+                = new BufferedReader(new InputStreamReader(p.getInputStream()));
+        BufferedReader error
+                = new BufferedReader(new InputStreamReader(p.getErrorStream()));
         p.waitFor();
 
         String line = input.readLine();
@@ -126,7 +124,7 @@ public class CmdExec {
             System.out.println("input check");
             //submission_time:
 
-            while (( line = input.readLine() ) != null) {
+            while ((line = input.readLine()) != null) {
                 System.out.println("result: " + line);
             }
         }

@@ -29,8 +29,8 @@ public class ElasticNet extends Analysis {
     /**
      * The Logger
      */
-    private static final Logger LOG =
-            Logger.getLogger(ElasticNet.class.getName());
+    private static final Logger LOG
+            = Logger.getLogger(ElasticNet.class.getName());
 
     /**
      * {

@@ -31,8 +31,8 @@ public class DataUploadValidationForm extends ActionSupport {
     /**
      * The logger
      */
-    private static final Logger LOG =
-            Logger.getLogger(DataUploadValidationForm.class.getName());
+    private static final Logger LOG
+            = Logger.getLogger(DataUploadValidationForm.class.getName());
     /**
      * File containing the response variables
      */
@@ -92,8 +92,8 @@ public class DataUploadValidationForm extends ActionSupport {
 
     public void setDataSheetPredictorFileContentType(
             String dataSheetPredictorFileContentType) {
-        this.dataSheetPredictorFileContentType =
-                dataSheetPredictorFileContentType;
+        this.dataSheetPredictorFileContentType
+                = dataSheetPredictorFileContentType;
     }
 
     public String getDataSheetPredictorFileFileName() {
@@ -162,8 +162,8 @@ public class DataUploadValidationForm extends ActionSupport {
 
     public void setDataSheetPredictResponseFileContentType(
             String dataSheetPredictResponseFileContentType) {
-        this.dataSheetPredictResponseFileContentType =
-                dataSheetPredictResponseFileContentType;
+        this.dataSheetPredictResponseFileContentType
+                = dataSheetPredictResponseFileContentType;
     }
 
     public String getDataSheetPredictResponseFileFileName() {
@@ -172,8 +172,8 @@ public class DataUploadValidationForm extends ActionSupport {
 
     public void setDataSheetPredictResponseFileFileName(
             String dataSheetPredictResponseFileFileName) {
-        this.dataSheetPredictResponseFileFileName =
-                dataSheetPredictResponseFileFileName;
+        this.dataSheetPredictResponseFileFileName
+                = dataSheetPredictResponseFileFileName;
     }
 
     @Override
@@ -181,7 +181,6 @@ public class DataUploadValidationForm extends ActionSupport {
         LOG.info("Start Excel form validation");
 
         //TODO: file size check??
-
         //Order of test is important for the order in which the errors are shown.
         if (dataSheetResponseFile == null) {//TODO: via validation.xml?
             addActionError(getText("select.response"));
@@ -197,11 +196,9 @@ public class DataUploadValidationForm extends ActionSupport {
         }
 
         //TODO: filenames are not kept after validation error. Type, however, is kept.
-
         //        if(dataSheetFileFileName.equals("")){
 //              addActionError("please select a file");
 //        }
-
 //        if (file1==null){
 //            addActionError("please select a file");
 //        }

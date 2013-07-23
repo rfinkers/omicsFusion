@@ -43,8 +43,8 @@ public class UserDetailsAction extends UserDetailsValidationForm
     /**
      * The logger
      */
-    private static final Logger LOG =
-            Logger.getLogger(UserDetailsAction.class.getName());
+    private static final Logger LOG
+            = Logger.getLogger(UserDetailsAction.class.getName());
 
     @Override
     public String execute() throws Exception {
@@ -64,8 +64,7 @@ public class UserDetailsAction extends UserDetailsValidationForm
 
             request.getSession().setAttribute(Constants.USER, user);
 
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Exception: {0}", ex.getMessage());
             addActionError("An exceoption occured");
             ex.printStackTrace();
@@ -80,8 +79,7 @@ public class UserDetailsAction extends UserDetailsValidationForm
             SqLiteQueries sq2 = new SqLiteQueries();
             sq2.addUser(ServletUtils.getResultsDir(
                     request.getSession()), user);
-        }
-        catch (SQLException sQLiteException) {
+        } catch (SQLException sQLiteException) {
             LOG.log(Level.SEVERE, "Exception: {0}",
                     sQLiteException.getMessage());
             addActionError("SQLite exception: " + sQLiteException.getMessage());

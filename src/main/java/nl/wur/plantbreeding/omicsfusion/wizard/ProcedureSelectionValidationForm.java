@@ -31,8 +31,8 @@ public class ProcedureSelectionValidationForm extends ActionSupport {
     /**
      * The logger
      */
-    private static final Logger LOG =
-            Logger.getLogger(ProcedureSelectionValidationForm.class.getName());
+    private static final Logger LOG
+            = Logger.getLogger(ProcedureSelectionValidationForm.class.getName());
     /**
      * File containing the response variables
      */

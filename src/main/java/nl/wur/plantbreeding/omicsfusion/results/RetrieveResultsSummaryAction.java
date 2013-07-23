@@ -71,8 +71,8 @@ public class RetrieveResultsSummaryAction
         ArrayList<CsvSummaryDataType> univariate_bh = null;
 
         //Location of the results directory
-        String resultsDirectory =
-                request.getSession().getServletContext().getInitParameter(
+        String resultsDirectory
+                = request.getSession().getServletContext().getInitParameter(
                 "resultsDirectory");
 
         if (resultsDirectory == null) {
@@ -84,10 +84,9 @@ public class RetrieveResultsSummaryAction
         ArrayList<String> responseNames = null;
         try {
             SqLiteQueries slq = new SqLiteQueries();
-            responseNames =
-                    slq.getResponseNames(resultsDirectory + "/" + getSessionId());
-        }
-        catch (SQLException sQLiteException) {
+            responseNames
+                    = slq.getResponseNames(resultsDirectory + "/" + getSessionId());
+        } catch (SQLException sQLiteException) {
             addActionError(getText("error.opening.db"));
             return ERROR;
         }
@@ -103,8 +102,8 @@ public class RetrieveResultsSummaryAction
             responseName = responseNames.get(0);
         }
 
-        HashMap<String, ArrayList<CsvSummaryDataType>> methResults =
-                getMethodsWithResultsSummaryFilesFromDB(getSessionId(),
+        HashMap<String, ArrayList<CsvSummaryDataType>> methResults
+                = getMethodsWithResultsSummaryFilesFromDB(getSessionId(),
                 resultsDirectory, responseName);
 
         LOG.log(Level.INFO, "Methods: {0}", methResults.size());
@@ -612,8 +611,8 @@ public class RetrieveResultsSummaryAction
     private HashMap<String, ArrayList<CsvSummaryDataType>> getMethodsWithResultsSummaryFilesFromDB(
             String sessionID, String resultsDirectory, String responseVariable)
             throws SQLException, ClassNotFoundException {
-        HashMap<String, ArrayList<CsvSummaryDataType>> results =
-                new HashMap<String, ArrayList<CsvSummaryDataType>>();
+        HashMap<String, ArrayList<CsvSummaryDataType>> results
+                = new HashMap<String, ArrayList<CsvSummaryDataType>>();
 
         if (sessionID == null || sessionID.isEmpty()) {
             addActionError(getText("errors.sessionID.required"));
@@ -624,32 +623,32 @@ public class RetrieveResultsSummaryAction
         //read data from the database
         //one or several queries?
         SqLiteQueries queries = new SqLiteQueries();
-        ArrayList<SummaryResults> readSummaryResults =
-                queries.readSummaryResults(resultsDirectory, responseVariable);
+        ArrayList<SummaryResults> readSummaryResults
+                = queries.readSummaryResults(resultsDirectory, responseVariable);
 
         LOG.log(Level.INFO, "Database Size: {0}", readSummaryResults.size());
 
         //add results to the different lists
-        ArrayList<CsvSummaryDataType> lasso =
-                new ArrayList<CsvSummaryDataType>();
-        ArrayList<CsvSummaryDataType> ridge =
-                new ArrayList<CsvSummaryDataType>();
-        ArrayList<CsvSummaryDataType> rf =
-                new ArrayList<CsvSummaryDataType>();
-        ArrayList<CsvSummaryDataType> en =
-                new ArrayList<CsvSummaryDataType>();
-        ArrayList<CsvSummaryDataType> pcr =
-                new ArrayList<CsvSummaryDataType>();
-        ArrayList<CsvSummaryDataType> pls =
-                new ArrayList<CsvSummaryDataType>();
-        ArrayList<CsvSummaryDataType> spls =
-                new ArrayList<CsvSummaryDataType>();
-        ArrayList<CsvSummaryDataType> svm =
-                new ArrayList<CsvSummaryDataType>();
-        ArrayList<CsvSummaryDataType> univariate_p =
-                new ArrayList<CsvSummaryDataType>();
-        ArrayList<CsvSummaryDataType> univariate_bh =
-                new ArrayList<CsvSummaryDataType>();
+        ArrayList<CsvSummaryDataType> lasso
+                = new ArrayList<CsvSummaryDataType>();
+        ArrayList<CsvSummaryDataType> ridge
+                = new ArrayList<CsvSummaryDataType>();
+        ArrayList<CsvSummaryDataType> rf
+                = new ArrayList<CsvSummaryDataType>();
+        ArrayList<CsvSummaryDataType> en
+                = new ArrayList<CsvSummaryDataType>();
+        ArrayList<CsvSummaryDataType> pcr
+                = new ArrayList<CsvSummaryDataType>();
+        ArrayList<CsvSummaryDataType> pls
+                = new ArrayList<CsvSummaryDataType>();
+        ArrayList<CsvSummaryDataType> spls
+                = new ArrayList<CsvSummaryDataType>();
+        ArrayList<CsvSummaryDataType> svm
+                = new ArrayList<CsvSummaryDataType>();
+        ArrayList<CsvSummaryDataType> univariate_p
+                = new ArrayList<CsvSummaryDataType>();
+        ArrayList<CsvSummaryDataType> univariate_bh
+                = new ArrayList<CsvSummaryDataType>();
 
         CsvSummaryDataType dataPoint = null;
         for (SummaryResults summaryResults : readSummaryResults) {

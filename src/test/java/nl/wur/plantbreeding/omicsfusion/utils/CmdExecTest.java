@@ -3,9 +3,14 @@ package nl.wur.plantbreeding.omicsfusion.utils;
 import java.io.IOException;
 import java.util.logging.Logger;
 import static nl.wur.plantbreeding.omicsfusion.utils.CmdExec.CheckJobStatus;
+import org.junit.After;
+import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
-import org.junit.*;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
+import org.junit.Test;
 
 /**
  * Tests the submissions to SGE.
@@ -67,8 +72,7 @@ public class CmdExecTest {
         boolean result;
         try {
             result = CheckJobStatus(jobId);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             //NO qstat installed on the system!
             result = true;
             LOG.warning("No qstat installed on this system. "

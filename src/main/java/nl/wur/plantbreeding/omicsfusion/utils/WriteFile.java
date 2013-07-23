@@ -20,8 +20,8 @@ public class WriteFile {
     /**
      * The logger
      */
-    private static final Logger LOG =
-            Logger.getLogger(WriteFile.class.getName());
+    private static final Logger LOG
+            = Logger.getLogger(WriteFile.class.getName());
 
     /**
      * Writes data to a textfile.

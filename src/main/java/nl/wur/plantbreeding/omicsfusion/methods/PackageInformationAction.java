@@ -33,6 +33,6 @@ public class PackageInformationAction extends ActionSupport {
     /**
      * The logger.
      */
-    private static final Logger LOG =
-            Logger.getLogger(PackageInformationAction.class.getName());
+    private static final Logger LOG
+            = Logger.getLogger(PackageInformationAction.class.getName());
 }

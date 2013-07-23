@@ -177,11 +177,11 @@ public class CsvSummaryDataType {
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 79 * hash + ( this.predictorVariable != null
-                ? this.predictorVariable.hashCode() : 0 );
-        hash = 79 * hash + ( this.mean != null ? this.mean.hashCode() : 0 );
-        hash = 79 * hash + ( this.sd != null ? this.sd.hashCode() : 0 );
-        hash = 79 * hash + ( this.rank != null ? this.rank.hashCode() : 0 );
+        hash = 79 * hash + (this.predictorVariable != null
+                ? this.predictorVariable.hashCode() : 0);
+        hash = 79 * hash + (this.mean != null ? this.mean.hashCode() : 0);
+        hash = 79 * hash + (this.sd != null ? this.sd.hashCode() : 0);
+        hash = 79 * hash + (this.rank != null ? this.rank.hashCode() : 0);
         return hash;
     }
 

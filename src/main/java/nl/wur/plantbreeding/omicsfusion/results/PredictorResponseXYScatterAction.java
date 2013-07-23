@@ -75,10 +75,10 @@ public class PredictorResponseXYScatterAction
     public String execute() throws Exception {
         LOG.info("Starting chart class");
 
-        String sessionName =
-                (String) request.getSession().getAttribute("resultSession");
-        String responseVariable =
-                (String) request.getSession().getAttribute("responseName");
+        String sessionName
+                = (String) request.getSession().getAttribute("resultSession");
+        String responseVariable
+                = (String) request.getSession().getAttribute("responseName");
         LOG.log(Level.INFO, "Response: {0}", responseVariable);
         //response vs continues or response vs discrete.
 
@@ -99,8 +99,7 @@ public class PredictorResponseXYScatterAction
         try {
             dataSet = getDataSetFromDB(getPredictor(),
                     responseVariable, sessionName);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             addActionError(getText("errors.general.exception"));
             //This one will be catched when no valid input format is available.
             //Due to the forward, the exception message gets lost?
@@ -145,8 +144,8 @@ public class PredictorResponseXYScatterAction
         //connect to the db.
         SqLiteQueries sql = new SqLiteQueries();
         //Read the data for the predictor & response (order by
-        List<XYScatterDataType> predictResponseXYScatterPlotDataSet =
-                sql.getObservationsForPredictorAndResponse(
+        List<XYScatterDataType> predictResponseXYScatterPlotDataSet
+                = sql.getObservationsForPredictorAndResponse(
                 ServletUtils.getResultsDir(request, sessionID),
                 predictor, response);
 

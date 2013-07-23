@@ -33,8 +33,8 @@ public class ProcedureSelectionAction extends DataUploadValidationForm
     /**
      * The logger.
      */
-    private static final Logger LOG =
-            Logger.getLogger(ProcedureSelectionAction.class.getName());
+    private static final Logger LOG
+            = Logger.getLogger(ProcedureSelectionAction.class.getName());
     /**
      * the request.
      */

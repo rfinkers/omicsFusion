@@ -27,8 +27,8 @@ public class RSessionInfo extends Analysis {
     /**
      * The logger.
      */
-    private static final Logger LOG =
-            Logger.getLogger(RSessionInfo.class.getName());
+    private static final Logger LOG
+            = Logger.getLogger(RSessionInfo.class.getName());
 
     /**
      * {

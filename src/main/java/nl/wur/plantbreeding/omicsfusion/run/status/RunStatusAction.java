@@ -32,8 +32,8 @@ public class RunStatusAction extends RunStatusValidationForm {
     @Override
     public String execute() throws Exception {
 
-        ArrayList<Integer> jobIdsFromDatabase =
-                getJobIdsFromDatabase(getSessionId());
+        ArrayList<Integer> jobIdsFromDatabase
+                = getJobIdsFromDatabase(getSessionId());
 
         System.out.println("Jobs: " + jobIdsFromDatabase.size());
 
@@ -50,7 +50,6 @@ public class RunStatusAction extends RunStatusValidationForm {
         servletRequest.setAttribute("status", status);
 
         //Method <-> Finished / In progress / Scheduled
-
         return SUCCESS;
     }
 

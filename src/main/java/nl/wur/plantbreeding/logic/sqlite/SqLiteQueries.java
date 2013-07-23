@@ -106,17 +106,14 @@ public class SqLiteQueries extends SqLiteHelper {
             statement.executeUpdate("CREATE TABLE responseVariables ("
                     + "counter INTEGER, "
                     + "response TEXT)");
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             // if the error message is "out of memory",
             // it probably means no database file is found
             System.err.println(e.getMessage());
-        }
-        finally {
+        } finally {
             try {
                 closeDatabase(db);
-            }
-            catch (SQLException e) {
+            } catch (SQLException e) {
                 // connection close failed.
                 System.err.println(e);
             }
@@ -149,17 +146,14 @@ public class SqLiteQueries extends SqLiteHelper {
                     + Calendar.DAY_OF_MONTH + "-" + Calendar.MONTH
                     + "-" + Calendar.YEAR + "')";
             statement.execute(sql);
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             // if the error message is "out of memory",
             // it probably means no database file is found
             System.err.println(e.getMessage());
-        }
-        finally {
+        } finally {
             try {
                 closeDatabase(db);
-            }
-            catch (SQLException e) {
+            } catch (SQLException e) {
                 // connection close failed.
                 System.err.println(e);
             }
@@ -198,8 +192,7 @@ public class SqLiteQueries extends SqLiteHelper {
                     + responseType + "','"
                     + predictorType + "')");
 
-        }
-        finally {
+        } finally {
             closeDatabase(db);
         }
     }
@@ -277,8 +270,7 @@ public class SqLiteQueries extends SqLiteHelper {
                 statement.executeUpdate("INSERT INTO methods "
                         + "(method_name) values ('" + method + "')");
             }
-        }
-        finally {
+        } finally {
             closeDatabase(db);
         }
     }
@@ -302,8 +294,7 @@ public class SqLiteQueries extends SqLiteHelper {
                             + "WHERE method_name = '" + method + "'");
                 }
             }
-        }
-        finally {
+        } finally {
             closeDatabase(db);
 
         }
@@ -327,8 +318,7 @@ public class SqLiteQueries extends SqLiteHelper {
                     + "(genotype_name, variable_name, observation) "
                     + "values (?,?,?)");
 
-        }
-        finally {
+        } finally {
             closeDatabase(db);
         }
     }
@@ -364,8 +354,7 @@ public class SqLiteQueries extends SqLiteHelper {
                         resultSet.getDouble("rank"));
                 results.add(summaryResults);
             }
-        }
-        finally {
+        } finally {
             closeDatabase(db);
         }
         return results;
@@ -391,8 +380,7 @@ public class SqLiteQueries extends SqLiteHelper {
 //            while (stm.step()) {
 //                result = stm.columnString(0);
 //            }
-        }
-        finally {
+        } finally {
             closeDatabase(db);
         }
         return result;
@@ -417,8 +405,7 @@ public class SqLiteQueries extends SqLiteHelper {
 //            while (stm.step()) {
 //                result = stm.columnString(0);
 //            }
-        }
-        finally {
+        } finally {
             closeDatabase(db);
         }
         return result;
@@ -475,8 +462,7 @@ public class SqLiteQueries extends SqLiteHelper {
                         + " Predictor: " + Double.toString(resultSet.getDouble("pred")));
             }
 
-        }
-        finally {
+        } finally {
             closeDatabase(db);
         }
 
@@ -495,8 +481,7 @@ public class SqLiteQueries extends SqLiteHelper {
             while (rs.next()) {
                 result.add(rs.getString("response"));
             }
-        }
-        finally {
+        } finally {
             closeDatabase(db);
         }
         return result;

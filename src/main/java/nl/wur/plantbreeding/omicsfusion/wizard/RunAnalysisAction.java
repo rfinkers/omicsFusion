@@ -25,7 +25,16 @@ import javax.servlet.http.HttpServletRequest;
 import nl.wur.plantbreeding.logic.sqlite.SqLiteQueries;
 import nl.wur.plantbreeding.omicsfusion.email.ExceptionEmail;
 import static nl.wur.plantbreeding.omicsfusion.email.SubmissionCompleteEmail.SubmissionCompleteEmail;
-import nl.wur.plantbreeding.omicsfusion.methods.*;
+import nl.wur.plantbreeding.omicsfusion.methods.ElasticNet;
+import nl.wur.plantbreeding.omicsfusion.methods.Lasso;
+import nl.wur.plantbreeding.omicsfusion.methods.PCR;
+import nl.wur.plantbreeding.omicsfusion.methods.PartialLeasedSquares;
+import nl.wur.plantbreeding.omicsfusion.methods.RSessionInfo;
+import nl.wur.plantbreeding.omicsfusion.methods.RandomForest;
+import nl.wur.plantbreeding.omicsfusion.methods.Ridge;
+import nl.wur.plantbreeding.omicsfusion.methods.SVM;
+import nl.wur.plantbreeding.omicsfusion.methods.SparsePLS;
+import nl.wur.plantbreeding.omicsfusion.methods.Univariate;
 import nl.wur.plantbreeding.omicsfusion.utils.CmdExec;
 import nl.wur.plantbreeding.omicsfusion.utils.Constants;
 import nl.wur.plantbreeding.omicsfusion.utils.ServletUtils;
@@ -61,14 +70,14 @@ public class RunAnalysisAction extends ActionSupport
         LOG.info("Starting RunAnalysisAction");
         //Read the relevant data from the session
         @SuppressWarnings("unchecked")
-        ArrayList<String> methods =
-                (ArrayList<String>) getRequest().getSession()
+        ArrayList<String> methods
+                = (ArrayList<String>) getRequest().getSession()
                 .getAttribute("methods");
 
         //Get the name of the response from the SQLite databse.
         SqLiteQueries slq = new SqLiteQueries();
-        ArrayList<String> responseNames =
-                slq.getResponseNames(ServletUtils.getResultsDir(request));
+        ArrayList<String> responseNames
+                = slq.getResponseNames(ServletUtils.getResultsDir(request));
 
         LOG.info("Got response names from db");
         String responseName = "";
@@ -81,8 +90,7 @@ public class RunAnalysisAction extends ActionSupport
                 //TODO: implment for > 1 response variable.
                 responseName = responseNames.get(0);
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             LOG.severe("Error getting response names from db");
             return ERROR;
         }
@@ -95,7 +103,6 @@ public class RunAnalysisAction extends ActionSupport
         //Schedule slow jobs first! Or can should this be controlled via order
         //in submission screen / orther ordening options / queue weight?
         //Relative timings on the CxE Flesh color /Metabolite dataset.
-
         try {
             //Relative time: RF - 50 /SPLS - 34 /Ridge - 32 /EN - 8
             //SVM - 5 /PCR - 2 /PLS - 1 /LASSO - 1
@@ -160,12 +167,10 @@ public class RunAnalysisAction extends ActionSupport
             SqLiteQueries sql = new SqLiteQueries();
             sql.addSgeId(ServletUtils.getResultsDir(request), jobIds);
 
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             addActionError("qsub not found, please check your SGE configuration");//TODO: check
             return ERROR;//TODO: configure
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             addActionError("Error during SGE submission");
             LOG.log(Level.SEVERE, "Exception: {0}", e.getMessage());
             return ERROR;
@@ -178,8 +183,7 @@ public class RunAnalysisAction extends ActionSupport
         try {
             // TODO: add user details and sessionID to constructor
             SubmissionCompleteEmail();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             LOG.log(Level.WARNING, "exception on sending confirmation email");
             e.printStackTrace();
             ExceptionEmail.SendExceptionEmail(e);
@@ -216,8 +220,8 @@ public class RunAnalysisAction extends ActionSupport
             NullPointerException {
 
         //SGE submission queue.
-        String queue =
-                request.getSession().getServletContext().getInitParameter("SGEQueue");
+        String queue
+                = request.getSession().getServletContext().getInitParameter("SGEQueue");
 
         WriteFile wf = new WriteFile();
         wf.WriteFile(ServletUtils.getResultsDir(request)

@@ -81,10 +81,10 @@ public class DataPointDataType {
             return false;
         }
         final DataPointDataType other = (DataPointDataType) obj;
-        if (( this.genotypeName == null ) ? ( other.genotypeName != null ) : !this.genotypeName.equals(other.genotypeName)) {
+        if ((this.genotypeName == null) ? (other.genotypeName != null) : !this.genotypeName.equals(other.genotypeName)) {
             return false;
         }
-        if (( this.traitName == null ) ? ( other.traitName != null ) : !this.traitName.equals(other.traitName)) {
+        if ((this.traitName == null) ? (other.traitName != null) : !this.traitName.equals(other.traitName)) {
             return false;
         }
         if (Double.doubleToLongBits(this.observation) != Double.doubleToLongBits(other.observation)) {
@@ -96,9 +96,9 @@ public class DataPointDataType {
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 83 * hash + ( this.genotypeName != null ? this.genotypeName.hashCode() : 0 );
-        hash = 83 * hash + ( this.traitName != null ? this.traitName.hashCode() : 0 );
-        hash = 83 * hash + (int) ( Double.doubleToLongBits(this.observation) ^ ( Double.doubleToLongBits(this.observation) >>> 32 ) );
+        hash = 83 * hash + (this.genotypeName != null ? this.genotypeName.hashCode() : 0);
+        hash = 83 * hash + (this.traitName != null ? this.traitName.hashCode() : 0);
+        hash = 83 * hash + (int) (Double.doubleToLongBits(this.observation) ^ (Double.doubleToLongBits(this.observation) >>> 32));
         return hash;
     }
 }

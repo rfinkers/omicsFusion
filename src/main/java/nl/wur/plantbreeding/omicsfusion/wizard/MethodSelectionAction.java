@@ -37,8 +37,8 @@ public class MethodSelectionAction extends MethodSelectionValidationForm
     /**
      * The logger
      */
-    private static final Logger LOG =
-            Logger.getLogger(MethodSelectionAction.class.getName());
+    private static final Logger LOG
+            = Logger.getLogger(MethodSelectionAction.class.getName());
     /**
      * the request
      */

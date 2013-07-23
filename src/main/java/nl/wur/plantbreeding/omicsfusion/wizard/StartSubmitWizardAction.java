@@ -35,8 +35,8 @@ public class StartSubmitWizardAction extends ActionSupport
     /**
      * The logger
      */
-    private static final Logger LOG =
-            Logger.getLogger(StartSubmitWizardAction.class.getName());
+    private static final Logger LOG
+            = Logger.getLogger(StartSubmitWizardAction.class.getName());
     /**
      * the request
      */

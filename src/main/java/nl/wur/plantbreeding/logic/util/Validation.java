@@ -65,7 +65,7 @@ public class Validation {
     public static String nullString(String nullString) {
         Pattern characters = Pattern.compile("[\\S\\W\\D]+");
         Matcher letterMatch = characters.matcher(nullString);
-        if (!( letterMatch.find() )) {
+        if (!(letterMatch.find())) {
             return null;
         } else {
             return nullString;

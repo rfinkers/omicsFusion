@@ -62,8 +62,8 @@ public class ServletUtils {
     public static String getResultsDir(
             HttpServletRequest request, String sessionID) {
         String resultsDirectory = request.getSession().getServletContext().getInitParameter("resultsDirectory");
-        if (!( resultsDirectory.endsWith("/")
-                || resultsDirectory.endsWith("\\") )) {
+        if (!(resultsDirectory.endsWith("/")
+                || resultsDirectory.endsWith("\\"))) {
             resultsDirectory += System.getProperty("file.separator");
         }
         resultsDirectory += sessionID;
@@ -82,8 +82,8 @@ public class ServletUtils {
     public static String getResultsDir(HttpSession session) {
         //String resultsDirectory = System.getProperty("java.io.tmpdir");
         String resultsDirectory = session.getServletContext().getInitParameter("resultsDirectory");
-        if (!( resultsDirectory.endsWith("/")
-                || resultsDirectory.endsWith("\\") )) {
+        if (!(resultsDirectory.endsWith("/")
+                || resultsDirectory.endsWith("\\"))) {
             resultsDirectory += System.getProperty("file.separator");
         }
         resultsDirectory += session.getId();

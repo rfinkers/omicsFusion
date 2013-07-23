@@ -65,11 +65,9 @@ public class UploadDataSheets extends ManipulateExcelSheet {
             responseWorkbook = loadExcelSheet(responseExcelFile);
 
             predictorWorkbook = loadExcelSheet(predictorExcelFile);
-        }
-        catch (IOException iOException) {
+        } catch (IOException iOException) {
             System.out.println("IO");
-        }
-        catch (InvalidFormatException invalidFormatException) {
+        } catch (InvalidFormatException invalidFormatException) {
             System.out.println("Format");
         }
 
@@ -110,8 +108,8 @@ public class UploadDataSheets extends ManipulateExcelSheet {
 
             String trait;
             Double observation;
-            String genotype =
-                    responseSheet.getRow(i).getCell(0).getStringCellValue().trim();
+            String genotype
+                    = responseSheet.getRow(i).getCell(0).getStringCellValue().trim();
 
             for (int j = 1; j < responseRowLenght; j++) {
                 if (!responseHeaderRow.getCell(j).getStringCellValue().equals("")) {
@@ -120,8 +118,7 @@ public class UploadDataSheets extends ManipulateExcelSheet {
                             == Cell.CELL_TYPE_NUMERIC) {
                         try {
                             observation = responseSheet.getRow(i).getCell(j).getNumericCellValue();
-                        }
-                        catch (Exception e) {
+                        } catch (Exception e) {
                             observation = Double.NaN;
                         }
                     } else {
@@ -152,8 +149,7 @@ public class UploadDataSheets extends ManipulateExcelSheet {
                             == Cell.CELL_TYPE_NUMERIC) {
                         try {
                             value = predictorSheet.getRow(i).getCell(j).getNumericCellValue();
-                        }
-                        catch (Exception e) {
+                        } catch (Exception e) {
                             value = Double.NaN;
                         }
                     } else {

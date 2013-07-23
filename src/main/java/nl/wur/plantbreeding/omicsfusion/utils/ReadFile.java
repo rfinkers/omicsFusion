@@ -57,8 +57,7 @@ public class ReadFile {
                 while (scanner.hasNextLine()) {
                     text.append(scanner.nextLine()).append(NL);
                 }
-            }
-            finally {
+            } finally {
                 scanner.close();
             }
             content = text.toString().split(NL);
@@ -96,8 +95,7 @@ public class ReadFile {
                 while (scanner.hasNextLine()) {
                     text.append(scanner.nextLine()).append(NL);
                 }
-            }
-            finally {
+            } finally {
                 scanner.close();
             }
             String[] lines = text.toString().split(NL);

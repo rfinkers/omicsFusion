@@ -33,8 +33,8 @@ public class PredictorResponseXYScatterPlot {
     /**
      * The logger.
      */
-    private static final Logger LOG =
-            Logger.getLogger(PredictorResponseXYScatterPlot.class.getName());
+    private static final Logger LOG
+            = Logger.getLogger(PredictorResponseXYScatterPlot.class.getName());
 
     /**
      * Create a XY dataset, and add the regression line.
@@ -45,8 +45,8 @@ public class PredictorResponseXYScatterPlot {
     protected Map<Double, Double> getRegressionLine(
             List<XYScatterDataType> points) {
 
-        double[][] data =
-                new double[2][points.size()];
+        double[][] data
+                = new double[2][points.size()];
 
         double minX = Double.POSITIVE_INFINITY;
         double maxX = Double.NEGATIVE_INFINITY;
@@ -59,7 +59,7 @@ public class PredictorResponseXYScatterPlot {
         for (XYScatterDataType point : points) {
             LOG.log(Level.INFO, z + " response: {0} predictor: {1}",
                     new Object[]{point.getResponseValue(),
-                point.getPredictorValue()});
+                        point.getPredictorValue()});
 
             data[0][z] = point.getPredictorValue(); // predictor -> X
             data[1][z] = point.getResponseValue(); // response -> Y
@@ -82,7 +82,7 @@ public class PredictorResponseXYScatterPlot {
         LOG.log(Level.INFO,
                 "preY: {0} predY: {1}",
                 new Object[]{slr.predict(minX), slr.predict(maxX)
-        });
+                });
         regLine[0][0] = minX;
         regLine[1][0] = slr.predict(minX);
         regLine[0][1] = maxX;

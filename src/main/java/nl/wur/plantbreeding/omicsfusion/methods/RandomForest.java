@@ -29,8 +29,8 @@ public class RandomForest extends Analysis {
     /**
      * The logger.
      */
-    private static final Logger LOG =
-            Logger.getLogger(RandomForest.class.getName());
+    private static final Logger LOG
+            = Logger.getLogger(RandomForest.class.getName());
 
     /**
      * {

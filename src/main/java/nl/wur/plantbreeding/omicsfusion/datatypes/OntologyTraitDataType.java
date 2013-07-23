@@ -68,10 +68,10 @@ public class OntologyTraitDataType {
             return false;
         }
         final OntologyTraitDataType other = (OntologyTraitDataType) obj;
-        if (( this.variableName == null ) ? ( other.variableName != null ) : !this.variableName.equals(other.variableName)) {
+        if ((this.variableName == null) ? (other.variableName != null) : !this.variableName.equals(other.variableName)) {
             return false;
         }
-        if (( this.ontologyID == null ) ? ( other.ontologyID != null ) : !this.ontologyID.equals(other.ontologyID)) {
+        if ((this.ontologyID == null) ? (other.ontologyID != null) : !this.ontologyID.equals(other.ontologyID)) {
             return false;
         }
         return true;
@@ -80,8 +80,8 @@ public class OntologyTraitDataType {
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 97 * hash + ( this.variableName != null ? this.variableName.hashCode() : 0 );
-        hash = 97 * hash + ( this.ontologyID != null ? this.ontologyID.hashCode() : 0 );
+        hash = 97 * hash + (this.variableName != null ? this.variableName.hashCode() : 0);
+        hash = 97 * hash + (this.ontologyID != null ? this.ontologyID.hashCode() : 0);
         return hash;
     }
 }

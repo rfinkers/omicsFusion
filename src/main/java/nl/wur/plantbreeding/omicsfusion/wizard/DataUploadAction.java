@@ -48,8 +48,8 @@ public class DataUploadAction extends DataUploadValidationForm
     /**
      * The logger.
      */
-    private static final Logger LOG =
-            Logger.getLogger(DataUploadAction.class.getName());
+    private static final Logger LOG
+            = Logger.getLogger(DataUploadAction.class.getName());
     /**
      * the request.
      */
@@ -78,7 +78,6 @@ public class DataUploadAction extends DataUploadValidationForm
             }
 
             //prepare a file with the names of the input sheets.
-
             //Write the names to the database.
             writeNamesToDB();
 
@@ -93,8 +92,7 @@ public class DataUploadAction extends DataUploadValidationForm
                     uploadExcelSheets(responseSheet, getResponseType(),
                             predictorSheet, getPredictorType(),
                             ServletUtils.getResultsDir(request));
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                     addActionError(e.getMessage());
                     LOG.info("Excel to Database");
@@ -102,32 +100,26 @@ public class DataUploadAction extends DataUploadValidationForm
                 }
             }
 
-
             if (predictResponseSheet != null) {
                 ValidateDataSheets.validatePredictResponseSheet();
             }
 
             //TODO: should we prepare the list with selectionboxes here depending of the type of sheets?
-        }
-        catch (InvalidFormatException e) {
+        } catch (InvalidFormatException e) {
             e.printStackTrace();
             addActionError(e.getMessage());
             return INPUT;
-        }
-        catch (DataSheetValidationException e) {
+        } catch (DataSheetValidationException e) {
             addActionError(e.getMessage());
             e.printStackTrace();
             return INPUT;
-        }
-        catch (FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
             addActionError(e.getMessage());
             return INPUT;
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             addActionError(e.getMessage());
             return INPUT;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             addActionError(e.getMessage());
             LOG.severe("Exception caught");
             ExceptionEmail.SendExceptionEmail(e);

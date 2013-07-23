@@ -106,8 +106,7 @@ public class EmailSender {
             }
             message.setContent(HtmlMessage, "text/html; charset=\""
                     + charset + "\"");
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             Logger.getLogger(EmailSender.class.getName()).log(Level.SEVERE, null, ex);
         }
         return message;
@@ -131,15 +130,12 @@ public class EmailSender {
                     from, subject, HtmlMessage, to);
             transport.connect();
             Transport.send(message);
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
-        }
-        finally {
+        } finally {
             try {
                 transport.close();
-            }
-            catch (MessagingException ex) {
+            } catch (MessagingException ex) {
                 Logger.getLogger(EmailSender.class.getName()).log(Level.SEVERE, null, ex);
             }
         }

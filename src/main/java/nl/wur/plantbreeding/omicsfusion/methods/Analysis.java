@@ -33,8 +33,8 @@ public class Analysis {
     /**
      * A logger.
      */
-    private static final Logger LOG =
-            Logger.getLogger(Analysis.class.getName());
+    private static final Logger LOG
+            = Logger.getLogger(Analysis.class.getName());
 
     Analysis() {
     }
@@ -576,9 +576,7 @@ public class Analysis {
         //Load the data sheet.
 
         //Get the optimized parameters for the model.
-
         //Calculate the new responses and safe them to a file.
-
         return rCode;
     }
 
@@ -625,8 +623,7 @@ public class Analysis {
         boolean startWithInteger = true;
         try {
             Integer.parseInt(tmp);
-        }
-        catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             startWithInteger = false;
         }
         if (startWithInteger == true) {

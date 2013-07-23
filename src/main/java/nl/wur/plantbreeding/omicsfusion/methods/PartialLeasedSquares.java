@@ -29,8 +29,8 @@ public class PartialLeasedSquares extends Analysis {
     /**
      * The logger.
      */
-    private static final Logger LOG =
-            Logger.getLogger(PartialLeasedSquares.class.getName());
+    private static final Logger LOG
+            = Logger.getLogger(PartialLeasedSquares.class.getName());
 
     /**
      * {
