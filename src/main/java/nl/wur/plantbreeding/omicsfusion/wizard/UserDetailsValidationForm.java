@@ -19,7 +19,7 @@ import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.util.logging.Logger;
 
 /**
- * Form containg basic information on the person that want to use the tool.
+ * Form containing basic information on the person that want to use the tool.
  *
  * @author Richard Finkers
  */
