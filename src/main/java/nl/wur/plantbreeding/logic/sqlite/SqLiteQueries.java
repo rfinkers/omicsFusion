@@ -25,6 +25,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import nl.wur.plantbreeding.omicsfusion.datatypes.DataPointDataType;
 import nl.wur.plantbreeding.omicsfusion.datatypes.SummaryResults;
 import nl.wur.plantbreeding.omicsfusion.datatypes.XYScatterDataType;
@@ -74,14 +75,14 @@ public class SqLiteQueries extends SqLiteHelper {
                     + "response_type VARCHAR(75))");
             //table data
             statement.executeUpdate("CREATE TABLE predictor ("
-                    + "predictorID INTEGER(4), "
+                    + "predictorID VARCHAR(7), "
                     + "predictor_name VARCHAR(75), "
                     + "genotype_name VARCHAR(75), "
                     + "genotypeID INTEGER(4), "
                     + "observation FLOAT(10,5))");
             //table response
             statement.executeUpdate("CREATE TABLE response  ("
-                    + "traitID INTEGER(4), "
+                    + "traitID VARCHAR(7), "
                     + "trait_name VARCHAR(75), "
                     + "genotype_name VARCHAR(75), "
                     + "genotypeID INTEGER(4), "
@@ -98,15 +99,15 @@ public class SqLiteQueries extends SqLiteHelper {
                     + "ontology_id VARCHAR(75))");
             //table results
             statement.executeUpdate("CREATE TABLE results ("
-                    + "traitID TEXT, "
-                    + "observationID TEXT, "
+                    + "observationID VARCHAR(7), "
+                    + "traitID VARCHAR(7), "
                     + "method_name TEXT, "
                     + "value REAL, "
                     + "sd REAL, "
                     + "rank REAL)");
             //table predictors
             statement.executeUpdate("CREATE TABLE responseVariables ("
-                    + "traitID INTEGER, "
+                    + "traitID VARCHAR(7), "
                     + "response TEXT)");
         } catch (SQLException e) {
             // if the error message is "out of memory",
@@ -210,7 +211,7 @@ public class SqLiteQueries extends SqLiteHelper {
      */
     public void loadExcelData(List<DataPointDataType> rdp,
             List<DataPointDataType> pdp,
-            List<String> responseVariables,
+            HashMap<String, String> responseVariables,
             String directory) throws SQLException, ClassNotFoundException {
         Connection db = openDatabase(directory);
         Statement statement = prepareStatement();
@@ -220,7 +221,7 @@ public class SqLiteQueries extends SqLiteHelper {
                     + "(genotypeID, genotype_name, predictorID, predictor_name, observation) "
                     + "values ('" + dataPointDataType.getGenotypeID()
                     + "','" + dataPointDataType.getGenotypeName().trim()
-                    + "','" + dataPointDataType.getObservationID()
+                    + "','" + dataPointDataType.getObservationID().trim()
                     + "','" + dataPointDataType.getObservationName().trim()
                     + "','" + dataPointDataType.getObservation() + "')");
         }
@@ -236,7 +237,7 @@ public class SqLiteQueries extends SqLiteHelper {
                     + "(genotypeID, genotype_name, traitID, trait_name, observation) "
                     + "values ('" + dataPointDataType.getGenotypeID()
                     + "','" + dataPointDataType.getGenotypeName().trim()
-                    + "','" + dataPointDataType.getObservationID()
+                    + "','" + dataPointDataType.getObservationID().trim()
                     + "','" + dataPointDataType.getObservationName().trim()
                     + "','" + dataPointDataType.getObservation() + "')");
         }
@@ -248,18 +249,18 @@ public class SqLiteQueries extends SqLiteHelper {
 
         System.out.println("resp lenght: " + responseVariables.size()
                 + " value: " + responseVariables.get(0));
-        int i = 1;
+
         db.setAutoCommit(true);
-        for (String responseVariable : responseVariables) {
-            System.out.println(i + " - Variable: " + responseVariable);
+        for (Map.Entry pairs : responseVariables.entrySet()) {
+            System.out.println(pairs.getKey() + " - Variable: " + pairs.getValue());
             statement.executeUpdate("INSERT INTO responseVariables "
                     + "(traitID, response) values "
-                    + "(" + i + ",'" + responseVariable + "')");
-            i++;
+                    + "('" + pairs.getKey() + "','" + pairs.getValue() + "')"
+                    );
         }
+
         //int[] variableStatus = statement.executeBatch();
         //statement.clearBatch();
-
         closeDatabase(db);
 
     }
@@ -346,14 +347,23 @@ public class SqLiteQueries extends SqLiteHelper {
         Connection db = openDatabase(directory);
         Statement statement = prepareStatement();
 
+        //TODO: query is extremely slow. Optimze!
         try {
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM results "
-                    + "WHERE response='" + responseVariable.trim() + "' "
-                    + "ORDER BY predictor, response, method_name");
+            ResultSet resultSet = statement.executeQuery("SELECT DISTINCT "
+                    + "observationID, r.traitID AS responseID, response, "
+                    + "predictor_name,method_name, value, sd, rank "
+                    + "FROM results r, responseVariables t, predictor p "
+                    + "WHERE r.traitID=t.traitID "
+                    + "AND r.observationID = p.predictorID "
+                    + "AND r.traitID='" + responseVariable.trim() + "' "
+                    + "ORDER BY observationID, r.traitID, method_name");
+            System.out.println("Response Variable; " + responseVariable);
             while (resultSet.next()) {
                 summaryResults = new SummaryResults(
-                        resultSet.getString("predictor"),
+                        resultSet.getString("responseID"),
                         resultSet.getString("response"),
+                        resultSet.getString("observationID"),
+                        resultSet.getString("predictor_name"),
                         resultSet.getString("method_name"),
                         resultSet.getDouble("value"),
                         resultSet.getDouble("sd"),
@@ -438,12 +448,15 @@ public class SqLiteQueries extends SqLiteHelper {
 
         try {
             ResultSet resultSet = statement.executeQuery("SELECT "
-                    //+ "response.genotype_name, "
+                    + "response.genotype_name AS genotype, "
                     + "response.observation AS resp, "
+                    + "traitname "
                     + "predictor.observation AS pred "
+                    + "predictor_name "
                     + "FROM predictor, response "
-                    + "WHERE response.genotype_name = predictor.genotype_name "
-                    + "AND predictor.variable_name LIKE "
+                    + "WHERE response.genotypeID = predictor.genotypeID "
+                    + "AND predictor.predictorID LIKE "
+                    //TODO: predictorID should start with p... Build a check for this?
                     + "'%" + preditor.trim() + "' "
                     + "ORDER BY pred, resp ");
 //            //FIXME: LIKE is temp fix for spaces at the beginning of the name in db.
@@ -455,13 +468,11 @@ public class SqLiteQueries extends SqLiteHelper {
             XYScatterDataType data;
             while (resultSet.next()) {
                 data = new XYScatterDataType();
-                //TODO: add genotypename to the query.
-                //data.setGenotypeName(resultSet.getString("genotype"));
                 data.setResponseValue(resultSet.getDouble("resp"));
-                data.setResponseVariable(response);
+                data.setResponseVariable(resultSet.getString("traitname"));
                 data.setPredictorValue(resultSet.getDouble("pred"));
-                data.setPredictorVariable(preditor);
-
+                data.setPredictorVariable(resultSet.getString("predictor_name"));
+                data.setGenotypeName(resultSet.getString("genotype"));
                 resultList.add(data);
 
                 i++;
@@ -477,17 +488,17 @@ public class SqLiteQueries extends SqLiteHelper {
         return resultList;
     }
 
-    public ArrayList<String> getResponseNames(String directory)
+    public HashMap<String, String> getResponseNames(String directory)
             throws SQLException, ClassNotFoundException {
-        ArrayList<String> result = new ArrayList<>();
+        HashMap<String, String> result = new HashMap<>();
         Connection db = openDatabase(directory);
         Statement statement = prepareStatement();
 
         try {
-            ResultSet rs = statement.executeQuery("SELECT response "
+            ResultSet rs = statement.executeQuery("SELECT * "
                     + "FROM responseVariables ");
             while (rs.next()) {
-                result.add(rs.getString("response"));
+                result.put(rs.getString("traitID"), rs.getString("response"));
             }
         } finally {
             closeDatabase(db);
