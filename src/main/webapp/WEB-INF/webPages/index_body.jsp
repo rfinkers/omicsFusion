@@ -11,8 +11,8 @@
 
 <s:text name="omicsFusion.home.text" />
 
-<s:form validate="false" action="/userRegistration/startSubmitWizard" id="form" />
-
-<sj:submit formIds="form" value="Start submission" button="true"/>
+<s:form validate="false" action="/userRegistration/startSubmitWizard" id="form">
+    <s:submit formIds="form" value="Start submission" cssClass="btn"  />
+</s:form>
 <br/>
 <s:text name="omicsFusion.lastUpdate"/>
