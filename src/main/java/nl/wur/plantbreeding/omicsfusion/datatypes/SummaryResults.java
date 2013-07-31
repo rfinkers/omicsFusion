@@ -49,6 +49,16 @@ public class SummaryResults {
     public SummaryResults() {
     }
 
+    /**
+     * Standard constructor to fill the data object.
+     *
+     * @param predictorVariable Name of the variable from the ~omics set.
+     * @param responseVariable Name of the trait.
+     * @param method Name of the method.
+     * @param mean
+     * @param sd
+     * @param rank
+     */
     public SummaryResults(String predictorVariable, String responseVariable,
             String method, Double mean, Double sd, Double rank) {
         if (predictorVariable.startsWith("`")
