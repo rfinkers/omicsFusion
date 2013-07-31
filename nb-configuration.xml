@@ -32,5 +32,6 @@
         <org-netbeans-modules-css-prep.sass_2e_mappings>/scss:/css</org-netbeans-modules-css-prep.sass_2e_mappings>
         <org-netbeans-modules-css-prep.sass_2e_enabled>false</org-netbeans-modules-css-prep.sass_2e_enabled>
         <org-netbeans-modules-web-clientproject-api.js_2e_libs_2e_folder>js</org-netbeans-modules-web-clientproject-api.js_2e_libs_2e_folder>
+        <netbeans.compile.on.save>none</netbeans.compile.on.save>
     </properties>
 </project-shared-configuration>
