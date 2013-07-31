@@ -26,7 +26,9 @@ import nl.wur.plantbreeding.omicsfusion.utils.Constants;
  * implement its own specification, but might inherit code from this class.
  *
  * @author Richard Finkers
- * @version 1.0
+ * @version 1.5
+ *
+ * 1.5: Updated for sqlite usage.
  */
 public class Analysis {
 
@@ -52,14 +54,14 @@ public class Analysis {
         rCode += "# Load the PredictResponse data sheet from the "
                 + "SQLite database.\n";
         rCode += "con <- dbConnect(\"SQLite\", dbname = \"omicsFusion.db\")\n";
-        rCode += "predQuery <- dbSendQuery(con, \"SELECT genotype_name, "
-                + "variable_name, observation FROM predictor\")\n";
+        rCode += "predQuery <- dbSendQuery(con, \"SELECT genotypeID, "
+                + "predictorID, observation FROM predictor\")\n";
         rCode += "predData <- fetch(predQuery, n = -1)\n";
         rCode += "dbClearResult(predQuery)\n";
-        rCode += "respQuery <- dbSendQuery(con, \"SELECT genotype_name, "
-                + "variable_name, observation "
+        rCode += "respQuery <- dbSendQuery(con, \"SELECT genotypeID, "
+                + "traitID, observation "
                 + "FROM response "
-                + "WHERE variable_name ='" + responseVariable.trim() + "'\")\n";
+                + "WHERE traitID ='" + responseVariable.trim() + "'\")\n";
         rCode += "respData <- fetch(respQuery, n = -1)\n";
         rCode += "dbClearResult(respQuery)\n";
         //Convert to matrix
@@ -126,6 +128,7 @@ public class Analysis {
     /**
      * Preprocess the data matrix.
      *
+     * @param responseVariable
      * @return R program code.
      */
     protected String preProcessMatrix(String responseVariable) {
@@ -245,29 +248,32 @@ public class Analysis {
             rCode += "R2_" + i + " <- matrix(data=NA,nrow=1,"
                     + "ncol=" + Constants.ITERATIONS + ")\n";
             rCode += "colnames(R2_" + i + ") <- coln\n";
-            if (analysisMethod.equals(Constants.EN)
-                    || analysisMethod.equals(Constants.RIDGE)
-                    || analysisMethod.equals(Constants.LASSO)) {
-                rCode += "lambda_"
-                        + i + " <- matrix(data = NA, nrow = 1, ncol = "
-                        + Constants.ITERATIONS + ")\n";
-                rCode += "colnames(lambda_" + i + ") <- coln\n";
-                //row 1 is always the intercept. This is always the first row.
-                rCode += "coefs_"
-                        + i + " <- matrix(data = NA,"
-                        + "nrow = dim(DesignMatrix)[2]+1,"
-                        + "ncol=" + Constants.ITERATIONS + ")\n";
-                rCode += "colnames(coefs_" + i + ") <- coln\n";
-                rCode += "rownames(coefs_" + i
-                        + ") <- c(\"intercept\",colnames(DesignMatrix))\n";
-            } else if (analysisMethod.equals(Constants.PCR)
-                    || analysisMethod.equals(Constants.SPLS)
-                    || analysisMethod.equals(Constants.PLS)) {
-                rCode += "coefs_" + i + " <- matrix(data = NA,"
-                        + "nrow = dim(DesignMatrix)[2],"
-                        + "ncol=" + Constants.ITERATIONS + ")\n";
-                rCode += "colnames(coefs_" + i + ") <- coln\n";
-                rCode += "rownames(coefs_" + i + ") <- colnames(DesignMatrix)\n";
+            switch (analysisMethod) {
+                case Constants.EN:
+                case Constants.RIDGE:
+                case Constants.LASSO:
+                    rCode += "lambda_"
+                            + i + " <- matrix(data = NA, nrow = 1, ncol = "
+                            + Constants.ITERATIONS + ")\n";
+                    rCode += "colnames(lambda_" + i + ") <- coln\n";
+                    //row 1 is always the intercept. This is always the first row.
+                    rCode += "coefs_"
+                            + i + " <- matrix(data = NA,"
+                            + "nrow = dim(DesignMatrix)[2]+1,"
+                            + "ncol=" + Constants.ITERATIONS + ")\n";
+                    rCode += "colnames(coefs_" + i + ") <- coln\n";
+                    rCode += "rownames(coefs_" + i
+                            + ") <- c(\"intercept\",colnames(DesignMatrix))\n";
+                    break;
+                case Constants.PCR:
+                case Constants.SPLS:
+                case Constants.PLS:
+                    rCode += "coefs_" + i + " <- matrix(data = NA,"
+                            + "nrow = dim(DesignMatrix)[2],"
+                            + "ncol=" + Constants.ITERATIONS + ")\n";
+                    rCode += "colnames(coefs_" + i + ") <- coln\n";
+                    rCode += "rownames(coefs_" + i + ") <- colnames(DesignMatrix)\n";
+                    break;
             }
             if (analysisMethod.equals(Constants.SPLS)) {
                 rCode += "eta_" + i + " <- matrix(data = NA, nrow = 1, ncol ="
@@ -343,22 +349,31 @@ public class Analysis {
                 + Constants.NUMBER_FOLDS_INNER + ")\n";
         for (int i = 0; i < Constants.NUMBER_FOLDS_OUTER; i++) {
             int j = i + 1;
-            if (analysisMethod.equals(Constants.EN)) {
-                rCode += "      ## Elastic Net Round: " + j + "\n";
-            } else if (analysisMethod.equals(Constants.LASSO)) {
-                rCode += "      ## Lasso Net Round: " + j + "\n";
-            } else if (analysisMethod.equals(Constants.RIDGE)) {
-                rCode += "      ## Ridge Round: " + j + "\n";
-            } else if (analysisMethod.equals(Constants.SVM)) {
-                rCode += "      ## SVN Round: " + j + "\n";
-            } else if (analysisMethod.equals(Constants.SPLS)) {
-                rCode += "      ## SPLS Round: " + j + "\n";
-            } else if (analysisMethod.equals(Constants.PCR)) {
-                rCode += "      ## PCR Round: " + j + "\n";
-            } else if (analysisMethod.equals(Constants.PCR)) {
-                rCode += "      ## PLS Round: " + j + "\n";
-            } else if (analysisMethod.equals(Constants.RF)) {
-                rCode += "      ## RF Round: " + j + "\n";
+            switch (analysisMethod) {
+                case Constants.EN:
+                    rCode += "      ## Elastic Net Round: " + j + "\n";
+                    break;
+                case Constants.LASSO:
+                    rCode += "      ## Lasso Net Round: " + j + "\n";
+                    break;
+                case Constants.RIDGE:
+                    rCode += "      ## Ridge Round: " + j + "\n";
+                    break;
+                case Constants.SVM:
+                    rCode += "      ## SVN Round: " + j + "\n";
+                    break;
+                case Constants.SPLS:
+                    rCode += "      ## SPLS Round: " + j + "\n";
+                    break;
+                case Constants.PCR:
+                    rCode += "      ## PCR Round: " + j + "\n";
+                    break;
+                case Constants.PLS:
+                    rCode += "      ## PLS Round: " + j + "\n";
+                    break;
+                case Constants.RF:
+                    rCode += "      ## RF Round: " + j + "\n";
+                    break;
             }
             rCode += "      ## Create predictor and response test and "
                     + "training sets\n";
@@ -375,19 +390,26 @@ public class Analysis {
                     + responseVariable.trim() + "[-trainingSet" + i + "]\n";
             //TODO: write trainingset to a file.
             rCode += "      ## Parameter optimalization\n";
-            if (analysisMethod.equals(Constants.EN)) {
-                rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"glmnet\", metric = \"RMSE\", tuneLength = 10, trControl = innerLoop)\n";
-            } else if (analysisMethod.equals(Constants.LASSO)) {
-                //TODO: function of tuneGrid? If there is a default on the other methods, perhaps we should code them anyway?
-                // tunegrid:
-                // .alpha depens on the method
-                rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"glmnet\", metric = \"RMSE\", tuneLength = 10, tuneGrid = data.frame(.lambda = seq(0, 1, by = 0.1), .alpha = 1), trControl = innerLoop)\n";
-            } else if (analysisMethod.equals(Constants.SVM)) {
-                rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"svmRadial\", metric = \"RMSE\", tuneLength = 10, trControl = innerLoop)\n";
-            } else if (analysisMethod.equals(Constants.PLS)) {
-                rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"pls\", metric = \"RMSE\", tuneLength = 10, trControl = innerLoop)\n";
-            } else if (analysisMethod.equals(Constants.RF) || analysisMethod.equals(Constants.SPLS) || analysisMethod.equals(Constants.RIDGE)) {
-                if (Constants.MAX_NUMBER_CPU > 2) {
+            switch (analysisMethod) {
+                case Constants.EN:
+                    rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"glmnet\", metric = \"RMSE\", tuneLength = 10, trControl = innerLoop)\n";
+                    break;
+                case Constants.LASSO:
+                    //TODO: function of tuneGrid? If there is a default on the other methods, perhaps we should code them anyway?
+                    // tunegrid:
+                    // .alpha depens on the method
+                    rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"glmnet\", metric = \"RMSE\", tuneLength = 10, tuneGrid = data.frame(.lambda = seq(0, 1, by = 0.1), .alpha = 1), trControl = innerLoop)\n";
+                    break;
+                case Constants.SVM:
+                    rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"svmRadial\", metric = \"RMSE\", tuneLength = 10, trControl = innerLoop)\n";
+                    break;
+                case Constants.PLS:
+                    rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"pls\", metric = \"RMSE\", tuneLength = 10, trControl = innerLoop)\n";
+                    break;
+                case Constants.RF:
+                case Constants.SPLS:
+                case Constants.RIDGE:
+                    if (Constants.MAX_NUMBER_CPU > 2) {
                     int workerCount = Constants.MAX_NUMBER_CPU - 1;
                     //TODO: start in the first itteration only? Then, move if statement to R level
                     //Required additional packages: foreach, iterators, codetools, Rmpi
@@ -396,74 +418,96 @@ public class Analysis {
                     rCode += "      cl <- startMPIcluster(count = " + workerCount + ", verbose = TRUE)\n";
                     rCode += "      registerDoMPI(cl)\n";
                 }
-                if (analysisMethod.equals(Constants.RF)) {
-                    rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"rf\", metric = \"RMSE\", tuneLength = 10, trControl = innerLoop)\n";
-                } else if (analysisMethod.equals(Constants.SPLS)) {
-                    rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"spls\", metric = \"RMSE\", tuneLength = 10, trControl = innerLoop)\n";
-                } else if (analysisMethod.equals(Constants.RIDGE)) {
-                    rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"glmnet\", metric = \"RMSE\", tuneLength = 10, tuneGrid = data.frame(.lambda = seq(0, 100, by = 0.1), .alpha = 0), trControl = innerLoop)\n";
-                }
-                if (Constants.MAX_NUMBER_CPU > 2) {
-                    //TODO: stop in the last itteration only?
-                    rCode += "      closeCluster(cl)\n";
-                }
-            } else if (analysisMethod.equals(Constants.PCR)) {
-                // tuneLenght is an arbitrary value. Can be optomized by method. Now just choosen a value. 10 is a default of the method. PCR somtimes requires more.
-                // if you choose 10, you cannot get more components than 10?
-                rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"pcr\", metric = \"RMSE\", tuneLength = 50, trControl = innerLoop)\n";
+                    if (analysisMethod.equals(Constants.RF)) {
+                        rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"rf\", metric = \"RMSE\", tuneLength = 10, trControl = innerLoop)\n";
+                    } else if (analysisMethod.equals(Constants.SPLS)) {
+                        rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"spls\", metric = \"RMSE\", tuneLength = 10, trControl = innerLoop)\n";
+                    } else if (analysisMethod.equals(Constants.RIDGE)) {
+                        rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"glmnet\", metric = \"RMSE\", tuneLength = 10, tuneGrid = data.frame(.lambda = seq(0, 100, by = 0.1), .alpha = 0), trControl = innerLoop)\n";
+                    }
+                    if (Constants.MAX_NUMBER_CPU > 2) {
+                        //TODO: stop in the last itteration only?
+                        rCode += "      closeCluster(cl)\n";
+                    }
+                    break;
+                case Constants.PCR:
+                    // tuneLenght is an arbitrary value. Can be optomized by method. Now just choosen a value. 10 is a default of the method. PCR somtimes requires more.
+                    // if you choose 10, you cannot get more components than 10?
+                    rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"pcr\", metric = \"RMSE\", tuneLength = 50, trControl = innerLoop)\n";
+                    break;
             }
             //TODO: are the different methods to obtain y_fit necessary?
             //TODO: what is the (different) meaning for coefs? contains .lamda, .k or .ncomp depending on the method.
             //TODO: why somethimes type="response" and other times type="coefficient" in predecit function?
             //TODO: overall. what is the impact of the difference used within the functions on the overall comparability.
             //parameter optimalization & back-rediction of the outer training set and coefficients under that optimized model.
-            if (analysisMethod.equals(Constants.EN)
-                    || analysisMethod.equals(Constants.LASSO)
-                    || analysisMethod.equals(Constants.RIDGE)) {
-                if (analysisMethod.equals(Constants.EN)) {
-                    rCode += "      frac_" + i + "[, index] <- fit_" + i + "$finalModel$tuneValue$.alpha\n";
-                    rCode += "      lambda_" + i + "[, index] <- fit_" + i + "$finalModel$tuneValue$.lambda\n";
-                } else if (analysisMethod.equals(Constants.LASSO) || analysisMethod.equals(Constants.RIDGE)) {
-                    rCode += "      lambda_" + i + "[, index] <- fit_" + i + "$bestTune$.lambda\n";
+            switch (analysisMethod) {
+                case Constants.EN:
+                case Constants.LASSO:
+                case Constants.RIDGE:
+                    switch (analysisMethod) {
+                    case Constants.EN:
+                        rCode += "      frac_" + i + "[, index] <- fit_" + i + "$finalModel$tuneValue$.alpha\n";
+                        rCode += "      lambda_" + i + "[, index] <- fit_" + i + "$finalModel$tuneValue$.lambda\n";
+                        break;
+                    case Constants.LASSO:
+                    case Constants.RIDGE:
+                        rCode += "      lambda_" + i + "[, index] <- fit_" + i + "$bestTune$.lambda\n";
+                        break;
                 }
-                rCode += "      coefs_" + i + "[, index] <- as.matrix(coef(fit_" + i + "$finalModel, s = fit_" + i + "$finalModel$tuneValue$.lambda))\n";
-                //predection on outer training set.
-                rCode += "      preds_" + i + " <- predict(fit_" + i + "$finalModel, newx = predictorTrainSet" + i + ", s = fit_" + i + "$finalModel$tuneValue$.lambda, type = \"response\")\n";
-                rCode += "      y_fit_" + i + " <- preds_" + i + "[, 1]\n";
-            } else if (analysisMethod.equals(Constants.PCR) || analysisMethod.equals(Constants.PLS)) {
-                rCode += "      coefs_" + i + "[, index] <- coef(fit_" + i + "$finalModel, ncomp = fit_" + i + "$finalModel$tuneValue$.ncomp)\n";
-                rCode += "      y_fit_" + i + " <- predict(fit_" + i + "$finalModel, ncomp = fit_" + i + "$finalModel$tuneValue$.ncomp)\n";
-                rCode += "      opt_comp_" + i + "[, index] <- fit_" + i + "$finalModel$tuneValue$.ncomp\n";
-            } else if (analysisMethod.equals(Constants.RF)) {
-                rCode += "      y_fit_" + i + " <- predict(fit_" + i + "$finalModel)\n";
-                rCode += "      mtry_" + i + "[, index] <- fit_" + i + "$finalModel$tuneValue$.mtry\n";
-                rCode += "      imp_" + i + "[, index] <- fit_" + i + "$finalModel$importance\n";
-            } else if (analysisMethod.equals(Constants.SVM)) {
-                rCode += "      y_fit_" + i + " <- predict(fit_" + i + "$finalModel)\n";
-                rCode += "      tune_cost_" + i + "[, index] <- fit_" + i + "$bestTune$.C\n";
-                rCode += "      tune_sigma_" + i + "[, index] <- fit_" + i + "$bestTune$.sigma\n";
-            } else if (analysisMethod.equals(Constants.SPLS)) {
-                rCode += "      y_fit_" + i + " <- predict(fit_" + i + "$finalModel)\n";
-                rCode += "      coefs_" + i + "[, index] <- predict(fit_" + i + "$finalModel, type = \"coefficient\", fit_" + i + "$finalModel$tuneValue$.eta, fit_" + i + "$finalModel$tuneValue$.K)\n";
-                rCode += "      K_" + i + "[, index] <- fit_" + i + "$finalModel$tuneValue$.K\n";
-                rCode += "      eta_" + i + "[, index] <- fit_" + i + "$finalModel$tuneValue$.eta\n";
+                    rCode += "      coefs_" + i + "[, index] <- as.matrix(coef(fit_" + i + "$finalModel, s = fit_" + i + "$finalModel$tuneValue$.lambda))\n";
+                    //predection on outer training set.
+                    rCode += "      preds_" + i + " <- predict(fit_" + i + "$finalModel, newx = predictorTrainSet" + i + ", s = fit_" + i + "$finalModel$tuneValue$.lambda, type = \"response\")\n";
+                    rCode += "      y_fit_" + i + " <- preds_" + i + "[, 1]\n";
+                    break;
+                case Constants.PCR:
+                case Constants.PLS:
+                    rCode += "      coefs_" + i + "[, index] <- coef(fit_" + i + "$finalModel, ncomp = fit_" + i + "$finalModel$tuneValue$.ncomp)\n";
+                    rCode += "      y_fit_" + i + " <- predict(fit_" + i + "$finalModel, ncomp = fit_" + i + "$finalModel$tuneValue$.ncomp)\n";
+                    rCode += "      opt_comp_" + i + "[, index] <- fit_" + i + "$finalModel$tuneValue$.ncomp\n";
+                    break;
+                case Constants.RF:
+                    rCode += "      y_fit_" + i + " <- predict(fit_" + i + "$finalModel)\n";
+                    rCode += "      mtry_" + i + "[, index] <- fit_" + i + "$finalModel$tuneValue$.mtry\n";
+                    rCode += "      imp_" + i + "[, index] <- fit_" + i + "$finalModel$importance\n";
+                    break;
+                case Constants.SVM:
+                    rCode += "      y_fit_" + i + " <- predict(fit_" + i + "$finalModel)\n";
+                    rCode += "      tune_cost_" + i + "[, index] <- fit_" + i + "$bestTune$.C\n";
+                    rCode += "      tune_sigma_" + i + "[, index] <- fit_" + i + "$bestTune$.sigma\n";
+                    break;
+                case Constants.SPLS:
+                    rCode += "      y_fit_" + i + " <- predict(fit_" + i + "$finalModel)\n";
+                    rCode += "      coefs_" + i + "[, index] <- predict(fit_" + i + "$finalModel, type = \"coefficient\", fit_" + i + "$finalModel$tuneValue$.eta, fit_" + i + "$finalModel$tuneValue$.K)\n";
+                    rCode += "      K_" + i + "[, index] <- fit_" + i + "$finalModel$tuneValue$.K\n";
+                    rCode += "      eta_" + i + "[, index] <- fit_" + i + "$finalModel$tuneValue$.eta\n";
+                    break;
             }
             //R2 calculated on the outer training set.
             rCode += "      R2_" + i + "[, index] <- (cor(responseTrainSet" + i + ", y_fit_" + i + ")^2) * 100\n";//TODO: On how many samples is this R2 calculated?
             rCode += "      ## Outer test set.\n";
             //Outer test set
-            if (analysisMethod.equals(Constants.EN) || analysisMethod.equals(Constants.LASSO) || analysisMethod.equals(Constants.RIDGE)) {
-                rCode += "      bhModels_" + i + " <- list(glmnet = fit_" + i + ")\n";
-            } else if (analysisMethod.equals(Constants.PCR)) {
-                rCode += "      bhModels_" + i + " <- list(pcr = fit_" + i + ")\n";
-            } else if (analysisMethod.equals(Constants.PLS)) {
-                rCode += "      bhModels_" + i + " <- list(pls = fit_" + i + ")\n";
-            } else if (analysisMethod.equals(Constants.RF)) {
-                rCode += "      bhModels_" + i + " <- list(rf = fit_" + i + ")\n";
-            } else if (analysisMethod.equals(Constants.SVM)) {
-                rCode += "      bhModels_" + i + " <- list(svmRadial = fit_" + i + ")\n";
-            } else if (analysisMethod.equals(Constants.SPLS)) {
-                rCode += "      bhModels_" + i + " <- list(spls = fit_" + i + ")\n";
+            switch (analysisMethod) {
+                case Constants.EN:
+                case Constants.LASSO:
+                case Constants.RIDGE:
+                    rCode += "      bhModels_" + i + " <- list(glmnet = fit_" + i + ")\n";
+                    break;
+                case Constants.PCR:
+                    rCode += "      bhModels_" + i + " <- list(pcr = fit_" + i + ")\n";
+                    break;
+                case Constants.PLS:
+                    rCode += "      bhModels_" + i + " <- list(pls = fit_" + i + ")\n";
+                    break;
+                case Constants.RF:
+                    rCode += "      bhModels_" + i + " <- list(rf = fit_" + i + ")\n";
+                    break;
+                case Constants.SVM:
+                    rCode += "      bhModels_" + i + " <- list(svmRadial = fit_" + i + ")\n";
+                    break;
+                case Constants.SPLS:
+                    rCode += "      bhModels_" + i + " <- list(spls = fit_" + i + ")\n";
+                    break;
             }
             rCode += "      allPred_" + i + " <- extractPrediction(bhModels_" + i + ", testX = predictorTestSet" + i + ", testY = responseTestSet" + i + ")\n";
             rCode += "      testPred_" + i + " <- subset(allPred_" + i + ", dataType == \"Test\")\n";
@@ -471,20 +515,28 @@ public class Analysis {
             rCode += "      sorted_" + i + " <- as.matrix(by(testPred_" + i + ", list(model = testPred_" + i + "$model), function(x) postResample(x$pred, x$obs)))\n";
             //test contains the MSEP and fraction
             //TODO: colnames
-            if (analysisMethod.equals(Constants.EN) || analysisMethod.equals(Constants.LASSO) || analysisMethod.equals(Constants.RIDGE)) {
-                rCode += "      test_" + i + "[index, ] <- sorted_" + i + "[, 1]$glmnet\n\n";
-            } else if (analysisMethod.equals(Constants.PCR)) {
-                rCode += "      test_" + i + "[index, ] <- sorted_" + i + "[, 1]$pcr\n\n";
-            } else if (analysisMethod.equals(Constants.PLS)) {
-                rCode += "      test_" + i + "[index, ] <- sorted_" + i + "[, 1]$pls\n\n";
-            } else if (analysisMethod.equals(Constants.RF)) {
-                rCode += "      test_" + i + "[index, ] <- sorted_" + i + "[, 1]$rf\n\n";
-            } else if (analysisMethod.equals(Constants.SVM)) {
-                rCode += "      test_" + i + "[index, ] <- sorted_" + i + "[, 1]$svm\n\n";
-            } else if (analysisMethod.equals(Constants.SPLS)) {
-                rCode += "      test_" + i + "[index, ] <- sorted_" + i + "[, 1]$spls\n\n";
+            switch (analysisMethod) {
+                case Constants.EN:
+                case Constants.LASSO:
+                case Constants.RIDGE:
+                    rCode += "      test_" + i + "[index, ] <- sorted_" + i + "[, 1]$glmnet\n\n";
+                    break;
+                case Constants.PCR:
+                    rCode += "      test_" + i + "[index, ] <- sorted_" + i + "[, 1]$pcr\n\n";
+                    break;
+                case Constants.PLS:
+                    rCode += "      test_" + i + "[index, ] <- sorted_" + i + "[, 1]$pls\n\n";
+                    break;
+                case Constants.RF:
+                    rCode += "      test_" + i + "[index, ] <- sorted_" + i + "[, 1]$rf\n\n";
+                    break;
+                case Constants.SVM:
+                    rCode += "      test_" + i + "[index, ] <- sorted_" + i + "[, 1]$svm\n\n";
+                    break;
+                case Constants.SPLS:
+                    rCode += "      test_" + i + "[index, ] <- sorted_" + i + "[, 1]$spls\n\n";
+                    break;
             }
-            //TODO: cleanup of unused objects?
         }
         //TODO: Calculate R2, for the previous sets, after finishing this 10 folds? Combine all 10 testPred_i and
         rCode += "}\n\n";

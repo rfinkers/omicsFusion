@@ -36,9 +36,9 @@ public class Ridge extends Analysis {
     }
 
     /**
-     * {
      *
-     * @inheritDoc}
+     *
+     * {@inheritDoc}
      */
     @Override
     protected String getRequiredLibraries() {
