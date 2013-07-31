@@ -1,10 +1,9 @@
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="sj" uri="/struts-jquery-tags"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml">
+<%@ taglib prefix="sb" uri="/struts-bootstrap-tags" %>
+<!DOCTYPE html>
+<html lang="en">
     <head>
         <!-- page title -->
         <title><tiles:insertAttribute name="title" /></title>
@@ -29,6 +28,9 @@
         <s:head/>
         <!-- javascript. jQuery/ jQueryUI libraries are loaded this tag instead of the script element. -->
         <sj:head jqueryui="true" loadAtOnce="true" jquerytheme="cupertino" loadFromGoogle="true" />
+        <!-- bootstrap plugin -->
+        <sb:head includeScripts="true" includeScriptsValidation="true"/>
+
         <!-- other -->
         <script type="text/javascript" src="<s:url value="/js/jquery.blockUI.2.57.js"/>"></script>
         <script type="text/javascript" src="<s:url value="/js/jquery.breeDB.0.1.js"/>"></script>
