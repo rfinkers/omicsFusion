@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import nl.wur.plantbreeding.logic.sqlite.SqLiteQueries;
 import nl.wur.plantbreeding.omicsfusion.datatypes.DataPointDataType;
@@ -45,7 +46,8 @@ public class UploadDataSheets extends ManipulateExcelSheet {
      * @param predictorExcelFile
      * @param predictorType
      * @param directory
-     * @throws SQLiteException
+     * @throws java.sql.SQLException
+     * @throws java.lang.ClassNotFoundException
      */
     public static void uploadExcelSheets(File responseExcelFile,
             String responseType, File predictorExcelFile, String predictorType,
@@ -76,9 +78,11 @@ public class UploadDataSheets extends ManipulateExcelSheet {
         Sheet predictorSheet = null;
 
         //First row contains the variable
+        //TODO: NPE check
         Sheet responseSheet = responseWorkbook.getSheetAt(0);
         predictorSheet = predictorWorkbook.getSheetAt(0);
         Row responseHeaderRow = responseSheet.getRow(0);
+        //TODO: miss one row!. +1 leads to NPE!
         int responseRowLenght = responseHeaderRow.getLastCellNum();
         Row predictorHeaderRow = predictorSheet.getRow(0);
         int predictorRowLength = predictorHeaderRow.getLastCellNum();
@@ -100,8 +104,8 @@ public class UploadDataSheets extends ManipulateExcelSheet {
         }
         //Data (first column genotype, other columns data).
         //parse the rest of the data.
-        rdp = new ArrayList<DataPointDataType>();
-        List<String> resp = new ArrayList<String>();
+        rdp = new ArrayList<>();
+        HashMap<String, String> resp = new HashMap<>();
 
         for (int i = responseRowCounter;
                 i < responseSheet.getLastRowNum(); i++) {
@@ -110,7 +114,7 @@ public class UploadDataSheets extends ManipulateExcelSheet {
             Double observation;
             String genotype
                     = responseSheet.getRow(i).getCell(0).getStringCellValue().trim();
-
+//TODO: Check if all rows are parsed to the DB! (0 ref vs. 1 ref?)
             for (int j = 1; j < responseRowLenght; j++) {
                 if (!responseHeaderRow.getCell(j).getStringCellValue().equals("")) {
                     trait = responseHeaderRow.getCell(j).getStringCellValue();
@@ -124,16 +128,16 @@ public class UploadDataSheets extends ManipulateExcelSheet {
                     } else {
                         observation = Double.NaN;
                     }
-                    rdp.add(new DataPointDataType(genotype, trait, observation));
+                    rdp.add(new DataPointDataType(genotype, i, trait, "t" + j, observation));
                     if (i == responseRowCounter) {
                         System.out.println("Trait: " + trait);
-                        resp.add(trait);
+                        resp.put("t" + j, trait);
                     }
                 }
             }
         }
 
-        List<DataPointDataType> pdp = new ArrayList<DataPointDataType>();
+        List<DataPointDataType> pdp = new ArrayList<>();
 
         //TODO: Check this logic, seems redundant!
         for (int i = predictorRowCounter;
@@ -155,7 +159,7 @@ public class UploadDataSheets extends ManipulateExcelSheet {
                     } else {
                         value = Double.NaN;
                     }
-                    pdp.add(new DataPointDataType(genotype, header, value));
+                    pdp.add(new DataPointDataType(genotype, i, header, "p" + j, value));
                 }
 
             }
