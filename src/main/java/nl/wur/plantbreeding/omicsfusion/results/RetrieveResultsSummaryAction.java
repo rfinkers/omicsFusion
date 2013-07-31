@@ -19,11 +19,12 @@ import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import nl.wur.plantbreeding.logic.sqlite.SqLiteQueries;
-import nl.wur.plantbreeding.omicsfusion.datatypes.CsvSummaryDataType;
+import nl.wur.plantbreeding.omicsfusion.datatypes.SummaryDataType;
 import nl.wur.plantbreeding.omicsfusion.datatypes.SummaryResults;
 import nl.wur.plantbreeding.omicsfusion.utils.Constants;
 import nl.wur.plantbreeding.omicsfusion.utils.ServletUtils;
@@ -59,16 +60,16 @@ public class RetrieveResultsSummaryAction
     @Override
     public String execute() throws Exception {
         //Empty result objects for all possible methods
-        ArrayList<CsvSummaryDataType> lasso = null;
-        ArrayList<CsvSummaryDataType> ridge = null;
-        ArrayList<CsvSummaryDataType> rf = null;
-        ArrayList<CsvSummaryDataType> en = null;
-        ArrayList<CsvSummaryDataType> pcr = null;
-        ArrayList<CsvSummaryDataType> pls = null;
-        ArrayList<CsvSummaryDataType> spls = null;
-        ArrayList<CsvSummaryDataType> svm = null;
-        ArrayList<CsvSummaryDataType> univariate_p = null;
-        ArrayList<CsvSummaryDataType> univariate_bh = null;
+        ArrayList<SummaryDataType> lasso = null;
+        ArrayList<SummaryDataType> ridge = null;
+        ArrayList<SummaryDataType> rf = null;
+        ArrayList<SummaryDataType> en = null;
+        ArrayList<SummaryDataType> pcr = null;
+        ArrayList<SummaryDataType> pls = null;
+        ArrayList<SummaryDataType> spls = null;
+        ArrayList<SummaryDataType> svm = null;
+        ArrayList<SummaryDataType> univariate_p = null;
+        ArrayList<SummaryDataType> univariate_bh = null;
 
         //Location of the results directory
         String resultsDirectory
@@ -81,7 +82,7 @@ public class RetrieveResultsSummaryAction
         }
 
         //Get the name of the response from the SQLite databse.
-        ArrayList<String> responseNames = null;
+        HashMap<String, String> responseNames = null;
         try {
             SqLiteQueries slq = new SqLiteQueries();
             responseNames
@@ -92,19 +93,27 @@ public class RetrieveResultsSummaryAction
         }
 
         String responseName = "";
+        String responseID = "";
         if (responseNames == null || responseNames.isEmpty()) {
             addActionError(getText("error.no.responsevariable"));
             return ERROR;
         } else if (responseNames.size() == 1) {
-            responseName = responseNames.get(0);
+            for (Map.Entry pairs : responseNames.entrySet()) {
+                responseName = pairs.getValue().toString();
+                responseID = pairs.getKey().toString();
+            }
         } else {
             //TODO: implment for > 1 response variable.
-            responseName = responseNames.get(0);
+            //TODO: This method is redundant with RunAnalysisAction. Optimize!
+            for (Map.Entry pairs : responseNames.entrySet()) {
+                responseName = pairs.getValue().toString();
+                responseID = pairs.getKey().toString();
+            }
         }
 
-        HashMap<String, ArrayList<CsvSummaryDataType>> methResults
+        HashMap<String, ArrayList<SummaryDataType>> methResults
                 = getMethodsWithResultsSummaryFilesFromDB(getSessionId(),
-                resultsDirectory, responseName);
+                resultsDirectory, responseID);
 
         LOG.log(Level.INFO, "Methods: {0}", methResults.size());
 
@@ -203,7 +212,7 @@ public class RetrieveResultsSummaryAction
         sortRankArray(rank);
 
         //concatenate the HTML table.
-        String table = getHtmlTableString(oldResultRows, responseName,
+        String table = getHtmlTableString(oldResultRows, responseName, responseID,
                 methResults, rank, univariate_p, univariate_bh, lasso, svm,
                 pcr, pls, ridge, rf, en, spls);
 
@@ -219,18 +228,20 @@ public class RetrieveResultsSummaryAction
         return SUCCESS;
     }
 
-    private String getHtmlTableString(int oldResultRows, String responseName,
-            HashMap<String, ArrayList<CsvSummaryDataType>> methResults,
-            int[][] rank, ArrayList<CsvSummaryDataType> univariate_p,
-            ArrayList<CsvSummaryDataType> univariate_bh,
-            ArrayList<CsvSummaryDataType> lasso,
-            ArrayList<CsvSummaryDataType> svm,
-            ArrayList<CsvSummaryDataType> pcr,
-            ArrayList<CsvSummaryDataType> pls,
-            ArrayList<CsvSummaryDataType> ridge,
-            ArrayList<CsvSummaryDataType> rf,
-            ArrayList<CsvSummaryDataType> en,
-            ArrayList<CsvSummaryDataType> spls) {
+    private String getHtmlTableString(int oldResultRows,
+            String responseName,
+            String responseID,
+            HashMap<String, ArrayList<SummaryDataType>> methResults,
+            int[][] rank, ArrayList<SummaryDataType> univariate_p,
+            ArrayList<SummaryDataType> univariate_bh,
+            ArrayList<SummaryDataType> lasso,
+            ArrayList<SummaryDataType> svm,
+            ArrayList<SummaryDataType> pcr,
+            ArrayList<SummaryDataType> pls,
+            ArrayList<SummaryDataType> ridge,
+            ArrayList<SummaryDataType> rf,
+            ArrayList<SummaryDataType> en,
+            ArrayList<SummaryDataType> spls) {
         String baseURL = request.getContextPath();
         DecimalFormat df = new DecimalFormat("#.###");
         //We want an counter for overall rank of the response variable.
@@ -287,49 +298,64 @@ public class RetrieveResultsSummaryAction
      * @return
      */
     private String getHtmlTableRowString(int[][] rank, int i,
-            HashMap<String, ArrayList<CsvSummaryDataType>> methResults,
-            ArrayList<CsvSummaryDataType> univariate_p,
-            ArrayList<CsvSummaryDataType> univariate_bh,
-            ArrayList<CsvSummaryDataType> lasso,
-            ArrayList<CsvSummaryDataType> svm,
-            ArrayList<CsvSummaryDataType> pcr,
-            ArrayList<CsvSummaryDataType> pls,
-            ArrayList<CsvSummaryDataType> ridge,
-            ArrayList<CsvSummaryDataType> rf,
-            ArrayList<CsvSummaryDataType> en,
-            ArrayList<CsvSummaryDataType> spls,
+            HashMap<String, ArrayList<SummaryDataType>> methResults,
+            ArrayList<SummaryDataType> univariate_p,
+            ArrayList<SummaryDataType> univariate_bh,
+            ArrayList<SummaryDataType> lasso,
+            ArrayList<SummaryDataType> svm,
+            ArrayList<SummaryDataType> pcr,
+            ArrayList<SummaryDataType> pls,
+            ArrayList<SummaryDataType> ridge,
+            ArrayList<SummaryDataType> rf,
+            ArrayList<SummaryDataType> en,
+            ArrayList<SummaryDataType> spls,
             String baseURL, int negativeCounter, DecimalFormat df) {
         int element = rank[i][0];
         String row = "<tr align='right'>";
         row += "<td>";
         String predictorVariable = "";
+        String predictorVariableID = "";
         //Only add the rowname once (from the first available result set).
         if (methResults.get(Constants.UNIVARIATE) != null) {
-            predictorVariable = univariate_p.get(element).getPredictorVariable();
+            predictorVariable
+                    = univariate_p.get(element).getPredictorVariable();
+            predictorVariableID
+                    = univariate_p.get(element).getPredictorVariableID();
         } else if (methResults.get(Constants.BH) != null) {
-            predictorVariable = univariate_bh.get(element).getPredictorVariable();
+            predictorVariable
+                    = univariate_bh.get(element).getPredictorVariable();
+            predictorVariableID
+                    = univariate_bh.get(element).getPredictorVariableID();
         } else if (methResults.get(Constants.RF) != null) {
             predictorVariable = lasso.get(element).getPredictorVariable();
+            predictorVariableID = lasso.get(element).getPredictorVariableID();
         } else if (methResults.get(Constants.SVM) != null) {
             predictorVariable = svm.get(element).getPredictorVariable();
+            predictorVariableID = svm.get(element).getPredictorVariableID();
         } else if (methResults.get(Constants.PCR) != null) {
             predictorVariable = pcr.get(element).getPredictorVariable();
+            predictorVariableID = pcr.get(element).getPredictorVariableID();
         } else if (methResults.get(Constants.PLS) != null) {
             predictorVariable = pls.get(element).getPredictorVariable();
+            predictorVariableID = pls.get(element).getPredictorVariableID();
         } else if (methResults.get(Constants.RIDGE) != null) {
             predictorVariable = ridge.get(element).getPredictorVariable();
+            predictorVariableID = ridge.get(element).getPredictorVariableID();
         } else if (methResults.get(Constants.LASSO) != null) {
             predictorVariable = rf.get(element).getPredictorVariable();
+            predictorVariableID = rf.get(element).getPredictorVariableID();
         } else if (methResults.get(Constants.EN) != null) {
             predictorVariable = en.get(element).getPredictorVariable();
+            predictorVariableID = en.get(element).getPredictorVariableID();
         } else if (methResults.get(Constants.SPLS) != null) {
             predictorVariable = spls.get(element).getPredictorVariable();
+            predictorVariableID = spls.get(element).getPredictorVariableID();
         }
 
         //table row annotation & url
         //TODO: can we use <s:url> instead?
         row += "<a href='" + baseURL + "/results/predRespXYScatter?predictor="
-                + predictorVariable
+                + predictorVariableID
                 //+ "&response=traitName&session=" + getSessionId()
                 + "'>"
                 + predictorVariable + " (" + negativeCounter + ")</a>";
@@ -417,7 +443,7 @@ public class RetrieveResultsSummaryAction
     }
 
     private String getHtmlTableHeaderString(String responseName,
-            HashMap<String, ArrayList<CsvSummaryDataType>> methResults) {
+            HashMap<String, ArrayList<SummaryDataType>> methResults) {
         //TODO: resource bundle
         //TODO: title back to href! with implementation of specific pages
         String table = "<thead>\n";
@@ -486,16 +512,16 @@ public class RetrieveResultsSummaryAction
      * @return The mean ranks of the response variables.
      */
     private int[][] getMeanRank(int oldResultRows,
-            HashMap<String, ArrayList<CsvSummaryDataType>> methResults,
-            ArrayList<CsvSummaryDataType> lasso,
-            ArrayList<CsvSummaryDataType> ridge,
-            ArrayList<CsvSummaryDataType> rf,
-            ArrayList<CsvSummaryDataType> pcr,
-            ArrayList<CsvSummaryDataType> pls,
-            ArrayList<CsvSummaryDataType> spls,
-            ArrayList<CsvSummaryDataType> svm,
-            ArrayList<CsvSummaryDataType> en,
-            ArrayList<CsvSummaryDataType> univariate_p) {
+            HashMap<String, ArrayList<SummaryDataType>> methResults,
+            ArrayList<SummaryDataType> lasso,
+            ArrayList<SummaryDataType> ridge,
+            ArrayList<SummaryDataType> rf,
+            ArrayList<SummaryDataType> pcr,
+            ArrayList<SummaryDataType> pls,
+            ArrayList<SummaryDataType> spls,
+            ArrayList<SummaryDataType> svm,
+            ArrayList<SummaryDataType> en,
+            ArrayList<SummaryDataType> univariate_p) {
         //TODO: add mean rank and use this for sorting (or instead of for loop?).
         int[][] rank = new int[oldResultRows][2];
         for (int i = 0; i < oldResultRows; i++) {
@@ -586,13 +612,13 @@ public class RetrieveResultsSummaryAction
      *
      * @param results
      */
-    private void addTableBackgroundColors(ArrayList<CsvSummaryDataType> results,
+    private void addTableBackgroundColors(ArrayList<SummaryDataType> results,
             boolean inverse) {
         //Initialize to the extreme values.
         Double min = Double.POSITIVE_INFINITY;
         Double max = Double.NEGATIVE_INFINITY;
         //Find the absolute min and max for this dataset.
-        for (CsvSummaryDataType csvSummaryDataType : results) {
+        for (SummaryDataType csvSummaryDataType : results) {
             Double value = csvSummaryDataType.getMean();
             if (Math.abs(value) < min) {
                 min = value;
@@ -602,17 +628,27 @@ public class RetrieveResultsSummaryAction
             }
         }
         //Create a table (with background colors).
-        for (CsvSummaryDataType csvSummaryDataType : results) {
+        for (SummaryDataType csvSummaryDataType : results) {
             csvSummaryDataType.setHtmlColor(getBackgroundColor(
                     csvSummaryDataType.getMean(), min, max, inverse));
         }
     }
 
-    private HashMap<String, ArrayList<CsvSummaryDataType>> getMethodsWithResultsSummaryFilesFromDB(
+    /**
+     * Obtain methods with results from the database.
+     *
+     * @param sessionID
+     * @param resultsDirectory
+     * @param responseVariable
+     * @return
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
+    private HashMap<String, ArrayList<SummaryDataType>> getMethodsWithResultsSummaryFilesFromDB(
             String sessionID, String resultsDirectory, String responseVariable)
             throws SQLException, ClassNotFoundException {
-        HashMap<String, ArrayList<CsvSummaryDataType>> results
-                = new HashMap<String, ArrayList<CsvSummaryDataType>>();
+        HashMap<String, ArrayList<SummaryDataType>> results
+                = new HashMap<>();
 
         if (sessionID == null || sessionID.isEmpty()) {
             addActionError(getText("errors.sessionID.required"));
@@ -629,55 +665,57 @@ public class RetrieveResultsSummaryAction
         LOG.log(Level.INFO, "Database Size: {0}", readSummaryResults.size());
 
         //add results to the different lists
-        ArrayList<CsvSummaryDataType> lasso
-                = new ArrayList<CsvSummaryDataType>();
-        ArrayList<CsvSummaryDataType> ridge
-                = new ArrayList<CsvSummaryDataType>();
-        ArrayList<CsvSummaryDataType> rf
-                = new ArrayList<CsvSummaryDataType>();
-        ArrayList<CsvSummaryDataType> en
-                = new ArrayList<CsvSummaryDataType>();
-        ArrayList<CsvSummaryDataType> pcr
-                = new ArrayList<CsvSummaryDataType>();
-        ArrayList<CsvSummaryDataType> pls
-                = new ArrayList<CsvSummaryDataType>();
-        ArrayList<CsvSummaryDataType> spls
-                = new ArrayList<CsvSummaryDataType>();
-        ArrayList<CsvSummaryDataType> svm
-                = new ArrayList<CsvSummaryDataType>();
-        ArrayList<CsvSummaryDataType> univariate_p
-                = new ArrayList<CsvSummaryDataType>();
-        ArrayList<CsvSummaryDataType> univariate_bh
-                = new ArrayList<CsvSummaryDataType>();
+        ArrayList<SummaryDataType> lasso = new ArrayList<>();
+        ArrayList<SummaryDataType> ridge = new ArrayList<>();
+        ArrayList<SummaryDataType> rf = new ArrayList<>();
+        ArrayList<SummaryDataType> en = new ArrayList<>();
+        ArrayList<SummaryDataType> pcr = new ArrayList<>();
+        ArrayList<SummaryDataType> pls = new ArrayList<>();
+        ArrayList<SummaryDataType> spls = new ArrayList<>();
+        ArrayList<SummaryDataType> svm = new ArrayList<>();
+        ArrayList<SummaryDataType> univariate_p = new ArrayList<>();
+        ArrayList<SummaryDataType> univariate_bh = new ArrayList<>();
 
-        CsvSummaryDataType dataPoint = null;
+        SummaryDataType dataPoint = null;
         for (SummaryResults summaryResults : readSummaryResults) {
-            dataPoint = new CsvSummaryDataType(
+            dataPoint = new SummaryDataType(
                     summaryResults.getPredictorVariable(),
+                    summaryResults.getPredictorID(),
                     summaryResults.getMean(),
                     summaryResults.getSd(),
-                    summaryResults.getRank());
-
-            if (summaryResults.getMethod().equals(Constants.PCR)) {
-                pcr.add(dataPoint);
-            } else if (summaryResults.getMethod().equals(Constants.LASSO)) {
-                lasso.add(dataPoint);
-            } else if (summaryResults.getMethod().equals(Constants.PLS)) {
-                pls.add(dataPoint);
-            } else if (summaryResults.getMethod().equals(Constants.SPLS)) {
-                spls.add(dataPoint);
-            } else if (summaryResults.getMethod().equals(Constants.RF)) {
-                rf.add(dataPoint);
-            } else if (summaryResults.getMethod().equals(Constants.UNIVARIATE)) {
-                univariate_p.add(dataPoint);
-            } else if (summaryResults.getMethod().equals(Constants.BH)) {
-                univariate_bh.add(dataPoint);
-            } else if (summaryResults.getMethod().equals(Constants.RIDGE)) {
-                ridge.add(dataPoint);
-            } else if (summaryResults.getMethod().equals(Constants.SVM)) {
-                svm.add(dataPoint);
-            } else if (summaryResults.getMethod().equals(Constants.EN)) {
-                en.add(dataPoint);
+                    summaryResults.getRank()
+                    );
+            switch (summaryResults.getMethod()) {
+                case Constants.PCR:
+                    pcr.add(dataPoint);
+                    break;
+                case Constants.LASSO:
+                    lasso.add(dataPoint);
+                    break;
+                case Constants.PLS:
+                    pls.add(dataPoint);
+                    break;
+                case Constants.SPLS:
+                    spls.add(dataPoint);
+                    break;
+                case Constants.RF:
+                    rf.add(dataPoint);
+                    break;
+                case Constants.UNIVARIATE:
+                    univariate_p.add(dataPoint);
+                    break;
+                case Constants.BH:
+                    univariate_bh.add(dataPoint);
+                    break;
+                case Constants.RIDGE:
+                    ridge.add(dataPoint);
+                    break;
+                case Constants.SVM:
+                    svm.add(dataPoint);
+                    break;
+                case Constants.EN:
+                    en.add(dataPoint);
+                    break;
             }
         }
 
