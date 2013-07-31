@@ -15,6 +15,10 @@
  */
 package nl.wur.plantbreeding.omicsfusion.wizard;
 
+import com.opensymphony.xwork2.validator.annotations.ExpressionValidator;
+import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
+import com.opensymphony.xwork2.validator.annotations.Validations;
+import com.opensymphony.xwork2.validator.annotations.ValidatorType;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,14 +28,43 @@ import nl.wur.plantbreeding.omicsfusion.email.ExceptionEmail;
 import nl.wur.plantbreeding.omicsfusion.entities.UserList;
 import nl.wur.plantbreeding.omicsfusion.utils.Constants;
 import nl.wur.plantbreeding.omicsfusion.utils.ServletUtils;
+import org.apache.struts2.convention.annotation.InterceptorRef;
+import org.apache.struts2.convention.annotation.ParentPackage;
+import org.apache.struts2.convention.annotation.Result;
+import org.apache.struts2.convention.annotation.Results;
 import org.apache.struts2.interceptor.ServletRequestAware;
 
 /**
  * process the user information and makes it available on the session scope.
  *
  * @author Richard Finkers
- * @version 1.0
+ * @version 2.0
  */
+@ParentPackage(value = "userDetails")
+@InterceptorRef("jsonValidationWorkflowStack")
+@Results({
+    @Result(location = "/submit/userDetails.jsp", name = "input"),
+    @Result(location = "/submit/uploadExcel.jsp", name = "success"),
+    @Result(location = "/submit/userDetails.jsp", name = "error")
+})
+@Validations(requiredStrings = {
+    @RequiredStringValidator(fieldName = "name",
+            type = ValidatorType.FIELD, message = "Please enter your name"),
+    @RequiredStringValidator(fieldName = "email",
+            type = ValidatorType.FIELD, message = "Please enter your email")
+}, expressions = {
+    @ExpressionValidator(expression = "name.trim().length() > 5",
+            message = "Password must have as minimum 6 Characters.")
+}
+        //        ,fieldExpressions = {
+        //    @FieldExpressionValidator(fieldName = "name",
+        //            expression = "name.trim().length() > 6",
+        //            message = "Password must have as minimum 6 Characters."),
+        //    @FieldExpressionValidator(fieldName = "email",
+        //            expression = "email.trim().length() > 6",
+        //            message = "Accept the Agreement.")
+        //}
+        )
 public class UserDetailsAction extends UserDetailsValidationForm
         implements ServletRequestAware {
 
