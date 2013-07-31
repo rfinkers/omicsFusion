@@ -74,15 +74,17 @@ public class SqLiteQueries extends SqLiteHelper {
                     + "response_type VARCHAR(75))");
             //table data
             statement.executeUpdate("CREATE TABLE predictor ("
-                    + "variableID INTEGER(4), "
-                    + "variable_name VARCHAR(75), "
+                    + "predictorID INTEGER(4), "
+                    + "predictor_name VARCHAR(75), "
                     + "genotype_name VARCHAR(75), "
+                    + "genotypeID INTEGER(4), "
                     + "observation FLOAT(10,5))");
             //table response
             statement.executeUpdate("CREATE TABLE response  ("
-                    + "variableID INTEGER(4), "
-                    + "variable_name VARCHAR(75), "
+                    + "traitID INTEGER(4), "
+                    + "trait_name VARCHAR(75), "
                     + "genotype_name VARCHAR(75), "
+                    + "genotypeID INTEGER(4), "
                     + "observation FLOAT(10,5))");
             //table methods
             statement.executeUpdate("CREATE TABLE methods ("
@@ -96,15 +98,15 @@ public class SqLiteQueries extends SqLiteHelper {
                     + "ontology_id VARCHAR(75))");
             //table results
             statement.executeUpdate("CREATE TABLE results ("
-                    + "predictor TEXT, "
-                    + "response TEXT, "
+                    + "traitID TEXT, "
+                    + "observationID TEXT, "
                     + "method_name TEXT, "
                     + "value REAL, "
                     + "sd REAL, "
                     + "rank REAL)");
             //table predictors
             statement.executeUpdate("CREATE TABLE responseVariables ("
-                    + "counter INTEGER, "
+                    + "traitID INTEGER, "
                     + "response TEXT)");
         } catch (SQLException e) {
             // if the error message is "out of memory",
@@ -215,9 +217,11 @@ public class SqLiteQueries extends SqLiteHelper {
 
         for (DataPointDataType dataPointDataType : pdp) {
             statement.addBatch("INSERT INTO predictor "
-                    + "(genotype_name, variable_name, observation) "
-                    + "values ('" + dataPointDataType.getGenotypeName().trim()
-                    + "','" + dataPointDataType.getTraitName().trim()
+                    + "(genotypeID, genotype_name, predictorID, predictor_name, observation) "
+                    + "values ('" + dataPointDataType.getGenotypeID()
+                    + "','" + dataPointDataType.getGenotypeName().trim()
+                    + "','" + dataPointDataType.getObservationID()
+                    + "','" + dataPointDataType.getObservationName().trim()
                     + "','" + dataPointDataType.getObservation() + "')");
         }
         db.setAutoCommit(false);
@@ -229,9 +233,11 @@ public class SqLiteQueries extends SqLiteHelper {
 
         for (DataPointDataType dataPointDataType : rdp) {
             statement.addBatch("INSERT INTO response "
-                    + "(genotype_name, variable_name, observation) "
-                    + "values ('" + dataPointDataType.getGenotypeName().trim()
-                    + "','" + dataPointDataType.getTraitName().trim()
+                    + "(genotypeID, genotype_name, traitID, trait_name, observation) "
+                    + "values ('" + dataPointDataType.getGenotypeID()
+                    + "','" + dataPointDataType.getGenotypeName().trim()
+                    + "','" + dataPointDataType.getObservationID()
+                    + "','" + dataPointDataType.getObservationName().trim()
                     + "','" + dataPointDataType.getObservation() + "')");
         }
         db.setAutoCommit(false);
@@ -247,7 +253,7 @@ public class SqLiteQueries extends SqLiteHelper {
         for (String responseVariable : responseVariables) {
             System.out.println(i + " - Variable: " + responseVariable);
             statement.executeUpdate("INSERT INTO responseVariables "
-                    + "(counter, response) values "
+                    + "(traitID, response) values "
                     + "(" + i + ",'" + responseVariable + "')");
             i++;
         }
@@ -335,7 +341,7 @@ public class SqLiteQueries extends SqLiteHelper {
     public ArrayList<SummaryResults> readSummaryResults(
             String directory, String responseVariable)
             throws SQLException, ClassNotFoundException {
-        ArrayList<SummaryResults> results = new ArrayList<SummaryResults>();
+        ArrayList<SummaryResults> results = new ArrayList<>();
         SummaryResults summaryResults = null;
         Connection db = openDatabase(directory);
         Statement statement = prepareStatement();
@@ -391,7 +397,8 @@ public class SqLiteQueries extends SqLiteHelper {
      *
      * @param directory
      * @return The name of the predictor sheet.
-     * @throws SQLiteException
+     * @throws java.sql.SQLException
+     * @throws java.lang.ClassNotFoundException
      */
     public String getPredictorSheetName(String directory)
             throws SQLException, ClassNotFoundException {
@@ -418,7 +425,8 @@ public class SqLiteQueries extends SqLiteHelper {
      * @param preditor Predictor variable.
      * @param response Response variable.
      * @return A list of observations
-     * @throws SQLiteException
+     * @throws java.sql.SQLException
+     * @throws java.lang.ClassNotFoundException
      */
     public List<XYScatterDataType> getObservationsForPredictorAndResponse(
             String directory, String preditor, String response)
@@ -442,7 +450,7 @@ public class SqLiteQueries extends SqLiteHelper {
             int i = 0;
 
             //TODO: initiate initial capacity
-            resultList = new ArrayList<XYScatterDataType>();
+            resultList = new ArrayList<>();
 
             XYScatterDataType data;
             while (resultSet.next()) {
@@ -471,7 +479,7 @@ public class SqLiteQueries extends SqLiteHelper {
 
     public ArrayList<String> getResponseNames(String directory)
             throws SQLException, ClassNotFoundException {
-        ArrayList<String> result = new ArrayList<String>();
+        ArrayList<String> result = new ArrayList<>();
         Connection db = openDatabase(directory);
         Statement statement = prepareStatement();
 
