@@ -29,6 +29,7 @@ import nl.wur.plantbreeding.omicsfusion.utils.ServletUtils;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Actions;
 import org.apache.struts2.convention.annotation.Result;
+import org.apache.struts2.convention.annotation.Results;
 import org.apache.struts2.interceptor.ServletRequestAware;
 
 /**
@@ -37,6 +38,10 @@ import org.apache.struts2.interceptor.ServletRequestAware;
  * @author Richard Finkers
  * @version 2.0.
  */
+@Results({
+    @Result(location = "/results/predRespXYScatter.jsp", name = "success"),
+    @Result(location = "/results/showResultsSummary.jsp", name = "error")
+})
 public class PredictorResponseXYScatterAction
         extends PredictorResponseXYScatterForm implements ServletRequestAware {
 
@@ -122,7 +127,7 @@ public class PredictorResponseXYScatterAction
         regression = pl.getRegressionLine(dataSet);
 
         //Finally, parse to the map (removes redunant response varables :(
-        points = new IdentityHashMap<Double, Double>(dataSet.size());
+        points = new IdentityHashMap<>(dataSet.size());
         for (XYScatterDataType data : dataSet) {
             points.put(data.getPredictorValue(), data.getResponseValue());
         }
