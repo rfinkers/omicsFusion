@@ -41,6 +41,7 @@ import org.apache.struts2.interceptor.ServletRequestAware;
  * @author Richard Finkers
  * @version 1.0
  */
+//TODO: Annotations
 public class DataUploadAction extends DataUploadValidationForm
         implements ServletRequestAware {
 
@@ -92,7 +93,7 @@ public class DataUploadAction extends DataUploadValidationForm
                     uploadExcelSheets(responseSheet, getResponseType(),
                             predictorSheet, getPredictorType(),
                             ServletUtils.getResultsDir(request));
-                } catch (Exception e) {
+                } catch (ClassNotFoundException | SQLException e) {
                     e.printStackTrace();
                     addActionError(e.getMessage());
                     LOG.info("Excel to Database");
@@ -119,7 +120,7 @@ public class DataUploadAction extends DataUploadValidationForm
         } catch (IOException e) {
             addActionError(e.getMessage());
             return INPUT;
-        } catch (Exception e) {
+        } catch (SQLException | ClassNotFoundException e) {
             addActionError(e.getMessage());
             LOG.severe("Exception caught");
             ExceptionEmail.SendExceptionEmail(e);
