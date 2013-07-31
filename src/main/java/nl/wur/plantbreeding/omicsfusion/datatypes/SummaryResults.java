@@ -22,9 +22,18 @@ package nl.wur.plantbreeding.omicsfusion.datatypes;
 public class SummaryResults {
 
     /**
+     * ID of the predictor variable (data matrix).
+     */
+    private String predictorID;
+
+    /**
      * predictor variable.
      */
     private String predictorVariable;
+    /**
+     * TraitID.
+     */
+    private String traitID;
     /**
      * response variable.
      */
@@ -53,13 +62,16 @@ public class SummaryResults {
      * Standard constructor to fill the data object.
      *
      * @param predictorVariable Name of the variable from the ~omics set.
+     * @param responseID
+     * @param predictorID
      * @param responseVariable Name of the trait.
      * @param method Name of the method.
      * @param mean
      * @param sd
      * @param rank
      */
-    public SummaryResults(String predictorVariable, String responseVariable,
+    public SummaryResults(String responseID, String responseVariable,
+            String predictorID, String predictorVariable,
             String method, Double mean, Double sd, Double rank) {
         if (predictorVariable.startsWith("`")
                 && predictorVariable.endsWith("`")) {
@@ -72,6 +84,31 @@ public class SummaryResults {
         this.mean = mean;
         this.sd = sd;
         this.rank = rank;
+        this.predictorID = predictorID;
+    }
+
+    public String getTraitID() {
+        return traitID;
+    }
+
+    public void setTraitID(String traitID) {
+        this.traitID = traitID;
+    }
+
+    public String getResponseVariable() {
+        return responseVariable;
+    }
+
+    public void setResponseVariable(String responseVariable) {
+        this.responseVariable = responseVariable;
+    }
+
+    public String getMethod() {
+        return method;
+    }
+
+    public void setMethod(String method) {
+        this.method = method;
     }
 
     public Double getMean() {
@@ -82,12 +119,28 @@ public class SummaryResults {
         this.mean = mean;
     }
 
-    public String getMethod() {
-        return method;
+    public Double getSd() {
+        return sd;
     }
 
-    public void setMethod(String method) {
-        this.method = method;
+    public void setSd(Double sd) {
+        this.sd = sd;
+    }
+
+    public Double getRank() {
+        return rank;
+    }
+
+    public void setRank(Double rank) {
+        this.rank = rank;
+    }
+
+    public String getPredictorID() {
+        return predictorID;
+    }
+
+    public void setPredictorID(String predictorID) {
+        this.predictorID = predictorID;
     }
 
     public String getPredictorVariable() {
@@ -113,29 +166,5 @@ public class SummaryResults {
         } else {
             this.predictorVariable = predictorVariable;
         }
-    }
-
-    public Double getRank() {
-        return rank;
-    }
-
-    public void setRank(Double rank) {
-        this.rank = rank;
-    }
-
-    public Double getSd() {
-        return sd;
-    }
-
-    public void setSd(Double sd) {
-        this.sd = sd;
-    }
-
-    public String getResponseVariable() {
-        return responseVariable;
-    }
-
-    public void setResponseVariable(String responseVariable) {
-        this.responseVariable = responseVariable;
     }
 }
