@@ -8,13 +8,13 @@ Author     : Richard Finkers
 <%@ taglib prefix="sj" uri="/struts-jquery-tags"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 
-<sj:menu id="menuWithItems" cssStyle="width:75%">
+<sj:menu id="menuWithItems" cssStyle="width:160px">
     <s:url var="home" value='/'/>
     <s:text var="menu.home" name="menu.home"/>
     <sj:menuItem title="%{menu.home}" menuIcon="ui-icon-home"  href="%{home}" />
     <s:url var="submit" value="/userRegistration/startSubmitWizard"/>
     <s:text var="menu.submit" name="menu.submit"/>
-    <sj:menuItem title="%{menu.submit}" menuIcon="ui-icon-extlink" href="%{submit}"/>
+    <sj:menuItem title="%{menu.submit}" href="%{submit}"/>
     <s:url var="result" value="/results/showResultsSummary.jsp"/>
     <s:text var="menu.retrieve" name="menu.retrieve"/>
     <sj:menuItem title="%{menu.retrieve}" href="%{result}"/>

@@ -3,7 +3,9 @@
 <%@ taglib prefix="sj" uri="/struts-jquery-tags"%>
 <%@ taglib prefix="sb" uri="/struts-bootstrap-tags" %>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:r="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
     <head>
         <!-- page title -->
         <title><tiles:insertAttribute name="title" /></title>
@@ -14,6 +16,9 @@
 
         <!-- RDF description -->
         <link rel="meta" type="application/rdf+xml" title="FOAF" href="<s:url value="/OmicsFusion.rdf" />"/>
+        <r:RDF>
+            <!-- TODO: Further test this implementation? -->
+        </r:RDF>
 
         <!-- meta information -->
         <meta name="keywords" content="omicsFusion, Wageningen UR Plantbreeding, tomato, potato, lasso, ridge, pls, spls, univariate, anova, random forrest" />
