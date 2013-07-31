@@ -99,7 +99,7 @@ public class UserDetailsAction extends UserDetailsValidationForm
 
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Exception: {0}", ex.getMessage());
-            addActionError("An exceoption occured");
+            addActionError("An exception occured");
             ex.printStackTrace();
             ExceptionEmail.SendExceptionEmail(ex);
             return ERROR;
