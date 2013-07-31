@@ -5,7 +5,7 @@
     <groupId>nl.wur.plantbreeding</groupId>
     <artifactId>omicsFusion</artifactId>
     <packaging>war</packaging>
-    <version>1.0-M7</version>
+    <version>2.0-M7</version>
     <name>omicsFusion Webapp</name>
     <description>omicsFusion is a tool in which different regression methods can be used to analyze typical ~omics situations with large
         numbers of variables and smaller numbers of samples. omicsFusion apply univariate regression and different regularized multivariate
