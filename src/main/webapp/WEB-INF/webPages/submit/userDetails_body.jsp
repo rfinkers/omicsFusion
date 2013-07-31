@@ -8,50 +8,35 @@ Form
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="sj" uri="/struts-jquery-tags"%>
 
-<script type="text/javascript">
-    $.subscribe('before', function(event, data) {
-        var fData = event.originalEvent.formData;
-        alert('About to submit: \n\n' + fData[0].value + ' to target ' + event.originalEvent.options.target + ' with timeout ' + event.originalEvent.options.timeout);
-        var form = event.originalEvent.form[0];
-        if (form.name.value.length < 2) {
-            alert('Please enter a name with min 2 characters');
-            // Cancel Submit comes with 1.8.0
-            event.originalEvent.options.submit = false;
-        }
-    });
-</script>
-
 <s:text name="userDetails.progress"/>
-<sj:dialog id="myclickdialog" autoOpen="false" modal="true" title="help"><s:text name="userDetails.explanation"/></sj:dialog>
-<sj:a openDialog="myclickdialog" button="true" buttonIcon="ui-icon-newwin" cssStyle="allign:right">help</sj:a>
+<sj:dialog id="myclickdialog" autoOpen="false" modal="true" title="help">
+    <s:text name="userDetails.explanation"/></sj:dialog>
+<sj:a openDialog="myclickdialog" button="true" buttonIcon="ui-icon-newwin"
+      cssStyle="allign:right">help</sj:a>
 <h2><s:text name="userDetails.heading" /></h2>
-<s:actionerror theme="jquery"/>
-<s:actionmessage theme="jquery"/>
+<s:actionerror theme="bootstrap"/>
 
 <s:text name="userDetails.explanation"/>
-<img id="indicator" src="<s:url value="/images/busy.gif"/>" alt="loading..." style="display:none"/>
-<s:form action="userDetails" name="userDetails" method="POST" namespace="/userRegistration" class="form-horizontal" >
+<s:form action="userDetails" name="userDetails" theme="bootstrap"
+        label="User details" method="POST" namespace="/userRegistration"
+        cssClass="form-horizontal" enctype="multipart/form-data">
     <sj:textfield key="name"
                   id="name"
                   tooltip="Please enter your name."
-                  helpText="Please enter your name."
-                  cssClass="input_text"
-                  tooltipCssClass="ui-icon-info"/>
+                  inputAppendIcon="user"
+                  required="true"/>
     <sj:textfield key="email"
                   tooltip="Please enter your email."
-                  helpText="Please enter your email address." />
+                  inputAppendIcon="envelope"/>
     <sj:textfield key="affiliation"
-                  tooltip="Please enter the name of your organization."
-                  helpText="Which organization are you employed." />
+                  tooltip="Please enter the name of your organization."/>
     <sj:textfield key="country"
-                  tooltip="Please enter your country."
-                  helpText="From which country are you ariginating." />
+                  tooltip="Please enter your country."/>
+    <div class="form-actions">
+        <sj:submit cssClass="btn btn-inverse"
+                   formIds="userDetails"
+                   validate="false"
+                   validateFunction="bootstrapValidation"/>
+    </div>
 </s:form>
-<sj:submit formIds="userDetails"
-           button="true"
-           timeout="2500"
-           indicator="indicator"
-           onBeforeTopics="before"
-           effect="highlight"
-           effectOptions="{ color : '#222222' }"
-           effectDuration="3000"/>
+<!--<img id="indicator" src="images/indicator.gif" alt="Loading..." style="display:none"/>-->

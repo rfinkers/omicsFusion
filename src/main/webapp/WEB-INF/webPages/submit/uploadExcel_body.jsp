@@ -14,14 +14,16 @@ Form
     <!-- TODO: correct help text -->
 
     <h2><s:text name="uploadExcel.heading" /></h2>
-<s:actionerror theme="jquery"/>
+<s:actionerror theme="bootstrap"/>
 <s:actionmessage theme="jquery"/>
 <s:fielderror theme="jquery"/>
 
 <s:text name="uploadExcel.explanation"/>
 
 <!--    TODO: separate this from the lines above? Add instructions-->
-<s:form action="dataUpload" enctype="multipart/form-data" method="POST" namespace="/userRegistration">
+<s:form action="dataUpload" enctype="multipart/form-data" method="POST"
+        theme="bootstrap" namespace="/userRegistration" label="Upload"
+        cssClass="form-horizontal">
     <!-- TODO: use listKey instead of list?)-->
     <s:file name="dataSheetResponseFile"
             key="dataSheetResponseFile"
@@ -42,6 +44,13 @@ Form
               headerKey="select"
               list="#{'ph':'Phenomics','me':'Metabolomics','tr':'Transcriptomics','ma':'Markers'}" />
     <%-- <s:file name="dataSheetPredictResponseFile" key="dataSheetPredictResponseFile"/> --%>
-    <s:reset /><sj:submit id="validateSheet" button="true" indicator="indicator" />
+    <div class="form-actions">
+        <sj:submit cssClass="btn btn-inverse"
+                   validate="false"
+                   validateFunction="bootstrapValidation"
+                   indicator="indicator"/>
+        <s:reset cssClass="btn btn-inverse"/>
+    </div>
+
 </s:form>
 <img id="indicator" src="<s:url value="/images/busy.gif"/>" alt="loading..." style="display:none"/>
