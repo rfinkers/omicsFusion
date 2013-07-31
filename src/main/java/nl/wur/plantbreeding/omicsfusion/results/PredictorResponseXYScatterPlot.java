@@ -25,7 +25,7 @@ import org.apache.commons.math.stat.regression.SimpleRegression;
 
 /**
  *
- * @author finke002
+ * @author Richard Finkers
  *
  */
 public class PredictorResponseXYScatterPlot {
@@ -39,7 +39,7 @@ public class PredictorResponseXYScatterPlot {
     /**
      * Create a XY dataset, and add the regression line.
      *
-     * @param observationsForPredictorAndResponse scatter data.
+     * @param points scatterplot data.
      * @return Struts2-jquery compatible regression line dataset..
      */
     protected Map<Double, Double> getRegressionLine(
@@ -90,7 +90,7 @@ public class PredictorResponseXYScatterPlot {
         /**
          * The dataset
          */
-        Map<Double, Double> regDataSet = new HashMap<Double, Double>();
+        Map<Double, Double> regDataSet = new HashMap<>();
 
         //add the regression series to the dataSet.
         regDataSet.put(minX, slr.predict(minX));
