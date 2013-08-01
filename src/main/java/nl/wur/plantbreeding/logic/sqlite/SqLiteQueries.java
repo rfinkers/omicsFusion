@@ -20,6 +20,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -79,14 +80,16 @@ public class SqLiteQueries extends SqLiteHelper {
                     + "predictor_name VARCHAR(75), "
                     + "genotype_name VARCHAR(75), "
                     + "genotypeID INTEGER(4), "
-                    + "observation FLOAT(10,5))");
+                    + "observation FLOAT(10,5), "
+                    + "PRIMARY KEY (predictorID, genotypeID))");
             //table response
             statement.executeUpdate("CREATE TABLE response  ("
                     + "traitID VARCHAR(7), "
                     + "trait_name VARCHAR(75), "
                     + "genotype_name VARCHAR(75), "
                     + "genotypeID INTEGER(4), "
-                    + "observation FLOAT(10,5))");
+                    + "observation FLOAT(10,5), "
+                    + "PRIMARY KEY (traitID, genotypeID))");
             //table methods
             statement.executeUpdate("CREATE TABLE methods ("
                     + "method_name VARCHAR(75), "
@@ -104,11 +107,13 @@ public class SqLiteQueries extends SqLiteHelper {
                     + "method_name TEXT, "
                     + "value REAL, "
                     + "sd REAL, "
-                    + "rank REAL)");
+                    + "rank REAL,"
+                    + "PRIMARY KEY (traitID, observationID,method_name))");
             //table predictors
             statement.executeUpdate("CREATE TABLE responseVariables ("
                     + "traitID VARCHAR(7), "
-                    + "response TEXT)");
+                    + "response TEXT,"
+                    + "PRIMARY KEY (traitID))");
         } catch (SQLException e) {
             // if the error message is "out of memory",
             // it probably means no database file is found
@@ -347,29 +352,36 @@ public class SqLiteQueries extends SqLiteHelper {
         Connection db = openDatabase(directory);
         Statement statement = prepareStatement();
 
+        java.util.Date date = new java.util.Date();
+        System.out.println("Timestamp: " + new Timestamp(date.getTime()));
+
         //TODO: query is extremely slow. Optimze!
         try {
             ResultSet resultSet = statement.executeQuery("SELECT DISTINCT "
                     + "observationID, r.traitID AS responseID, response, "
-                    + "predictor_name,method_name, value, sd, rank "
-                    + "FROM results r, responseVariables t, predictor p "
-                    + "WHERE r.traitID=t.traitID "
-                    + "AND r.observationID = p.predictorID "
-                    + "AND r.traitID='" + responseVariable.trim() + "' "
+                    + "predictor_name, method_name, value, sd, rank "
+                    + "FROM results r "
+                    + "INNER JOIN responseVariables t ON r.traitID=t.traitID "
+                    + "INNER JOIN predictor p ON r.observationID = p.predictorID "
+                    + "WHERE t.traitID='" + responseVariable.trim() + "' "
                     + "ORDER BY observationID, r.traitID, method_name");
+            java.util.Date date2 = new java.util.Date();
+            System.out.println("Timestamp: " + new Timestamp(date2.getTime()));
             System.out.println("Response Variable; " + responseVariable);
             while (resultSet.next()) {
                 summaryResults = new SummaryResults(
-                        resultSet.getString("responseID"),
-                        resultSet.getString("response"),
-                        resultSet.getString("observationID"),
-                        resultSet.getString("predictor_name"),
-                        resultSet.getString("method_name"),
-                        resultSet.getDouble("value"),
-                        resultSet.getDouble("sd"),
-                        resultSet.getDouble("rank"));
+                        resultSet.getString("responseID"),//Results
+                        resultSet.getString("response"),//ResponseVariables
+                        resultSet.getString("observationID"),//Results
+                        resultSet.getString("predictor_name"),//Predictor
+                        resultSet.getString("method_name"),//Results
+                        resultSet.getDouble("value"),//Results
+                        resultSet.getDouble("sd"),//Results
+                        resultSet.getDouble("rank"));//Results
                 results.add(summaryResults);
             }
+            java.util.Date date3 = new java.util.Date();
+            System.out.println("Timestamp: " + new Timestamp(date3.getTime()));
         } finally {
             closeDatabase(db);
         }
