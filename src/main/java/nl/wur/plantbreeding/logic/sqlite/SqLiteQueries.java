@@ -448,19 +448,17 @@ public class SqLiteQueries extends SqLiteHelper {
 
         try {
             ResultSet resultSet = statement.executeQuery("SELECT "
-                    + "response.genotype_name AS genotype, "
-                    + "response.observation AS resp, "
-                    + "traitname "
-                    + "predictor.observation AS pred "
+                    + "r.genotype_name AS genotype, "
+                    + "r.observation AS resp, "
+                    + "trait_name, "
+                    + "p.observation AS pred, "
                     + "predictor_name "
-                    + "FROM predictor, response "
-                    + "WHERE response.genotypeID = predictor.genotypeID "
-                    + "AND predictor.predictorID LIKE "
+                    + "FROM predictor p, response r "
+                    + "WHERE r.genotypeID = p.genotypeID "
+                    + "AND p.predictorID = "
                     //TODO: predictorID should start with p... Build a check for this?
-                    + "'%" + preditor.trim() + "' "
+                    + "'" + preditor.trim() + "' "
                     + "ORDER BY pred, resp ");
-//            //FIXME: LIKE is temp fix for spaces at the beginning of the name in db.
-            int i = 0;
 
             //TODO: initiate initial capacity
             resultList = new ArrayList<>();
@@ -469,18 +467,12 @@ public class SqLiteQueries extends SqLiteHelper {
             while (resultSet.next()) {
                 data = new XYScatterDataType();
                 data.setResponseValue(resultSet.getDouble("resp"));
-                data.setResponseVariable(resultSet.getString("traitname"));
+                data.setResponseVariable(resultSet.getString("trait_name"));
                 data.setPredictorValue(resultSet.getDouble("pred"));
                 data.setPredictorVariable(resultSet.getString("predictor_name"));
                 data.setGenotypeName(resultSet.getString("genotype"));
                 resultList.add(data);
-
-                i++;
-                System.out.println("Counter: " + i
-                        + " Response: " + Double.toString(resultSet.getDouble("resp"))
-                        + " Predictor: " + Double.toString(resultSet.getDouble("pred")));
             }
-
         } finally {
             closeDatabase(db);
         }
