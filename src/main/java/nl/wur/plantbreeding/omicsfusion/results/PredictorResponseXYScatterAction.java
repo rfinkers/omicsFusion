@@ -78,7 +78,7 @@ public class PredictorResponseXYScatterAction
     })
     @Override
     public String execute() throws Exception {
-        LOG.info("Starting chart class");
+        LOG.info("Starting PredRespXYScatter Action class");
 
         String sessionName
                 = (String) request.getSession().getAttribute("resultSession");
