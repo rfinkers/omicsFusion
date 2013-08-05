@@ -54,12 +54,13 @@ public class CmdExec {
             HashMap<String, Integer> jobIDs)
             throws IOException {
         Process p;
-        if (method.equals(Constants.RF) || method.equals(Constants.SPLS)
-                || method.equals(Constants.RIDGE)) {
-
-            //TODO: replace email with email user?
-            //TODO: add this to the if test above?
-            if (Constants.MAX_NUMBER_CPU > 2) {
+        switch (method) {
+            case Constants.RF:
+            case Constants.SPLS:
+            case Constants.RIDGE:
+                //TODO: replace email with email user?
+                //TODO: add this to the if test above?
+                if (Constants.MAX_NUMBER_CPU > 2) {
                 p = Runtime.getRuntime().exec(
                         "qsub -p -1023 -pe Rmpi "
                         + Constants.MAX_NUMBER_CPU
@@ -69,32 +70,33 @@ public class CmdExec {
                 p = Runtime.getRuntime().exec("qsub "
                         + executionDir + method + ".pbs");
             }
-        } else if (method.equals(Constants.EMAIL)) {
-            int counter = 0;
-            String execution = "qsub  -hold_jid ";
+                break;
+            case Constants.EMAIL:
+                int counter = 0;
+                String execution = "qsub  -hold_jid ";
+                //TODO: null check on jobIDs
+                Iterator it = jobIDs.entrySet().iterator();
+                while (it.hasNext()) {
+                    Map.Entry pairs = (Map.Entry) it.next();
+                    if (counter == 0) {
+                        execution += pairs.getValue();
+                    } else {
+                        execution += "," + pairs.getValue();
+                    }
+                    counter++;
 
-            //TODO: null check on jobIDs
-            Iterator it = jobIDs.entrySet().iterator();
-            while (it.hasNext()) {
-                Map.Entry pairs = (Map.Entry) it.next();
-                if (counter == 0) {
-                    execution += pairs.getValue();
-                } else {
-                    execution += " , " + pairs.getKey();
+                    it.remove(); // avoids a ConcurrentModificationException
                 }
-
-                it.remove(); // avoids a ConcurrentModificationException
-            }
-            execution += " ";
-            execution += executionDir;
-            execution += method + ".pbs";
-
-            System.out.println("Execution:  " + execution);
-
-            p = Runtime.getRuntime().exec(execution);
-        } else {
-            p = Runtime.getRuntime().exec("qsub "
-                    + executionDir + method + ".pbs");
+                execution += " ";
+                execution += executionDir;
+                execution += method + ".pbs";
+                System.out.println("Execution:  " + execution);
+                p = Runtime.getRuntime().exec(execution);
+                break;
+            default:
+                p = Runtime.getRuntime().exec("qsub "
+                        + executionDir + method + ".pbs");
+                break;
         }
         String line;
         try (BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()))) {
