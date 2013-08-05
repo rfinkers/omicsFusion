@@ -4,7 +4,7 @@
         "http://struts.apache.org/dtds/struts-2.0.dtd">
 
 <struts>
-    <package name="summaryResults" namespace="/results" extends="struts-default">
+    <package name="summaryResults" namespace="/results" extends="struts-default,json-default">
         <action name="summaryResults" class="nl.wur.plantbreeding.omicsfusion.results.RetrieveResultsSummaryAction">
             <result name="input">/results/showResultsSummary.jsp</result>
             <result name="error">/results/showResultsSummary.jsp</result>
