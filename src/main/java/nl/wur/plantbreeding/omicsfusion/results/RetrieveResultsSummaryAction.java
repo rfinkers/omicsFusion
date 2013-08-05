@@ -15,6 +15,10 @@
  */
 package nl.wur.plantbreeding.omicsfusion.results;
 
+import com.opensymphony.xwork2.validator.annotations.ExpressionValidator;
+import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
+import com.opensymphony.xwork2.validator.annotations.Validations;
+import com.opensymphony.xwork2.validator.annotations.ValidatorType;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -28,6 +32,10 @@ import nl.wur.plantbreeding.omicsfusion.datatypes.SummaryDataType;
 import nl.wur.plantbreeding.omicsfusion.datatypes.SummaryResults;
 import nl.wur.plantbreeding.omicsfusion.utils.Constants;
 import nl.wur.plantbreeding.omicsfusion.utils.ServletUtils;
+import org.apache.struts2.convention.annotation.InterceptorRef;
+import org.apache.struts2.convention.annotation.ParentPackage;
+import org.apache.struts2.convention.annotation.Result;
+import org.apache.struts2.convention.annotation.Results;
 import org.apache.struts2.interceptor.ServletRequestAware;
 
 /**
@@ -39,6 +47,28 @@ import org.apache.struts2.interceptor.ServletRequestAware;
  * @author Richard Finkers
  * @version 1.0
  */
+@ParentPackage(value = "summaryResults")
+@InterceptorRef("jsonValidationWorkflowStack")
+@Results({
+    @Result(location = "/results/showResultsSummary.jsp", name = "input"),
+    @Result(location = "/results/resultsSummary.jsp", name = "success"),
+    @Result(location = "/results/showResultsSummary.jsp", name = "error")
+})
+@Validations(requiredStrings = {
+    @RequiredStringValidator(fieldName = "sessionId",
+            type = ValidatorType.FIELD, message = "Please enter a valid sessionID")}, expressions = {
+            @ExpressionValidator(expression = "sessionId.trim().length() > 3",
+            message = "sessionId is to short.")
+        }
+        //        ,fieldExpressions = {
+        //    @FieldExpressionValidator(fieldName = "name",
+        //            expression = "name.trim().length() > 6",
+        //            message = "Password must have as minimum 6 Characters."),
+        //    @FieldExpressionValidator(fieldName = "email",
+        //            expression = "email.trim().length() > 6",
+        //            message = "Accept the Agreement.")
+        //}
+        )
 public class RetrieveResultsSummaryAction
         extends RetrieveResultsSummaryValidationForm
         implements ServletRequestAware {
@@ -49,11 +79,11 @@ public class RetrieveResultsSummaryAction
     private static final Logger LOG = Logger.getLogger(
             RetrieveResultsSummaryAction.class.getName());
     /**
-     * Serial Version UID
+     * Serial Version UID.
      */
     private static final long serialVersionUID = 1L;
     /**
-     * the request
+     * the request.
      */
     private HttpServletRequest request;
 
