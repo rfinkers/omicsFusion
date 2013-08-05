@@ -55,7 +55,7 @@ public class CmdExecTest {
         String executionDir = "/home/finke002/NetBeansProjects/omicsFusion/src/main/resources"; //FIXME: refer to a valid test test case. It should contain a complete .pbs file!
         String method = Constants.LASSO;
         int expResult = 0;
-        int result = CmdExec.ExecuteQSubCmd(executionDir, method);
+        int result = CmdExec.ExecuteQSubCmd(executionDir, method, null);
         assertNotSame(expResult, result);
     }
 

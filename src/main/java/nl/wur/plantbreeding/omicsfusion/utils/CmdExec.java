@@ -18,6 +18,9 @@ package nl.wur.plantbreeding.omicsfusion.utils;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.logging.Logger;
 
@@ -43,10 +46,12 @@ public class CmdExec {
      * @param executionDir Name of the directory where the job scripts / data
      * resides.
      * @param method Method to be executed.
+     * @param jobIDs
      * @return JobID on the SGE grid.
      * @throws IOException Batch job script not found.
      */
-    public static int ExecuteQSubCmd(String executionDir, String method)
+    public static int ExecuteQSubCmd(String executionDir, String method,
+            HashMap<String, Integer> jobIDs)
             throws IOException {
         Process p;
         if (method.equals(Constants.RF) || method.equals(Constants.SPLS)
@@ -64,17 +69,37 @@ public class CmdExec {
                 p = Runtime.getRuntime().exec("qsub "
                         + executionDir + method + ".pbs");
             }
+        } else if (method.equals(Constants.EMAIL)) {
+            int counter = 0;
+            String execution = "qsub  -hold_jid ";
+
+            //TODO: null check on jobIDs
+            Iterator it = jobIDs.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry pairs = (Map.Entry) it.next();
+                if (counter == 0) {
+                    execution += pairs.getValue();
+                } else {
+                    execution += " , " + pairs.getKey();
+                }
+
+                it.remove(); // avoids a ConcurrentModificationException
+            }
+            execution += " ";
+            execution += executionDir;
+            execution += method + ".pbs";
+
+            System.out.println("Execution:  " + execution);
+
+            p = Runtime.getRuntime().exec(execution);
         } else {
             p = Runtime.getRuntime().exec("qsub "
                     + executionDir + method + ".pbs");
         }
-        //TODO: if qsub not present, this will result in an error. Finally this
-        //will lead to an nullpointer exception because of problems with
-        //404 page.
-        BufferedReader input
-                = new BufferedReader(new InputStreamReader(p.getInputStream()));
-        String line = input.readLine();
-        input.close();
+        String line;
+        try (BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()))) {
+            line = input.readLine();
+        }
 
         int jobId = 0;
         if (line != null) {

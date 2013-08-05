@@ -116,6 +116,10 @@ public class Constants {
      * Package Versions.
      */
     public static final String SESSIONINFO = "sessionInfo";
+    /**
+     * Email job identifier.
+     */
+    public static final String EMAIL = "email";
 
     private Constants() {
     }

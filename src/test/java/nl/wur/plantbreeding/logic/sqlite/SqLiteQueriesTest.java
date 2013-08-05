@@ -21,10 +21,16 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import nl.wur.plantbreeding.omicsfusion.datatypes.SummaryResults;
 import nl.wur.plantbreeding.omicsfusion.entities.UserList;
 import nl.wur.plantbreeding.omicsfusion.utils.Constants;
-import org.junit.*;
+import org.junit.After;
+import org.junit.AfterClass;
 import static org.junit.Assert.fail;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
+import org.junit.Test;
 
 /**
  *
@@ -129,6 +135,22 @@ public class SqLiteQueriesTest {
         String directory = "";
         SqLiteQueries instance = new SqLiteQueries();
         //instance.readSgeJobStatus(directory);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of readSummaryResults method, of class SqLiteQueries.
+     */
+    @Test
+    public void testReadSummaryResults() throws Exception {
+        System.out.println("readSummaryResults");
+        String directory = "/Users/richardfinkers/NetBeansProjects/ofResults/test/";
+        String responseVariable = "t1";
+        SqLiteQueries instance = new SqLiteQueries();
+        ArrayList<SummaryResults> expResult = null;
+        ArrayList<SummaryResults> result = instance.readSummaryResults(directory, responseVariable);
+//        assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }

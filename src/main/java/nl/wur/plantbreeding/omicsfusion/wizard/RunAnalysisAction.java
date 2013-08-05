@@ -111,27 +111,28 @@ public class RunAnalysisAction extends ActionSupport
         try {
             //Relative time: RF - 50 /SPLS - 34 /Ridge - 32 /EN - 8
             //SVM - 5 /PCR - 2 /PLS - 1 /LASSO - 1
+            //TODO: nog completely standardized!
             for (String method : methods) {
                 switch (method) {
                     case Constants.RF: {
                         RandomForest mth = new RandomForest();
                         String mthString = mth.getAnalysisScript(responseName);
                         writeScriptFile("rf.R", mthString);
-                        jobIds.put(Constants.RF, submitToSGE(Constants.RF));
+                        jobIds.put(Constants.RF, submitToSGE(Constants.RF, null));
                         break;
                     }
                     case Constants.SPLS: {
                         SparsePLS mth = new SparsePLS();
                         String mthString = mth.getAnalysisScript(responseName);
                         writeScriptFile("spls.R", mthString);
-                        jobIds.put(Constants.SPLS, submitToSGE(Constants.SPLS));
+                        jobIds.put(Constants.SPLS, submitToSGE(Constants.SPLS, null));
                         break;
                     }
                     case Constants.RIDGE: {
                         Ridge mth = new Ridge();
                         String mthString = mth.getAnalysisScript(responseName);
                         writeScriptFile(method + ".R", mthString);
-                        int job = submitToSGE(method);
+                        int job = submitToSGE(method, null);
                         if (job != 0) {
                             jobIds.put(Constants.RIDGE, job);
                         }
@@ -141,42 +142,42 @@ public class RunAnalysisAction extends ActionSupport
                         ElasticNet mth = new ElasticNet();
                         String mthString = mth.getAnalysisScript(responseName);
                         writeScriptFile("en.R", mthString);
-                        jobIds.put(Constants.EN, submitToSGE(Constants.EN));
+                        jobIds.put(Constants.EN, submitToSGE(Constants.EN, null));
                         break;
                     }
                     case Constants.SVM: {
                         SVM mth = new SVM();
                         String mthString = mth.getAnalysisScript(responseName);
                         writeScriptFile("svm.R", mthString);
-                        jobIds.put(Constants.SVM, submitToSGE(Constants.SVM));
+                        jobIds.put(Constants.SVM, submitToSGE(Constants.SVM, null));
                         break;
                     }
                     case Constants.PCR: {
                         PCR mth = new PCR();
                         String mthString = mth.getAnalysisScript(responseName);
                         writeScriptFile("pcr.R", mthString);
-                        jobIds.put(Constants.PCR, submitToSGE(Constants.PCR));
+                        jobIds.put(Constants.PCR, submitToSGE(Constants.PCR, null));
                         break;
                     }
                     case Constants.PLS: {
                         PartialLeasedSquares mth = new PartialLeasedSquares();
                         String mthString = mth.getAnalysisScript(responseName);
                         writeScriptFile("pls.R", mthString);
-                        jobIds.put(Constants.PLS, submitToSGE(Constants.PLS));
+                        jobIds.put(Constants.PLS, submitToSGE(Constants.PLS, null));
                         break;
                     }
                     case Constants.LASSO: {
                         Lasso mth = new Lasso();
                         String mthString = mth.getAnalysisScript(responseName);
                         writeScriptFile("lasso.R", mthString);
-                        jobIds.put(Constants.LASSO, submitToSGE(Constants.LASSO));
+                        jobIds.put(Constants.LASSO, submitToSGE(Constants.LASSO, null));
                         break;
                     }
                     case Constants.UNIVARIATE: {
                         Univariate mth = new Univariate();
                         String mthString = mth.getAnalysisScript(responseName);
                         writeScriptFile("univariate.R", mthString);
-                        jobIds.put(Constants.UNIVARIATE, submitToSGE(Constants.UNIVARIATE));
+                        jobIds.put(Constants.UNIVARIATE, submitToSGE(Constants.UNIVARIATE, null));
                         break;
                     }
                 }
@@ -185,7 +186,11 @@ public class RunAnalysisAction extends ActionSupport
             RSessionInfo rsi = new RSessionInfo();
             String mthString = rsi.getAnalysisScript(responseName);
             writeScriptFile("sessionInfo.R", mthString);
-            jobIds.put("sessionInfo", submitToSGE("sessionInfo"));
+            jobIds.put(Constants.SESSIONINFO, submitToSGE(Constants.SESSIONINFO, null));
+
+            //Submit the end analysis email.
+            //TODO: get from context
+            submitToSGE(Constants.EMAIL, jobIds);
 
             //Add the info to the database
             SqLiteQueries sql = new SqLiteQueries();
@@ -236,11 +241,13 @@ public class RunAnalysisAction extends ActionSupport
      * Create the SGE submission script and submit the job to SGE.
      *
      * @param scriptName Name of the scripts.
+     * @param jobIDs
      * @return The jobID.
      * @throws IOException When writing to disk fails.
      * @throws NullPointerException SGE qsub is not available.
      */
-    public int submitToSGE(String scriptName) throws IOException,
+    public int submitToSGE(String scriptName, HashMap<String, Integer> jobIDs)
+            throws IOException,
             NullPointerException {
 
         //SGE submission queue.
@@ -264,7 +271,7 @@ public class RunAnalysisAction extends ActionSupport
         int jobId = 0;
 
         jobId = CmdExec.ExecuteQSubCmd(ServletUtils.getResultsDir(request)
-                + "/", scriptName);
+                + "/", scriptName, jobIDs);
 
         if (jobId == 0) {
             LOG.severe("error during submission");
