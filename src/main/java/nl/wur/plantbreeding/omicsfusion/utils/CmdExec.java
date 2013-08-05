@@ -90,7 +90,6 @@ public class CmdExec {
                 execution += " ";
                 execution += executionDir;
                 execution += method + ".pbs";
-                System.out.println("Execution:  " + execution);
                 p = Runtime.getRuntime().exec(execution);
                 break;
             default:
@@ -99,7 +98,8 @@ public class CmdExec {
                 break;
         }
         String line;
-        try (BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()))) {
+        try (BufferedReader input
+                = new BufferedReader(new InputStreamReader(p.getInputStream()))) {
             line = input.readLine();
         }
 
@@ -134,28 +134,26 @@ public class CmdExec {
         boolean finished = false;
         //String line;
         Process p = Runtime.getRuntime().exec("qstat -j " + jobId);
-        BufferedReader input
-                = new BufferedReader(new InputStreamReader(p.getInputStream()));
-        BufferedReader error
-                = new BufferedReader(new InputStreamReader(p.getErrorStream()));
-        p.waitFor();
+        BufferedReader error;
+        try (BufferedReader input
+                = new BufferedReader(new InputStreamReader(p.getInputStream()))) {
+            error = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+            p.waitFor();
+            String line = input.readLine();
+            String errors = error.readLine();
+            if (errors != null && errors.contains("do not exist")) {
+                LOG.info("Errors check");
+                System.out.println("errors:" + errors);
+                finished = true;
+            } else if (line != null) {
+                System.out.println("input check");
+                //submission_time:
 
-        String line = input.readLine();
-        String errors = error.readLine();
-
-        if (errors != null && errors.contains("do not exist")) {
-            LOG.info("Errors check");
-            System.out.println("errors:" + errors);
-            finished = true;
-        } else if (line != null) {
-            System.out.println("input check");
-            //submission_time:
-
-            while ((line = input.readLine()) != null) {
-                System.out.println("result: " + line);
+                while ((line = input.readLine()) != null) {
+                    System.out.println("result: " + line);
+                }
             }
         }
-        input.close();
         error.close();
         return finished;
     }
