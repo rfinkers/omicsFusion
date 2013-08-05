@@ -8,10 +8,22 @@
 <%@ taglib prefix="sj" uri="/struts-jquery-tags"%>
 
 <h2><s:text name="results.heading" /></h2>
-<s:actionerror/>
+<s:actionerror theme="jquery"/>
 <s:text name="results.introduction" />
 <br/><br/>
-<s:form action="summaryResults"  namespace="/results">
-    <s:textfield name="sessionId" size="26"/>
-    <sj:submit styleId="submitMoment" button="true" />
+<s:form action="summaryResults"
+        namespace="/results"
+        theme="bootstrap"
+        cssClass="form-horizontal"
+        label="Results"
+        >
+    <s:textfield name="sessionId"
+                 key=""
+                 size="26"
+                 tooltip="Enter your unique session identifyer. This ID was sent to you by email after submitting your analyis."/>
+    <div class="form-actions">
+        <sj:submit styleId="submitMoment"
+                   cssClass="btn btn-inverse"
+                   validate="false" />
+    </div>
 </s:form>
