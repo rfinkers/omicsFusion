@@ -30,7 +30,12 @@
         </s:iterator>
 </ul>
 
-<s:form action="/analysis/pipeline" method="POST" namespace="/userRegistration">
-    <s:hidden value="go" name="ready"/>
-    <s:submit styleId="submitMoment" />
+<s:form action="/analysis/pipeline" method="POST" namespace="/userRegistration" cssClass="form-horizontal" theme="bootstrap">
+    <div class="form-actions">
+        <s:hidden value="go"
+                  name="ready"/>
+        <s:submit styleId="submitMoment"
+                  cssClass="btn btn-inverse"
+                  validate="false"/>
+    </div>
 </s:form>

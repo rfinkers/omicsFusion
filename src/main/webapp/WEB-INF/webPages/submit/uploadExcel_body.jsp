@@ -51,6 +51,5 @@ Form
                    indicator="indicator"/>
         <s:reset cssClass="btn btn-inverse"/>
     </div>
-
 </s:form>
 <img id="indicator" src="<s:url value="/images/busy.gif"/>" alt="loading..." style="display:none"/>

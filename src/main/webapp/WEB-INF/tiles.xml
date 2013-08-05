@@ -41,7 +41,6 @@
     </definition>
     <definition name="methodSelection" extends="baseLayout">
         <put-attribute name="title" value="omicsFusion" />
-        <put-attribute name="scripts" value="/WEB-INF/webPages/submit/methodSelection.js" />
         <put-attribute name="body" value="/WEB-INF/webPages/submit/methodSelection_body.jsp" />
     </definition>
     <definition name="uploadExcel" extends="baseLayout">
