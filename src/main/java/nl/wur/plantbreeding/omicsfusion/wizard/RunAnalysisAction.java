@@ -255,18 +255,24 @@ public class RunAnalysisAction extends ActionSupport
                 = request.getSession().getServletContext().getInitParameter("SGEQueue");
 
         WriteFile wf = new WriteFile();
-        wf.WriteFile(ServletUtils.getResultsDir(request)
-                + "/" + scriptName + ".pbs",
-                "#!/bin/sh\n\n"
+        //wf.WriteFile(
+        String runScript = "#!/bin/sh\n\n"
                 + "#$ -cwd\n"
                 + "#$ -N " + scriptName + "\n"
-                + "#$ -m e\n"
-                + "#$ -M richard.finkers@wur.nl\n"
+                //                + "#$ -m e\n"
+                //                + "#$ -M richard.finkers@wur.nl\n"
                 + "#$ -S /bin/bash\n"
                 + "#$ -q " + queue + "\n"
-                + "cd " + ServletUtils.getResultsDir(request)
-                + "\nR --no-save < "
-                + scriptName + ".R\n");
+                + "cd " + ServletUtils.getResultsDir(request);
+        if (scriptName.equals(Constants.EMAIL)) {
+            runScript += "\njava -jar ../omicsFusionNotify.jar\n";
+        } else {
+            runScript += "\nR --no-save < "
+                    + scriptName + ".R\n";
+        }
+
+        wf.WriteFile(ServletUtils.getResultsDir(request)
+                + "/" + scriptName + ".pbs", runScript);
         //Submit jobs to the SGE QUEUE
         int jobId = 0;
 
