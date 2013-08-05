@@ -27,7 +27,8 @@ Form
                   required="true"/>
     <sj:textfield key="email"
                   tooltip="Please enter your email."
-                  inputAppendIcon="envelope"/>
+                  inputAppendIcon="envelope"
+                  required="true"/>
     <sj:textfield key="affiliation"
                   tooltip="Please enter the name of your organization."/>
     <sj:textfield key="country"

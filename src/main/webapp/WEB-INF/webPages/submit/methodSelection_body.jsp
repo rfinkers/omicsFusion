@@ -10,7 +10,7 @@
 <s:form action="methodSelection"
         method="POST"
         namespace="/userRegistration"
-        cssClass="form-horizontal"
+        cssClass="form-vertical"
         theme="bootstrap"
         label="Methods">
     <s:checkbox key="analysis.method.rf" name="rf" />
