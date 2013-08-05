@@ -32,6 +32,10 @@ import nl.wur.plantbreeding.omicsfusion.utils.ServletUtils;
 import nl.wur.plantbreeding.omicsfusion.utils.WriteFile;
 import org.apache.commons.io.FileUtils;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.struts2.convention.annotation.InterceptorRef;
+import org.apache.struts2.convention.annotation.ParentPackage;
+import org.apache.struts2.convention.annotation.Result;
+import org.apache.struts2.convention.annotation.Results;
 import org.apache.struts2.interceptor.ServletRequestAware;
 
 /**
@@ -41,7 +45,13 @@ import org.apache.struts2.interceptor.ServletRequestAware;
  * @author Richard Finkers
  * @version 1.0
  */
-//TODO: Annotations
+@ParentPackage(value = "dataUpload")
+@InterceptorRef("jsonValidationWorkflowStack")
+@Results({
+    @Result(location = "/submit/uploadExcel.jsp", name = "input"),
+    @Result(location = "/submit/methodSelection.jsp", name = "success"),
+    @Result(location = "/submit/uploadExcel.jsp", name = "error")
+})
 public class DataUploadAction extends DataUploadValidationForm
         implements ServletRequestAware {
 
@@ -83,22 +93,17 @@ public class DataUploadAction extends DataUploadValidationForm
             writeNamesToDB();
 
             //validate the correctness of the format of the excelsheet.
-            if (!responseSheet.getName().contains("csv")
-                    && !predictorSheet.getName().contains("csv")) {
-                //FIXME: one of the files is csv. No validation possible
-                ValidateDataSheets.validateExcelSheets(responseSheet,
-                        predictorSheet);
-
-                try {
-                    uploadExcelSheets(responseSheet, getResponseType(),
-                            predictorSheet, getPredictorType(),
-                            ServletUtils.getResultsDir(request));
-                } catch (ClassNotFoundException | SQLException e) {
-                    e.printStackTrace();
-                    addActionError(e.getMessage());
-                    LOG.info("Excel to Database");
-                    return INPUT;
-                }
+            ValidateDataSheets.validateExcelSheets(responseSheet,
+                    predictorSheet);
+            try {
+                uploadExcelSheets(responseSheet, getResponseType(),
+                        predictorSheet, getPredictorType(),
+                        ServletUtils.getResultsDir(request));
+            } catch (ClassNotFoundException | SQLException e) {
+                e.printStackTrace();
+                addActionError(e.getMessage());
+                LOG.info("Excel to Database");
+                return INPUT;
             }
 
             if (predictResponseSheet != null) {
