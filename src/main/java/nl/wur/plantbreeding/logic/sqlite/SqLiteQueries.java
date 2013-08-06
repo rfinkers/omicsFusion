@@ -509,4 +509,22 @@ public class SqLiteQueries extends SqLiteHelper {
         }
         return result;
     }
+
+    public String getPredictorNameFromDB(String directory, String predictor) throws SQLException, ClassNotFoundException {
+        Connection db = openDatabase(directory);
+        Statement statement = prepareStatement();
+
+        String predictorName = null;
+        try {
+            ResultSet rs = statement.executeQuery("SELECT DISTINCT predictor_name "
+                    + "FROM predictor WHERE predictorID='" + predictor + "'");
+            while (rs.next()) {
+                predictorName = rs.getString("predictor_name");
+            }
+        } finally {
+            closeDatabase(db);
+        }
+//TODO: can be done with getSingleResult?
+        return predictorName;
+    }
 }

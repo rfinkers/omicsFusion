@@ -39,7 +39,7 @@ import org.apache.struts2.interceptor.ServletRequestAware;
  * @version 2.0.
  */
 @Results({
-    @Result(location = "/results/predRespXYScatter.jsp", name = "success"),
+    @Result(location = "/results/predRespXYScatter.jsp", name = "success", type = "json"),
     @Result(location = "/results/showResultsSummary.jsp", name = "error")
 })
 public class PredictorResponseXYScatterAction
@@ -101,9 +101,11 @@ public class PredictorResponseXYScatterAction
         }
 
         List<XYScatterDataType> dataSet = null;
+        String predictorName = null;
         try {
             dataSet = getDataSetFromDB(getPredictor(),
                     responseVariable, sessionName);
+            predictorName = getPredictorNameFromDB(getPredictor(), sessionName);
         } catch (Exception e) {
             addActionError(getText("errors.general.exception"));
             //This one will be catched when no valid input format is available.
@@ -122,6 +124,13 @@ public class PredictorResponseXYScatterAction
             addActionError("No datapoints obtained from database");
             return ERROR;
         }
+
+        if (predictorName == null) {
+            addActionError("No response name read from database");
+            return ERROR;
+        }
+
+        request.getSession().setAttribute("predictorName", predictorName);
 
         PredictorResponseXYScatterPlot pl = new PredictorResponseXYScatterPlot();
         regression = pl.getRegressionLine(dataSet);
@@ -155,6 +164,16 @@ public class PredictorResponseXYScatterAction
                 predictor, response);
 
         return predictResponseXYScatterPlotDataSet;
+    }
+
+    String getPredictorNameFromDB(String predictor, String sessionID)
+            throws ClassNotFoundException, SQLException {
+
+        //connect to the db.
+        SqLiteQueries sql = new SqLiteQueries();
+        //Read the name from the DB.
+        return sql.getPredictorNameFromDB(
+                ServletUtils.getResultsDir(request, sessionID), predictor);
     }
 
     public Map<Double, Double> getPoints() {
