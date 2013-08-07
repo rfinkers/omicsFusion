@@ -94,6 +94,7 @@ public class UploadDataSheets extends ManipulateExcelSheet {
             responseRowCounter++;
             //parse row to db
 
+            //FIXME: will introduce a bug?
             //variable, ontologyID
         }
         if (predictorSheet.getRow(predictorRowCounter).getCell(0).getRichStringCellValue().getString().equals(ontologyID)) {
@@ -108,15 +109,14 @@ public class UploadDataSheets extends ManipulateExcelSheet {
         HashMap<String, String> resp = new HashMap<>();
 
         for (int i = responseRowCounter;
-                i < responseSheet.getLastRowNum(); i++) {
+                i < responseSheet.getLastRowNum() + 1; i++) {
 
             String trait;
             Double observation;
             String genotype
                     = responseSheet.getRow(i).getCell(0).getStringCellValue().trim();
-//TODO: Check if all rows are parsed to the DB! (0 ref vs. 1 ref?)
             for (int j = 1; j < responseRowLenght; j++) {
-                if (!responseHeaderRow.getCell(j).getStringCellValue().equals("")) {
+                if (!responseHeaderRow.getCell(j).getStringCellValue().isEmpty()) {
                     trait = responseHeaderRow.getCell(j).getStringCellValue();
                     if (responseSheet.getRow(i).getCell(j).getCellType()
                             == Cell.CELL_TYPE_NUMERIC) {
@@ -139,15 +139,15 @@ public class UploadDataSheets extends ManipulateExcelSheet {
 
         List<DataPointDataType> pdp = new ArrayList<>();
 
-        //TODO: Check this logic, seems redundant!
+        //TODO: This logic is redundant! Refractor out to separate method.
         for (int i = predictorRowCounter;
-                i < predictorSheet.getLastRowNum(); i++) {
+                i < predictorSheet.getLastRowNum() + 1; i++) {
 
             String header;
             Double value;
             String genotype = predictorSheet.getRow(i).getCell(0).getStringCellValue().trim();
             for (int j = 1; j < predictorRowLength; j++) {
-                if (!predictorHeaderRow.getCell(j).getStringCellValue().equals("")) {
+                if (!predictorHeaderRow.getCell(j).getStringCellValue().isEmpty()) {
                     header = predictorHeaderRow.getCell(j).getStringCellValue();
                     if (predictorSheet.getRow(i).getCell(j).getCellType()
                             == Cell.CELL_TYPE_NUMERIC) {
