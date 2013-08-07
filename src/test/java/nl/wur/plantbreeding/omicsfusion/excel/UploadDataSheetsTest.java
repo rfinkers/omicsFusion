@@ -17,7 +17,12 @@ package nl.wur.plantbreeding.omicsfusion.excel;
 
 import java.io.File;
 import java.sql.SQLException;
-import org.junit.*;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
+import org.junit.Test;
 
 /**
  *
