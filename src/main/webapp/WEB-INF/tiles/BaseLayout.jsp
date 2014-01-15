@@ -25,6 +25,7 @@
         <meta name="description" content="Research &amp; education tools from Wageningen UR Plant Breeding." />
         <meta name="reply-to" content="webmaster.plantbreeding@wur.nl" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <link rel="author" href="https://plus.google.com/+RichardFinkers"/>
 
         <!-- style sheets -->
         <link href="<s:url value="/css/themePBR.css"/>" rel="stylesheet" media="screen" type="text/css" title="Standaard" />
