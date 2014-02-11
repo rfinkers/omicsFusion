@@ -3,12 +3,15 @@
 <%@ taglib prefix="sj" uri="/struts-jquery-tags"%>
 <%@ taglib prefix="sb" uri="/struts-bootstrap-tags" %>
 <!DOCTYPE html>
-<html lang="en"
+<html version="HTML+RDFa 1.1" lang="en"
       xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:r="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+      xmlns:dc="http://purl.org/dc/elements/1.1/"
+      xmlns:foaf="http://xmlns.com/foaf/0.1/">
+
     <head>
         <!-- page title -->
-        <title><tiles:insertAttribute name="title" /></title>
+        <title property="dc:title"><tiles:insertAttribute name="title" /></title>
 
         <!-- favicon -->
         <link rel="icon" type="image/x-icon" href="<s:url value="/favicon.ico"/>" />
@@ -16,16 +19,18 @@
 
         <!-- RDF description -->
         <link rel="meta" type="application/rdf+xml" title="FOAF" href="<s:url value="/OmicsFusion.rdf" />"/>
-        <r:RDF>
+        <rdf:RDF>
             <!-- TODO: Further test this implementation? -->
-        </r:RDF>
+        </rdf:RDF>
 
         <!-- meta information -->
         <meta name="keywords" content="omicsFusion, Wageningen UR Plantbreeding, tomato, potato, lasso, ridge, pls, spls, univariate, anova, random forrest" />
-        <meta name="description" content="Research &amp; education tools from Wageningen UR Plant Breeding." />
+        <meta rel="dc:description" name="description" content="Research &amp; education tools from Wageningen UR Plant Breeding." />
         <meta name="reply-to" content="webmaster.plantbreeding@wur.nl" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-        <link rel="author" href="https://plus.google.com/+RichardFinkers"/>
+        <meta rel="dc:creator" href="http://nl.linkedin.com/in/richardfinkers" />
+        <meta rel="dc:publisher" href="http://www.plantbreeding.wur.nl" />
+        <meta rel="dc:subject" href="http://dbpedia.org/page/Plant_breeding" />
 
         <!-- style sheets -->
         <link href="<s:url value="/css/themePBR.css"/>" rel="stylesheet" media="screen" type="text/css" title="Standaard" />
