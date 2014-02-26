@@ -90,18 +90,22 @@ public class UploadDataSheets extends ManipulateExcelSheet {
         final String ontologyID = "ontology";
         int responseRowCounter = 1;
         predictorRowCounter = 1;
-        if (responseSheet.getRow(responseRowCounter).getCell(0).getRichStringCellValue().getString().equals(ontologyID)) {
-            responseRowCounter++;
+        try {
+            if (responseSheet.getRow(responseRowCounter).getCell(0).getRichStringCellValue().getString().equals(ontologyID)) {
+                responseRowCounter++;
             //parse row to db
 
-            //FIXME: will introduce a bug?
-            //variable, ontologyID
-        }
-        if (predictorSheet.getRow(predictorRowCounter).getCell(0).getRichStringCellValue().getString().equals(ontologyID)) {
-            predictorRowCounter++;
+                //FIXME: will introduce a bug?
+                //variable, ontologyID
+            }
+            if (predictorSheet.getRow(predictorRowCounter).getCell(0).getRichStringCellValue().getString().equals(ontologyID)) {
+                predictorRowCounter++;
             //parse row to DB
 
-            //variable, ontologyID
+                //variable, ontologyID
+            }
+        } catch (Exception e) {
+            System.out.println("Exception!");
         }
         //Data (first column genotype, other columns data).
         //parse the rest of the data.
@@ -113,8 +117,12 @@ public class UploadDataSheets extends ManipulateExcelSheet {
 
             String trait;
             Double observation;
-            String genotype
-                    = responseSheet.getRow(i).getCell(0).getStringCellValue().trim();
+            String genotype;
+            if (responseSheet.getRow(i).getCell(0).getCellType() == Cell.CELL_TYPE_NUMERIC) {
+                genotype = Double.toString(responseSheet.getRow(i).getCell(0).getNumericCellValue());
+            } else {
+                genotype = responseSheet.getRow(i).getCell(0).getStringCellValue().trim();
+            }
             for (int j = 1; j < responseRowLenght; j++) {
                 if (!responseHeaderRow.getCell(j).getStringCellValue().isEmpty()) {
                     trait = responseHeaderRow.getCell(j).getStringCellValue();
@@ -145,7 +153,12 @@ public class UploadDataSheets extends ManipulateExcelSheet {
 
             String header;
             Double value;
-            String genotype = predictorSheet.getRow(i).getCell(0).getStringCellValue().trim();
+            String genotype;
+            if (predictorSheet.getRow(i).getCell(0).getCellType() == Cell.CELL_TYPE_NUMERIC) {
+                genotype = Double.toString(predictorSheet.getRow(i).getCell(0).getNumericCellValue());
+            } else {
+                genotype = predictorSheet.getRow(i).getCell(0).getStringCellValue().trim();
+            }
             for (int j = 1; j < predictorRowLength; j++) {
                 if (!predictorHeaderRow.getCell(j).getStringCellValue().isEmpty()) {
                     header = predictorHeaderRow.getCell(j).getStringCellValue();
