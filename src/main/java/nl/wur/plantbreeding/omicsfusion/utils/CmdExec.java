@@ -61,15 +61,15 @@ public class CmdExec {
                 //TODO: replace email with email user?
                 //TODO: add this to the if test above?
                 if (Constants.MAX_NUMBER_CPU > 2) {
-                p = Runtime.getRuntime().exec(
-                        "qsub -p -1023 -pe Rmpi "
-                        + Constants.MAX_NUMBER_CPU
-                        + " " + executionDir
-                        + method + ".pbs");
-            } else {
-                p = Runtime.getRuntime().exec("qsub "
-                        + executionDir + method + ".pbs");
-            }
+                    p = Runtime.getRuntime().exec(
+                            "qsub -p -1023 -pe Rmpi "
+                            + Constants.MAX_NUMBER_CPU
+                            + " " + executionDir
+                            + method + ".pbs");
+                } else {
+                    p = Runtime.getRuntime().exec("qsub "
+                            + executionDir + method + ".pbs");
+                }
                 break;
             case Constants.EMAIL:
                 int counter = 0;

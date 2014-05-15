@@ -410,14 +410,14 @@ public class Analysis {
                 case Constants.SPLS:
                 case Constants.RIDGE:
                     if (Constants.MAX_NUMBER_CPU > 2) {
-                    int workerCount = Constants.MAX_NUMBER_CPU - 1;
-                    //TODO: start in the first itteration only? Then, move if statement to R level
-                    //Required additional packages: foreach, iterators, codetools, Rmpi
-                    rCode += "      library(doMPI)\n";
-                    // there is also an: maxcores= parameter on startMPIcluster
-                    rCode += "      cl <- startMPIcluster(count = " + workerCount + ", verbose = TRUE)\n";
-                    rCode += "      registerDoMPI(cl)\n";
-                }
+                        int workerCount = Constants.MAX_NUMBER_CPU - 1;
+                        //TODO: start in the first itteration only? Then, move if statement to R level
+                        //Required additional packages: foreach, iterators, codetools, Rmpi
+                        rCode += "      library(doMPI)\n";
+                        // there is also an: maxcores= parameter on startMPIcluster
+                        rCode += "      cl <- startMPIcluster(count = " + workerCount + ", verbose = TRUE)\n";
+                        rCode += "      registerDoMPI(cl)\n";
+                    }
                     if (analysisMethod.equals(Constants.RF)) {
                         rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"rf\", metric = \"RMSE\", tuneLength = 10, trControl = innerLoop)\n";
                     } else if (analysisMethod.equals(Constants.SPLS)) {
@@ -446,15 +446,15 @@ public class Analysis {
                 case Constants.LASSO:
                 case Constants.RIDGE:
                     switch (analysisMethod) {
-                    case Constants.EN:
-                        rCode += "      frac_" + i + "[, index] <- fit_" + i + "$finalModel$tuneValue$.alpha\n";
-                        rCode += "      lambda_" + i + "[, index] <- fit_" + i + "$finalModel$tuneValue$.lambda\n";
-                        break;
-                    case Constants.LASSO:
-                    case Constants.RIDGE:
-                        rCode += "      lambda_" + i + "[, index] <- fit_" + i + "$bestTune$.lambda\n";
-                        break;
-                }
+                        case Constants.EN:
+                            rCode += "      frac_" + i + "[, index] <- fit_" + i + "$finalModel$tuneValue$.alpha\n";
+                            rCode += "      lambda_" + i + "[, index] <- fit_" + i + "$finalModel$tuneValue$.lambda\n";
+                            break;
+                        case Constants.LASSO:
+                        case Constants.RIDGE:
+                            rCode += "      lambda_" + i + "[, index] <- fit_" + i + "$bestTune$.lambda\n";
+                            break;
+                    }
                     rCode += "      coefs_" + i + "[, index] <- as.matrix(coef(fit_" + i + "$finalModel, s = fit_" + i + "$finalModel$tuneValue$.lambda))\n";
                     //predection on outer training set.
                     rCode += "      preds_" + i + " <- predict(fit_" + i + "$finalModel, newx = predictorTrainSet" + i + ", s = fit_" + i + "$finalModel$tuneValue$.lambda, type = \"response\")\n";

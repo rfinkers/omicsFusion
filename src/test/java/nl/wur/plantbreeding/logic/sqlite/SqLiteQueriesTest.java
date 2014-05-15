@@ -143,6 +143,7 @@ public class SqLiteQueriesTest {
      * Test of readSummaryResults method, of class SqLiteQueries.
      */
     @Test
+    @Ignore
     public void testReadSummaryResults() throws Exception {
         System.out.println("readSummaryResults");
         String directory = "/Users/richardfinkers/NetBeansProjects/ofResults/test/";

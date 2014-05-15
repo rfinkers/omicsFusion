@@ -160,8 +160,8 @@ public class PredictorResponseXYScatterAction
         //Read the data for the predictor & response (order by
         List<XYScatterDataType> predictResponseXYScatterPlotDataSet
                 = sql.getObservationsForPredictorAndResponse(
-                ServletUtils.getResultsDir(request, sessionID),
-                predictor, response);
+                        ServletUtils.getResultsDir(request, sessionID),
+                        predictor, response);
 
         return predictResponseXYScatterPlotDataSet;
     }

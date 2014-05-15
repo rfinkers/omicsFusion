@@ -65,11 +65,11 @@ public class ManipulateExcelSheet {
                         break;
                     case Cell.CELL_TYPE_NUMERIC:
                         if (DateUtil.isCellDateFormatted(cell)) {
-                        LOG.info(cell.getDateCellValue().toString());
-                    } else {
-                        LOG.info(Double.toString(
-                                cell.getNumericCellValue()));
-                    }
+                            LOG.info(cell.getDateCellValue().toString());
+                        } else {
+                            LOG.info(Double.toString(
+                                    cell.getNumericCellValue()));
+                        }
                         break;
                     case Cell.CELL_TYPE_BOOLEAN:
                         LOG.info(Boolean.toString(cell.getBooleanCellValue()));

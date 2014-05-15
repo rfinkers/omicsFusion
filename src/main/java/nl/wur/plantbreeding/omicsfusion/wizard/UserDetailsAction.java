@@ -56,15 +56,15 @@ import org.apache.struts2.interceptor.ServletRequestAware;
     @ExpressionValidator(expression = "name.trim().length() > 5",
             message = "Password must have as minimum 6 Characters.")
 }
-        //        ,fieldExpressions = {
-        //    @FieldExpressionValidator(fieldName = "name",
-        //            expression = "name.trim().length() > 6",
-        //            message = "Password must have as minimum 6 Characters."),
-        //    @FieldExpressionValidator(fieldName = "email",
-        //            expression = "email.trim().length() > 6",
-        //            message = "Accept the Agreement.")
-        //}
-        )
+//        ,fieldExpressions = {
+//    @FieldExpressionValidator(fieldName = "name",
+//            expression = "name.trim().length() > 6",
+//            message = "Password must have as minimum 6 Characters."),
+//    @FieldExpressionValidator(fieldName = "email",
+//            expression = "email.trim().length() > 6",
+//            message = "Accept the Agreement.")
+//}
+)
 public class UserDetailsAction extends UserDetailsValidationForm
         implements ServletRequestAware {
 

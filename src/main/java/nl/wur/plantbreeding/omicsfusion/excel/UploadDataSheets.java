@@ -76,11 +76,17 @@ public class UploadDataSheets extends ManipulateExcelSheet {
         List<DataPointDataType> rdp = null;
         int predictorRowCounter = 0;
         Sheet predictorSheet = null;
+        Sheet responseSheet = null;
 
         //First row contains the variable
         //TODO: NPE check
-        Sheet responseSheet = responseWorkbook.getSheetAt(0);
-        predictorSheet = predictorWorkbook.getSheetAt(0);
+        try {
+            responseSheet = responseWorkbook.getSheetAt(0);
+            predictorSheet = predictorWorkbook.getSheetAt(0);
+        } catch (Exception e) {
+            //TODO
+        }
+
         Row responseHeaderRow = responseSheet.getRow(0);
         //TODO: miss one row!. +1 leads to NPE!
         int responseRowLenght = responseHeaderRow.getLastCellNum();

@@ -58,17 +58,17 @@ import org.apache.struts2.interceptor.ServletRequestAware;
     @RequiredStringValidator(fieldName = "sessionId",
             type = ValidatorType.FIELD, message = "Please enter a valid sessionID")}, expressions = {
             @ExpressionValidator(expression = "sessionId.trim().length() > 3",
-            message = "sessionId is to short.")
+                    message = "sessionId is to short.")
         }
-        //        ,fieldExpressions = {
-        //    @FieldExpressionValidator(fieldName = "name",
-        //            expression = "name.trim().length() > 6",
-        //            message = "Password must have as minimum 6 Characters."),
-        //    @FieldExpressionValidator(fieldName = "email",
-        //            expression = "email.trim().length() > 6",
-        //            message = "Accept the Agreement.")
-        //}
-        )
+//        ,fieldExpressions = {
+//    @FieldExpressionValidator(fieldName = "name",
+//            expression = "name.trim().length() > 6",
+//            message = "Password must have as minimum 6 Characters."),
+//    @FieldExpressionValidator(fieldName = "email",
+//            expression = "email.trim().length() > 6",
+//            message = "Accept the Agreement.")
+//}
+)
 public class RetrieveResultsSummaryAction
         extends RetrieveResultsSummaryValidationForm
         implements ServletRequestAware {
@@ -104,7 +104,7 @@ public class RetrieveResultsSummaryAction
         //Location of the results directory
         String resultsDirectory
                 = request.getSession().getServletContext().getInitParameter(
-                "resultsDirectory");
+                        "resultsDirectory");
 
         if (resultsDirectory == null) {
             addActionError(getText("errors.no.dir"));
@@ -143,7 +143,7 @@ public class RetrieveResultsSummaryAction
 
         HashMap<String, ArrayList<SummaryDataType>> methResults
                 = getMethodsWithResultsSummaryFilesFromDB(getSessionId(),
-                resultsDirectory, responseID);
+                        resultsDirectory, responseID);
 
         LOG.log(Level.INFO, "Methods: {0}", methResults.size());
 
@@ -714,7 +714,7 @@ public class RetrieveResultsSummaryAction
                     summaryResults.getMean(),
                     summaryResults.getSd(),
                     summaryResults.getRank()
-                    );
+            );
             switch (summaryResults.getMethod()) {
                 case Constants.PCR:
                     pcr.add(dataPoint);

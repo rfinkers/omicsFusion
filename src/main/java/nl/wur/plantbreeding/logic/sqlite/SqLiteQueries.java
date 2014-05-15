@@ -261,7 +261,7 @@ public class SqLiteQueries extends SqLiteHelper {
             statement.executeUpdate("INSERT INTO responseVariables "
                     + "(traitID, response) values "
                     + "('" + pairs.getKey() + "','" + pairs.getValue() + "')"
-                    );
+            );
         }
 
         //int[] variableStatus = statement.executeBatch();
