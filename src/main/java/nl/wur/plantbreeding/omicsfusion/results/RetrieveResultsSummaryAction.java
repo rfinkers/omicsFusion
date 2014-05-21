@@ -399,13 +399,13 @@ public class RetrieveResultsSummaryAction
             row += "<td class=\"" + univariate_p.get(element).getHtmlColor()
                     + "\"><a title=\"rank: "
                     + univariate_p.get(element).getRank() + "\"> "
-                    + df.format(univariate_p.get(element).getMean()) + "</td>";
+                    + df.format(univariate_p.get(element).getMean()) + "</a></td>";
         }
         if (methResults.get(Constants.BH) != null) {
             row += "<td class=\"" + univariate_bh.get(element).getHtmlColor()
                     + "\"><a title=\"rank: "
                     + univariate_bh.get(element).getRank() + "\"> "
-                    + df.format(univariate_bh.get(element).getMean()) + "</td>";
+                    + df.format(univariate_bh.get(element).getMean()) + "</a></td>";
         }
         if (methResults.get(Constants.RF) != null) {
             row += "<td class=\"" + rf.get(element).getHtmlColor()
