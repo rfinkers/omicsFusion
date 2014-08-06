@@ -448,16 +448,16 @@ public class Analysis {
                     switch (analysisMethod) {
                         case Constants.EN:
                             rCode += "      frac_" + i + "[, index] <- fit_" + i + "$finalModel$tuneValue$.alpha\n";
-                            rCode += "      lambda_" + i + "[, index] <- fit_" + i + "$finalModel$tuneValue$.lambda\n";
+                            rCode += "      lambda_" + i + "[, index] <- fit_" + i + "$finalModel$tuneValue$lambda\n";
                             break;
                         case Constants.LASSO:
                         case Constants.RIDGE:
-                            rCode += "      lambda_" + i + "[, index] <- fit_" + i + "$bestTune$.lambda\n";
+                            rCode += "      lambda_" + i + "[, index] <- fit_" + i + "$bestTune$lambda\n";
                             break;
                     }
-                    rCode += "      coefs_" + i + "[, index] <- as.matrix(coef(fit_" + i + "$finalModel, s = fit_" + i + "$finalModel$tuneValue$.lambda))\n";
+                    rCode += "      coefs_" + i + "[, index] <- as.matrix(coef(fit_" + i + "$finalModel, s = fit_" + i + "$finalModel$tuneValue$lambda))\n";
                     //predection on outer training set.
-                    rCode += "      preds_" + i + " <- predict(fit_" + i + "$finalModel, newx = predictorTrainSet" + i + ", s = fit_" + i + "$finalModel$tuneValue$.lambda, type = \"response\")\n";
+                    rCode += "      preds_" + i + " <- predict(fit_" + i + "$finalModel, newx = predictorTrainSet" + i + ", s = fit_" + i + "$finalModel$tuneValue$lambda, type = \"response\")\n";
                     rCode += "      y_fit_" + i + " <- preds_" + i + "[, 1]\n";
                     break;
                 case Constants.PCR:
