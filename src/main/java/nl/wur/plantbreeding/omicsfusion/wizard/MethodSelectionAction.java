@@ -35,19 +35,19 @@ public class MethodSelectionAction extends MethodSelectionValidationForm
 
     private static final long serialVersionUID = 180610L;
     /**
-     * The logger
+     * The logger.
      */
     private static final Logger LOG
             = Logger.getLogger(MethodSelectionAction.class.getName());
     /**
-     * the request
+     * the request.
      */
     private HttpServletRequest request;
 
     @Override
     public String execute() throws Exception {
 
-        ArrayList<String> methods = new ArrayList<String>();
+        ArrayList<String> methods = new ArrayList<>();
 
         if (isRidge() == true) {
             methods.add(Constants.RIDGE);

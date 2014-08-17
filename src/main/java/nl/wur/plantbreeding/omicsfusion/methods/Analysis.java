@@ -128,7 +128,7 @@ public class Analysis {
     /**
      * Preprocess the data matrix.
      *
-     * @param responseVariable
+     * @param responseVariable Name of the response variable.
      * @return R program code.
      */
     protected String preProcessMatrix(String responseVariable) {
@@ -144,7 +144,7 @@ public class Analysis {
     /**
      * Get the training sets.
      *
-     * @param responseVariable
+     * @param responseVariable Name of the response variable.
      * @return R program code.
      */
     protected String getTrainingSets(String responseVariable) {
@@ -418,13 +418,18 @@ public class Analysis {
                         rCode += "      cl <- startMPIcluster(count = " + workerCount + ", verbose = TRUE)\n";
                         rCode += "      registerDoMPI(cl)\n";
                     }
-                    if (analysisMethod.equals(Constants.RF)) {
-                        rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"rf\", metric = \"RMSE\", tuneLength = 10, trControl = innerLoop)\n";
-                    } else if (analysisMethod.equals(Constants.SPLS)) {
-                        rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"spls\", metric = \"RMSE\", tuneLength = 10, trControl = innerLoop)\n";
-                    } else if (analysisMethod.equals(Constants.RIDGE)) {
-                        rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"glmnet\", metric = \"RMSE\", tuneLength = 10, tuneGrid = data.frame(.lambda = seq(0, 100, by = 0.1), .alpha = 0), trControl = innerLoop)\n";
+                    switch (analysisMethod) {
+                        case (Constants.RF):
+                            rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"rf\", metric = \"RMSE\", tuneLength = 10, trControl = innerLoop)\n";
+                            break;
+                        case (Constants.SPLS):
+                            rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"spls\", metric = \"RMSE\", tuneLength = 10, trControl = innerLoop)\n";
+                            break;
+                        case (Constants.RIDGE):
+                            rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"glmnet\", metric = \"RMSE\", tuneLength = 10, tuneGrid = data.frame(.lambda = seq(0, 100, by = 0.1), .alpha = 0), trControl = innerLoop)\n";
+                            break;
                     }
+
                     if (Constants.MAX_NUMBER_CPU > 2) {
                         //TODO: stop in the last itteration only?
                         rCode += "      closeCluster(cl)\n";

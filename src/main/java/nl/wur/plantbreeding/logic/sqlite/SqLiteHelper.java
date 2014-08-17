@@ -65,6 +65,12 @@ public class SqLiteHelper {
         return db;
     }
 
+    /**
+     * Prepare database statement.
+     *
+     * @return the database statement.
+     * @throws java.sql.SQLException error creating the statement.
+     */
     protected Statement prepareStatement() throws SQLException {
         Statement statement = db.createStatement();
         statement.setQueryTimeout(30);  // set timeout to 30 sec.

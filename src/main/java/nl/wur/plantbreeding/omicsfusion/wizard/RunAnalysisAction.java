@@ -17,6 +17,7 @@ package nl.wur.plantbreeding.omicsfusion.wizard;
 
 import com.opensymphony.xwork2.ActionSupport;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -199,7 +200,7 @@ public class RunAnalysisAction extends ActionSupport
         } catch (IOException e) {
             addActionError("qsub not found, please check your SGE configuration");//TODO: check
             return ERROR;//TODO: configure
-        } catch (Exception e) {
+        } catch (ClassNotFoundException | NullPointerException | SQLException e) {
             addActionError("Error during SGE submission");
             LOG.log(Level.SEVERE, "Exception: {0}", e.getMessage());
             return ERROR;

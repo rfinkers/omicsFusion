@@ -270,6 +270,14 @@ public class SqLiteQueries extends SqLiteHelper {
 
     }
 
+    /**
+     * Store the selected methods in the database.
+     *
+     * @param directory directory where the database is stored.
+     * @param methods List of methods.
+     * @throws java.sql.SQLException
+     * @throws java.lang.ClassNotFoundException
+     */
     public void addMethods(String directory, List<String> methods)
             throws SQLException, ClassNotFoundException {
         //add list of methods to the database
@@ -287,6 +295,14 @@ public class SqLiteQueries extends SqLiteHelper {
         }
     }
 
+    /**
+     * Store the SGE runID' in he database.
+     *
+     * @param directory directory where the database is stored.
+     * @param jobIds
+     * @throws java.sql.SQLException
+     * @throws java.lang.ClassNotFoundException
+     */
     public void addSgeId(String directory,
             HashMap<String, Integer> jobIds)
             throws SQLException, ClassNotFoundException {
@@ -492,6 +508,14 @@ public class SqLiteQueries extends SqLiteHelper {
         return resultList;
     }
 
+    /**
+     * Obtain name of the Response variable from the database.
+     *
+     * @param directory directory where the database is stored.
+     * @return Name of the response variable.
+     * @throws java.sql.SQLException
+     * @throws java.lang.ClassNotFoundException
+     */
     public HashMap<String, String> getResponseNames(String directory)
             throws SQLException, ClassNotFoundException {
         HashMap<String, String> result = new HashMap<>();
@@ -510,7 +534,17 @@ public class SqLiteQueries extends SqLiteHelper {
         return result;
     }
 
-    public String getPredictorNameFromDB(String directory, String predictor) throws SQLException, ClassNotFoundException {
+    /**
+     * Obtain name of the Predictor from the database.
+     *
+     * @param directory directory where the database is stored.
+     * @param predictor Name of the predictor variable.
+     * @return Name of the predictor variable.
+     * @throws java.sql.SQLException
+     * @throws java.lang.ClassNotFoundException
+     */
+    public String getPredictorNameFromDB(String directory, String predictor)
+            throws SQLException, ClassNotFoundException {
         Connection db = openDatabase(directory);
         Statement statement = prepareStatement();
 

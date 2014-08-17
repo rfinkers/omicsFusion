@@ -60,6 +60,15 @@ public class SummaryDataType {
     public SummaryDataType() {
     }
 
+    /**
+     * Load the summary datatype with all information.
+     *
+     * @param predictorVariable Name of the predictor variable.
+     * @param predictorVariableID ID of the predictor variable.
+     * @param mean Mean value.
+     * @param sd Standard deviation.
+     * @param rank mean rank.
+     */
     public SummaryDataType(String predictorVariable, String predictorVariableID,
             Double mean, Double sd, Double rank) {
         this.predictorVariable = predictorVariable;
@@ -174,10 +183,20 @@ public class SummaryDataType {
         this.htmlColor = htmlColor;
     }
 
+    /**
+     * Obtain the ID of the predictor variable.
+     *
+     * @return predictor variable.
+     */
     public String getPredictorVariableID() {
         return predictorVariableID;
     }
 
+    /**
+     * Set the ID of the predictor variable.
+     *
+     * @param predictorVariableID predictor variable.
+     */
     public void setPredictorVariableID(String predictorVariableID) {
         this.predictorVariableID = predictorVariableID;
     }

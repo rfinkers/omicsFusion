@@ -133,7 +133,7 @@ public class DataUploadAction extends DataUploadValidationForm
         }
         LOG.info("Action: upload data completed");
 
-        HashMap<String, String> sheets = new HashMap<String, String>(3);
+        HashMap<String, String> sheets = new HashMap<>(3);
         sheets.put("predictor", getDataSheetPredictorFileFileName());
         sheets.put("response", getDataSheetResponseFileFileName());
         if (getDataSheetPredictResponseFileFileName() != null) {

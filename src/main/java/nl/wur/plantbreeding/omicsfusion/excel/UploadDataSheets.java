@@ -153,14 +153,22 @@ public class UploadDataSheets extends ManipulateExcelSheet {
                     //this is redundant with the same code in the method above -> Refractor out
                     //Use SWITCH to go through the different options and act accordingly.
                     //FIXME: miss one row!. +1 leads to NPE!??? Is this still teh case after refractoring?
+                    //TODO: empty cell leads to fill in of 0, instead of NAN
                     switch (excelSheet.getRow(i).getCell(j).getCellType()) {
+                        case (Cell.CELL_TYPE_BLANK):
+                            value = Double.NaN;
+                            break;
                         case (Cell.CELL_TYPE_NUMERIC):
                             value = excelSheet.getRow(i).getCell(j).
                                     getNumericCellValue();
                             break;
                         case (Cell.CELL_TYPE_STRING):
-                            value = Double.parseDouble(excelSheet.getRow(i).
-                                    getCell(j).getStringCellValue());
+                            try {
+                                value = Double.parseDouble(excelSheet.getRow(i).
+                                        getCell(j).getStringCellValue());
+                            } catch (Exception e) {
+                                value = Double.NaN;
+                            }
                             break;
                         default:
                             value = Double.NaN;
