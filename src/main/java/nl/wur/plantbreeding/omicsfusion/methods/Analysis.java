@@ -452,8 +452,8 @@ public class Analysis {
                 case Constants.RIDGE:
                     switch (analysisMethod) {
                         case Constants.EN:
-                            rCode += "      frac_" + i + "[, index] <- fit_" + i + "$finalModel$tuneValue$.alpha\n";
-                            rCode += "      lambda_" + i + "[, index] <- fit_" + i + "$finalModel$tuneValue$lambda\n";
+                            rCode += "      frac_" + i + "[, index] <- fit_" + i + "$finalModel$tuneValue$alpha\n";
+                                rCode += "      lambda_" + i + "[, index] <- fit_" + i + "$finalModel$tuneValue$lambda\n";
                             break;
                         case Constants.LASSO:
                         case Constants.RIDGE:
