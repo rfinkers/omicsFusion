@@ -357,8 +357,8 @@ public class RetrieveResultsSummaryAction
             predictorVariableID
                     = univariate_bh.get(element).getPredictorVariableID();
         } else if (methResults.get(Constants.RF) != null) {
-            predictorVariable = lasso.get(element).getPredictorVariable();
-            predictorVariableID = lasso.get(element).getPredictorVariableID();
+            predictorVariable = rf.get(element).getPredictorVariable();
+            predictorVariableID = rf.get(element).getPredictorVariableID();
         } else if (methResults.get(Constants.SVM) != null) {
             predictorVariable = svm.get(element).getPredictorVariable();
             predictorVariableID = svm.get(element).getPredictorVariableID();
@@ -372,8 +372,8 @@ public class RetrieveResultsSummaryAction
             predictorVariable = ridge.get(element).getPredictorVariable();
             predictorVariableID = ridge.get(element).getPredictorVariableID();
         } else if (methResults.get(Constants.LASSO) != null) {
-            predictorVariable = rf.get(element).getPredictorVariable();
-            predictorVariableID = rf.get(element).getPredictorVariableID();
+            predictorVariable = lasso.get(element).getPredictorVariable();
+            predictorVariableID = lasso.get(element).getPredictorVariableID();
         } else if (methResults.get(Constants.EN) != null) {
             predictorVariable = en.get(element).getPredictorVariable();
             predictorVariableID = en.get(element).getPredictorVariableID();
