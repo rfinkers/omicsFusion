@@ -50,7 +50,7 @@ public class PredictorResponseXYScatterAction
      */
     private static final long serialVersionUID = 100906L;
     /**
-     * The Logger
+     * The Logger.
      */
     private static final Logger LOG = Logger.getLogger(
             PredictorResponseXYScatterAction.class.getName());
@@ -112,10 +112,8 @@ public class PredictorResponseXYScatterAction
             //Due to the forward, the exception message gets lost?
             if (e.getMessage() != null) {
                 LOG.log(Level.SEVERE, "Exception: {0}", e.toString());
-                e.printStackTrace();
             } else {
-                LOG.severe("Exception occurred.");
-                e.printStackTrace();
+                LOG.log(Level.SEVERE, "Exception occurred: {0}", e.getMessage());
             }
             return ERROR;
         }
@@ -176,14 +174,29 @@ public class PredictorResponseXYScatterAction
                 ServletUtils.getResultsDir(request, sessionID), predictor);
     }
 
+    /**
+     * The points for the graph.
+     *
+     * @return data points.
+     */
     public Map<Double, Double> getPoints() {
         return points;
     }
 
+    /**
+     * The regression line.
+     *
+     * @return regression line.
+     */
     public Map<Double, Double> getRegression() {
         return regression;
     }
 
+    /**
+     * The HTTP response.
+     *
+     * @return response.
+     */
     public HttpServletResponse getServletResponse() {
         return response;
     }

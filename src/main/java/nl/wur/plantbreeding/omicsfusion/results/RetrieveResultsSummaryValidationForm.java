@@ -16,6 +16,7 @@
 package nl.wur.plantbreeding.omicsfusion.results;
 
 import com.opensymphony.xwork2.ActionSupport;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import nl.wur.plantbreeding.logic.util.Validation;
 
@@ -26,35 +27,55 @@ import nl.wur.plantbreeding.logic.util.Validation;
 public class RetrieveResultsSummaryValidationForm extends ActionSupport {
 
     /**
-     * The logger
+     * The logger.
      */
     private static final Logger LOG = Logger.getLogger(
             RetrieveResultsSummaryValidationForm.class.getName());
     /**
-     * Serial Version UID
+     * Serial Version UID.
      */
     private static final long serialVersionUID = 1L;
     /**
-     * session token
+     * session token.
      */
     private String sessionId;
     /**
-     * The response variable
+     * The response variable.
      */
     private String variable;
 
+    /**
+     * Get the SessionID.
+     *
+     * @return the SessionID.
+     */
     public String getSessionId() {
         return sessionId;
     }
 
+    /**
+     * Set the SessionID.
+     *
+     * @param sessionId SessionID.
+     */
     public void setSessionId(String sessionId) {
         this.sessionId = sessionId.trim();
     }
 
+    /**
+     * Variable.
+     *
+     * @return name of the variable.
+     */
     public String getVariable() {
         return variable;
     }
 
+    /**
+     * Variable.
+     *
+     * @param variable variable.
+     */
     public void setVariable(String variable) {
         this.variable = variable;
     }
@@ -67,7 +88,7 @@ public class RetrieveResultsSummaryValidationForm extends ActionSupport {
             LOG.warning("Input contains special characters");
         }
         if (sessionId != null) {
-            LOG.info("SessionID: " + sessionId);
+            LOG.log(Level.INFO, "SessionID: {0}", sessionId);
         }
         //TODO: we expect a fixed length for the sessionID Include a length check
         //TODO: null check

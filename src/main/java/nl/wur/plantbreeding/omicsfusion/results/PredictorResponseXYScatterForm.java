@@ -49,18 +49,38 @@ public class PredictorResponseXYScatterForm extends ActionSupport {
 //    /** response variable */
 //    private String response;
 
+    /**
+     * Obtain the sessionID.
+     *
+     * @return the sessionID.
+     */
     public String getSession() {
         return session;
     }
 
+    /**
+     * Set the sessionID.
+     *
+     * @param sessionId the sessionID.
+     */
     public void setSession(String sessionId) {
         this.session = sessionId.trim();
     }
 
+    /**
+     * Obtain the predictor.
+     *
+     * @return Name of the predictor.
+     */
     public String getPredictor() {
         return predictor;
     }
 
+    /**
+     * Set the name of the predictor.
+     *
+     * @param predictor Name of the predictor.
+     */
     public void setPredictor(String predictor) {
         this.predictor = predictor;
     }

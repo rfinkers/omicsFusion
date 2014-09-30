@@ -34,6 +34,10 @@ public class MethodsWithResultsAction extends MethodsWithResultsForm
         this.request = request;
     }
 
+    /**
+     * Return the request scope.
+     * @return the request.
+     */
     public HttpServletRequest getRequest() {
         return request;
     }
