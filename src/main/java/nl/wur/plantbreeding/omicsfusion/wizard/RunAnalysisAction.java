@@ -25,6 +25,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import nl.wur.plantbreeding.logic.sqlite.SqLiteQueries;
+import nl.wur.plantbreeding.omicsfusion.email.Email;
 import nl.wur.plantbreeding.omicsfusion.email.ExceptionEmail;
 import static nl.wur.plantbreeding.omicsfusion.email.SubmissionCompleteEmail.SubmissionCompleteEmail;
 import nl.wur.plantbreeding.omicsfusion.methods.ElasticNet;
@@ -266,7 +267,11 @@ public class RunAnalysisAction extends ActionSupport
                 + "#$ -q " + queue + "\n"
                 + "cd " + ServletUtils.getResultsDir(request);
         if (scriptName.equals(Constants.EMAIL)) {
-            runScript += "\njava -jar ../omicsFusionNotify.jar\n";
+            Email email = new Email();
+
+            runScript += "\njava -jar ../omicsFusionNotify.jar"
+                    + email.getUser().getEmail() + " "
+                    + email.getSessionID() + "\n";
         } else {
             runScript += "\nR --no-save < "
                     + scriptName + ".R\n";
