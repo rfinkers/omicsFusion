@@ -269,7 +269,7 @@ public class RunAnalysisAction extends ActionSupport
         if (scriptName.equals(Constants.EMAIL)) {
             Email email = new Email();
 
-            runScript += "\njava -jar ../omicsFusionNotify.jar"
+            runScript += "\njava -jar ../omicsFusionNotify.jar "
                     + email.getUser().getEmail() + " "
                     + email.getSessionID() + "\n";
         } else {
