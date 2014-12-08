@@ -19,7 +19,7 @@
     <package name="dataUpload" namespace="/userRegistration" extends="struts-default,json-default">
         <action name="dataUpload" class="nl.wur.plantbreeding.omicsfusion.wizard.DataUploadAction">
             <interceptor-ref name="fileUpload">
-                <param name="maximumSize">10000000</param><!--Approx 9.5MB-->
+                <param name="maximumSize">25000000</param><!--Approx 9.5MB-->
                 <param name="allowedTypes"><!--Allows excel 2003 & 2007. -->
                     application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
                 </param>
