@@ -9,7 +9,7 @@
     <constant name="struts.devMode" value="true" />
     <constant name="struts.custom.i18n.resources"
               value="nl.wur.plantbreeding.omicsfusion.resources.OmicsFusion" />
-    <constant name="struts.multipart.maxSize" value="15000000" />
+    <constant name="struts.multipart.maxSize" value="25000000" />
 
     <constant name="struts.convention.action.packages"
               value="nl.wur.plantbreeding.omicsfusion"/>
