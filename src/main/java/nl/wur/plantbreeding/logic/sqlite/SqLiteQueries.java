@@ -34,6 +34,7 @@ import nl.wur.plantbreeding.omicsfusion.entities.UserList;
 import nl.wur.plantbreeding.omicsfusion.utils.Constants;
 
 /**
+ * SQL queries used for omicsFusion.
  *
  * @author Richard Finkers
  */
@@ -48,6 +49,9 @@ public class SqLiteQueries extends SqLiteHelper {
      */
     public void initializeDatabase(String directory)
             throws SQLException, ClassNotFoundException {
+        //FIXME: prepared statements are safer for SQL injection
+        //SEE: http://docs.oracle.com/javase/tutorial/jdbc/basics/prepared.html
+
         //Make sure that the directory exists.
         if (!new File(directory).exists()) {
             new File(directory).mkdir();

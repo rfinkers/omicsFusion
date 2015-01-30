@@ -82,6 +82,15 @@ public class UserList implements Serializable {
         this.id = id;
     }
 
+    /**
+     * User object.
+     *
+     * @param id User identifier.
+     * @param userName User name.
+     * @param email email address.
+     * @param dateCreated date that this record was created.
+     * @param lastUpdate date that there last modification took place.
+     */
     public UserList(Integer id, String userName, String email,
             Date dateCreated, Date lastUpdate) {
         this.id = id;

@@ -33,7 +33,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 /**
- *
+ * Testing SQL queries.
  * @author finke002
  */
 public class SqLiteQueriesTest {
@@ -65,6 +65,7 @@ public class SqLiteQueriesTest {
 
     /**
      * Test of addUser method, of class sqLiteQueries.
+     * @throws java.lang.Exception
      */
     @Test
     @Ignore("throws unexpected error. TODO")

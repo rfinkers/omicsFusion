@@ -27,26 +27,36 @@ public class UserDetailsValidationForm extends ActionSupport {
 
     private static final long serialVersionUID = 170610L;
     /**
-     * name of the user
+     * name of the user.
      */
     private String name;
     /**
-     * email of the user
+     * email of the user.
      */
     private String email;
     /**
-     * country
+     * country of the user.
      */
     private String country;
     /**
-     * affiliation
+     * affiliation of the user.
      */
     private String affiliation;
 
+    /**
+     * Get the email of the current user.
+     *
+     * @return Email address.
+     */
     public String getEmail() {
         return email;
     }
 
+    /**
+     * Set the email address of the current user.
+     *
+     * @param email email address.
+     */
     public void setEmail(String email) {
         this.email = email;
     }
