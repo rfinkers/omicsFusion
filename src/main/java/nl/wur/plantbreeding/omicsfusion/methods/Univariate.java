@@ -100,7 +100,7 @@ public class Univariate extends Analysis {
                 + "as.data.frame(bh))\n";
         rCode += "colnames(Summary_bh_)[1]<-\"method\"\n";
 
-        rCode += "con <- dbConnect(\"SQLite\", dbname = \"omicsFusion.db\")\n";
+        rCode += getDatabaseConnection();
         rCode += "dbWriteTable(con, \"results\",Summary_,append=TRUE)\n";
         rCode += "dbWriteTable(con, \"results\",Summary_bh_,append=TRUE)\n";
         return rCode;

@@ -53,7 +53,7 @@ public class Analysis {
         rCode += "responseVariable <- '" + responseVariable + "'\n\n";
         rCode += "# Load the PredictResponse data sheet from the "
                 + "SQLite database.\n";
-        rCode += "con <- dbConnect(\"SQLite\", dbname = \"omicsFusion.db\")\n";
+        rCode += getDatabaseConnection();
         rCode += "predQuery <- dbSendQuery(con, \"SELECT genotypeID, "
                 + "predictorID, observation FROM predictor\")\n";
         rCode += "predData <- fetch(predQuery, n = -1)\n";
@@ -73,6 +73,16 @@ public class Analysis {
         //Prepare the dataset object.
         rCode += "dataSet=cbind(respMatrix,predMatrix)\n\n";
         return rCode;
+    }
+
+    /**
+     * Generic implementation to get database connection
+     *
+     * @return R code to connect to SQLite database.
+     */
+    protected String getDatabaseConnection() {
+        return "con <- dbConnect(SQLite(), dbname = \"omicsFusion.db\", "
+                + "cache_size = 5000, synchronous = \"full\")\n";
     }
 
     /**
@@ -135,7 +145,8 @@ public class Analysis {
         String rCode = "# Pre process data matrix\n";
 
         rCode += "DesignMatrix <- "
-                + "model.matrix(dataSet$" + responseVariable.trim() + " ~ . - 1, dataSet)\n";
+                + "model.matrix(dataSet$" + responseVariable.trim()
+                + " ~ . - 1, dataSet)\n";
         //TODO: different centering and autoscaling algorithms? User selectable.
         rCode += "DesignMatrix <- scale(DesignMatrix)\n\n";
         return rCode;
@@ -453,7 +464,7 @@ public class Analysis {
                     switch (analysisMethod) {
                         case Constants.EN:
                             rCode += "      frac_" + i + "[, index] <- fit_" + i + "$finalModel$tuneValue$alpha\n";
-                                rCode += "      lambda_" + i + "[, index] <- fit_" + i + "$finalModel$tuneValue$lambda\n";
+                            rCode += "      lambda_" + i + "[, index] <- fit_" + i + "$finalModel$tuneValue$lambda\n";
                             break;
                         case Constants.LASSO:
                         case Constants.RIDGE:
@@ -467,25 +478,25 @@ public class Analysis {
                     break;
                 case Constants.PCR:
                 case Constants.PLS:
-                    rCode += "      coefs_" + i + "[, index] <- coef(fit_" + i + "$finalModel, ncomp = fit_" + i + "$finalModel$tuneValue$.ncomp)\n";
-                    rCode += "      y_fit_" + i + " <- predict(fit_" + i + "$finalModel, ncomp = fit_" + i + "$finalModel$tuneValue$.ncomp)\n";
-                    rCode += "      opt_comp_" + i + "[, index] <- fit_" + i + "$finalModel$tuneValue$.ncomp\n";
+                    rCode += "      coefs_" + i + "[, index] <- coef(fit_" + i + "$finalModel, ncomp = fit_" + i + "$finalModel$tuneValue$ncomp)\n";
+                    rCode += "      y_fit_" + i + " <- predict(fit_" + i + "$finalModel, ncomp = fit_" + i + "$finalModel$tuneValue$ncomp)\n";
+                    rCode += "      opt_comp_" + i + "[, index] <- fit_" + i + "$finalModel$tuneValue$ncomp\n";
                     break;
                 case Constants.RF:
                     rCode += "      y_fit_" + i + " <- predict(fit_" + i + "$finalModel)\n";
-                    rCode += "      mtry_" + i + "[, index] <- fit_" + i + "$finalModel$tuneValue$.mtry\n";
+                    rCode += "      mtry_" + i + "[, index] <- fit_" + i + "$finalModel$tuneValue$mtry\n";
                     rCode += "      imp_" + i + "[, index] <- fit_" + i + "$finalModel$importance\n";
                     break;
                 case Constants.SVM:
                     rCode += "      y_fit_" + i + " <- predict(fit_" + i + "$finalModel)\n";
-                    rCode += "      tune_cost_" + i + "[, index] <- fit_" + i + "$bestTune$.C\n";
-                    rCode += "      tune_sigma_" + i + "[, index] <- fit_" + i + "$bestTune$.sigma\n";
+                    rCode += "      tune_cost_" + i + "[, index] <- fit_" + i + "$bestTune$C\n";
+                    rCode += "      tune_sigma_" + i + "[, index] <- fit_" + i + "$bestTune$sigma\n";
                     break;
                 case Constants.SPLS:
                     rCode += "      y_fit_" + i + " <- predict(fit_" + i + "$finalModel)\n";
-                    rCode += "      coefs_" + i + "[, index] <- predict(fit_" + i + "$finalModel, type = \"coefficient\", fit_" + i + "$finalModel$tuneValue$.eta, fit_" + i + "$finalModel$tuneValue$.K)\n";
-                    rCode += "      K_" + i + "[, index] <- fit_" + i + "$finalModel$tuneValue$.K\n";
-                    rCode += "      eta_" + i + "[, index] <- fit_" + i + "$finalModel$tuneValue$.eta\n";
+                    rCode += "      coefs_" + i + "[, index] <- predict(fit_" + i + "$finalModel, type = \"coefficient\", fit_" + i + "$finalModel$tuneValue$eta, fit_" + i + "$finalModel$tuneValue$K)\n";
+                    rCode += "      K_" + i + "[, index] <- fit_" + i + "$finalModel$tuneValue$K\n";
+                    rCode += "      eta_" + i + "[, index] <- fit_" + i + "$finalModel$tuneValue$eta\n";
                     break;
             }
             //R2 calculated on the outer training set.

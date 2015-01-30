@@ -118,7 +118,7 @@ public class PCR extends Analysis {
                 + "as.data.frame(Train_Coeff_Summary))\n";
         rCode += "colnames(Train_Coeff_Summary_)[1]<-\"method\"\n";
 
-        rCode += "con <- dbConnect(\"SQLite\", dbname = \"omicsFusion.db\")\n";
+        rCode += getDatabaseConnection();
         rCode += "dbWriteTable(con, \"results\",Train_Coeff_Summary_,append=TRUE)\n";
         return rCode;
     }

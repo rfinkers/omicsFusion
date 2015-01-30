@@ -106,7 +106,8 @@ public class Lasso extends Analysis {
         rCode += "save.image(file=\"lasso.RData\")\n";
         rCode += "write.csv(Train_Coeff, paste(\"LASSO_coef\", \"_\", "
                 + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
-        rCode += "write.csv(Train_Coeff_Summary, paste(\"LASSO_coef_Sum\", \".csv\" , sep = \"\"))\n";
+        rCode += "write.csv(Train_Coeff_Summary, paste(\"LASSO_coef_Sum\", "
+                + "\".csv\" , sep = \"\"))\n";
         rCode += "write.csv(Train_R2, paste(\"LASSO_R2\", \"_\", "
                 + Constants.ITERATIONS + ", \".csv\" , sep = \"\"))\n";
         rCode += "write.csv(Train_Lambda, paste(\"LASSO_Lambda\", \"_\", "
@@ -129,7 +130,7 @@ public class Lasso extends Analysis {
         rCode += "Train_Coeff_Summary_<-cbind(responseVariable,\"" + Constants.LASSO + "\","
                 + "as.data.frame(Train_Coeff_Summary))\n";
         rCode += "colnames(Train_Coeff_Summary_)[1]<-\"method\"\n";
-        rCode += "con <- dbConnect(\"SQLite\", dbname = \"omicsFusion.db\")\n";
+        rCode += getDatabaseConnection();
         rCode += "dbWriteTable(con, \"results\",Train_Coeff_Summary_,append=TRUE)\n";
         //Write training coefficients to db.
 
