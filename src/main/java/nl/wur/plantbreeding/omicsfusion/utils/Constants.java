@@ -73,6 +73,11 @@ public class Constants {
      */
     public static final int MAX_SUMMARY_RESULTS = 2500;
     /**
+     * Number of permutations for the permutation test. Should be user set or
+     * set to a much higher value, like 500, 1000 or 5000.
+     */
+    public final static int PERMUTATIONS = 10;
+    /**
      * RandomForest identifier.
      */
     public static final String RF = "rf";
