@@ -136,4 +136,8 @@ public class Ridge extends Analysis {
     protected String writeRImage() {
         return "save.image(file=\"ridge.RData\", safe = TRUE)\n\n";
     }
+
+    public String getAnalysisScript(String responseVariable) {
+        return getAnalysisScript(responseVariable, Constants.RIDGE);
+    }
 }

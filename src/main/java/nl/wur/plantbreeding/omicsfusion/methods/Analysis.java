@@ -42,6 +42,32 @@ public class Analysis {
     }
 
     /**
+     * Load the required libraries for this method.
+     *
+     * @return R compatible code.
+     */
+    protected String getRequiredLibraries() {
+        String rCode = "# Load requried generic libraries\n";
+        rCode += "library(lattice)\n";//dependencies of caret.
+        rCode += "library(reshape)\n";//dependencies of caret.
+        rCode += "library(plyr)\n";//dependencies of caret.
+        rCode += "library(caret)\n";//Used for createfolds in training set.
+        rCode += "library(RSQLite)\n";//Used to connect to the SQLite database.
+        rCode += "\n";
+        return rCode;
+    }
+
+    /**
+     * Generic implementation to get database connection
+     *
+     * @return R code to connect to SQLite database.
+     */
+    protected String getDatabaseConnection() {
+        return "con <- dbConnect(SQLite(), dbname = \"omicsFusion.db\", "
+                + "cache_size = 5000, synchronous = \"full\")\n";
+    }
+
+    /**
      * Read data from the SQLite database.
      *
      * @param responseVariable responseVariable to analyze.
@@ -70,21 +96,46 @@ public class Analysis {
                 + "as.data.frame(tapply(respData[,3],respData[,c(1,2)],c))\n";
         rCode += "predMatrix <- "
                 + "as.data.frame(tapply(predData[,3],predData[,c(1,2)],c))\n";
-        //Prepare the dataset object.
-        rCode += "dataSet=cbind(respMatrix,predMatrix)\n\n";
         return rCode;
     }
 
     /**
-     * Generic implementation to get database connection
+     * Permute the dataset.
      *
-     * @return R code to connect to SQLite database.
+     * @param permuted True if permuted dataset should be obtained.
+     * @return dataset.
      */
-    protected String getDatabaseConnection() {
-        return "con <- dbConnect(SQLite(), dbname = \"omicsFusion.db\", "
-                + "cache_size = 5000, synchronous = \"full\")\n";
+    protected String getDataset(boolean permuted) {
+        //Prepare the dataset object.
+        String rCode = "";
+        if (permuted) {
+            rCode += "dataSet=cbind(sample(respMatrix),predMatrix)\n\n";
+        } else {
+            rCode += "dataSet=cbind(respMatrix,predMatrix)\n\n";
+        }
+        return rCode;
     }
 
+    /**
+     * Preprocess the data matrix.
+     *
+     * @param responseVariable Name of the response variable.
+     * @return R program code.
+     */
+    protected String preProcessMatrix(String responseVariable) {
+        String rCode = "# Pre process data matrix\n";
+
+        rCode += "DesignMatrix <- "
+                + "model.matrix(dataSet$" + responseVariable.trim()
+                + " ~ . - 1, dataSet)\n";
+        //TODO: different centering and autoscaling algorithms? User selectable.
+        rCode += "DesignMatrix <- scale(DesignMatrix)\n\n";
+        return rCode;
+    }
+
+    /**
+     * test.
+     */
     /**
      * Handle missing data via omit or imputation. This method should correct
      * for each analysis. Missing data in the response matrix might differ for
@@ -136,19 +187,14 @@ public class Analysis {
     }
 
     /**
-     * Preprocess the data matrix.
+     * ind the values for lambda over which the optimization of lambda should be
+     * carried out Could be done outside of the for loop I think.
      *
-     * @param responseVariable Name of the response variable.
-     * @return R program code.
+     * @return R program code to determine value of lambda.
      */
-    protected String preProcessMatrix(String responseVariable) {
-        String rCode = "# Pre process data matrix\n";
-
-        rCode += "DesignMatrix <- "
-                + "model.matrix(dataSet$" + responseVariable.trim()
-                + " ~ . - 1, dataSet)\n";
-        //TODO: different centering and autoscaling algorithms? User selectable.
-        rCode += "DesignMatrix <- scale(DesignMatrix)\n\n";
+    protected String getLambda() {
+        String rCode = "cvres<-cv.glmnet(x=DesignMatrix,y=dataSet$Response,nfolds=10)\n";
+        rCode += "lambda<-cvres$lambda\n";
         return rCode;
     }
 
@@ -177,22 +223,6 @@ public class Analysis {
                         + " <- inTrainingSet$Fold" + j + "\n";
             }
         }
-        rCode += "\n";
-        return rCode;
-    }
-
-    /**
-     * Load the required libraries for this method.
-     *
-     * @return R compatible code.
-     */
-    protected String getRequiredLibraries() {
-        String rCode = "# Load requried generic libraries\n";
-        rCode += "library(lattice)\n";//dependencies of caret.
-        rCode += "library(reshape)\n";//dependencies of caret.
-        rCode += "library(plyr)\n";//dependencies of caret.
-        rCode += "library(caret)\n";//Used for createfolds in training set.
-        rCode += "library(RSQLite)\n";//Used to connect to the SQLite database.
         rCode += "\n";
         return rCode;
     }
@@ -409,6 +439,7 @@ public class Analysis {
                     //TODO: function of tuneGrid? If there is a default on the other methods, perhaps we should code them anyway?
                     // tunegrid:
                     // .alpha depens on the method
+                    //FIXME: seq(0, 1, by = 0.1) -> lambda (see code chris)
                     rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"glmnet\", metric = \"RMSE\", tuneLength = 10, tuneGrid = data.frame(.lambda = seq(0, 1, by = 0.1), .alpha = 1), trControl = innerLoop)\n";
                     break;
                 case Constants.SVM:
@@ -437,6 +468,7 @@ public class Analysis {
                             rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"spls\", metric = \"RMSE\", tuneLength = 10, trControl = innerLoop)\n";
                             break;
                         case (Constants.RIDGE):
+                            //TODO: tuneGrid = data.frame(.lambda = seq(0, 100, by = 0.1) <- can this be replaced by lambda
                             rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"glmnet\", metric = \"RMSE\", tuneLength = 10, tuneGrid = data.frame(.lambda = seq(0, 100, by = 0.1), .alpha = 0), trControl = innerLoop)\n";
                             break;
                     }
@@ -560,6 +592,17 @@ public class Analysis {
     }
 
     /**
+     * Run the method once more with the optimized parameters.
+     */
+    protected String getFinalAnalysis() {
+        String rCode = "# Final Analysis\n";
+        //TODO implement
+        //TODO: Method specific?
+        return rCode;
+
+    }
+
+    /**
      * Method that combines the result sets.
      *
      * @return R compatible code.
@@ -652,20 +695,34 @@ public class Analysis {
      * Generic run script.
      *
      * @param responseVariable Name of the response variable.
+     * @param methodName Name of the method for which to create the script.
+     * @param permutation Is this an permutation or not?
      * @return the complete R compatible script for the selected method.
      */
-    public String getAnalysisScript(String responseVariable) {
+    public String getAnalysisScript(String responseVariable, String methodName,
+            boolean permutation) {
         String rScript = "# Concatenating analisis script\n";
         rScript += getRequiredLibraries();
         //Do not use checkResponseName for loading: SQLite handles this fine.
         rScript += loadPredictorAndResponseDataSheets(responseVariable);
         rScript += writeRImage();
         rScript += handleMissingData();
+        if (permutation == true) {
+            rScript += getDataset(true);
+        } else {
+            rScript += getDataset(false);
+        }
+        if (methodName.equals(Constants.RIDGE)) {
+            rScript += getLambda();
+        }
         rScript += preProcessMatrix(checkResponseName(responseVariable));
         rScript += initializeResultObjects();
         rScript += getAnalysis(checkResponseName(responseVariable));
-        rScript += combineResults();
-        rScript += getRowMeansAndSD();
+        //TODO: run analysis once more with determined optimum.
+        //rScript += getFinalAnalysis();
+        rScript += combineResults(); //should we still use this?
+        rScript += getRowMeansAndSD(); //should we still use this?
+
         //rScript += writeRImage();
         //TODO: fix the following error!
 //Error in save.image(file = "test.RData", safe = TRUE) :
@@ -679,13 +736,34 @@ public class Analysis {
     }
 
     /**
+     * Generic run script.
+     *
+     * @param responseVariable Name of the response variable.
+     * @return the complete R compatible script for the selected method.
+     */
+    public String getAnalysisScript(String responseVariable) {
+        return getAnalysisScript(responseVariable, "none", false);
+    }
+
+    /**
+     * Generic run script.
+     *
+     * @param responseVariable Name of the response variable.
+     * @param methodName Name of the method to run.
+     * @return the complete R compatible script for the selected method.
+     */
+    public String getAnalysisScript(String responseVariable, String methodName) {
+        return getAnalysisScript(responseVariable, methodName, false);
+    }
+
+    /**
      * Check if the response name starts with an integer. If yes, part of the R
      * code will not work, unless '' are introduced.
      *
      * @param responseName Name of the response variable
      * @return checked response variable.
      */
-    private String checkResponseName(String responseName) {
+    protected String checkResponseName(String responseName) {
         //If the response starts with a number, R chrashes!
         String tmp = responseName.substring(0, 1);
         boolean startWithInteger = true;
