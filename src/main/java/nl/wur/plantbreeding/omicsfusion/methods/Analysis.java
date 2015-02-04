@@ -190,10 +190,13 @@ public class Analysis {
      * ind the values for lambda over which the optimization of lambda should be
      * carried out Could be done outside of the for loop I think.
      *
+     * @TODO: t1 is now fixed, make dynamic for analysis of multiple response
+     * variables.
+     *
      * @return R program code to determine value of lambda.
      */
     protected String getLambda() {
-        String rCode = "cvres<-cv.glmnet(x=DesignMatrix,y=dataSet$Response,nfolds=10)\n";
+        String rCode = "cvres<-cv.glmnet(x=DesignMatrix,y=dataSet$t1,nfolds=10)\n";
         rCode += "lambda<-cvres$lambda\n";
         return rCode;
     }
