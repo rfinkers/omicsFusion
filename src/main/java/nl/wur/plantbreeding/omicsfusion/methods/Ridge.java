@@ -43,7 +43,7 @@ public class Ridge extends Analysis {
     @Override
     protected String getRequiredLibraries() {
         String rCode = super.getRequiredLibraries();
-        rCode += "# Load requried libraries for RIDGE\n";
+        rCode += "# Load specific libraries for RIDGE\n";
         rCode += "library(glmnet)\n";
         rCode += "library(Matrix)\n";
         return rCode;

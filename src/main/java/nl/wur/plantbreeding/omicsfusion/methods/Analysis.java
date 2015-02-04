@@ -196,8 +196,9 @@ public class Analysis {
      * @return R program code to determine value of lambda.
      */
     protected String getLambda() {
-        String rCode = "cvres<-cv.glmnet(x=DesignMatrix,y=dataSet$t1,nfolds=10)\n";
-        rCode += "lambda<-cvres$lambda\n";
+        String rCode = " # Estimate inital Lambda for RIDGE regression.\n";
+        rCode += "cvres<-cv.glmnet(x=DesignMatrix,y=dataSet$t1,nfolds=10)\n";
+        rCode += "lambda<-cvres$lambda\n\n";
         return rCode;
     }
 
