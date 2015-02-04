@@ -469,7 +469,7 @@ public class Analysis {
                             break;
                         case (Constants.RIDGE):
                             //TODO: tuneGrid = data.frame(.lambda = seq(0, 100, by = 0.1) <- can this be replaced by lambda
-                            rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"glmnet\", metric = \"RMSE\", tuneLength = 10, tuneGrid = data.frame(.lambda = seq(0, 100, by = 0.1), .alpha = 0), trControl = innerLoop)\n";
+                            rCode += "      fit_" + i + " <- train(predictorTrainSet" + i + ", responseTrainSet" + i + ", \"glmnet\", metric = \"RMSE\", tuneLength = 10, tuneGrid = data.frame(.lambda = lambda, .alpha = 0), trControl = innerLoop)\n";
                             break;
                     }
 
@@ -702,6 +702,7 @@ public class Analysis {
     public String getAnalysisScript(String responseVariable, String methodName,
             boolean permutation) {
         String rScript = "# Concatenating analisis script\n";
+        //TODO: read resource bundle for last update date?
         rScript += getRequiredLibraries();
         //Do not use checkResponseName for loading: SQLite handles this fine.
         rScript += loadPredictorAndResponseDataSheets(responseVariable);
