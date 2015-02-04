@@ -707,7 +707,6 @@ public class Analysis {
         //Do not use checkResponseName for loading: SQLite handles this fine.
         rScript += loadPredictorAndResponseDataSheets(responseVariable);
         rScript += writeRImage();
-        rScript += handleMissingData();
         if (permutation == true) {
             rScript += getDataset(true);
         } else {
@@ -716,6 +715,7 @@ public class Analysis {
         if (methodName.equals(Constants.RIDGE)) {
             rScript += getLambda();
         }
+        rScript += handleMissingData();
         rScript += preProcessMatrix(checkResponseName(responseVariable));
         rScript += initializeResultObjects();
         rScript += getAnalysis(checkResponseName(responseVariable));
