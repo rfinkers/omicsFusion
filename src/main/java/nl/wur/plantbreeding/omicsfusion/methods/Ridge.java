@@ -90,11 +90,26 @@ public class Ridge extends Analysis {
 
     /**
      * {
+     * @inheritDoc}
+     */
+    @Override
+    protected String getFinalAnalysisWithOptimizedParamterers() {
+        String rCode = "# Run Once more with Optimized Parameters\n";
+        rCode += "finalfit <- train(DesignMatrix, dataSet$Response, "
+                + "\"glmnet\", metric = \"RMSE\", "
+                + "tuneGrid = data.frame(.lambda = lambda, .alpha = 1), "
+                + "trControl = innerLoop)";
+        rCode += "bestlambda[permut]<-finalfit$finalModel$lambdaOpt";
+        return rCode;
+    }
+
+    /**
+     * {
      *
      * @inheritDoc}
      */
     @Override
-    public String writeResultsToDisk() {
+    protected String writeResultsToDisk() {
         String rCode = "# Write results to disk\n";
         rCode += "save.image(file=\"ridge.RData\")\n";
         rCode += "write.csv(Train_Coeff, paste(\"RIDGE_coef\", \"_\", "
