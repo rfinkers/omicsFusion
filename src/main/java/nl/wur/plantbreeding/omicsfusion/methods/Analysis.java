@@ -596,9 +596,10 @@ public class Analysis {
     }
 
     /**
-     * Run the method once more with the optimized parameters.
+     * Now perform once more a single loop cross-validation to choose optimized
+     * parameters for the final model for the whole data set.
      */
-    protected String getFinalAnalysis() {
+    protected String runFinalWithOptimizedParamterers() {
         String rCode = "# Final Analysis\n";
         //TODO implement
         //TODO: Method specific?
@@ -724,7 +725,7 @@ public class Analysis {
         rScript += initializeResultObjects();
         rScript += getAnalysis(checkResponseName(responseVariable));
         //TODO: run analysis once more with determined optimum.
-        //rScript += getFinalAnalysis();
+        rScript += runFinalWithOptimizedParamterers();
         rScript += combineResults(); //should we still use this?
         rScript += getRowMeansAndSD(); //should we still use this?
 
