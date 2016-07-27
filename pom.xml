@@ -1,5 +1,6 @@
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>nl.wur.plantbreeding</groupId>
@@ -63,6 +64,14 @@
                 <role>provider R scripts</role>
             </roles>
         </contributor>
+        <contributor>
+            <name>Chris Maliepaard</name>
+            <organization>Wageningen UR</organization>
+            <organizationUrl>http://www.plantbreeding.wur.nl</organizationUrl>
+            <roles>
+                <role>provider R scripts</role>
+            </roles>
+        </contributor>
     </contributors>
     <repositories>
         <repository>
@@ -81,31 +90,31 @@
         <dependency>
             <groupId>com.jgeppert.struts2.jquery</groupId>
             <artifactId>struts2-jquery-grid-plugin</artifactId>
-            <version>4.0.0-SNAPSHOT</version>
+            <version>4.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.jgeppert.struts2.jquery</groupId>
             <artifactId>struts2-jquery-chart-plugin</artifactId>
-            <version>4.0.0-SNAPSHOT</version>
+            <version>4.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.jgeppert.struts2.bootstrap</groupId>
             <artifactId>struts2-bootstrap-plugin</artifactId>
-            <version>2.0.1</version>
+            <version>2.5.0</version>
         </dependency>
         <dependency>
             <groupId>nl.wur.plantbreeding</groupId>
             <artifactId>chebi2gene</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.1-SNAPSHOT</version>
             <type>jar</type>
         </dependency>
         <dependency>
             <groupId>org.xerial</groupId>
             <artifactId>sqlite-jdbc</artifactId>
-            <version>3.8.7</version>
+            <version>3.9.0-SNAPSHOT</version>
         </dependency>
         <!-- Added temporarily? POI requires older version. -->
-<!--        <dependency>
+        <!--        <dependency>
             <groupId>xml-apis</groupId>
             <artifactId>xml-apis</artifactId>
             <version>1.4.01</version>
@@ -121,7 +130,7 @@
         <dependency>
             <groupId>javax.mail</groupId>
             <artifactId>javax.mail-api</artifactId>
-            <version>1.5.2</version>
+            <version>1.5.5</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -132,29 +141,29 @@
         <dependency>
             <groupId>org.apache.struts</groupId>
             <artifactId>struts2-core</artifactId>
-            <version>2.3.20</version>
+            <version>2.5.2</version>
         </dependency>
         <dependency>
             <groupId>org.apache.struts</groupId>
             <artifactId>struts2-tiles-plugin</artifactId>
-            <version>2.3.20</version>
+            <version>2.5.2</version>
             <type>jar</type>
         </dependency>
         <dependency>
             <groupId>org.apache.struts</groupId>
             <artifactId>struts2-json-plugin</artifactId>
-            <version>2.3.20</version>
+            <version>2.5.2</version>
             <type>jar</type>
         </dependency>
         <dependency>
             <groupId>org.apache.struts</groupId>
             <artifactId>struts2-convention-plugin</artifactId>
-            <version>2.3.20</version>
+            <version>2.5.2</version>
         </dependency>
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
-            <version>3.11</version>
+            <version>3.14</version>
             <type>jar</type>
         </dependency>
         <dependency>
@@ -168,7 +177,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.2</version>
+                <version>3.5.1</version>
                 <configuration>
                     <source>1.7</source>
                     <target>1.7</target>
